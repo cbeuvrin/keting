@@ -10,7 +10,8 @@ export function Hero() {
 
     const scale = useTransform(scrollYProgress, [0, 0.5], [1, 5]);
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]); // Fades out much later
-    const blur = useTransform(scrollYProgress, [0, 0.4], ["0px", "10px"]);
+    const blur = useTransform(scrollYProgress, [0, 0.4], [0, 10]);
+    const blurFilter = useTransform(blur, (v) => `blur(${v}px)`);
 
     const container: Variants = {
         hidden: { opacity: 0 },
@@ -184,7 +185,12 @@ export function Hero() {
 
                     {/* Main Typography */}
                     <motion.div
-                        style={{ scale, opacity, filter: `blur(${blur})` }}
+                        style={{
+                            scale,
+                            opacity,
+                            filter: blurFilter
+                        }}
+                        suppressHydrationWarning
                         className="max-w-6xl origin-center z-10 mt-48"
                     >
                         <motion.h1

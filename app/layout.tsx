@@ -21,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={cn(inter.variable, montserrat.variable, playfair.variable, sulphur.variable, "font-sans antialiased bg-[#FAFAFA] text-[#333333]")}>
+      <body
+        className={cn(inter.variable, montserrat.variable, playfair.variable, sulphur.variable, "font-sans antialiased bg-[#FAFAFA] text-[#333333]")}
+        suppressHydrationWarning
+      >
         {children}
         <WhatsAppButton />
       </body>
