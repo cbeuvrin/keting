@@ -11,17 +11,17 @@ export function Toogo() {
         offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
+    const width = useTransform(scrollYProgress, [0, 1], ["100%", "90%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "2rem"]);
 
     return (
         <motion.section
             ref={containerRef}
             style={{ width, borderRadius }}
-            className="relative z-20 mx-auto h-[51vh] bg-[#E8E8E0] text-[#1a2332] shadow-2xl font-heading flex items-center justify-center mb-40"
+            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#E8E8E0] text-[#1a2332] shadow-2xl font-heading flex items-center justify-center mb-40"
         >
             <div className="container mx-auto px-6 md:px-12 h-full flex items-center">
-                <div className="grid md:grid-cols-2 gap-12 items-center w-full h-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
 
                     {/* Text Content */}
                     <motion.div
@@ -29,7 +29,7 @@ export function Toogo() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center"
+                        className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
                         <motion.h2
                             initial={{ backgroundSize: "0% 100%" }}
@@ -44,12 +44,12 @@ export function Toogo() {
                                 backgroundClip: "text",
                                 backgroundPosition: "0 0",
                             }}
-                            className="text-6xl md:text-8xl font-bold mb-8 tracking-tight"
+                            className="text-4xl md:text-7xl font-bold mb-8 tracking-tight"
                         >
-                            toogo
+                            toogo.store
                         </motion.h2>
 
-                        <div className="w-full h-px bg-gray-400 mb-8"></div>
+                        <div className="w-full h-px bg-gray-400 mb-8 max-w-[100px] md:max-w-none"></div>
 
                         <p
                             className="text-gray-700 leading-relaxed font-light"
@@ -78,7 +78,7 @@ export function Toogo() {
 
                 </div>
             </div>
-            <CornerButton href="/toogo" iconColor="border-black text-black" />
+            <CornerButton href="https://www.toogo.store" iconColor="border-black text-black" />
         </motion.section>
     );
 }

@@ -5,13 +5,14 @@ import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from "lucide-react";
+import { ContactModal } from "@/components/pricing/contact-modal";
+
 
 const menuItems = [
-    { label: "Home", href: "/#home" },
-    { label: "Diseño web", href: "/gravity" },
+    { label: "Inicio", href: "/#home" },
+    { label: "Diseño web", href: "/webdesing" },
     { label: "Soluciones digitales", href: "/soluciones-digitales" },
     { label: "Portafolio", href: "/#portafolio" },
-    { label: "Contacto", href: "/#contacto" },
     { label: "Blog", href: "/#blog" },
 ];
 
@@ -27,8 +28,6 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         setIsScrolled(latest > 50);
     });
 
-    // ... (comments omitted for brevity)
-
     // Determine logo: 
     // If forcedTheme is dark -> White Logo
     // If forcedTheme is light -> Black Logo
@@ -40,25 +39,26 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         <>
             <motion.header
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                    // Logic:
-                    // If forcedTheme is set: use it.
-                    // Else: use standard isScrolled logic.
-                    forcedTheme === "dark"
-                        ? "bg-transparent py-4 text-white"
-                        : (forcedTheme === "light"
-                            ? "bg-white/90 backdrop-blur-md py-4 text-[#333333]"
-                            : (isScrolled ? "bg-white/90 backdrop-blur-md py-4 text-[#333333]" : "bg-transparent py-8")
-                        ),
+                    "fixed top-[40px] left-0 right-0 transition-all duration-300 pointer-events-none", // Remove main BG & allow clicks through empty spaces
+                    forcedTheme === "dark" ? "z-[70]" : "z-50",
                     className
                 )}
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-                    {/* Left: Logo + Separator + Menu Trigger */}
-                    <div className="flex items-center gap-6">
+                <div className="container mx-auto px-6 md:px-12 flex items-center justify-between pointer-events-auto"> {/* Enable pointer events for children */}
+                    {/* Left: Logo + Separator + Menu Trigger -> Minimal Style (No Capsule) */}
+                    <div className={cn(
+                        "flex items-center gap-6 transition-all duration-300",
+                        // Apply Text Color logic only
+                        forcedTheme === "dark"
+                            ? "text-white"
+                            : (forcedTheme === "light"
+                                ? "text-[#333333]"
+                                : (isScrolled ? "text-[#333333]" : "text-[#333333]") // Default to dark text if transparent? Or keep dynamic? sticking to safe defaults for now.
+                            )
+                    )}>
 
                         {/* Logo Container - Revealed after preloader */}
                         {/* Logo Container - Revealed after preloader */}
@@ -76,20 +76,22 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             }}
                             className="overflow-visible flex items-center pr-2" // Overflow visible for the badge effect?
                         >
-                            <motion.div
-                                className={cn(
-                                    "p-2 rounded-full",
-                                    // If effectiveLogoColor is white -> bg-black (to contrast)
-                                    // If effectiveLogoColor is black -> bg-white
-                                    effectiveLogoColor === "white" ? "bg-black" : "bg-white"
-                                )}
-                            >
-                                <img
-                                    src={currentLogo}
-                                    alt="Keting Media"
-                                    className="h-8 md:h-10 w-auto object-contain"
-                                />
-                            </motion.div>
+                            <Link href="/">
+                                <motion.div
+                                    className={cn(
+                                        "p-2 rounded-2xl cursor-pointer",
+                                        // If effectiveLogoColor is white -> bg-black (to contrast)
+                                        // If effectiveLogoColor is black -> bg-white
+                                        effectiveLogoColor === "white" ? "bg-black" : "bg-white"
+                                    )}
+                                >
+                                    <img
+                                        src={currentLogo}
+                                        alt="Keting Media"
+                                        className="h-7 md:h-10 w-auto object-contain"
+                                    />
+                                </motion.div>
+                            </Link>
                         </motion.div>
 
                         {/* Vertical Separator */}
@@ -106,7 +108,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             onClick={() => setIsMenuOpen(true)}
                             className="flex items-center gap-3 group"
                         >
-                            <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
+                            <MenuIcon className="w-8 h-8 stroke-[1.5] stroke-current group-hover:scale-110 transition-transform" />
                             <span className="text-sm font-heading font-normal tracking-[1px] uppercase hidden md:block">menu</span>
                         </button>
                     </div>
@@ -114,52 +116,14 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     {/* Right: Contact Button */}
                     <div className="relative">
                         <button
-                            onClick={() => setIsContactOpen(!isContactOpen)}
-                            className="group flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full hover:border-black transition-colors shadow-sm text-[#333333]"
+                            onClick={() => setIsContactOpen(true)}
+                            className="bg-black text-white px-5 md:px-8 py-2 md:py-3 rounded-2xl text-xs md:text-sm font-bold hover:bg-zinc-800 transition-colors shadow-lg"
                         >
-                            <span className="text-sm font-heading font-normal tracking-[1px] uppercase">Contacto</span>
-                            <ArrowUpRight className={cn(
-                                "w-4 h-4 transition-transform",
-                                isContactOpen ? "rotate-180" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                            )} />
+                            Hablemos
                         </button>
 
                         {/* Contact Form Dropdown ... (unchanged) */}
-                        <AnimatePresence>
-                            {isContactOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="absolute right-0 mt-4 w-[320px] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100"
-                                >
-                                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                                        <input
-                                            type="text"
-                                            placeholder="Nombre"
-                                            className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
-                                        />
-                                        <input
-                                            type="email"
-                                            placeholder="Email"
-                                            className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
-                                        />
-                                        <input
-                                            type="tel"
-                                            placeholder="Teléfono"
-                                            className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="w-full py-3 bg-black text-white rounded-2xl text-sm font-bold hover:bg-gray-800 transition-colors"
-                                        >
-                                            Enviar
-                                        </button>
-                                    </form>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                        <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
                     </div>
                 </div>
             </motion.header>

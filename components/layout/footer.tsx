@@ -19,9 +19,9 @@ export function Footer() {
                     </div>
 
                     {/* Right Section: Language & Contact */}
-                    <div className="flex flex-col items-end gap-6">
+                    <div className="flex flex-col items-center md:items-end gap-6 w-full md:w-auto">
                         {/* Language Switcher */}
-                        <div className="flex gap-8 text-white text-base">
+                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base">
                             <span className="cursor-pointer hover:text-gray-300 transition-colors">
                                 Spanish
                             </span>
@@ -31,18 +31,18 @@ export function Footer() {
                         </div>
 
                         {/* Contact Buttons */}
-                        <div className="flex gap-4">
+                        <div className="flex flex-wrap justify-center md:justify-end gap-4 w-full">
                             <Link
-                                href="mailto:info@keting.com"
-                                className="px-6 py-2 bg-white text-black rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 font-medium"
+                                href="mailto:info@ketingmedia.com"
+                                className="px-6 md:px-8 py-3 bg-white text-black rounded-2xl hover:bg-gray-200 transition-colors flex items-center gap-2 text-xs md:text-sm font-bold"
                             >
                                 Email ⊕
                             </Link>
                             <Link
-                                href="tel:5543830151"
-                                className="px-6 py-2 bg-white text-black rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 font-medium"
+                                href="tel:5543830150"
+                                className="px-6 md:px-8 py-3 bg-white text-black rounded-2xl hover:bg-gray-200 transition-colors flex items-center gap-2 text-xs md:text-sm font-bold"
                             >
-                                5543830151 ⊕
+                                5543830150 ⊕
                             </Link>
                         </div>
                     </div>

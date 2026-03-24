@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { CornerButton } from "@/components/ui/corner-button";
+import { Sparkles, TrendingUp, Smartphone, Zap } from "lucide-react";
 
 export function DigitalSolutions() {
     const containerRef = useRef<HTMLElement>(null);
@@ -11,17 +12,17 @@ export function DigitalSolutions() {
         offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
+    const width = useTransform(scrollYProgress, [0, 1], ["100%", "90%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "2rem"]);
 
     return (
         <motion.section
             ref={containerRef}
             style={{ width, borderRadius }}
-            className="relative z-20 mx-auto h-[51vh] bg-[#F5F5F0] text-[#333333] shadow-2xl font-heading flex items-center justify-center mb-40"
+            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#F5F5F0] text-[#333333] shadow-2xl font-heading flex items-center justify-center mb-40"
         >
             <div className="container mx-auto px-6 md:px-12 h-full flex items-center">
-                <div className="grid md:grid-cols-2 gap-12 items-center w-full h-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
 
                     {/* Text Content */}
                     <motion.div
@@ -29,7 +30,7 @@ export function DigitalSolutions() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center"
+                        className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
                         <motion.h2
                             initial={{ backgroundSize: "0% 100%" }}
@@ -44,12 +45,20 @@ export function DigitalSolutions() {
                                 backgroundClip: "text",
                                 backgroundPosition: "0 0",
                             }}
-                            className="text-6xl md:text-8xl font-bold mb-8 tracking-tight"
+                            className="text-4xl md:text-7xl font-bold mb-2 tracking-tight"
                         >
                             Soluciones digitales
                         </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.8 }}
+                            className="text-sm md:text-base text-gray-400 font-light mb-8 tracking-wide italic"
+                        >
+                            Apps hiper-personalizadas
+                        </motion.p>
 
-                        <div className="w-full h-px bg-gray-300 mb-8"></div>
+                        <div className="w-full h-px bg-gray-300 mb-8 max-w-[100px] md:max-w-none"></div>
 
                         <p
                             className="text-gray-600 leading-relaxed font-light"
@@ -79,9 +88,14 @@ export function DigitalSolutions() {
                                 }
                             }}
                         >
-                            {[1, 2, 3, 4].map((item) => (
+                            {[
+                                { icon: <Sparkles className="w-6 h-6 md:w-8 md:h-8" />, label: "IA" },
+                                { icon: <TrendingUp className="w-6 h-6 md:w-8 md:h-8" />, label: "Escala" },
+                                { icon: <Smartphone className="w-6 h-6 md:w-8 md:h-8" />, label: "Apps" },
+                                { icon: <Zap className="w-6 h-6 md:w-8 md:h-8" />, label: "Velocidad" }
+                            ].map((item, idx) => (
                                 <motion.div
-                                    key={item}
+                                    key={idx}
                                     variants={{
                                         hidden: { scale: 0, opacity: 0 },
                                         visible: {
@@ -90,8 +104,11 @@ export function DigitalSolutions() {
                                             transition: { type: "spring", stiffness: 260, damping: 20 }
                                         }
                                     }}
-                                    className="aspect-square bg-black rounded-[1.5rem] shadow-lg"
-                                />
+                                    className="aspect-square bg-black rounded-[1.5rem] shadow-lg flex flex-col items-center justify-center p-2 text-white"
+                                >
+                                    <div className="mb-2 text-[#FF4500]">{item.icon}</div>
+                                    <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
+                                </motion.div>
                             ))}
                         </motion.div>
                     </motion.div>

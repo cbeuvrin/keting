@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { ArrowDown } from "lucide-react";
 
 export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "light" | "dark") => void }) {
     const targetRef = useRef<HTMLDivElement>(null);
@@ -39,7 +40,8 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
             ref={targetRef}
             className="relative h-[400vh] bg-white" // Very tall for scroll length
         >
-            <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+            <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden z-[60] pointer-events-none">
+                {/* Video Background Removed */}
 
                 {/* Main Title - Z-index 10 to stay behind phone */}
                 <motion.h1
@@ -51,74 +53,13 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                 {/* Phone Image Container */}
                 <motion.div
                     style={{ y, scale, transformOrigin: "50% 49.2%" }}
-                    className="absolute w-[300px] md:w-[400px] lg:w-[500px] aspect-square z-20 flex items-center justify-center"
+                    className="absolute w-[300px] md:w-[400px] lg:w-[500px] aspect-square z-[60] flex items-center justify-center pointer-events-auto"
                 >
                     {/* FEATURE OVERLAY - Moved OUTSIDE the clipped screen div 
                         Positioned relative to the Phone Container (500px wide).
                         Inverse scaled to maintain readable size.
                      */}
-                    <motion.div
-                        style={{ scale: inverseScale, opacity: featureOpacity }}
-                        className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none"
-                    >
-                        {/* Container for absolute positioning relative to center */}
-                        <div className="relative w-full h-full max-w-[500px]">
 
-                            {/* 
-                                Coordinates Logic:
-                                The container is effectively ~500px wide (visually).
-                                We want text pushed out to left and right.
-                                Let's use standard absolute positioning from center.
-                            */}
-
-                            {/* TOP LEFT: Desarrollo de APP */}
-                            <div className="absolute right-[110%] bottom-[55%] w-[250px] text-right">
-                                <h3 className="text-white font-bold text-xl mb-2">Desarrollo de APP</h3>
-                                <p className="text-gray-300 text-sm">Apps nativas e híbridas que transforman la experiencia de usuario y optimizan procesos.</p>
-                            </div>
-                            {/* Line TL */}
-                            <svg className="absolute inset-0 w-full h-full overflow-visible">
-                                {/* From: Text Right Edge (Left side of phone) -> To: Square Center */}
-                                {/* Text is at -10% of width. Phone is 0 to 100%. Square is at ~44%. */}
-                                <line x1="-10%" y1="45%" x2="44.2%" y2="48%" stroke="white" strokeWidth="1" strokeOpacity="0.5" />
-                                <circle cx="44.2%" cy="48%" r="3" fill="white" />
-                            </svg>
-
-
-                            {/* TOP RIGHT: Soluciones para eventos */}
-                            <div className="absolute left-[110%] bottom-[55%] w-[250px] text-left">
-                                <h3 className="text-white font-bold text-xl mb-2">Soluciones para eventos</h3>
-                                <p className="text-gray-300 text-sm">Registro digital, apps interactivas y experiencias en tiempo real para eventos inolvidables.</p>
-                            </div>
-                            <svg className="absolute inset-0 w-full h-full overflow-visible">
-                                <line x1="110%" y1="45%" x2="55.8%" y2="48%" stroke="white" strokeWidth="1" strokeOpacity="0.5" />
-                                <circle cx="55.8%" cy="48%" r="3" fill="white" />
-                            </svg>
-
-
-                            {/* BOTTOM LEFT: Desarrollo de ecosistemas digital */}
-                            <div className="absolute right-[110%] top-[55%] w-[250px] text-right">
-                                <h3 className="text-white font-bold text-xl mb-2">Desarrollo de ecosistemas digital</h3>
-                                <p className="text-gray-300 text-sm">Integración de web, app y redes en un entorno cohesivo que potencia tu marca.</p>
-                            </div>
-                            <svg className="absolute inset-0 w-full h-full overflow-visible">
-                                <line x1="-10%" y1="55%" x2="44.2%" y2="52%" stroke="white" strokeWidth="1" strokeOpacity="0.5" />
-                                <circle cx="44.2%" cy="52%" r="3" fill="white" />
-                            </svg>
-
-
-                            {/* BOTTOM RIGHT: Plataformas digitales */}
-                            <div className="absolute left-[110%] top-[55%] w-[250px] text-left">
-                                <h3 className="text-white font-bold text-xl mb-2">Plataformas digitales</h3>
-                                <p className="text-gray-300 text-sm">Sistemas robustos y escalables a medida, desde e-commerce hasta portales corporativos.</p>
-                            </div>
-                            <svg className="absolute inset-0 w-full h-full overflow-visible">
-                                <line x1="110%" y1="55%" x2="55.8%" y2="52%" stroke="white" strokeWidth="1" strokeOpacity="0.5" />
-                                <circle cx="55.8%" cy="52%" r="3" fill="white" />
-                            </svg>
-
-                        </div>
-                    </motion.div>
 
                     {/* Screen Background - Drastically reduced to ensure no bleeding */}
                     <div className="absolute left-[50%] top-[49.2%] -translate-x-1/2 -translate-y-1/2 w-[36.5%] h-[78%] bg-black rounded-[2rem] overflow-hidden">
@@ -128,14 +69,49 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                             style={{ scale: inverseScale }}
                             className="absolute inset-0 flex items-center justify-center pointer-events-none"
                         >
-                            <div className="relative w-full h-full">
-                                {/* FEATURE OVERLAY REMOVED FROM HERE */}
+                            {/* V4 Content Wrapper - Sized to Viewport to act as "World" behind the "Window" */}
+                            <div className="relative w-[100vw] h-[100vh] flex flex-col justify-center px-6 md:px-24 pt-20 bg-black text-white">
 
-                                {/* Squares - Static Position (Relative to container) */}
-                                <div className="absolute left-[34%] top-[43%] w-[28%] aspect-square bg-white rounded-[20%] -translate-x-1/2 -translate-y-1/2" />
-                                <div className="absolute left-[66%] top-[43%] w-[28%] aspect-square bg-white rounded-[20%] -translate-x-1/2 -translate-y-1/2" />
-                                <div className="absolute left-[34%] top-[57%] w-[28%] aspect-square bg-white rounded-[20%] -translate-x-1/2 -translate-y-1/2" />
-                                <div className="absolute left-[66%] top-[57%] w-[28%] aspect-square bg-white rounded-[20%] -translate-x-1/2 -translate-y-1/2" />
+
+
+                                {/* Grid Background Effect */}
+                                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 z-10" />
+
+                                {/* Floating Number 01 */}
+                                <div className="absolute top-[25%] left-6 md:left-[5%] font-serif italic text-4xl md:text-5xl text-white/90">
+                                    01
+                                </div>
+
+                                {/* Main Title Group */}
+                                <div className="flex flex-col justify-center h-full mt-20 md:mt-0 md:ml-[15%] w-fit relative z-10">
+                                    <h1 className="flex flex-col text-6xl md:text-[8vw] leading-none tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
+                                        <span className="block whitespace-nowrap">Experiencias</span>
+                                        <span className="block whitespace-nowrap"><span className="font-bold italic">digitales</span></span>
+                                        <span className="block whitespace-nowrap">únicas</span>
+                                        <span className="block whitespace-nowrap">e innovadoras</span>
+
+                                        {/* Circular Video next to text */}
+                                        <motion.div
+                                            className="absolute -left-64 top-96 w-24 h-24 rounded-full shadow-xl z-10 flex items-center justify-center bg-white"
+                                            animate={{ y: ["-20%", "0%", "-20%"] }}
+                                            transition={{
+                                                duration: 2,
+                                                repeat: Infinity,
+                                                ease: "easeInOut",
+                                            }}
+                                        >
+                                            {/* Black Arrow */}
+                                            <ArrowDown className="relative w-12 h-12 text-black" />
+                                        </motion.div>
+                                    </h1>
+                                </div>
+
+
+
+                                {/* Scroll Indicator */}
+                                <div className="absolute bottom-2 right-2 flex items-center gap-4 text-xs font-semibold tracking-[0.2em] uppercase text-gray-500">
+                                    <span>Scroll</span>
+                                </div>
                             </div>
                         </motion.div>
                     </div>
@@ -149,6 +125,6 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                 </motion.div>
 
             </div>
-        </section>
+        </section >
     );
 }

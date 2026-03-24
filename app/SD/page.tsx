@@ -11,7 +11,7 @@ import { X, Facebook, Linkedin, Instagram, ArrowUpRight } from "lucide-react";
 // Menu Items
 const menuItems = [
     { label: "Home", href: "/#home" },
-    { label: "Diseño web", href: "/gravity" },
+    { label: "Diseño web", href: "/webdesing" },
     { label: "Soluciones digitales", href: "/soluciones-digitales" },
     { label: "Portafolio", href: "/#portafolio" },
     { label: "Contacto", href: "/#contacto" },
