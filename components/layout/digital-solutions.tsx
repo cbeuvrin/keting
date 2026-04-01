@@ -12,8 +12,9 @@ export function DigitalSolutions() {
         offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "90%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "2rem"]);
+    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
+    const titleFill = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
 
     return (
         <motion.section
@@ -33,13 +34,10 @@ export function DigitalSolutions() {
                         className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
                         <motion.h2
-                            initial={{ backgroundSize: "0% 100%" }}
-                            whileInView={{ backgroundSize: "100% 100%" }}
-                            viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 1.2, ease: [0.1, 0.5, 0.5, 1], delay: 0.3 }}
                             style={{
                                 color: "rgba(182, 182, 182, 0.2)",
-                                backgroundImage: "linear-gradient(to right, #666666, #666666)",
+                                backgroundImage: "linear-gradient(to right, #000000, #000000)",
+                                backgroundSize: titleFill,
                                 backgroundRepeat: "no-repeat",
                                 WebkitBackgroundClip: "text",
                                 backgroundClip: "text",
@@ -47,7 +45,7 @@ export function DigitalSolutions() {
                             }}
                             className="text-4xl md:text-7xl font-bold mb-2 tracking-tight"
                         >
-                            Soluciones digitales
+                            Soluciones <span className="italic font-light">digitales</span>
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0, x: -10 }}
@@ -106,8 +104,7 @@ export function DigitalSolutions() {
                                     }}
                                     className="aspect-square bg-black rounded-[1.5rem] shadow-lg flex flex-col items-center justify-center p-2 text-white"
                                 >
-                                    <div className="mb-2 text-[#FF4500]">{item.icon}</div>
-                                    <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
+                                    {/* Contenido eliminado a petición del usuario */}
                                 </motion.div>
                             ))}
                         </motion.div>

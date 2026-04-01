@@ -34,7 +34,7 @@ export default function Home() {
   const backgroundColor = useTransform(
     scrollYProgress,
     [0, 0.5],
-    ["#FAFAFA", "#000000"]
+    ["#FAFAFA", "#242424"]
   );
 
   return (

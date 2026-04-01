@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function Footer() {
     return (
-        <footer className="bg-black text-white border-t border-gray-800">
+        <footer className="bg-[#242424] text-white border-t border-gray-800">
             {/* Main Footer Content */}
             <div className="container mx-auto px-6 py-12">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
@@ -55,8 +55,8 @@ export function Footer() {
                     <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
                         <p>&copy; {new Date().getFullYear()} Keting Media. Todos los derechos reservados.</p>
                         <div className="flex gap-4 mt-4 md:mt-0">
-                            <Link href="#" className="hover:text-white transition-colors">Política de Privacidad</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+                            <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de Privacidad</Link>
+                            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos y Condiciones</Link>
                         </div>
                     </div>
                 </div>

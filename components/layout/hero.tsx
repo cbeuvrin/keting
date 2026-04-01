@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionValueEvent, useSpring, animate, cubicBezier } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
@@ -153,11 +154,11 @@ export function Hero() {
         );
     }
 
-    const AnimatedWord = ({ word }: { word: string }) => {
+    const AnimatedWord = ({ word, className }: { word: string, className?: string }) => {
         const chars = word.split("");
 
         return (
-            <span className="inline-block mr-[0.25em] whitespace-nowrap">
+            <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
                 {chars.map((char, i) => (
                     <MagnifyingChar key={i} char={char} index={i} baseDelay={0} />
                 ))}
@@ -171,9 +172,17 @@ export function Hero() {
 
         return (
             <span className="block">
-                {words.map((word, i) => (
-                    <AnimatedWord key={i} word={word} />
-                ))}
+                {words.map((word, i) => {
+                    const cleanWord = word.replace(/[.,]/g, "");
+                    const isStyled = cleanWord === "escalan" || cleanWord === "negocios";
+                    return (
+                        <AnimatedWord 
+                            key={i} 
+                            word={word} 
+                            className={isStyled ? "italic font-light" : ""} 
+                        />
+                    );
+                })}
             </span>
         );
     };
@@ -194,7 +203,7 @@ export function Hero() {
         >
             <div className="sticky top-0 h-screen flex flex-col justify-center relative">
 
-                <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col justify-center h-full pb-32 md:pb-0">
+                <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-32 md:pb-24 lg:pb-14">
 
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
                     <motion.div
@@ -202,7 +211,7 @@ export function Hero() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 1, duration: 0.8 }}
-                        className="hidden lg:flex justify-end absolute top-32 right-12 z-20"
+                        className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
                         <div className="text-base text-gray-500 max-w-lg text-right leading-relaxed">
                             Más del <span className="font-bold text-black">80%</span> de nuestros <span className="font-bold text-black">proyectos</span> son <span className="font-bold text-black">referidos</span><br />
@@ -219,14 +228,12 @@ export function Hero() {
                             filter: blurFilter
                         }}
                         suppressHydrationWarning
-                        className="max-w-6xl origin-center z-10 mt-48"
+                        className="w-full origin-center z-10 pb-12 lg:pb-2 mt-32"
                     >
                         <motion.h1
-                            className="text-[clamp(2rem,7vw,6.5rem)] font-heading font-medium leading-[0.9] tracking-tighter text-black"
+                            className="text-[clamp(2rem,8vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
                         >
-                            <AnimatedLine text="Soluciones digitales" />
-                            <AnimatedLine text="que escalan negocios" />
-                            <AnimatedLine text="ambiciosos." />
+                            <AnimatedLine text="Soluciones digitales que escalan negocios ambiciosos." />
                         </motion.h1>
                     </motion.div>
 

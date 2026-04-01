@@ -17,7 +17,7 @@ export function AboutUs() {
     return (
         <section
             ref={sectionRef}
-            className="relative z-20 w-full py-32 md:py-48 bg-white text-black font-heading overflow-hidden"
+            className="relative z-20 w-full pt-32 pb-12 md:pt-48 md:pb-20 bg-white text-black font-heading overflow-hidden"
         >
             {/* Background Text - Subtle background "About" with parallax */}
             <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-[0.03]">

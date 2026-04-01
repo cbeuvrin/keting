@@ -199,7 +199,7 @@ export function BlogCarousel() {
     }, []);
 
     return (
-        <section id="blog" className="relative w-full py-24 md:py-32 bg-white overflow-hidden">
+        <section id="blog" className="relative w-full pt-12 pb-24 md:pt-20 md:pb-32 bg-white overflow-hidden">
             {/* Smooth background blend */}
             <div className="absolute inset-0 bg-[#FAFAFA] [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]" />
 
@@ -210,7 +210,7 @@ export function BlogCarousel() {
                         <p className="text-xs font-bold tracking-[3px] uppercase text-gray-400 mb-3">
                             Blog &amp; Recursos
                         </p>
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-[#1a1a1a] leading-none">
+                        <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-[#1a1a1a] leading-none">
                             Ideas que<br />
                             <span className="italic font-light">inspiran</span>
                         </h2>

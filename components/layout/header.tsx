@@ -47,7 +47,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="container mx-auto px-6 md:px-12 flex items-center justify-between pointer-events-auto"> {/* Enable pointer events for children */}
+                <div className="w-full px-6 md:px-12 lg:px-20 flex items-center justify-between pointer-events-auto"> {/* Enable pointer events for children */}
                     {/* Left: Logo + Separator + Menu Trigger -> Minimal Style (No Capsule) */}
                     <div className={cn(
                         "flex items-center gap-6 transition-all duration-300",

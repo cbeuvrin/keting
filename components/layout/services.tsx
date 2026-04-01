@@ -11,16 +11,17 @@ export function Services() {
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end start"] // Extend range to cover full passage
+        offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "90%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "2rem"]);
+    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
 
     // Parallax Effect for Description ONLY
     // "Delayed Entry" - Starts lower (+60px), stays there a bit, then slides UP to 0px (Final position)
     // Does NOT go above 0px (negative), so it won't cross the line.
     const descY = useTransform(scrollYProgress, [0, 0.6], [60, 0], { ease: cubicBezier(0.8, 0, 1, 1) });
+    const titleFill = useTransform(scrollYProgress, [0.1, 0.4], ["0% 100%", "100% 100%"]);
 
     return (
         <motion.section
@@ -41,13 +42,10 @@ export function Services() {
                     >
                         <Link href="/webdesing" className="block group cursor-pointer w-full">
                             <motion.h2
-                                initial={{ backgroundSize: "0% 100%" }}
-                                whileInView={{ backgroundSize: "100% 100%" }}
-                                viewport={{ once: true, amount: 0.5 }}
-                                transition={{ duration: 1.2, ease: [0.1, 0.5, 0.5, 1], delay: 0.3 }}
                                 style={{
                                     color: "rgba(182, 182, 182, 0.2)",
-                                    backgroundImage: "linear-gradient(to right, #b6b6b6, #b6b6b6)",
+                                    backgroundImage: "linear-gradient(to right, #ffffff, #ffffff)",
+                                    backgroundSize: titleFill,
                                     backgroundRepeat: "no-repeat",
                                     WebkitBackgroundClip: "text",
                                     backgroundClip: "text",
@@ -55,7 +53,7 @@ export function Services() {
                                 }}
                                 className="text-4xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-center md:origin-left text-center md:text-left"
                             >
-                                Diseño web
+                                Diseño <span className="italic font-light">web</span>
                             </motion.h2>
 
                             {/* Animated Separator */}

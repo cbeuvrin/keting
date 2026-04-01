@@ -16,7 +16,7 @@ export function WhatsAppButton() {
                     <>
                         {/* WhatsApp Option */}
                         <motion.a
-                            href="https://wa.me/5211234567890" // Replace with actual number
+                            href="https://wa.me/525543830150" // Updated with current phone
                             target="_blank"
                             rel="noopener noreferrer"
                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
@@ -30,7 +30,7 @@ export function WhatsAppButton() {
 
                         {/* Email Option */}
                         <motion.a
-                            href="mailto:contacto@ketingmedia.com" // Replace with actual email
+                            href="mailto:info@ketingmedia.com" // Updated with current email
                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.8 }}
@@ -49,7 +49,9 @@ export function WhatsAppButton() {
                 className="flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-2xl hover:scale-105 transition-transform"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
+                whileHover={{ rotate: 45 }}
                 whileTap={{ scale: 0.9 }}
+                transition={{ rotate: { duration: 0.3 } }}
             >
                 <div className="relative">
                     <AnimatePresence mode="wait">

@@ -11,8 +11,9 @@ export function Toogo() {
         offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "90%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "2rem"]);
+    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
+    const titleFill = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
 
     return (
         <motion.section
@@ -32,13 +33,10 @@ export function Toogo() {
                         className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
                         <motion.h2
-                            initial={{ backgroundSize: "0% 100%" }}
-                            whileInView={{ backgroundSize: "100% 100%" }}
-                            viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 1.2, ease: [0.1, 0.5, 0.5, 1], delay: 0.3 }}
                             style={{
                                 color: "rgba(26, 35, 50, 0.2)",
                                 backgroundImage: "linear-gradient(to right, #1a2332, #1a2332)",
+                                backgroundSize: titleFill,
                                 backgroundRepeat: "no-repeat",
                                 WebkitBackgroundClip: "text",
                                 backgroundClip: "text",
@@ -46,7 +44,7 @@ export function Toogo() {
                             }}
                             className="text-4xl md:text-7xl font-bold mb-8 tracking-tight"
                         >
-                            toogo.store
+                            toogo.<span className="italic font-light">store</span>
                         </motion.h2>
 
                         <div className="w-full h-px bg-gray-400 mb-8 max-w-[100px] md:max-w-none"></div>
