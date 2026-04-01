@@ -14,7 +14,7 @@ interface ContactModalProps {
 export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [selectedInterest, setSelectedInterest] = useState<string[]>([]);
 
-    const interests = ["Diseño Web", "App", "Solución digital"];
+    const interests = ["Diseño Web", "Precio", "Solución digital"];
 
     const toggleInterest = (interest: string) => {
         if (selectedInterest.includes(interest)) {
