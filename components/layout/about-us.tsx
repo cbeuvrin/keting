@@ -77,9 +77,10 @@ export function AboutUs() {
                         >
                             <img
                                 src="/carlos-beuvrin.png"
-                                alt="Carlos Beuvrin"
+                                alt="Carlos Beuvrin - Director de Keting Media, especializado en Marketing Digital y Diseño Web en México"
                                 className="w-full h-full object-cover"
                                 style={{ objectPosition: "center 5%" }}
+                                loading="lazy"
                             />
                         </motion.div>
                     </div>

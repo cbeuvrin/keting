@@ -41,15 +41,15 @@ export function Services() {
                         <Link href="/webdesing" className="block group cursor-pointer w-full">
                             <motion.h2
                                 style={{
-                                    color: "rgba(182, 182, 182, 0.2)",
-                                    backgroundImage: "linear-gradient(to right, #000000, #000000)",
+                                    color: "rgba(128, 128, 128, 0.3)",
+                                    backgroundImage: "linear-gradient(to right, var(--title-fill, #ffffff), var(--title-fill, #ffffff))",
                                     backgroundSize: titleFill,
                                     backgroundRepeat: "no-repeat",
                                     WebkitBackgroundClip: "text",
                                     backgroundClip: "text",
                                     backgroundPosition: "0 0",
                                 }}
-                                className="text-6xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-left text-left w-full"
+                                className="text-6xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-left text-left w-full [--title-fill:#000000] md:[--title-fill:#ffffff]"
                             >
                                 Diseño <span className="italic font-light">web</span>
                             </motion.h2>
@@ -95,6 +95,7 @@ export function Services() {
                                         muted
                                         playsInline
                                         className="w-full h-full object-cover"
+                                        aria-label="Demo de diseño web y marketing digital por Keting Media"
                                     />
 
                                     {/* Glass Reflection */}

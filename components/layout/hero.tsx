@@ -222,21 +222,49 @@ export function Hero() {
 
 
 
-                    <motion.div
-                        style={{
-                            scale,
-                            opacity,
-                            filter: blurFilter
-                        }}
-                        suppressHydrationWarning
-                        className="w-full origin-center z-10 pb-4 lg:pb-2 mt-32"
-                    >
-                        <motion.h1
-                            className="text-[clamp(2rem,8vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
+                    <div className="relative w-full flex flex-col pt-24 md:pt-32">
+                        {/* Cinematic "Tape" Video Effect ABOVE the title for Mobile */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, x: "-5%" }}
+                            animate={{ opacity: 1, scale: 1, x: "5%" }}
+                            transition={{ 
+                                duration: 12, 
+                                repeat: Infinity, 
+                                repeatType: "mirror", 
+                                ease: "linear" 
+                            }}
+                            className="lg:hidden w-[120%] h-32 md:h-40 pointer-events-none overflow-hidden -rotate-3 self-center mb-12"
                         >
-                            <AnimatedLine text="Soluciones digitales que escalan negocios ambiciosos." />
-                        </motion.h1>
-                    </motion.div>
+                            <div className="relative w-full h-full border-y border-neutral-200/50 shadow-sm">
+                                <video
+                                    src="/videos-raros/bideo3.mov"
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    className="w-full h-full object-cover grayscale brightness-110 contrast-125"
+                                />
+                                {/* Soft Vignette to blend with background */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#FAFAFA] via-transparent to-[#FAFAFA] opacity-60" />
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            style={{
+                                scale,
+                                opacity,
+                                filter: blurFilter
+                            }}
+                            suppressHydrationWarning
+                            className="w-full origin-center relative z-10 pb-4 lg:pb-2"
+                        >
+                            <motion.h1
+                                className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
+                            >
+                                <AnimatedLine text="Soluciones digitales que escalan negocios ambiciosos." />
+                            </motion.h1>
+                        </motion.div>
+                    </div>
 
                     {/* Mobile/Tablet Subtext (Below title) */}
                     <motion.div
@@ -253,37 +281,7 @@ export function Hero() {
                         </p>
                     </motion.div>
 
-                    {/* Mobile/Tablet Monitor Mockup */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ delay: 1.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="lg:hidden relative self-center w-full max-w-[340px] group flex flex-col items-center pb-10"
-                    >
-                        {/* Monitor Frame */}
-                        <div className="relative w-full aspect-video bg-black rounded-xl p-1 shadow-[0_20px_40px_rgba(0,0,0,0.1)] overflow-hidden">
-                            {/* Screen */}
-                            <div className="relative w-full h-full bg-zinc-900 rounded-lg overflow-hidden">
-                                <video
-                                    src="/videos-raros/bideo3.mov"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className="w-full h-full object-cover"
-                                />
-                                {/* Surface Gloss */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
-                            </div>
-                        </div>
-                        {/* Monitor Stand/Base */}
-                        <div className="relative flex flex-col items-center -mt-[1px]">
-                            {/* Neck */}
-                            <div className="w-10 h-3 bg-neutral-900" />
-                            {/* Base */}
-                            <div className="w-20 h-1.5 bg-neutral-950 rounded-full shadow-sm" />
-                        </div>
-                    </motion.div>
+
 
                 </div>
                 <ScrollArrow className="text-black/80 hover:text-black" />
