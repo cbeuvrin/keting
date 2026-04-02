@@ -201,7 +201,25 @@ export function Hero() {
             }}
             className="relative h-screen snap-start"
         >
-            <div className="sticky top-0 h-screen flex flex-col justify-center relative">
+            <div className="sticky top-0 h-screen flex flex-col justify-center relative overflow-hidden">
+                {/* Full Screen Ambient Video Background for Mobile (Truly edge-to-edge) */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.12 }}
+                    transition={{ duration: 2 }}
+                    className="lg:hidden absolute inset-0 w-full h-full z-0 pointer-events-none"
+                >
+                    <video
+                        src="/videos-raros/bideo3.mov"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover grayscale brightness-125 contrast-100"
+                    />
+                    {/* Extra Gradient Layer to soften top/bottom */}
+                    <div className="absolute inset-0 bg-[#FAFAFA]/5 backdrop-blur-[1px]" />
+                </motion.div>
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-32 md:pb-24 lg:pb-14">
 
@@ -223,32 +241,6 @@ export function Hero() {
 
 
                     <div className="relative w-full flex flex-col pt-24 md:pt-32">
-                        {/* Cinematic "Tape" Video Effect ABOVE the title for Mobile */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, x: "-5%" }}
-                            animate={{ opacity: 1, scale: 1, x: "5%" }}
-                            transition={{ 
-                                duration: 12, 
-                                repeat: Infinity, 
-                                repeatType: "mirror", 
-                                ease: "linear" 
-                            }}
-                            className="lg:hidden w-[120%] h-32 md:h-40 pointer-events-none overflow-hidden -rotate-3 self-center mb-12"
-                        >
-                            <div className="relative w-full h-full border-y border-neutral-200/50 shadow-sm">
-                                <video
-                                    src="/videos-raros/bideo3.mov"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className="w-full h-full object-cover grayscale brightness-110 contrast-125"
-                                />
-                                {/* Soft Vignette to blend with background */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#FAFAFA] via-transparent to-[#FAFAFA] opacity-60" />
-                            </div>
-                        </motion.div>
-
                         <motion.div
                             style={{
                                 scale,

@@ -12,6 +12,7 @@ export function Toogo() {
     });
 
     const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
+    const mobileWidth = "100%"; // Fixed at 100% for mobile
     const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
     const titleFillProgress = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
 
@@ -24,8 +25,11 @@ export function Toogo() {
     return (
         <motion.section
             ref={containerRef}
-            style={{ width: width, borderRadius: borderRadius }}
-            className="relative z-20 mx-auto min-h-0 md:h-[51vh] py-20 md:bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full"
+            style={{ 
+                width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, 
+                borderRadius: typeof window !== 'undefined' && window.innerWidth < 768 ? "0rem" : borderRadius 
+            }}
+            className="relative z-20 mx-auto min-h-0 md:h-[51vh] py-20 md:bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
         >
             <div className="container mx-auto px-0 md:px-12 h-full flex flex-col md:flex-row items-center">
                 <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
@@ -36,7 +40,7 @@ export function Toogo() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center text-left items-start px-6 md:px-0 w-full"
+                        className="flex flex-col justify-center text-left items-start px-[30px] md:px-0 w-full"
                     >
                         <motion.h2
                             style={{
