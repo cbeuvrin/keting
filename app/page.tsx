@@ -10,16 +10,28 @@ import { Footer } from "@/components/layout/footer";
 import { BlogCarousel } from "@/components/layout/blog-carousel";
 import { Preloader } from "@/components/ui/preloader";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function Home() {
+  const [showPreloader, setShowPreloader] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
   const [headerTheme, setHeaderTheme] = useState<"light" | "dark">("light");
   const pageRef = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: pageRef,
     offset: ["start start", "end end"]
   });
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("keting_visited");
+    if (!hasVisited) {
+      setShowPreloader(true);
+      sessionStorage.setItem("keting_visited", "true");
+    } else {
+      setShowLogo(true);
+    }
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     // If progress > 0.25 (approx halfway to black), switch to dark theme (white text)
@@ -39,7 +51,7 @@ export default function Home() {
 
   return (
     <>
-      <Preloader onComplete={() => setShowLogo(true)} />
+      {showPreloader && <Preloader onComplete={() => setShowLogo(true)} />}
       <motion.main
         ref={pageRef}
         style={{ backgroundColor }}

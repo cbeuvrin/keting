@@ -14,22 +14,20 @@ export function Services() {
         offset: ["start end", "center center"]
     });
 
-    const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
-    const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
+    const width = useTransform(scrollYProgress, [0, 0.5], ["100%", "80%"]);
+    const borderRadius = useTransform(scrollYProgress, [0, 0.5], ["0rem", "3rem"]);
 
     // Parallax Effect for Description ONLY
-    // "Delayed Entry" - Starts lower (+60px), stays there a bit, then slides UP to 0px (Final position)
-    // Does NOT go above 0px (negative), so it won't cross the line.
     const descY = useTransform(scrollYProgress, [0, 0.6], [60, 0], { ease: cubicBezier(0.8, 0, 1, 1) });
-    const titleFill = useTransform(scrollYProgress, [0.1, 0.4], ["0% 100%", "100% 100%"]);
+    const titleFill = useTransform(scrollYProgress, [0, 0.4], ["0% 100%", "100% 100%"]);
 
     return (
         <motion.section
             ref={containerRef}
-            style={{ width, borderRadius }}
-            className="relative z-20 -mt-[100vh] mb-40 mx-auto min-h-screen md:min-h-0 md:h-[51vh] pt-32 pb-24 md:py-0 bg-[#222222] text-white shadow-2xl font-heading flex items-start md:items-center justify-center snap-start"
+            style={{ width: width, borderRadius: borderRadius }}
+            className="relative z-20 mb-40 mx-auto min-h-0 md:h-[51vh] py-16 md:py-0 md:bg-[#222222] text-[#222222] md:text-white md:shadow-2xl font-heading flex items-center justify-center snap-start w-full"
         >
-            <div className="container mx-auto px-6 md:px-12 h-full flex items-start md:items-center">
+            <div className="container mx-auto px-0 md:px-12 h-full flex items-start md:items-center">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start md:items-center w-full h-full">
 
                     {/* Text Content */}
@@ -38,20 +36,20 @@ export function Services() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center items-center md:items-start px-4 md:px-0 text-center md:text-left"
+                        className="flex flex-col justify-center items-start px-6 md:px-0 text-left w-full"
                     >
                         <Link href="/webdesing" className="block group cursor-pointer w-full">
                             <motion.h2
                                 style={{
                                     color: "rgba(182, 182, 182, 0.2)",
-                                    backgroundImage: "linear-gradient(to right, #ffffff, #ffffff)",
+                                    backgroundImage: "linear-gradient(to right, #000000, #000000)",
                                     backgroundSize: titleFill,
                                     backgroundRepeat: "no-repeat",
                                     WebkitBackgroundClip: "text",
                                     backgroundClip: "text",
                                     backgroundPosition: "0 0",
                                 }}
-                                className="text-4xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-center md:origin-left text-center md:text-left"
+                                className="text-6xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-left text-left w-full"
                             >
                                 Diseño <span className="italic font-light">web</span>
                             </motion.h2>
@@ -59,43 +57,31 @@ export function Services() {
                             {/* Animated Separator */}
                             <motion.div
                                 initial={{ width: 0 }}
-                                whileInView={{ width: "120px" }}
+                                whileInView={{ width: "100%" }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-                                className="h-px bg-gray-500 mb-8 mx-auto md:mx-0"
+                                className="h-px bg-black md:bg-gray-500 mb-8 mx-auto md:mx-0"
                             />
 
                             {/* Description - Parallax Applied Here */}
                             <motion.p
                                 style={{
                                     y: descY,
-                                    fontSize: "clamp(0.875rem, 0.8092rem + 0.2105vw, 1.125rem)"
+                                    fontSize: "clamp(1.1rem, 1rem + 1vw, 1.3rem)"
                                 }}
-                                className="text-gray-300 leading-relaxed font-light text-left"
+                                className="text-gray-600 md:text-gray-300 leading-relaxed font-light text-left w-full"
                             >
-                                Desarrollamos <strong className="text-white font-bold">e-commerce</strong>, <strong className="text-white font-bold">plataformas</strong> y <strong className="text-white font-bold">landing pages</strong>. Fusionamos diseño estético con estrategias SEO para escalar tu negocio.
+                                Desarrollamos <strong className="text-black md:text-white font-bold">e-commerce</strong>, <strong className="text-black md:text-white font-bold">plataformas</strong> y <strong className="text-black md:text-white font-bold">landing pages</strong>. Fusionamos diseño estético con estrategias SEO para escalar tu negocio.
                             </motion.p>
                         </Link>
                     </motion.div>
 
-                    {/* Image/Mockup - Mobile: Shopping Bag, Desktop: Phone */}
+                    {/* Desktop Only Image/Mockup */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="relative flex justify-center items-center h-full"
+                        className="hidden md:flex relative justify-center items-center h-full"
                     >
-                        {/* Mobile: Shopping Bag Image */}
-                        <img
-                            src="/shopping-bag.png"
-                            alt="Shopping bag mockup"
-                            className="md:hidden w-full max-w-[350px] h-auto object-contain"
-                            style={{ borderRadius: '30px' }}
-                        />
-
                         {/* Desktop: Premium iPhone Mockup with Video */}
-                        <div className="hidden md:block relative w-[300px] h-[610px] -my-[110px] rotate-6 hover:rotate-0 transition-transform duration-500 group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[3.5rem] overflow-hidden">
+                        <div className="relative w-[300px] h-[610px] -my-[110px] rotate-6 hover:rotate-0 transition-transform duration-500 group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[3.5rem] overflow-hidden">
 
                             {/* iPhone Frame (Bezel) */}
                             <div className="absolute inset-0 bg-[#0f0f0f] border-[6px] border-[#1a1a1a] rounded-[3.5rem] shadow-[inset_0_0_2px_rgba(255,255,255,0.2)]">
@@ -136,7 +122,7 @@ export function Services() {
 
                 </div>
             </div>
-            <CornerButton href="/webdesing" iconColor="border-white text-white" />
+            <CornerButton href="/webdesing" iconColor="border-black md:border-white text-black md:text-white" />
             <ScrollArrow />
         </motion.section>
     );
