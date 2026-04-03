@@ -5,8 +5,13 @@ import { ExternalLink, ArrowRight, Home } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { articles } from "@/lib/blog-data";
+import { articles as staticArticles } from "@/lib/blog-data";
 import { useEffect, useState } from "react";
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Helper for random tilt that stays persistent during the session (not on every re-render)
 const getStableRandomTilt = (index: number) => {
@@ -15,9 +20,22 @@ const getStableRandomTilt = (index: number) => {
 
 export default function BlogPage() {
     const [mounted, setMounted] = useState(false);
+    const [articles, setArticles] = useState(staticArticles);
 
     useEffect(() => {
         setMounted(true);
+        const fetchDynamicArticles = async () => {
+            const { data, error } = await supabase
+                .from('articles')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (data) {
+                // Mix static and dynamic, putting dynamic ones first if wanted
+                setArticles([...data, ...staticArticles]);
+            }
+        };
+        fetchDynamicArticles();
     }, []);
 
     if (!mounted) return null;

@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generate-articles?key=keting_secret_automation_2025",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}

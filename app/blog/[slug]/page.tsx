@@ -33,11 +33,44 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
     };
 }
 
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+interface BlogArticle {
+    id: any;
+    slug: string;
+    category: string;
+    title: string;
+    excerpt: string;
+    author: string;
+    date: string;
+    image: string;
+    content: string;
+    youtube_id?: string;
+    accent: string;
+    color: string;
+}
+
 export default async function ArticlePage({ params }: { params: any }) {
     const resolvedParams = await params;
     const slug = resolvedParams.slug;
     
-    const article = articles.find(a => a.slug.trim() === slug.trim());
+    let article: BlogArticle | undefined = articles.find(a => a.slug.trim() === slug.trim());
+
+    if (!article) {
+        const { data } = await supabase
+            .from('articles')
+            .select('*')
+            .eq('slug', slug)
+            .single();
+        
+        if (data) {
+            article = data as BlogArticle;
+        }
+    }
 
     if (!article) {
         notFound();
@@ -134,6 +167,20 @@ export default async function ArticlePage({ params }: { params: any }) {
                             </div>
                         )}
                     </div>
+
+                    {article.youtube_id && (
+                        <div className="w-full aspect-video rounded-[2rem] overflow-hidden mb-20 shadow-2xl">
+                            <iframe
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${article.youtube_id}`}
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-20">
                         <div className="blog-content max-w-none">
