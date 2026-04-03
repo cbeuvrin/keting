@@ -176,10 +176,10 @@ export function Hero() {
                     const cleanWord = word.replace(/[.,]/g, "");
                     const isStyled = cleanWord === "escalan" || cleanWord === "negocios";
                     return (
-                        <AnimatedWord 
-                            key={i} 
-                            word={word} 
-                            className={isStyled ? "italic font-light" : ""} 
+                        <AnimatedWord
+                            key={i}
+                            word={word}
+                            className={isStyled ? "italic font-light" : ""}
                         />
                     );
                 })}
@@ -202,27 +202,28 @@ export function Hero() {
             className="relative h-screen snap-start"
         >
             <div className="sticky top-0 h-screen flex flex-col justify-center relative overflow-hidden">
-                {/* Full Screen Ambient Video Background for Mobile (Truly edge-to-edge) */}
+                {/* --- FULL SCREEN CINEMATIC VIDEO BACKGROUND (raro3.mp4) --- */}
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.12 }}
-                    transition={{ duration: 2 }}
-                    className="lg:hidden absolute inset-0 w-full h-full z-0 pointer-events-none"
+                    animate={{ opacity: 0.15 }}
+                    transition={{ duration: 2.5 }}
+                    className="absolute inset-0 w-full h-full z-0 pointer-events-none"
                 >
                     <video
-                        src="/videos-raros/bideo3.mov"
+                        src="/videos-raros/este1.mp4"
                         autoPlay
                         loop
                         muted
                         playsInline
-                        className="w-full h-full object-cover grayscale brightness-125 contrast-100"
+                        className="w-full h-full object-cover grayscale brightness-110 contrast-125"
                     />
-                    {/* Extra Gradient Layer to soften top/bottom */}
-                    <div className="absolute inset-0 bg-[#FAFAFA]/5 backdrop-blur-[1px]" />
+                    {/* Seamless Blend: Solid white gradient for maximum text clarity */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[65%] bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA] to-transparent z-10" />
+                    {/* Soft Vignette Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA]/20 via-transparent to-[#FAFAFA]/10" />
                 </motion.div>
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-32 md:pb-24 lg:pb-14">
-
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
                     <motion.div
                         style={{ opacity, y: subtextY }}
@@ -238,9 +239,7 @@ export function Hero() {
                         </div>
                     </motion.div>
 
-
-
-                    <div className="relative w-full flex flex-col pt-24 md:pt-32">
+                    <div className="relative w-full flex flex-col pt-4 md:pt-6">
                         <motion.div
                             style={{
                                 scale,
@@ -256,35 +255,6 @@ export function Hero() {
                             >
                                 / Estrategia & Diseño Digital /
                             </motion.h2>
-
-                            {/* --- THE CINEMATIC DIAGONAL TAPE --- */}
-                            <motion.div 
-                                style={{ 
-                                    rotate: -8, 
-                                    scale: useTransform(scrollYProgress, [0, 0.5], [1, 1.2]),
-                                    opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0.4]) 
-                                }}
-                                className="absolute top-[40%] -left-20 -right-20 h-[12vh] md:h-[18vh] bg-black z-20 overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] pointer-events-none"
-                            >
-                                {/* Moving Video inside the Tape */}
-                                <motion.div 
-                                    style={{ 
-                                        x: useTransform(scrollYProgress, [0, 1], [0, -400]) 
-                                    }}
-                                    className="relative w-[150%] h-full"
-                                >
-                                    <video
-                                        src="/videos-raros/bideo3.mov"
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        className="w-full h-full object-cover grayscale brightness-110 contrast-125 opacity-80"
-                                    />
-                                    {/* Glassmorphism Overlay on Top of Video */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
-                                </motion.div>
-                            </motion.div>
 
                             <motion.h1
                                 className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
