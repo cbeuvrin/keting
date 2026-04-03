@@ -82,10 +82,36 @@ function BlogCard({
     );
 }
 
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export function BlogCarousel() {
+    const [allArticles, setAllArticles] = useState(articles);
     const CARD_WIDTH = 340; // card width + gap
-    const TOTAL_WIDTH = CARD_WIDTH * articles.length;
+    const [totalWidth, setTotalWidth] = useState(CARD_WIDTH * articles.length);
+
+    useEffect(() => {
+        const fetchDynamicArticles = async () => {
+            const { data, error } = await supabase
+                .from('articles')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (data && data.length > 0) {
+                const combined = [...data, ...articles];
+                setAllArticles(combined);
+                setTotalWidth(CARD_WIDTH * combined.length);
+            }
+        };
+        fetchDynamicArticles();
+    }, []);
+
+    // Deterministic tilt per card index
+    const tilts = allArticles.map((_, i) => ((i * 137 + 31) % 29) - 14);
 
     // --- State ---
     const [direction, setDirection] = useState<1 | -1>(1);
@@ -128,7 +154,7 @@ export function BlogCarousel() {
             }
         }
 
-        offsetRef.current = ((offsetRef.current + step) % TOTAL_WIDTH + TOTAL_WIDTH) % TOTAL_WIDTH;
+        offsetRef.current = ((offsetRef.current + step) % totalWidth + totalWidth) % totalWidth;
 
         if (trackRef.current) {
             trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
@@ -268,13 +294,13 @@ export function BlogCarousel() {
                 <div
                     ref={trackRef}
                     className="flex gap-6 will-change-transform py-16 px-6" // Increased padding-y
-                    style={{ width: `${TOTAL_WIDTH * 3}px` }}
+                    style={{ width: `${totalWidth * 3}px` }}
                 >
-                    {[...articles, ...articles, ...articles].map((article, i) => (
+                    {[...allArticles, ...allArticles, ...allArticles].map((article, i) => (
                         <BlogCard
                             key={`${article.id}-${i}`}
                             article={article}
-                            tilt={TILTS[article.id - 1]}
+                            tilt={tilts[i % allArticles.length]}
                             velocity={velocity}
                         />
                     ))}
