@@ -250,6 +250,42 @@ export function Hero() {
                             suppressHydrationWarning
                             className="w-full origin-center relative z-10 pb-4 lg:pb-2"
                         >
+                            <motion.h2
+                                style={{ opacity, y: subtextY }}
+                                className="text-[10px] md:text-xs font-bold tracking-[4px] uppercase text-gray-400 mb-8 md:mb-12"
+                            >
+                                / Estrategia & Diseño Digital /
+                            </motion.h2>
+
+                            {/* --- THE CINEMATIC DIAGONAL TAPE --- */}
+                            <motion.div 
+                                style={{ 
+                                    rotate: -8, 
+                                    scale: useTransform(scrollYProgress, [0, 0.5], [1, 1.2]),
+                                    opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0.4]) 
+                                }}
+                                className="absolute top-[40%] -left-20 -right-20 h-[12vh] md:h-[18vh] bg-black z-20 overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] pointer-events-none"
+                            >
+                                {/* Moving Video inside the Tape */}
+                                <motion.div 
+                                    style={{ 
+                                        x: useTransform(scrollYProgress, [0, 1], [0, -400]) 
+                                    }}
+                                    className="relative w-[150%] h-full"
+                                >
+                                    <video
+                                        src="/videos-raros/bideo3.mov"
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className="w-full h-full object-cover grayscale brightness-110 contrast-125 opacity-80"
+                                    />
+                                    {/* Glassmorphism Overlay on Top of Video */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
+                                </motion.div>
+                            </motion.div>
+
                             <motion.h1
                                 className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
                             >

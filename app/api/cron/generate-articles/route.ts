@@ -11,14 +11,14 @@ const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY!;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY!;
 const CRON_SECRET = process.env.CRON_SECRET!; 
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
 export async function GET(request: Request) {
     // 1. Verificación de seguridad
     const { searchParams } = new URL(request.url);
     if (searchParams.get('key') !== CRON_SECRET) {
         return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     const generator = new ArticleGenerator(GEMINI_API_KEY);
     const multimedia = new MultimediaSearch(UNSPLASH_ACCESS_KEY, YOUTUBE_API_KEY);
