@@ -14,7 +14,7 @@ const menuItems = [
     { label: "Soluciones digitales", href: "/soluciones-digitales" },
     { label: "Precio", href: "/precioweb" },
     { label: "Portafolio", href: "/#portafolio" },
-    { label: "Blog", href: "/#blog" },
+    { label: "Blog", href: "/blog" },
 ];
 
 // HeaderProps updated to include initialColor and forcedTheme

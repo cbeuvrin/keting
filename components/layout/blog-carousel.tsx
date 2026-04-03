@@ -168,8 +168,8 @@ export function BlogCarousel() {
         // Hand off velocity to momentum
         momentumRef.current = dragVelocityRef.current;
 
-        // If dragged more than 5px, we consider it a drag, not a click
-        if (totalDrag > 5) {
+        // If dragged more than 20px, we consider it a drag, not a click
+        if (totalDrag > 20) {
             const dragDirection = dragStartXRef.current - e.clientX > 0 ? 1 : -1;
             directionRef.current = dragDirection;
             setDirection(dragDirection);
@@ -181,7 +181,7 @@ export function BlogCarousel() {
     const handleContainerClick = useCallback((e: React.MouseEvent) => {
         // If movement was significant, prevent click from triggering link
         const dx = Math.abs(dragStartXRef.current - e.clientX);
-        if (dx > 5) {
+        if (dx > 20) {
             e.preventDefault();
             e.stopPropagation();
         }
