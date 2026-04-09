@@ -75,14 +75,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 width: showLogo ? "auto" : 0,
                                 opacity: showLogo ? 1 : 0
                             }}
-                            className="overflow-visible flex items-center pr-2" // Overflow visible for the badge effect?
+                            className="overflow-visible flex items-center pr-2"
                         >
                             <Link href="/">
                                 <motion.div
                                     className={cn(
                                         "p-2 rounded-2xl cursor-pointer",
-                                        // If effectiveLogoColor is white -> bg-black (to contrast)
-                                        // If effectiveLogoColor is black -> bg-white
                                         effectiveLogoColor === "white" ? "bg-black" : "bg-white"
                                     )}
                                 >
@@ -95,6 +93,18 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             </Link>
                         </motion.div>
 
+                        {/* Mobile Hablemos Button */}
+                        <button
+                            onClick={() => setIsContactOpen(true)}
+                            className={cn(
+                                "md:hidden px-4 rounded-2xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm",
+                                effectiveLogoColor === "white" ? "bg-black text-white" : "bg-white text-black"
+                            )}
+                            style={{ height: '44px' }} // Match logo container height (h-7: 28px + p-2: 16px)
+                        >
+                            Hablemos
+                        </button>
+
                         {/* Vertical Separator */}
                         <motion.div
                             initial={{ height: 0, opacity: 0 }}
@@ -102,28 +112,37 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 height: showLogo ? 24 : 0,
                                 opacity: showLogo ? 1 : 0
                             }}
-                            className="w-[1px] bg-gray-300 mx-2 hidden md:block" // Hidden on mobile if space is tight? User asked for it.
+                            className="w-[1px] bg-gray-300 mx-2 hidden md:block"
                         />
 
+                        {/* Desktop Menu Trigger */}
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="flex items-center gap-3 group"
+                            className="hidden md:flex items-center gap-3 group"
                         >
                             <MenuIcon className="w-8 h-8 stroke-[1.5] stroke-current group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-heading font-normal tracking-[1px] uppercase hidden md:block">menu</span>
+                            <span className="text-sm font-heading font-normal tracking-[1px] uppercase">menu</span>
                         </button>
                     </div>
 
-                    {/* Right: Contact Button */}
-                    <div className="relative">
+                    {/* Right Group: Desktop Hablemos OR Mobile Hamburger */}
+                    <div className="flex items-center gap-4 relative">
+                        {/* Desktop Hablemos Button */}
                         <button
                             onClick={() => setIsContactOpen(true)}
-                            className="bg-black text-white px-5 md:px-8 py-2 md:py-3 rounded-2xl text-xs md:text-sm font-bold hover:bg-zinc-800 transition-colors shadow-lg"
+                            className="hidden md:block bg-black text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-zinc-800 transition-colors shadow-lg"
                         >
                             Hablemos
                         </button>
 
-                        {/* Contact Form Dropdown ... (unchanged) */}
+                        {/* Mobile Hamburger Trigger */}
+                        <button
+                            onClick={() => setIsMenuOpen(true)}
+                            className="md:hidden flex items-center group"
+                        >
+                            <MenuIcon className="w-8 h-8 stroke-[1.5] stroke-current group-hover:scale-110 transition-transform" />
+                        </button>
+
                         <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
                     </div>
                 </div>
