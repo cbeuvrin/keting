@@ -202,26 +202,7 @@ export function Hero() {
             className="relative h-screen snap-start"
         >
             <div className="sticky top-0 h-screen flex flex-col justify-center relative overflow-hidden">
-                {/* --- FULL SCREEN CINEMATIC VIDEO BACKGROUND (raro3.mp4) --- */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.15 }}
-                    transition={{ duration: 2.5 }}
-                    className="absolute inset-0 w-full h-full z-0 pointer-events-none"
-                >
-                    <video
-                        src="/videos-raros/este1.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover grayscale brightness-110 contrast-125"
-                    />
-                    {/* Seamless Blend: Solid white gradient for maximum text clarity */}
-                    <div className="absolute bottom-0 left-0 right-0 h-[65%] bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA] to-transparent z-10" />
-                    {/* Soft Vignette Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA]/20 via-transparent to-[#FAFAFA]/10" />
-                </motion.div>
+
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-32 md:pb-24 lg:pb-14">
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
