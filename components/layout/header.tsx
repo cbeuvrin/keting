@@ -87,23 +87,11 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     <img
                                         src={currentLogo}
                                         alt="Keting Media"
-                                        className="h-7 md:h-10 w-auto object-contain"
+                                        className="h-9 md:h-10 w-auto object-contain"
                                     />
                                 </motion.div>
                             </Link>
                         </motion.div>
-
-                        {/* Mobile Hablemos Button */}
-                        <button
-                            onClick={() => setIsContactOpen(true)}
-                            className={cn(
-                                "md:hidden px-4 rounded-2xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm",
-                                effectiveLogoColor === "white" ? "bg-black text-white" : "bg-white text-black"
-                            )}
-                            style={{ height: '44px' }} // Match logo container height (h-7: 28px + p-2: 16px)
-                        >
-                            Hablemos
-                        </button>
 
                         {/* Vertical Separator */}
                         <motion.div

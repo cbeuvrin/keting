@@ -2,10 +2,14 @@ import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionValueEvent, useSpring, animate, cubicBezier } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
+import { ContactModal } from "@/components/pricing/contact-modal";
+
 
 export function Hero() {
     const targetRef = useRef<HTMLDivElement>(null);
     const [hasAnimated, setHasAnimated] = useState(false);
+    const [isContactOpen, setIsContactOpen] = useState(false);
+
     const { scrollYProgress } = useScroll({
         target: targetRef,
         offset: ["start start", "end start"],
@@ -204,7 +208,7 @@ export function Hero() {
             <div className="sticky top-0 h-screen flex flex-col justify-center relative overflow-hidden">
 
 
-                <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-32 md:pb-24 lg:pb-14">
+                <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-44 md:pb-24 lg:pb-14">
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
                     <motion.div
                         style={{ opacity, y: subtextY }}
@@ -258,7 +262,17 @@ export function Hero() {
                             por clientes anteriores que conocen<br />
                             nuestro trabajo y compromiso
                         </p>
+
+                        <button
+                            onClick={() => setIsContactOpen(true)}
+                            className="mt-8 bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-lg hover:bg-zinc-800 transition-colors w-fit"
+                        >
+                            Hablemos
+                        </button>
                     </motion.div>
+
+                    <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+
 
 
 
