@@ -35,14 +35,25 @@ export function AboutUs() {
 
                     {/* Left Column: Greeting + Bio */}
                     <div className="md:col-span-12 lg:col-span-7 space-y-8">
-                        <motion.h3
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-2xl md:text-3xl lg:text-4xl font-normal leading-[1.1] tracking-tighter text-[#1a1a1a]"
-                        >
-                            Creando el futuro digital en México desde 2019. Diseño e innovación impulsada por IA para proyectos que rompen el molde.
-                        </motion.h3>
+                        <div className="space-y-6">
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tighter text-[#1a1a1a]"
+                            >
+                                Creando el futuro <span className="italic font-light text-gray-400">digital</span>
+                            </motion.h2>
+
+                            <motion.p
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
+                                className="text-xl md:text-2xl text-gray-600 font-normal leading-snug max-w-3xl"
+                            >
+                                en México desde 2019. Diseño e innovación impulsada por IA para proyectos que rompen el molde.
+                            </motion.p>
+                        </div>
 
                         <div className="space-y-4">
                             <motion.p
