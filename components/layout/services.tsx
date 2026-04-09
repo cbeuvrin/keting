@@ -26,10 +26,10 @@ export function Services() {
         <motion.section
             ref={containerRef}
             style={{ width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, borderRadius: borderRadius }}
-            className="relative z-20 mb-40 mx-auto min-h-0 md:h-[51vh] py-16 md:py-0 md:bg-[#222222] text-[#222222] md:text-white md:shadow-2xl font-heading flex items-center justify-center snap-start w-full overflow-x-hidden"
+            className="relative z-20 mb-40 mx-auto min-h-0 md:h-[51vh] py-16 md:py-0 md:bg-[#222222] text-[#222222] md:text-white md:shadow-2xl font-heading flex items-center justify-center snap-start w-full overflow-x-hidden md:overflow-visible"
         >
-            <div className="w-full h-full flex items-start md:items-center">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start md:items-center w-full h-full px-0 md:px-0">
+            <div className="container mx-auto px-6 md:px-12 h-full flex items-start md:items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start md:items-center w-full">
 
                     {/* Text Content */}
                     <motion.div
@@ -37,7 +37,7 @@ export function Services() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center items-start px-[30px] md:px-0 text-left w-full"
+                        className="flex flex-col justify-center items-start text-left w-full"
                     >
                         <Link href="/webdesing" className="block group cursor-pointer w-full">
                             <motion.h2

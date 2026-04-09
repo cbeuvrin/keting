@@ -205,7 +205,7 @@ export function Hero() {
             }}
             className="relative h-screen snap-start"
         >
-            <div className="sticky top-0 h-screen flex flex-col justify-center relative overflow-hidden">
+            <div className="sticky top-0 h-screen flex flex-col justify-center relative">
 
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-44 md:pb-24 lg:pb-14">

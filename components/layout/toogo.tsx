@@ -16,12 +16,6 @@ export function Toogo() {
     const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
     const titleFillProgress = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
 
-    // Dynamic colors for mobile scroll (matching the page background transition)
-    const { scrollYProgress: pageScrollY } = useScroll();
-    const textColor = useTransform(pageScrollY, [0.3, 0.5], ["#1a2332", "#ffffff"]);
-    const descColor = useTransform(pageScrollY, [0.3, 0.5], ["#374151", "#d1d5db"]);
-    const separatorColor = useTransform(pageScrollY, [0.3, 0.5], ["#000000", "#ffffff"]);
-
     return (
         <motion.section
             ref={containerRef}
@@ -29,9 +23,9 @@ export function Toogo() {
                 width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, 
                 borderRadius: typeof window !== 'undefined' && window.innerWidth < 768 ? "0rem" : borderRadius 
             }}
-            className="relative z-20 mx-auto min-h-0 md:h-[51vh] py-20 md:bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
+            className="relative z-20 mx-auto min-h-0 md:h-[51vh] py-20 bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
         >
-            <div className="container mx-auto px-0 md:px-12 h-full flex flex-col md:flex-row items-center">
+            <div className="container mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-center">
                 <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
 
                     {/* Text Content */}
@@ -40,15 +34,12 @@ export function Toogo() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-center text-left items-start px-[30px] md:px-0 w-full"
+                        className="flex flex-col justify-center text-left items-start w-full"
                     >
                         <motion.h2
                             style={{
                                 color: "rgba(26, 35, 50, 0.1)",
-                                backgroundImage: useTransform(pageScrollY, [0.3, 0.5], [
-                                    "linear-gradient(to right, #1a2332, #1a2332)",
-                                    "linear-gradient(to right, #ffffff, #ffffff)"
-                                ]),
+                                backgroundImage: "linear-gradient(to right, #1a2332, #1a2332)",
                                 backgroundSize: titleFillProgress,
                                 backgroundRepeat: "no-repeat",
                                 WebkitBackgroundClip: "text",
@@ -60,20 +51,18 @@ export function Toogo() {
                             toogo.<br className="md:hidden" /><span className="italic font-light">store</span>
                         </motion.h2>
 
-                        <motion.div 
-                            style={{ backgroundColor: separatorColor }}
-                            className="w-full h-px mb-8"
+                        <div 
+                            className="w-full h-px mb-8 bg-black/20"
                         />
 
-                        <motion.p
+                        <p
                             style={{ 
-                                color: descColor,
                                 fontSize: "clamp(1.1rem, 1rem + 1vw, 1.3rem)" 
                             }}
-                            className="leading-relaxed font-light text-left w-full"
+                            className="leading-relaxed font-light text-left w-full text-gray-700"
                         >
-                            Olvídate de depender de programadores o de luchar con códigos complejos. <motion.span style={{ color: textColor }} className="font-bold">Toogo</motion.span> es la plataforma todo en uno que democratiza el comercio electrónico. Diseña tu marca, gestiona tu inventario y cobra de forma segura en un solo lugar
-                        </motion.p>
+                            Olvídate de depender de programadores o de luchar con códigos complejos. <strong className="font-bold text-[#1a2332]">Toogo</strong> es la plataforma todo en uno que democratiza el comercio electrónico. Diseña tu marca, gestiona tu inventario y cobra de forma segura en un solo lugar.
+                        </p>
                     </motion.div>
 
                     {/* Toogo Character Image */}
@@ -97,7 +86,7 @@ export function Toogo() {
             </div>
             <CornerButton 
                 href="https://www.toogo.store" 
-                iconColor={useTransform(pageScrollY, [0.4, 0.5], ["border-black text-black", "border-white text-white"]).get()} 
+                iconColor="border-black text-black"
             />
         </motion.section>
     );

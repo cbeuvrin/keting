@@ -86,14 +86,14 @@ export default async function ArticlePage({ params }: { params: any }) {
                 <style dangerouslySetInnerHTML={{ __html: `
                     .blog-content h2 { font-size: 2.5rem; font-weight: 700; margin-top: 4rem; margin-bottom: 2rem; letter-spacing: -0.05em; border-left: 4px solid #000; padding-left: 1.5rem; line-height: 1; }
                     .blog-content p { font-size: 1.25rem; line-height: 2; color: #374151; margin-bottom: 2.5rem; font-weight: 300; }
-                    .blog-content img { width: 100%; border-radius: 2.5rem; margin: 4rem 0; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15); filter: grayscale(100%); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-                    .blog-content img:hover { filter: grayscale(0%); transform: scale(1.02); }
+                    .blog-content img { width: 100%; border-radius: 2.5rem; margin: 4rem 0; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+                    .blog-content img:hover { transform: scale(1.02); }
                     .blog-content strong { color: #000; font-weight: 700; }
                     .blog-content ul { margin-bottom: 3rem; space-y: 4; }
                     .blog-content li { font-size: 1.125rem; margin-bottom: 1rem; color: #4B5563; position: relative; padding-left: 1.5rem; }
                     .blog-content li::before { content: "—"; position: absolute; left: 0; color: #9CA3AF; font-weight: bold; }
-                    .blog-hero-img { filter: grayscale(100%); transition: filter 0.8s ease; }
-                    .blog-hero-img:hover { filter: grayscale(0%); }
+                    .blog-hero-img { transition: transform 0.8s ease; }
+                    .blog-hero-img:hover { transform: scale(1.05); }
                 `}} />
 
                 <div className="container mx-auto px-6 md:px-12">

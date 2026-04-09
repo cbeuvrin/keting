@@ -40,7 +40,7 @@ export function AboutUs() {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                className="text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-[0.9] tracking-tighter text-[#1a1a1a]"
+                                className="text-4xl md:text-7xl font-bold mb-2 tracking-tight text-[#1a1a1a]"
                             >
                                 Creando el futuro <span className="italic font-light">digital</span>
                             </motion.h2>

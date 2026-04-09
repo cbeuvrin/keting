@@ -33,8 +33,21 @@ function BlogCard({
                 }}
                 whileHover={{ rotate: 0, scale: 1.05, zIndex: 20 }}
                 transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                className="relative flex-shrink-0 w-[280px] md:w-[320px] h-[380px] md:h-[420px] rounded-3xl overflow-hidden shadow-2xl select-none cursor-pointer"
+                className="relative flex-shrink-0 w-[280px] md:w-[320px] h-[380px] md:h-[420px] rounded-3xl overflow-hidden shadow-2xl select-none cursor-pointer group"
             >
+                {/* Background Image Layer */}
+                <div
+                    className="absolute inset-0 opacity-15 grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-700"
+                    style={{
+                        backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}
+                />
+
+                {/* Overlay gradient for hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
                 {/* Category tag */}
                 <div
                     className="absolute top-6 left-6 text-[10px] font-bold tracking-[2px] uppercase px-3 py-1 rounded-full"

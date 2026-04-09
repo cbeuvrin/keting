@@ -96,8 +96,23 @@ export default function BlogPage() {
                                             backgroundColor: article.color,
                                             color: article.accent,
                                         }}
-                                        className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-xl cursor-pointer flex flex-col"
+                                        className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-xl cursor-pointer flex flex-col group"
                                     >
+                                        {/* Background Image with low opacity */}
+                                        <div
+                                            className="absolute inset-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700"
+                                            style={{
+                                                backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center'
+                                            }}
+                                        />
+                                        
+                                        {/* Overlay gradient for readability */}
+                                        <div 
+                                            className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                        />
+
                                         {/* Category tag */}
                                         <div
                                             className="absolute top-6 left-6 text-[10px] font-bold tracking-[2px] uppercase px-3 py-1 rounded-full z-10"
