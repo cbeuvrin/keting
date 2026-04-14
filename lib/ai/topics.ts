@@ -32,12 +32,14 @@ export const seedTopics = [
 /**
  * Categorías permitidas para el blog
  */
-export const categories = [
-    "Arquitectura Web",
+export const categoriesFlat = [
+    "Diseño Web",
     "Inteligencia Artificial",
-    "Seguridad Digital",
-    "UX/UI Design",
-    "Rendimiento Web",
-    "Desarrollo Mobile",
+    "Ventas",
+    "Marketing",
+    "Posicionamiento",
+    "Aplicaciones",
     "Estrategia Digital"
 ];
+
+export const categories = categoriesFlat;

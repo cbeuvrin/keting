@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { categories } from "./topics";
 
 /**
  * Generador de Artículos "Brain" de Keting Media
@@ -46,7 +47,11 @@ export class ArticleGenerator {
 
 Escribe un artículo de blog COMPLETO, ultra-extenso y de nivel experto sobre el tema: "${topic}"
 
-ESTRUCTURA OBLIGATORIA (HTML semántico puro, sin markdown):
+TEMAS Y CATEGORÍAS:
+Elige la categoría más adecuada para este artículo de esta lista obligatoria: [${categories.join(", ")}].
+Puedes elegir hasta 2 categorías separadas por coma si el tema lo amerita (ej: "IA, Marketing").
+
+ESTRUCTURA OBLIGATORIA (HTML semántico puro, sin markdown en el contenido):
 - Una etiqueta <h1> con el título del artículo (creativo, no literal al tema)
 - Al menos 8 secciones con <h2> como títulos
 - Cada sección debe tener mínimo 3 párrafos <p> bien desarrollados
@@ -59,33 +64,49 @@ REGLAS DE ESTILO:
 3. Conceptos técnicos avanzados explicados con claridad
 4. NO menciones que eres IA. Escribe como editorial humana de élite
 5. En español, pensado para directivos y emprendedores premium de México y LATAM
-6. El artículo debe sentirse como publicado en Harvard Business Review en español
+6. El artículo debe siente como publicado en Harvard Business Review en español
 
-IMPORTANTE: Devuelve ÚNICAMENTE el HTML del artículo. Ningún texto adicional antes ni después.`;
+IMPORTANTE: Devuelve ÚNICAMENTE un objeto JSON puro (sin bloques de código markdown) con esta estructura:
+{
+  "title": "título final del artículo",
+  "category": "categoría o categorías separadas por coma",
+  "content": "todo el HTML generado"
+}`;
 
-        let html = await this.generate(prompt);
+        let response = await this.generate(prompt);
+        
+        // Limpiar posibles bloques de código que la IA a veces pone
+        response = response.replace(/```json|```/g, "").trim();
 
-        // Limpiar markdown si viene
-        html = html.replace(/```html|```/g, "").trim();
+        try {
+            const data = JSON.parse(response);
+            const wordCount = data.content.split(/\s+/).length;
+            console.log(`[ArticleGenerator] Completado. ~${wordCount} palabras.`);
 
-        // Extraer el título del H1 para usarlo como title
-        const h1Match = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
-        const extractedTitle = h1Match
-            ? h1Match[1].replace(/<[^>]*>/g, "").trim()
-            : topic;
-
-        const wordCount = html.split(/\s+/).length;
-        console.log(`[ArticleGenerator] Completado. ~${wordCount} palabras.`);
-
-        return {
-            title: extractedTitle,
-            content: html,
-            wordCount,
-            slug: this.slugify(topic),
-            date: new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
-            author: "Editorial Keting",
-            category: "Estrategia Digital"
-        };
+            return {
+                title: data.title,
+                content: data.content,
+                wordCount,
+                slug: this.slugify(topic),
+                date: new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
+                author: "Editorial Keting",
+                category: data.category
+            };
+        } catch (e) {
+            console.error("[ArticleGenerator] Error parseando JSON de la IA. Reintentando extracción manual...");
+            // Fallback si falla el JSON
+            const h1Match = response.match(/<h1[^>]*>(.*?)<\/h1>/i);
+            const extractedTitle = h1Match ? h1Match[1].replace(/<[^>]*>/g, "").trim() : topic;
+            return {
+                title: extractedTitle,
+                content: response,
+                wordCount: response.split(/\s+/).length,
+                slug: this.slugify(topic),
+                date: new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
+                author: "Editorial Keting",
+                category: "Estrategia Digital"
+            };
+        }
     }
 
     private slugify(text: string) {
