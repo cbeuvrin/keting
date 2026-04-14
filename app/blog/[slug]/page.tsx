@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Calendar, Clock, Share2 } from "lucide-react";
 import { Metadata } from 'next';
 import { notFound } from "next/navigation";
+import { ViewTracker } from "@/components/blog/view-tracker";
 
 // Generate static params for all articles
 export async function generateStaticParams() {
@@ -52,6 +53,7 @@ interface BlogArticle {
     youtube_id?: string;
     accent: string;
     color: string;
+    views?: number;
 }
 
 export default async function ArticlePage({ params }: { params: any }) {
@@ -59,6 +61,7 @@ export default async function ArticlePage({ params }: { params: any }) {
     const slug = resolvedParams.slug;
     
     let article: BlogArticle | undefined = articles.find(a => a.slug.trim() === slug.trim());
+    let isDbArticle = false;
 
     if (!article) {
         const { data } = await supabase
@@ -69,6 +72,18 @@ export default async function ArticlePage({ params }: { params: any }) {
         
         if (data) {
             article = data as BlogArticle;
+            isDbArticle = true;
+        }
+    } else {
+        // If it's a static article, check if it's mirrored in DB for views
+        const { data } = await supabase
+            .from('articles')
+            .select('id, views')
+            .eq('slug', slug)
+            .single();
+        if (data) {
+            article = { ...article, id: data.id, views: data.views };
+            isDbArticle = true;
         }
     }
 
@@ -79,6 +94,9 @@ export default async function ArticlePage({ params }: { params: any }) {
     return (
         <main className="min-h-screen bg-[#FAFAFA] text-black font-heading overflow-hidden">
             <Header />
+
+            {/* View Tracker - Increments views in Supabase */}
+            {isDbArticle && article.id && <ViewTracker articleId={article.id} />}
 
             <article className="pt-32 pb-20 relative">
                 {/* Decorative background element */}
