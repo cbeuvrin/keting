@@ -22,53 +22,41 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isScrolled, setIsScrolled] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    // Removed internal showLogo state to accept prop
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastY, setLastY] = useState(0);
+    
     const { scrollY } = useScroll();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        setIsScrolled(latest > 50);
+        // Toggle background on scroll
+        setIsScrolled(latest > 20);
+
+        // Hide on scroll down, Show on scroll up
+        if (latest > lastY && latest > 100) {
+            setIsVisible(false);
+        } else {
+            setIsVisible(true);
+        }
+        setLastY(latest);
     });
 
-    // Determine logo: 
-    // If forcedTheme is dark -> White Logo
-    // If forcedTheme is light -> Black Logo
-    // Else fall back to standard logic
-    const effectiveLogoColor = forcedTheme === "dark" ? "white" : (forcedTheme === "light" ? "black" : (isScrolled ? "black" : initialColor));
-    const currentLogo = effectiveLogoColor === "white" ? "/keting-logo-white.png" : "/keting-logo-black.png";
+    // Color from Hero is #FAFAFA
+    const backgroundColor = isScrolled ? "bg-[#FAFAFA]/95 backdrop-blur-xl" : "bg-[#FAFAFA]";
 
     return (
         <>
             <motion.header
                 className={cn(
-                    "fixed top-[40px] left-0 right-0 transition-all duration-300 pointer-events-none", // Remove main BG & allow clicks through empty spaces
-                    forcedTheme === "dark" ? "z-[70]" : "z-50",
-                    className
+                    "fixed top-0 left-0 right-0 transition-all duration-500 z-[70] py-6",
+                    backgroundColor,
+                    !isVisible && "-translate-y-full"
                 )}
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="w-full px-6 md:px-12 lg:px-20 flex items-center justify-between pointer-events-auto"> {/* Enable pointer events for children */}
-                    {/* Left: Logo + Separator + Menu Trigger -> Minimal Style (No Capsule) */}
-                    <div className={cn(
-                        "flex items-center gap-6 transition-all duration-300",
-                        // Apply Text Color logic only
-                        forcedTheme === "dark"
-                            ? "text-white"
-                            : (forcedTheme === "light"
-                                ? "text-[#333333]"
-                                : (isScrolled ? "text-[#333333]" : "text-[#333333]") // Default to dark text if transparent? Or keep dynamic? sticking to safe defaults for now.
-                            )
-                    )}>
-
-                        {/* Logo Container - Revealed after preloader */}
-                        {/* Logo Container - Revealed after preloader */}
-                        {/* WRAPPER FOR ROTATION & CIRCLE BG */}
-                        {/* Logic: 
-                            isWhiteLogo = !isScrolled && initialColor === "white".
-                            If White Logo -> Circle BG = Black.
-                            If Black Logo -> Circle BG = White.
-                        */}
+                <div className="w-full px-6 md:px-12 lg:px-20 flex items-center justify-between">
+                    <div className="flex items-center gap-6">
                         <motion.div
                             initial={{ width: 0, opacity: 0 }}
                             animate={{
@@ -78,14 +66,9 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             className="overflow-visible flex items-center pr-2"
                         >
                             <Link href="/">
-                                <motion.div
-                                    className={cn(
-                                        "p-2 rounded-2xl cursor-pointer",
-                                        effectiveLogoColor === "white" ? "bg-black" : "bg-white"
-                                    )}
-                                >
+                                <motion.div className="cursor-pointer">
                                     <img
-                                        src={currentLogo}
+                                        src="/keting-logo-black.png"
                                         alt="Keting Media"
                                         className="h-9 md:h-10 w-auto object-contain"
                                     />
@@ -93,29 +76,25 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             </Link>
                         </motion.div>
 
-                        {/* Vertical Separator */}
                         <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{
                                 height: showLogo ? 24 : 0,
                                 opacity: showLogo ? 1 : 0
                             }}
-                            className="w-[1px] bg-gray-300 mx-2 hidden md:block"
+                            className="w-[1px] bg-gray-200 mx-2 hidden md:block"
                         />
 
-                        {/* Desktop Menu Trigger */}
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="hidden md:flex items-center gap-3 group"
+                            className="hidden md:flex items-center gap-3 group text-black"
                         >
-                            <MenuIcon className="w-8 h-8 stroke-[1.5] stroke-current group-hover:scale-110 transition-transform" />
+                            <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
                             <span className="text-sm font-heading font-normal tracking-[1px] uppercase">menu</span>
                         </button>
                     </div>
 
-                    {/* Right Group: Desktop Hablemos OR Mobile Hamburger */}
                     <div className="flex items-center gap-4 relative">
-                        {/* Desktop Hablemos Button */}
                         <button
                             onClick={() => setIsContactOpen(true)}
                             className="hidden md:block bg-black text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-zinc-800 transition-colors shadow-lg"
@@ -123,12 +102,11 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             Hablemos
                         </button>
 
-                        {/* Mobile Hamburger Trigger */}
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="md:hidden flex items-center group"
+                            className="md:hidden flex items-center group text-black"
                         >
-                            <MenuIcon className="w-8 h-8 stroke-[1.5] stroke-current group-hover:scale-110 transition-transform" />
+                            <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
                         </button>
 
                         <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
