@@ -69,7 +69,7 @@ export default function BlogPage() {
             {/* Filter Bar */}
             <section className="relative pt-40 pb-16 bg-[#F9F9F9]">
                 <div className="container mx-auto px-6 md:px-12">
-                    <nav className="flex items-center justify-end gap-2 text-[10px] font-bold tracking-[3px] uppercase text-gray-400 mb-10">
+                    <nav className="flex items-center justify-start gap-2 text-[10px] font-bold tracking-[3px] uppercase text-gray-400 mb-10">
                         <Link href="/" className="hover:text-black transition-colors flex items-center gap-1">
                             <Home size={10} /> Inicio
                         </Link>
@@ -77,12 +77,12 @@ export default function BlogPage() {
                         <span className="text-black">Explorar</span>
                     </nav>
                     
-                    <div className="max-w-4xl ml-auto text-right">
+                    <div className="max-w-4xl text-left">
                         <h1 className="text-6xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-8">
                             Nuestra <br />
                             <span className="italic font-light text-gray-300">Inteligencia</span>
                         </h1>
-                        <p className="max-w-xl ml-auto text-gray-500 text-lg md:text-xl font-light leading-relaxed">
+                        <p className="max-w-xl text-gray-500 text-lg md:text-xl font-light leading-relaxed">
                             Estrategias, diseño y tecnología premium para marcas que no se conforman con lo convencional.
                         </p>
                     </div>
@@ -133,13 +133,23 @@ export default function BlogPage() {
                                         <Sparkles size={16} />
                                         <span className="text-[10px] font-black tracking-[5px] uppercase">Sección {String(catIdx + 1).padStart(2, '0')}</span>
                                     </div>
-                                    <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none">
-                                        {cat}
+                                    <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase leading-none">
+                                        {(() => {
+                                            const words = cat.split(' ');
+                                            if (words.length > 1) {
+                                                return (
+                                                    <>
+                                                        {words[0]} <span className="italic font-light text-gray-300 normal-case">{words.slice(1).join(' ')}</span>
+                                                    </>
+                                                );
+                                            }
+                                            return cat;
+                                        })()}
                                     </h2>
                                 </div>
                                 <div className="h-px bg-gray-100 flex-grow mx-8 hidden lg:block mb-4" />
-                                <p className="text-gray-400 font-light text-sm max-w-[200px] md:text-right leading-relaxed">
-                                    Liderando el cambio en {cat.toLowerCase()}.
+                                <p className="text-gray-400 font-light text-[10px] uppercase tracking-widest max-w-[200px] md:text-right leading-relaxed">
+                                    {catIdx + 1} / {categories.length} — {cat}
                                 </p>
                             </div>
 
@@ -206,10 +216,10 @@ export default function BlogPage() {
                                                         <div className="w-1 h-1 rounded-full bg-current" />
                                                         <span className="text-[10px] font-bold uppercase tracking-[3px]">{article.author}</span>
                                                     </div>
-                                                    <h3 className="text-3xl md:text-4xl font-bold leading-[1] mb-6 tracking-tighter" style={{ color: article.accent }}>
+                                                    <h3 className="text-2xl md:text-2xl font-bold leading-[1.1] mb-6 tracking-tighter" style={{ color: article.accent }}>
                                                         {article.title}
                                                     </h3>
-                                                    <p className="text-sm leading-relaxed line-clamp-2 opacity-80 font-light max-w-[90%]" style={{ color: article.accent }}>
+                                                    <p className="text-xs leading-relaxed line-clamp-2 opacity-80 font-light max-w-[90%]" style={{ color: article.accent }}>
                                                         {article.excerpt}
                                                     </p>
                                                 </div>
