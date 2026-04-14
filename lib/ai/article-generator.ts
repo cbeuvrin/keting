@@ -1,109 +1,101 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 /**
  * Generador de Artículos "Brain" de Keting Media
- * Utiliza Gemini 1.5 para crear contenido ultra-extenso (+2500 palabras)
+ * Utiliza Gemini 2.5 Flash — Artículo completo en una sola llamada
  */
 export class ArticleGenerator {
-    private genAI: GoogleGenerativeAI;
-    private model: any;
+    private client: GoogleGenAI;
+    private modelName = "gemini-2.5-flash";
 
     constructor(apiKey: string) {
-        this.genAI = new GoogleGenerativeAI(apiKey);
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        this.client = new GoogleGenAI({ apiKey });
+    }
+
+    private async generate(prompt: string): Promise<string> {
+        const response = await this.client.models.generateContent({
+            model: this.modelName,
+            contents: prompt,
+            config: {
+                maxOutputTokens: 8192,
+                temperature: 0.8,
+            },
+        });
+        return response.text ?? "";
     }
 
     /**
      * Genera una lista de temas tendencia
      */
-    async generateTrends() {
-        const trendPrompt = `Eres un estratega editorial de alto nivel de Keting Media. 
-        Genera una lista de 5 temas tendencia en el sector de tecnología corporativa premium, diseño UX y transformación digital para hoy. 
-        Formato: JSON puro con un array de strings ["tema 1", "tema 2"...]`;
-        
-        const trendResult = await this.model.generateContent(trendPrompt);
-        const trendText = (await trendResult.response.text()).replace(/```json|```/g, "").trim();
-        return JSON.parse(trendText);
+    async generateTrends(): Promise<string[]> {
+        const prompt = `Eres un estratega editorial de alto nivel de Keting Media.
+        Genera una lista de 5 temas tendencia en tecnología corporativa premium, diseño UX y transformación digital.
+        Responde SOLO con JSON puro: ["tema 1", "tema 2", "tema 3", "tema 4", "tema 5"]`;
+
+        const text = (await this.generate(prompt)).replace(/```json|```/g, "").trim();
+        return JSON.parse(text);
     }
 
     /**
-     * Genera un artículo completo de 2500+ palabras por secciones
+     * Genera un artículo completo de 2500+ palabras en UNA SOLA llamada a la IA
      */
     async generateFullArticle(topic: string) {
-        console.log(`Iniciando generación para: ${topic}`);
+        console.log(`[ArticleGenerator] Generando artículo: "${topic}"`);
 
-        // 1. Generar Outline
-        const outlinePrompt = `Genera un esquema detallado (outline) para un artículo de blog sobre "${topic}" en español.
-        El artículo debe ser de nivel experto, premium y editorial. 
-        El esquema debe tener al menos 10 secciones (H2) y una conclusión.
-        No devuelvas nada más que el JSON puro. No uses bloques de markdown con la palabra "json".
-        Formato de salida: [ { "title": "string", "description": "string" } ]`;
+        const prompt = `Eres el editor jefe de Keting Media, la agencia de diseño y tecnología más premium de Latinoamérica.
 
-        const outlineResult = await this.model.generateContent(outlinePrompt);
-        let outlineText = await outlineResult.response.text();
-        
-        // Limpiar el texto si viene con markdown
-        outlineText = outlineText.replace(/```json|```|```/g, "").trim();
-        
-        let sections;
-        try {
-            sections = JSON.parse(outlineText);
-        } catch (e) {
-            console.error("Fallo al parsear outline. Intentando limpieza agresiva...");
-            const jsonMatch = outlineText.match(/\[[\s\S]*\]/);
-            if (jsonMatch) {
-                sections = JSON.parse(jsonMatch[0]);
-            } else {
-                throw new Error("No se pudo obtener el esquema del artículo.");
-            }
-        }
+Escribe un artículo de blog COMPLETO, ultra-extenso y de nivel experto sobre el tema: "${topic}"
 
-        let fullContentHtml = "";
-        let totalWords = 0;
+ESTRUCTURA OBLIGATORIA (HTML semántico puro, sin markdown):
+- Una etiqueta <h1> con el título del artículo (creativo, no literal al tema)
+- Al menos 8 secciones con <h2> como títulos
+- Cada sección debe tener mínimo 3 párrafos <p> bien desarrollados
+- Usa <strong>, <ul>, <li> para enriquecer el contenido
+- Total mínimo: 2500 palabras
 
-        // 2. Generar cada sección
-        for (const section of sections) {
-            console.log(`Generando sección: ${section.title}`);
-            const sectionPrompt = `Eres un experto redactor senior en Keting Media, una agencia de diseño y tecnología ultra-premium.
-            Redacta la sección "${section.title}" del artículo "${topic}".
-            Contexto de la sección: ${section.description}.
-            
-            REGLAS:
-            1. Escribe al menos 400-500 palabras para esta sección.
-            2. Usa un tono sofisticado, culto, directo y persuasivo.
-            3. Devuelve el contenido en HTML semántico puro (H2, P, UL, LI, STRONG). No uses markdown.
-            4. Inyecta conceptos técnicos avanzados y análisis de mercado realistas.
-            5. No menciones que eres una IA. El lector debe creer que es una editorial humana de élite.`;
+REGLAS DE ESTILO:
+1. Tono sofisticado, culto, directo y altamente persuasivo
+2. Análisis de mercado realistas con datos y tendencias actuales
+3. Conceptos técnicos avanzados explicados con claridad
+4. NO menciones que eres IA. Escribe como editorial humana de élite
+5. En español, pensado para directivos y emprendedores premium de México y LATAM
+6. El artículo debe sentirse como publicado en Harvard Business Review en español
 
-            const sectionResult = await this.model.generateContent(sectionPrompt);
-            let sectionHtml = await sectionResult.response.text();
-            
-            // Limpiar posible markdown en la respuesta de la sección
-            sectionHtml = sectionHtml.replace(/```html|```|```/g, "").trim();
-            
-            fullContentHtml += sectionHtml + "\n\n";
-            totalWords += sectionHtml.split(/\s+/).length;
-        }
+IMPORTANTE: Devuelve ÚNICAMENTE el HTML del artículo. Ningún texto adicional antes ni después.`;
 
-        console.log(`Generación completada. Palabras aprox: ${totalWords}`);
+        let html = await this.generate(prompt);
+
+        // Limpiar markdown si viene
+        html = html.replace(/```html|```/g, "").trim();
+
+        // Extraer el título del H1 para usarlo como title
+        const h1Match = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
+        const extractedTitle = h1Match
+            ? h1Match[1].replace(/<[^>]*>/g, "").trim()
+            : topic;
+
+        const wordCount = html.split(/\s+/).length;
+        console.log(`[ArticleGenerator] Completado. ~${wordCount} palabras.`);
 
         return {
-            title: topic,
-            content: fullContentHtml,
-            wordCount: totalWords,
+            title: extractedTitle,
+            content: html,
+            wordCount,
             slug: this.slugify(topic),
             date: new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
-            author: "IA Editorial Keting",
-            category: "Inteligencia Artificial"
+            author: "Editorial Keting",
+            category: "Estrategia Digital"
         };
     }
 
     private slugify(text: string) {
         return text.toString().toLowerCase()
-            .replace(/\s+/g, '-')           // Replace spaces with -
-            .replace(/[^\w-]+/g, '')       // Remove all non-word chars
-            .replace(/--+/g, '-')         // Replace multiple - with single -
-            .replace(/^-+/, '')             // Trim - from start of text
-            .replace(/-+$/, '');            // Trim - from end of text
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
     }
 }
