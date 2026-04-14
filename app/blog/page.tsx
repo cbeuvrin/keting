@@ -69,7 +69,7 @@ export default function BlogPage() {
             {/* Filter Bar */}
             <section className="relative pt-40 pb-16 bg-[#F9F9F9]">
                 <div className="container mx-auto px-6 md:px-12">
-                    <nav className="flex items-center justify-center gap-2 text-[10px] font-bold tracking-[3px] uppercase text-gray-400 mb-10">
+                    <nav className="flex items-center justify-end gap-2 text-[10px] font-bold tracking-[3px] uppercase text-gray-400 mb-10">
                         <Link href="/" className="hover:text-black transition-colors flex items-center gap-1">
                             <Home size={10} /> Inicio
                         </Link>
@@ -77,12 +77,12 @@ export default function BlogPage() {
                         <span className="text-black">Explorar</span>
                     </nav>
                     
-                    <div className="max-w-4xl mx-auto text-center">
+                    <div className="max-w-4xl ml-auto text-right">
                         <h1 className="text-6xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-8">
                             Nuestra <br />
                             <span className="italic font-light text-gray-300">Inteligencia</span>
                         </h1>
-                        <p className="max-w-xl mx-auto text-gray-500 text-lg md:text-xl font-light leading-relaxed">
+                        <p className="max-w-xl ml-auto text-gray-500 text-lg md:text-xl font-light leading-relaxed">
                             Estrategias, diseño y tecnología premium para marcas que no se conforman con lo convencional.
                         </p>
                     </div>
@@ -167,9 +167,9 @@ export default function BlogPage() {
                                                     backgroundColor: article.color || "#000000",
                                                     color: article.accent || "#FFFFFF",
                                                 }}
-                                                className="relative w-full min-h-[580px] rounded-[3rem] overflow-hidden shadow-2xl cursor-pointer flex flex-col group border border-white/10"
+                                                className="relative w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl cursor-pointer flex flex-col group border border-white/5"
                                             >
-                                                {/* Image Layer with better contrast overlay */}
+                                                {/* Image Layer */}
                                                 <div
                                                     className="absolute inset-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-1000"
                                                     style={{
@@ -179,43 +179,39 @@ export default function BlogPage() {
                                                     }}
                                                 />
                                                 
-                                                {/* Improved Gradient Overlay for better text contrast */}
-                                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
+                                                {/* Overlay Gradient */}
+                                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
-                                                {/* Top Info - Multiple Tags */}
+                                                {/* Top Tags */}
                                                 <div className="p-10 pb-0 z-10 flex flex-wrap gap-2">
                                                     {article.category.split(',').map((tag: string) => (
                                                         <div
                                                             key={tag}
-                                                            className="inline-block text-[9px] font-black tracking-[3px] uppercase px-4 py-2 rounded-full backdrop-blur-md shadow-sm"
-                                                            style={{ backgroundColor: `${article.accent}EE`, color: article.color }}
+                                                            className="inline-block text-[10px] font-black tracking-[3px] uppercase px-4 py-2 rounded-full backdrop-blur-md"
+                                                            style={{ 
+                                                                backgroundColor: article.accent === "#000000" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)", 
+                                                                color: article.accent,
+                                                                border: `1px solid ${article.accent}33`
+                                                            }}
                                                         >
                                                             {tag.trim()}
                                                         </div>
                                                     ))}
                                                 </div>
 
-                                                {/* Main Content - Flex Grow to ensure height */}
+                                                {/* Content */}
                                                 <div className="mt-auto p-10 z-10 relative">
-                                                    <h3 className="text-2xl md:text-3xl font-bold leading-[1.05] mb-6 tracking-tighter drop-shadow-md">
+                                                    <div className="flex items-center gap-3 mb-4 opacity-60">
+                                                        <span className="text-[10px] font-bold uppercase tracking-[3px]">{article.date}</span>
+                                                        <div className="w-1 h-1 rounded-full bg-current" />
+                                                        <span className="text-[10px] font-bold uppercase tracking-[3px]">{article.author}</span>
+                                                    </div>
+                                                    <h3 className="text-3xl md:text-4xl font-bold leading-[1] mb-6 tracking-tighter" style={{ color: article.accent }}>
                                                         {article.title}
                                                     </h3>
-                                                    <p className="text-sm leading-relaxed line-clamp-3 opacity-80 font-light mb-8 max-w-[90%]" style={{ color: article.accent }}>
+                                                    <p className="text-sm leading-relaxed line-clamp-2 opacity-80 font-light max-w-[90%]" style={{ color: article.accent }}>
                                                         {article.excerpt}
                                                     </p>
-                                                    
-                                                    <div className="flex items-center justify-between pt-8 border-t border-white/10">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[10px] font-bold uppercase tracking-[3px] opacity-40">Lectura</span>
-                                                            <span className="text-xs font-medium opacity-100 mt-1">{article.date}</span>
-                                                        </div>
-                                                        <div
-                                                            className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-700 group-hover:scale-110 group-hover:bg-white group-hover:text-black"
-                                                            style={{ backgroundColor: article.accent, color: article.color }}
-                                                        >
-                                                            <ArrowRight size={20} />
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </motion.article>
                                         </Link>
