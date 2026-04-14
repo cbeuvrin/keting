@@ -153,75 +153,79 @@ export default function BlogPage() {
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-16">
                                 {articlesInCat.map((article, i) => (
-                                    <div key={`${cat}-${article.id}`} className="perspective-1000">
-                                        <Link href={`/blog/${article.slug}`}>
+                                    <div key={`${cat}-${article.id}`} className="relative flex justify-center">
+                                        <Link href={`/blog/${article.slug}`} className="block relative z-30">
                                             <motion.article
-                                                initial={{ opacity: 0, scale: 0.95 }}
-                                                whileInView={{ opacity: 1, scale: 1 }}
+                                                initial={{ opacity: 0, y: 20, rotate: getStableRandomTilt(i) }}
+                                                whileInView={{ opacity: 1, y: 0 }}
                                                 viewport={{ once: true }}
-                                                whileHover={{ 
-                                                    rotateY: 5,
-                                                    rotateX: -5,
-                                                    y: -10,
-                                                    zIndex: 50,
-                                                    boxShadow: "0 50px 100px -20px rgba(0,0,0,0.2)"
-                                                }}
-                                                transition={{ 
-                                                    type: "spring", 
-                                                    stiffness: 300, 
-                                                    damping: 15
-                                                }}
+                                                whileTap={{ scale: 0.98 }}
                                                 style={{
+                                                    rotate: getStableRandomTilt(i),
                                                     backgroundColor: article.color || "#000000",
                                                     color: article.accent || "#FFFFFF",
                                                 }}
-                                                className="relative w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl cursor-pointer flex flex-col group border border-white/5"
+                                                whileHover={{ rotate: 0, scale: 1.05, zIndex: 50 }}
+                                                transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                                                className="relative w-[280px] md:w-[320px] h-[380px] md:h-[420px] rounded-[2rem] overflow-hidden shadow-2xl select-none cursor-pointer group"
                                             >
-                                                {/* Image Layer */}
+                                                {/* Background Image Layer */}
                                                 <div
-                                                    className="absolute inset-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-1000"
+                                                    className="absolute inset-0 opacity-15 grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-700"
                                                     style={{
                                                         backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})`,
                                                         backgroundSize: 'cover',
                                                         backgroundPosition: 'center'
                                                     }}
                                                 />
-                                                
-                                                {/* Overlay Gradient */}
-                                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
-                                                {/* Top Tags */}
-                                                <div className="p-10 pb-0 z-10 flex flex-wrap gap-2">
+                                                {/* Overlay gradient for hover */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                                {/* Category tags */}
+                                                <div className="absolute top-6 left-6 flex flex-wrap gap-1 z-10">
                                                     {article.category.split(',').map((tag: string) => (
                                                         <div
                                                             key={tag}
-                                                            className="inline-block text-[10px] font-black tracking-[3px] uppercase px-4 py-2 rounded-full backdrop-blur-md"
-                                                            style={{ 
-                                                                backgroundColor: article.accent === "#000000" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)", 
-                                                                color: article.accent,
-                                                                border: `1px solid ${article.accent}33`
-                                                            }}
+                                                            className="text-[9px] font-bold tracking-[2px] uppercase px-3 py-1 rounded-full"
+                                                            style={{ backgroundColor: article.accent, color: article.color }}
                                                         >
                                                             {tag.trim()}
                                                         </div>
                                                     ))}
                                                 </div>
 
+                                                {/* Big decorative number */}
+                                                <div
+                                                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[100px] font-black leading-none opacity-[0.05] pointer-events-none select-none"
+                                                    style={{ color: article.accent }}
+                                                >
+                                                    {String(article.id).padStart(2, "0")}
+                                                </div>
+
                                                 {/* Content */}
-                                                <div className="mt-auto p-10 z-10 relative">
-                                                    <div className="flex items-center gap-3 mb-4 opacity-60">
-                                                        <span className="text-[10px] font-bold uppercase tracking-[3px]">{article.date}</span>
-                                                        <div className="w-1 h-1 rounded-full bg-current" />
-                                                        <span className="text-[10px] font-bold uppercase tracking-[3px]">{article.author}</span>
-                                                    </div>
-                                                    <h3 className="text-2xl md:text-2xl font-bold leading-[1.1] mb-6 tracking-tighter" style={{ color: article.accent }}>
+                                                <div className="absolute bottom-0 left-0 right-0 p-7 flex flex-col gap-3">
+                                                    <h3
+                                                        className="text-xl font-bold leading-tight tracking-tight"
+                                                        style={{ color: article.accent }}
+                                                    >
                                                         {article.title}
                                                     </h3>
-                                                    <p className="text-xs leading-relaxed line-clamp-2 opacity-80 font-light max-w-[90%]" style={{ color: article.accent }}>
+                                                    <p
+                                                        className="text-sm leading-relaxed line-clamp-3 opacity-70 font-light"
+                                                        style={{ color: article.accent }}
+                                                    >
                                                         {article.excerpt}
                                                     </p>
+                                                    
+                                                    {/* Simple info row instead of the home footer with arrow */}
+                                                    <div className="flex items-center gap-2 mt-2 pt-4 opacity-40 text-[10px] font-bold uppercase tracking-widest" style={{ borderTop: `1px solid ${article.accent}11` }}>
+                                                        <span>{article.date}</span>
+                                                        <span>·</span>
+                                                        <span>{article.author}</span>
+                                                    </div>
                                                 </div>
                                             </motion.article>
                                         </Link>
