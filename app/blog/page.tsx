@@ -227,14 +227,19 @@ interface CardProps {
 
 function FeaturedCard({ article, size }: CardProps) {
     const isLarge = size === "lg";
+    const imageUrl = article.image || '/images/blog/checklist.png';
     
     return (
         <Link href={`/blog/${article.slug}`} className="block h-full w-full">
             <div className="relative h-full w-full rounded-3xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
-                {/* Background Image */}
-                <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})` }}
+                {/* Background Image using img tag for better compatibility */}
+                <img
+                    src={imageUrl}
+                    alt={article.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/blog/checklist.png';
+                    }}
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
