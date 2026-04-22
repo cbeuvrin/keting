@@ -170,7 +170,7 @@ export default function SDPage() {
                                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                                         transition={{ duration: 0.2 }}
-                                                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[320px] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 z-[100]"
+                                                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[320px] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 z-[9999]"
                                                     >
                                                         <form className="space-y-4 text-left" onSubmit={handleContactSubmit}>
                                                             <input

@@ -73,11 +73,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[90]"
+                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998]"
                     />
 
                     {/* Modal Container */}
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 pointer-events-none">
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 pointer-events-none">
                         <div className="flex flex-col md:flex-row gap-4 w-full max-w-7xl max-h-[90vh] pointer-events-auto">
 
                             {/* Left Side: Form - Opens First */}
