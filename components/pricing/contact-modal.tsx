@@ -4,7 +4,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Wifi, Facebook, Linkedin, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ContactModalProps {
     isOpen: boolean;
@@ -20,6 +21,23 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
         message: ""
     });
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Block body scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
 
     const interests = ["Diseño Web", "Precio", "Solución digital"];
 
@@ -63,7 +81,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
         }
     };
 
-    return (
+    if (!mounted) return null;
+
+    const modalContent = (
         <AnimatePresence>
             {isOpen && (
                 <>
@@ -73,12 +93,12 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998]"
+                        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(4px)", zIndex: 2147483647 - 1 }}
                     />
 
                     {/* Modal Container */}
-                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 pointer-events-none">
-                        <div className="flex flex-col md:flex-row gap-4 w-full max-w-7xl max-h-[90vh] pointer-events-auto">
+                    <div style={{ position: "fixed", inset: 0, zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", pointerEvents: "none" }}>
+                        <div className="flex flex-col md:flex-row gap-4 w-full max-w-7xl max-h-[90vh] pointer-events-auto overflow-y-auto md:overflow-visible">
 
                             {/* Left Side: Form - Opens First */}
                             <motion.div
@@ -264,4 +284,6 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
             )}
         </AnimatePresence>
     );
+
+    return createPortal(modalContent, document.body);
 }
