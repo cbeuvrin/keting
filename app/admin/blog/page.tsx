@@ -176,7 +176,76 @@ export default function AdminBlogPage() {
                         )}
                     </AnimatePresence>
                 </motion.form>
+                {/* Enrichment Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-12 p-8 bg-zinc-900/30 border border-zinc-800/30 rounded-[3rem] backdrop-blur-md"
+                >
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                        <div className="flex-1">
+                            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                                <Sparkles size={24} className="text-blue-400" />
+                                Enriquecimiento Visual
+                            </h3>
+                            <p className="text-zinc-500 text-sm font-light">
+                                ¿Tienes artículos con imágenes genéricas? Este proceso buscará fotos reales en Unsplash y videos relevantes en YouTube para todos tus artículos automáticamente.
+                            </p>
+                        </div>
+                        <button
+                            onClick={async () => {
+                                setLoading(true);
+                                setStatus(null);
+                                setMessage("Buscando assets reales en Unsplash y YouTube...");
+                                try {
+                                    const res = await fetch("/api/blog/enrich", { method: "POST" });
+                                    const data = await res.json();
+                                    if (res.ok) {
+                                        setStatus('success');
+                                        setMessage(data.message);
+                                    } else {
+                                        setStatus('error');
+                                        setMessage(data.error || "Asegúrate de configurar las API Keys en .env.local");
+                                    }
+                                } catch (e) {
+                                    setStatus('error');
+                                    setMessage("Error de conexión.");
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }}
+                            disabled={loading}
+                            className="px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl font-bold text-sm transition-all flex items-center gap-2 disabled:opacity-50"
+                        >
+                            {loading ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
+                            Enriquecer Blog
+                        </button>
+                    </div>
+
+                    <div className="mt-8 pt-8 border-t border-zinc-800/50 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Configuración requerida</p>
+                            <div className="flex flex-col gap-2">
+                                <a href="https://unsplash.com/oauth/applications" target="_blank" className="text-xs text-blue-400 hover:underline flex items-center gap-1">
+                                    Obtener Unsplash Access Key <ArrowRight size={12} />
+                                </a>
+                                <a href="https://console.cloud.google.com" target="_blank" className="text-xs text-blue-400 hover:underline flex items-center gap-1">
+                                    Obtener YouTube API Key <ArrowRight size={12} />
+                                </a>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10">
+                            <p className="text-[11px] text-blue-300 leading-relaxed font-light">
+                                <AlertCircle size={12} className="inline mr-1 mb-0.5" />
+                                Una vez obtengas las llaves, pégalas en tu archivo <code className="text-blue-200">.env.local</code> y reinicia el servidor.
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </main>
     );
 }
+
+import { ArrowRight } from "lucide-react";

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, ArrowRight, Home, Filter, Sparkles, Eye, User, Calendar, ChevronDown } from "lucide-react";
+import { Filter, ChevronDown, Eye, User, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -9,6 +9,7 @@ import { articles as staticArticles } from "@/lib/blog-data";
 import { useEffect, useState, useMemo } from "react";
 import { createClient } from '@supabase/supabase-js';
 import { categories } from "@/lib/ai/topics";
+import { getHash, getCategoryImage } from "@/lib/blog-utils";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -17,19 +18,26 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export default function BlogPage() {
     const [mounted, setMounted] = useState(false);
     const [dbArticles, setDbArticles] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState("Todos");
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
         const fetchDynamicArticles = async () => {
-            const { data } = await supabase
-                .from('articles')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (data) {
-                setDbArticles(data);
+            try {
+                const { data } = await supabase
+                    .from('articles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (data) {
+                    setDbArticles(data);
+                }
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchDynamicArticles();
@@ -41,24 +49,46 @@ export default function BlogPage() {
         
         // Ensure uniqueness by slug to avoid duplicates between DB and static data
         const uniqueArticlesMap = new Map();
+        
+        // Date parsing helper for Spanish months
+        const parseDate = (dateStr: string) => {
+            if (!dateStr) return 0;
+            if (dateStr.includes('-') || dateStr.includes('T')) return new Date(dateStr).getTime();
+            const months: Record<string, string> = {
+                'ene': 'Jan', 'feb': 'Feb', 'mar': 'Mar', 'abr': 'Apr', 
+                'may': 'May', 'jun': 'Jun', 'jul': 'Jul', 'ago': 'Aug', 
+                'sep': 'Sep', 'oct': 'Oct', 'nov': 'Nov', 'dic': 'Dec'
+            };
+            let normalized = dateStr.toLowerCase();
+            Object.entries(months).forEach(([es, en]) => {
+                normalized = normalized.replace(es, en);
+            });
+            return new Date(normalized).getTime() || 0;
+        };
+
         combined.forEach(art => {
-            if (!uniqueArticlesMap.has(art.slug)) {
+            const existing = uniqueArticlesMap.get(art.slug);
+            if (!existing) {
                 uniqueArticlesMap.set(art.slug, art);
+            } else {
+                const hasValidImage = (item: any) => item.image && item.image !== '/images/blog/default.png' && !item.image.includes('default') && !item.image.includes('placeholder');
+                if (!hasValidImage(existing) && hasValidImage(art)) {
+                    uniqueArticlesMap.set(art.slug, { ...existing, image: art.image });
+                }
             }
         });
 
         const uniqueList = Array.from(uniqueArticlesMap.values());
 
-        // Add pseudo-random views for visual consistency with the request if not present
-        return uniqueList.map(art => ({
-            ...art,
-            views: (art.views !== undefined && art.views !== null) ? art.views : Math.floor(Math.random() * 5000) + 500,
-            category: Array.isArray(art.category) ? art.category : art.category.split(',').map((c: string) => c.trim())
-        })).sort((a, b) => {
-            const dateA = new Date(a.created_at || a.date).getTime();
-            const dateB = new Date(b.created_at || b.date).getTime();
-            return dateB - dateA;
-        });
+        return uniqueList.map(art => {
+            const hash = getHash(art.slug || "");
+            return {
+                ...art,
+                views: (art.views !== undefined && art.views !== null) ? art.views : (hash % 4500) + 500,
+                category: Array.isArray(art.category) ? art.category : (art.category || "General").split(',').map((c: string) => c.trim()),
+                timestamp: art.created_at ? new Date(art.created_at).getTime() : parseDate(art.date)
+            };
+        }).sort((a, b) => b.timestamp - a.timestamp);
     }, [dbArticles]);
 
     // Filtered articles based on category
@@ -152,58 +182,86 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Section 1: Recent Articles Grid (Image 1 Style) */}
+            {/* Section 1: Recent Articles Grid */}
             <section className="pb-20 px-6 sm:px-12 bg-[#F0F2F5]">
                 <div className="container mx-auto">
-                    {filteredArticles.length >= 4 ? (
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[600px]">
-                            {/* Big Featured (Left) */}
-                            <div className="lg:col-span-7 h-[400px] lg:h-full group">
-                                <FeaturedCard article={filteredArticles[0]} size="lg" />
-                            </div>
+                    <AnimatePresence mode="wait">
+                        {isLoading && dbArticles.length === 0 ? (
+                            <motion.div 
+                                key="skeleton"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[600px]"
+                            >
+                                <div className="lg:col-span-7 h-[400px] lg:h-full bg-gray-200 animate-pulse rounded-3xl" />
+                                <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-2 gap-6 h-full">
+                                    <div className="sm:col-span-2 h-[300px] lg:h-auto bg-gray-200 animate-pulse rounded-3xl" />
+                                    <div className="h-[300px] lg:h-auto bg-gray-200 animate-pulse rounded-3xl" />
+                                    <div className="h-[300px] lg:h-auto bg-gray-200 animate-pulse rounded-3xl" />
+                                </div>
+                            </motion.div>
+                        ) : filteredArticles.length >= 4 ? (
+                            <motion.div 
+                                key="grid"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[600px]"
+                            >
+                                {/* Big Featured (Left) */}
+                                <motion.div layout className="lg:col-span-7 h-[400px] lg:h-full group" key={filteredArticles[0].slug}>
+                                    <FeaturedCard article={filteredArticles[0]} size="lg" />
+                                </motion.div>
 
-                            {/* Right Column Grid */}
-                            <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-2 gap-6 h-full">
-                                {/* Top Right (Medium) */}
-                                <div className="sm:col-span-2 h-[300px] lg:h-auto group">
-                                    <FeaturedCard article={filteredArticles[1]} size="md" />
+                                {/* Right Column Grid */}
+                                <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-2 gap-6 h-full">
+                                    {/* Top Right (Medium) */}
+                                    <motion.div layout className="sm:col-span-2 h-[300px] lg:h-auto group" key={filteredArticles[1].slug}>
+                                        <FeaturedCard article={filteredArticles[1]} size="md" />
+                                    </motion.div>
+                                    {/* Bottom Right 1 */}
+                                    <motion.div layout className="h-[300px] lg:h-auto group" key={filteredArticles[2].slug}>
+                                        <FeaturedCard article={filteredArticles[2]} size="sm" />
+                                    </motion.div>
+                                    {/* Bottom Right 2 */}
+                                    <motion.div layout className="h-[300px] lg:h-auto group" key={filteredArticles[3].slug}>
+                                        <FeaturedCard article={filteredArticles[3]} size="sm" />
+                                    </motion.div>
                                 </div>
-                                {/* Bottom Right 1 */}
-                                <div className="h-[300px] lg:h-auto group">
-                                    <FeaturedCard article={filteredArticles[2]} size="sm" />
-                                </div>
-                                {/* Bottom Right 2 */}
-                                <div className="h-[300px] lg:h-auto group">
-                                    <FeaturedCard article={filteredArticles[3]} size="sm" />
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredArticles.map(article => (
-                                <div key={article.slug} className="h-[400px]">
-                                    <FeaturedCard article={article} size="md" />
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                            </motion.div>
+                        ) : (
+                            <motion.div 
+                                key="list"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                            >
+                                {filteredArticles.map(article => (
+                                    <motion.div layout key={article.slug} className="h-[400px]">
+                                        <FeaturedCard article={article} size="md" />
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </section>
 
-            {/* Section 2: "Los más leídos" (Image 2 Style) */}
+            {/* Section 2: "Los más leídos" */}
             <section className="py-20 px-6 sm:px-12 bg-white">
                 <div className="container mx-auto">
                     <h2 className="text-3xl font-extrabold mb-10 tracking-tight text-gray-900">Los más leídos</h2>
                     
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        {/* Grid of Large Cards (Left & Middle Columns) */}
+                        {/* Grid of Large Cards */}
                         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                             {mostReadArticles.slice(0, 4).map((article) => (
                                 <VerticalCard key={article.slug} article={article} />
                             ))}
                         </div>
 
-                        {/* List of Small Items (Right Column) */}
+                        {/* List of Small Items */}
                         <div className="lg:col-span-4 space-y-6">
                             {mostReadArticles.slice(4, 9).map((article) => (
                                 <HorizontalItem key={article.slug} article={article} />
@@ -225,44 +283,38 @@ interface CardProps {
     size?: "lg" | "md" | "sm";
 }
 
-// Smart image fallback based on article category
-function getCategoryImage(article: any): string {
-    if (article.image && article.image !== '/images/blog/default.png' && !article.image.includes('default')) {
-        return article.image;
-    }
-    // Map categories to local images
-    const categoryMap: Record<string, string> = {
-        'Diseño Web':           '/images/blog/minimalism.png',
-        'Diseño web':           '/images/blog/minimalism.png',
-        'Marketing':            '/images/blog/identity-ai.png',
-        'Estrategia Digital':   '/images/blog/landing.png',
-        'Inteligencia Artificial': '/images/blog/animations.png',
-        'Aplicaciones':         '/images/blog/app-sales.png',
-        'Posicionamiento':      '/images/blog/checklist.png',
-        'Ventas':               '/images/blog/landing.png',
-        'E-commerce':           '/images/blog/app-sales.png',
-        'SEO':                  '/images/blog/geo-optimization.png',
-        'GEO':                  '/images/blog/geo-optimization.png',
+// Local fallbacks for when external images fail or are slow
+const LOCAL_FALLBACKS = [
+    '/images/blog/minimalism.png',
+    '/images/blog/typography.png',
+    '/images/blog/landing.png',
+    '/images/blog/animations.png',
+    '/images/blog/identity-ai.png',
+    '/images/blog/react-nextjs.png',
+    '/images/blog/checklist.png',
+    '/images/blog/app-sales.png',
+    '/images/blog/geo-optimization.png',
+];
+
+function BlogImage({ src, alt, className, slug }: { src: string; alt: string; className?: string; slug?: string }) {
+    const [imgSrc, setImgSrc] = useState(src);
+    const [loaded, setLoaded] = useState(false);
+
+    const handleError = () => {
+        // If the external image fails, use a local fallback based on slug hash
+        const hash = slug ? Math.abs(slug.split('').reduce((a, c) => ((a << 5) - a) + c.charCodeAt(0), 0)) : 0;
+        setImgSrc(LOCAL_FALLBACKS[hash % LOCAL_FALLBACKS.length]);
     };
-    const cats = Array.isArray(article.category) ? article.category : [article.category];
-    for (const cat of cats) {
-        const match = Object.keys(categoryMap).find(k => cat?.toLowerCase().includes(k.toLowerCase()));
-        if (match) return categoryMap[match];
-    }
-    // Final fallback: cycle through available images based on article id/slug
-    const fallbacks = [
-        '/images/blog/minimalism.png',
-        '/images/blog/typography.png',
-        '/images/blog/landing.png',
-        '/images/blog/animations.png',
-        '/images/blog/identity-ai.png',
-        '/images/blog/react-nextjs.png',
-        '/images/blog/checklist.png',
-        '/images/blog/app-sales.png',
-        '/images/blog/geo-optimization.png',
-    ];
-    const idx = Math.abs((article.id || article.slug?.length || 0)) % fallbacks.length;
-    return fallbacks[idx];
+
+    return (
+        <img
+            src={imgSrc}
+            alt={alt}
+            onError={handleError}
+            onLoad={() => setLoaded(true)}
+            className={`${className} transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        />
+    );
 }
 
 function FeaturedCard({ article, size }: CardProps) {
@@ -271,17 +323,15 @@ function FeaturedCard({ article, size }: CardProps) {
     
     return (
         <Link href={`/blog/${article.slug}`} className="block h-full w-full">
-            <div className="relative h-full w-full rounded-3xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
-                {/* Background Image using img tag for better compatibility */}
-                <img
+            <div className="relative h-full w-full rounded-3xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-gray-800 to-gray-900">
+                <BlogImage
                     src={imageUrl}
                     alt={article.title}
+                    slug={article.slug}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                 
-                {/* Content */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                     <div className="flex flex-wrap gap-2 mb-4">
                         {article.category.slice(0, 1).map((cat: string) => (
@@ -309,13 +359,17 @@ function FeaturedCard({ article, size }: CardProps) {
 }
 
 function VerticalCard({ article }: { article: any }) {
+    const imageUrl = getCategoryImage(article);
+    
     return (
         <Link href={`/blog/${article.slug}`} className="block group">
             <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
-                <div className="relative h-56 w-full overflow-hidden">
-                    <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                        style={{ backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})` }}
+                <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    <BlogImage
+                        src={imageUrl}
+                        alt={article.title}
+                        slug={article.slug}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                 </div>
                 <div className="p-8 flex flex-col flex-grow">
@@ -341,13 +395,17 @@ function VerticalCard({ article }: { article: any }) {
 }
 
 function HorizontalItem({ article }: { article: any }) {
+    const imageUrl = getCategoryImage(article);
+    
     return (
         <Link href={`/blog/${article.slug}`} className="block group">
             <div className="flex gap-4 items-center">
-                <div className="relative h-24 w-24 flex-shrink-0 rounded-2xl overflow-hidden border border-gray-100">
-                    <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                        style={{ backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})` }}
+                <div className="relative h-24 w-24 flex-shrink-0 rounded-2xl overflow-hidden border border-gray-100 bg-gradient-to-br from-gray-100 to-gray-200">
+                    <BlogImage
+                        src={imageUrl}
+                        alt={article.title}
+                        slug={article.slug}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">

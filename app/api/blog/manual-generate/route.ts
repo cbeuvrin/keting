@@ -6,14 +6,12 @@ import { createClient } from '@supabase/supabase-js';
 // Permitir hasta 120 segundos (Vercel Pro / local dev)
 export const maxDuration = 120;
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY || '';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
+const SUPABASE_URL = process.env.SUPABASE_URL!;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 
 export async function POST(request: Request) {
-    // Validar variables de entorno críticas
     if (!GEMINI_API_KEY) {
         return NextResponse.json({ error: "Falta la variable GEMINI_API_KEY en el servidor." }, { status: 500 });
     }
@@ -31,22 +29,22 @@ export async function POST(request: Request) {
         }
 
         const generator = new ArticleGenerator(GEMINI_API_KEY);
-        const multimedia = new MultimediaSearch(UNSPLASH_ACCESS_KEY, YOUTUBE_API_KEY);
+        const multimedia = new MultimediaSearch(GEMINI_API_KEY, YOUTUBE_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-        // A. Generar contenido (2500+ palabras por secciones)
-        console.log(`[manual-generate] Iniciando generación para tema: "${topic}"`);
+        // A. Generar contenido del artículo
+        console.log(`[manual-generate] Generando artículo: "${topic}"`);
         const article = await generator.generateFullArticle(topic);
 
-        // B. Enriquecer con multimedia (falla silenciosamente si no hay API keys)
-        const imageUrl = UNSPLASH_ACCESS_KEY
-            ? await multimedia.searchImage(`premium dark technology ${topic}`)
-            : '/images/blog/default.png';
-        
+        // B. Generar imagen con Gemini y guardar en Supabase Storage (URL permanente)
+        console.log(`[manual-generate] Generando imagen para: "${article.title}"`);
+        const imageUrl = await multimedia.generateAndStoreImage(article.title, article.category, article.slug);
+
+        // C. Buscar video de YouTube
         const youtubeId = YOUTUBE_API_KEY
             ? await multimedia.searchYouTubeVideo(topic)
             : null;
 
-        // C. Guardar en Supabase
+        // D. Guardar artículo completo en Supabase
         const { data, error } = await supabase
             .from('articles')
             .insert([{
@@ -71,7 +69,7 @@ export async function POST(request: Request) {
             throw new Error(`Error de base de datos: ${error.message}`);
         }
 
-        console.log(`[manual-generate] Artículo publicado: "${article.title}" (slug: ${article.slug})`);
+        console.log(`[manual-generate] Artículo publicado: "${article.title}" con imagen permanente: ${imageUrl}`);
 
         return NextResponse.json({ 
             success: true, 
@@ -79,6 +77,7 @@ export async function POST(request: Request) {
             slug: article.slug,
             hasImage: imageUrl !== '/images/blog/default.png',
             hasVideo: !!youtubeId,
+            imageUrl,
         });
 
     } catch (err: any) {
@@ -88,3 +87,4 @@ export async function POST(request: Request) {
         }, { status: 500 });
     }
 }
+

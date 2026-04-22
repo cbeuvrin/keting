@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
 
 import { NewsletterForm } from "@/components/blog/newsletter-form";
 import { createClient } from '@supabase/supabase-js';
+import { getCategoryImage } from "@/lib/blog-utils";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -176,15 +177,11 @@ export default async function ArticlePage({ params }: { params: any }) {
                     <div 
                         className="w-full h-[50vh] md:h-[70vh] rounded-[2rem] overflow-hidden mb-20 relative shadow-2xl bg-gray-100"
                     >
-                        {article.image ? (
-                            <img src={article.image} alt={article.title} className="w-full h-full object-cover blog-hero-img" />
-                        ) : (
-                            <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                                <span className="text-[15vw] font-black uppercase tracking-tighter" style={{ color: article.accent }}>
-                                    {article.category}
-                                </span>
-                            </div>
-                        )}
+                        <img 
+                            src={getCategoryImage(article)} 
+                            alt={article.title} 
+                            className="w-full h-full object-cover blog-hero-img" 
+                        />
                     </div>
 
                     {article.youtube_id && (

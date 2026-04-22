@@ -4,13 +4,12 @@ import { MultimediaSearch } from '@/lib/ai/multimedia-search';
 import { seedTopics } from '@/lib/ai/topics';
 import { createClient } from '@supabase/supabase-js';
 
-// Vercel Pro: permitir hasta 120s para la generación IA
+// Vercel Pro: permitir hasta 120s para la generación IA + imagen
 export const maxDuration = 120;
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY || '';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
+const SUPABASE_URL = process.env.SUPABASE_URL!;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 const CRON_SECRET = process.env.CRON_SECRET;
 
@@ -28,7 +27,8 @@ export async function GET(request: Request) {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const generator = new ArticleGenerator(GEMINI_API_KEY);
-    const multimedia = new MultimediaSearch(UNSPLASH_ACCESS_KEY, YOUTUBE_API_KEY);
+    // Imagen 4.0 → Supabase Storage: URL permanente desde el primer día
+    const multimedia = new MultimediaSearch(GEMINI_API_KEY, YOUTUBE_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     try {
         // 3. Obtener slugs existentes para evitar duplicados
@@ -51,20 +51,20 @@ export async function GET(request: Request) {
             console.log(`[cron] Tema IA: "${todayTopic}"`);
         }
 
-        // 5. Generar el artículo completo (una sola llamada, ~45s)
+        // 5. Generar el artículo completo
         console.log(`[cron] Generando artículo: "${todayTopic}"`);
         const article = await generator.generateFullArticle(todayTopic);
 
-        // 6. Multimedia (falla silenciosamente si no hay API keys)
-        const imageUrl = UNSPLASH_ACCESS_KEY
-            ? await multimedia.searchImage(`premium technology ${todayTopic}`)
-            : '/images/blog/default.png';
+        // 6. Generar imagen con Imagen 4.0 → sube a Supabase Storage → URL permanente
+        console.log(`[cron] Generando imagen con Imagen 4.0 para: "${article.title}"`);
+        const imageUrl = await multimedia.generateAndStoreImage(article.title, article.category, article.slug);
 
+        // 7. Buscar video de YouTube
         const youtubeId = YOUTUBE_API_KEY
             ? await multimedia.searchYouTubeVideo(todayTopic)
             : null;
 
-        // 7. Guardar en Supabase
+        // 8. Guardar en Supabase
         const { error } = await supabase.from('articles').insert([{
             slug: article.slug,
             category: article.category,
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
 
         if (error) throw new Error(`Supabase: ${error.message}`);
 
-        console.log(`[cron] ✅ Publicado: "${article.title}"`);
+        console.log(`[cron] ✅ Publicado: "${article.title}" | Imagen: ${imageUrl}`);
 
         return NextResponse.json({
             date: new Date().toISOString(),
@@ -90,6 +90,7 @@ export async function GET(request: Request) {
             title: article.title,
             slug: article.slug,
             wordCount: article.wordCount,
+            imageUrl,
         });
 
     } catch (err: any) {
