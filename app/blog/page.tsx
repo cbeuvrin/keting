@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, ArrowRight, Home, Filter, Sparkles, Eye, User, Calendar } from "lucide-react";
+import { ExternalLink, ArrowRight, Home, Filter, Sparkles, Eye, User, Calendar, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -109,14 +109,14 @@ export default function BlogPage() {
                             className="flex items-center justify-between w-full max-w-[280px] px-6 py-3 bg-white border border-gray-200 rounded-2xl shadow-sm text-sm font-bold uppercase tracking-widest text-black"
                         >
                             <div className="flex items-center gap-2">
-                                <Filter size={14} className="text-blue-600" />
+                                <Filter size={14} className="opacity-70" />
                                 <span>{activeCategory}</span>
                             </div>
                             <motion.div
                                 animate={{ rotate: isCategoryOpen ? 180 : 0 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <Filter size={14} className="opacity-40" />
+                                <ChevronDown size={16} className="opacity-40" />
                             </motion.div>
                         </button>
 
