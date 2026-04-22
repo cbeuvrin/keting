@@ -225,9 +225,49 @@ interface CardProps {
     size?: "lg" | "md" | "sm";
 }
 
+// Smart image fallback based on article category
+function getCategoryImage(article: any): string {
+    if (article.image && article.image !== '/images/blog/default.png' && !article.image.includes('default')) {
+        return article.image;
+    }
+    // Map categories to local images
+    const categoryMap: Record<string, string> = {
+        'Diseño Web':           '/images/blog/minimalism.png',
+        'Diseño web':           '/images/blog/minimalism.png',
+        'Marketing':            '/images/blog/identity-ai.png',
+        'Estrategia Digital':   '/images/blog/landing.png',
+        'Inteligencia Artificial': '/images/blog/animations.png',
+        'Aplicaciones':         '/images/blog/app-sales.png',
+        'Posicionamiento':      '/images/blog/checklist.png',
+        'Ventas':               '/images/blog/landing.png',
+        'E-commerce':           '/images/blog/app-sales.png',
+        'SEO':                  '/images/blog/geo-optimization.png',
+        'GEO':                  '/images/blog/geo-optimization.png',
+    };
+    const cats = Array.isArray(article.category) ? article.category : [article.category];
+    for (const cat of cats) {
+        const match = Object.keys(categoryMap).find(k => cat?.toLowerCase().includes(k.toLowerCase()));
+        if (match) return categoryMap[match];
+    }
+    // Final fallback: cycle through available images based on article id/slug
+    const fallbacks = [
+        '/images/blog/minimalism.png',
+        '/images/blog/typography.png',
+        '/images/blog/landing.png',
+        '/images/blog/animations.png',
+        '/images/blog/identity-ai.png',
+        '/images/blog/react-nextjs.png',
+        '/images/blog/checklist.png',
+        '/images/blog/app-sales.png',
+        '/images/blog/geo-optimization.png',
+    ];
+    const idx = Math.abs((article.id || article.slug?.length || 0)) % fallbacks.length;
+    return fallbacks[idx];
+}
+
 function FeaturedCard({ article, size }: CardProps) {
     const isLarge = size === "lg";
-    const imageUrl = article.image || '/images/blog/checklist.png';
+    const imageUrl = getCategoryImage(article);
     
     return (
         <Link href={`/blog/${article.slug}`} className="block h-full w-full">
@@ -237,9 +277,6 @@ function FeaturedCard({ article, size }: CardProps) {
                     src={imageUrl}
                     alt={article.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/blog/checklist.png';
-                    }}
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
