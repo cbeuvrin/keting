@@ -88,6 +88,14 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 transition={{ duration: 0.4, ease: "easeOut" }}
                                 className="flex-1 bg-white rounded-[2rem] overflow-hidden flex flex-col shadow-2xl relative"
                             >
+                                {/* Mobile Close Button */}
+                                <button
+                                    onClick={onClose}
+                                    className="absolute top-4 right-4 z-50 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white p-2 rounded-full md:hidden shadow-lg transition-transform active:scale-90"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+
                                 <div className="p-8 md:p-12 overflow-y-auto h-full">
                                     <h2 className="text-3xl md:text-4xl font-heading font-medium mb-6">
                                         Conecta con el equipo
@@ -197,7 +205,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 50 }}
                                 transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-                                className="w-full md:w-[350px] bg-white rounded-[2rem] p-6 md:p-8 flex flex-col justify-between shadow-2xl relative h-fit"
+                                className="hidden md:flex md:w-[350px] bg-white rounded-[2rem] p-6 md:p-8 flex-col justify-between shadow-2xl relative h-fit"
                             >
                                 {/* Close Button */}
                                 <button
