@@ -109,12 +109,14 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
                         </button>
 
-                        <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
                     </div>
                 </div>
             </motion.header>
 
-            {/* Slide-in Menu ... (unchanged) */}
+            {/* Contact Modal - rendered outside header to avoid stacking context issues */}
+            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+
+            {/* Slide-in Menu */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <>
