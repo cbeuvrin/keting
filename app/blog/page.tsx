@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ArrowRight, Home, Filter, Sparkles, Eye, User, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
@@ -18,6 +18,7 @@ export default function BlogPage() {
     const [mounted, setMounted] = useState(false);
     const [dbArticles, setDbArticles] = useState<any[]>([]);
     const [activeCategory, setActiveCategory] = useState("Todos");
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -84,7 +85,8 @@ export default function BlogPage() {
             {/* Filter Bar / Navigation */}
             <section className="pt-32 pb-6 px-6 sm:px-12 bg-[#F0F2F5]">
                 <div className="container mx-auto">
-                    <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+                    {/* Desktop Filters */}
+                    <div className="hidden md:flex flex-wrap items-center justify-center gap-2 mb-12">
                         {availableCategories.map((cat) => (
                             <button
                                 key={cat}
@@ -98,6 +100,54 @@ export default function BlogPage() {
                                 {cat}
                             </button>
                         ))}
+                    </div>
+
+                    {/* Mobile Filters Dropdown */}
+                    <div className="md:hidden relative mb-12 flex justify-center">
+                        <button
+                            onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                            className="flex items-center justify-between w-full max-w-[280px] px-6 py-3 bg-white border border-gray-200 rounded-2xl shadow-sm text-sm font-bold uppercase tracking-widest text-black"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Filter size={14} className="text-blue-600" />
+                                <span>{activeCategory}</span>
+                            </div>
+                            <motion.div
+                                animate={{ rotate: isCategoryOpen ? 180 : 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <Filter size={14} className="opacity-40" />
+                            </motion.div>
+                        </button>
+
+                        <AnimatePresence>
+                            {isCategoryOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="absolute top-full mt-2 w-full max-w-[280px] bg-white border border-gray-100 rounded-3xl shadow-2xl p-4 z-50 max-h-[400px] overflow-y-auto grid grid-cols-1 gap-1"
+                                >
+                                    {availableCategories.map((cat) => (
+                                        <button
+                                            key={cat}
+                                            onClick={() => {
+                                                setActiveCategory(cat);
+                                                setIsCategoryOpen(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-colors ${
+                                                activeCategory === cat
+                                                    ? "bg-blue-50 text-blue-600"
+                                                    : "text-gray-500 hover:bg-gray-50 hover:text-black"
+                                            }`}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
             </section>
