@@ -211,13 +211,42 @@ export default async function ArticlePage({ params }: { params: any }) {
                                 <p className="text-sm text-gray-500 mb-6 font-light">
                                     Recibe los mejores consejos sobre diseño y negocios una vez por semana.
                                 </p>
-                                <form className="space-y-3">
+                                <form className="space-y-3" action="/api/contact" method="POST" onSubmit={async (e) => {
+                                    e.preventDefault();
+                                    const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
+                                    const button = e.currentTarget.querySelector('button');
+                                    if (button) button.disabled = true;
+                                    
+                                    try {
+                                        const res = await fetch('/api/contact', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                name: 'Suscriptor Newsletter',
+                                                email: email,
+                                                phone: 'N/A',
+                                                message: 'Desea suscribirse al newsletter.',
+                                                source: 'Newsletter Blog'
+                                            })
+                                        });
+                                        if (res.ok) {
+                                            alert('¡Gracias por suscribirte!');
+                                            (e.target as HTMLFormElement).reset();
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                    } finally {
+                                        if (button) button.disabled = false;
+                                    }
+                                }}>
                                     <input 
                                         type="email" 
+                                        name="email"
+                                        required
                                         placeholder="Tu email..."
                                         className="w-full px-4 py-3 bg-white border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5"
                                     />
-                                    <button className="w-full py-3 bg-black text-white rounded-xl text-sm font-bold hover:bg-zinc-800 transition-colors">
+                                    <button type="submit" className="w-full py-3 bg-black text-white rounded-xl text-sm font-bold hover:bg-zinc-800 transition-colors disabled:opacity-50">
                                         Suscribirme
                                     </button>
                                 </form>

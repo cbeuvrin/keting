@@ -40,10 +40,46 @@ export default function SDPage() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [contactFormData, setContactFormData] = useState({
+        name: "",
+        email: "",
+        phone: ""
+    });
+    const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const scrollTop = e.currentTarget.scrollTop;
         setIsScrolled(scrollTop > 50);
+    };
+
+    const handleContactSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setContactStatus("sending");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...contactFormData,
+                    source: "Página SD (Hero)"
+                }),
+            });
+
+            if (response.ok) {
+                setContactStatus("success");
+                setContactFormData({ name: "", email: "", phone: "" });
+                setTimeout(() => {
+                    setContactStatus("idle");
+                    setIsContactOpen(false);
+                }, 3000);
+            } else {
+                setContactStatus("error");
+            }
+        } catch (error) {
+            console.error("Error submitting contact form:", error);
+            setContactStatus("error");
+        }
     };
 
     return (
@@ -136,27 +172,44 @@ export default function SDPage() {
                                                         transition={{ duration: 0.2 }}
                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[320px] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 z-[100]"
                                                     >
-                                                        <form className="space-y-4 text-left" onSubmit={(e) => e.preventDefault()}>
+                                                        <form className="space-y-4 text-left" onSubmit={handleContactSubmit}>
                                                             <input
                                                                 type="text"
+                                                                required
+                                                                value={contactFormData.name}
+                                                                onChange={(e) => setContactFormData({ ...contactFormData, name: e.target.value })}
                                                                 placeholder="Nombre"
                                                                 className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all text-black placeholder:text-gray-500"
                                                             />
                                                             <input
                                                                 type="email"
+                                                                required
+                                                                value={contactFormData.email}
+                                                                onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
                                                                 placeholder="Email"
                                                                 className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all text-black placeholder:text-gray-500"
                                                             />
                                                             <input
                                                                 type="tel"
+                                                                required
+                                                                value={contactFormData.phone}
+                                                                onChange={(e) => setContactFormData({ ...contactFormData, phone: e.target.value })}
                                                                 placeholder="Teléfono"
                                                                 className="w-full px-4 py-3 bg-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/10 transition-all text-black placeholder:text-gray-500"
                                                             />
                                                             <button
                                                                 type="submit"
-                                                                className="w-full py-3 bg-black text-white rounded-2xl text-sm font-bold hover:bg-gray-800 transition-colors"
+                                                                disabled={contactStatus === "sending"}
+                                                                className={cn(
+                                                                    "w-full py-3 bg-black text-white rounded-2xl text-sm font-bold hover:bg-gray-800 transition-colors disabled:opacity-50",
+                                                                    contactStatus === "success" && "bg-green-600 hover:bg-green-700",
+                                                                    contactStatus === "error" && "bg-red-600 hover:bg-red-700"
+                                                                )}
                                                             >
-                                                                Enviar
+                                                                {contactStatus === "idle" && "Enviar"}
+                                                                {contactStatus === "sending" && "Enviando..."}
+                                                                {contactStatus === "success" && "¡Enviado!"}
+                                                                {contactStatus === "error" && "Error"}
                                                             </button>
                                                         </form>
                                                     </motion.div>

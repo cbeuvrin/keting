@@ -13,6 +13,13 @@ interface ContactModalProps {
 
 export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [selectedInterest, setSelectedInterest] = useState<string[]>([]);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+    });
+    const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
     const interests = ["Diseño Web", "Precio", "Solución digital"];
 
@@ -21,6 +28,38 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
             setSelectedInterest(selectedInterest.filter(i => i !== interest));
         } else {
             setSelectedInterest([...selectedInterest, interest]);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus("sending");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...formData,
+                    interests: selectedInterest,
+                    source: "Modal Precios"
+                }),
+            });
+
+            if (response.ok) {
+                setStatus("success");
+                setFormData({ name: "", email: "", phone: "", message: "" });
+                setSelectedInterest([]);
+                setTimeout(() => {
+                    setStatus("idle");
+                    onClose();
+                }, 3000);
+            } else {
+                setStatus("error");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            setStatus("error");
         }
     };
 
@@ -56,7 +95,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                                     <div className="border-t border-dashed border-gray-300 my-4 w-full" />
 
-                                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                                    <form className="space-y-4" onSubmit={handleSubmit}>
                                         {/* Interests */}
                                         <div className="space-y-3">
                                             <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">
@@ -87,6 +126,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                 <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Nombre*</label>
                                                 <input
                                                     type="text"
+                                                    required
+                                                    value={formData.name}
+                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                                     placeholder="Tu nombre"
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
@@ -95,6 +137,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                 <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Correo electrónico*</label>
                                                 <input
                                                     type="email"
+                                                    required
+                                                    value={formData.email}
+                                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                     placeholder="Correo electrónico"
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
@@ -103,6 +148,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                 <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Celular*</label>
                                                 <input
                                                     type="tel"
+                                                    required
+                                                    value={formData.phone}
+                                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                     placeholder="Tu número de celular"
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
@@ -114,6 +162,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                             <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Mensaje*</label>
                                             <textarea
                                                 rows={3}
+                                                required
+                                                value={formData.message}
+                                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                                 placeholder="Cuéntanos un poco sobre tu proyecto"
                                                 className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300 resize-none"
                                             />
@@ -123,9 +174,17 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         <div className="flex justify-end pt-2">
                                             <button
                                                 type="submit"
-                                                className="bg-black text-white px-10 py-3 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all shadow-lg hover:scale-105 active:scale-95"
+                                                disabled={status === "sending"}
+                                                className={cn(
+                                                    "bg-black text-white px-10 py-3 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all shadow-lg hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
+                                                    status === "success" && "bg-green-600 hover:bg-green-700",
+                                                    status === "error" && "bg-red-600 hover:bg-red-700"
+                                                )}
                                             >
-                                                Enviar Mensaje
+                                                {status === "idle" && "Enviar Mensaje"}
+                                                {status === "sending" && "Enviando..."}
+                                                {status === "success" && "¡Enviado!"}
+                                                {status === "error" && "Error al enviar"}
                                             </button>
                                         </div>
                                     </form>
