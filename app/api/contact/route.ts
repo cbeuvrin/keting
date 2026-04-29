@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         const { data, error } = await resend.emails.send({
             from: process.env.RESEND_FROM || 'onboarding@resend.dev',
             to: [process.env.SMTP_TO || 'carlos@keting.media'],
-            replyTo: email,
+            reply_to: email,
             subject: `Nuevo contacto desde la web (${source || 'General'})`,
             html: `
                 <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px;">
