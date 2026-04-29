@@ -1,45 +1,23 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+// Inicializar Resend con la API Key de las variables de entorno
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { name, email, phone, message, interests, source } = body;
 
-        // Configuración de transporte (Banahosting suele usar estos puertos)
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 465,
-            secure: Number(process.env.SMTP_PORT) === 465, // true para 465, false para 587
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-            tls: {
-                // A veces necesario para servidores de hosting compartido
-                rejectUnauthorized: false
-            }
-        });
-
-        // Construir el cuerpo del correo
+        // Construir lista de intereses
         const interestsList = interests && Array.isArray(interests) ? interests.join(', ') : 'N/A';
         
-        const mailOptions = {
-            from: `"KETING Web" <${process.env.SMTP_USER}>`,
-            to: process.env.SMTP_TO || process.env.SMTP_USER,
+        // Enviar el correo usando Resend
+        const { data, error } = await resend.emails.send({
+            from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+            to: [process.env.SMTP_TO || 'carlos@keting.media'],
             replyTo: email,
             subject: `Nuevo contacto desde la web (${source || 'General'})`,
-            text: `
-                Nuevo mensaje de contacto:
-                
-                Nombre: ${name}
-                Email: ${email}
-                Teléfono: ${phone}
-                Intereses: ${interestsList}
-                Mensaje: ${message || 'Sin mensaje'}
-                
-                Enviado desde: ${source || 'Formulario general'}
-            `,
             html: `
                 <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px;">
                     <h2 style="color: #000;">Nuevo mensaje de contacto</h2>
@@ -55,11 +33,21 @@ export async function POST(request: Request) {
                     <p style="font-size: 12px; color: #888;">Enviado desde: ${source || 'Formulario general'}</p>
                 </div>
             `,
-        };
+        });
 
-        await transporter.sendMail(mailOptions);
+        if (error) {
+            console.error('Error de Resend:', error);
+            return NextResponse.json(
+                { success: false, error: error.message || 'Error en el servicio de correo' },
+                { status: 400 }
+            );
+        }
 
-        return NextResponse.json({ success: true, message: 'Correo enviado con éxito' });
+        return NextResponse.json({ 
+            success: true, 
+            message: 'Correo enviado con éxito',
+            id: data?.id 
+        });
     } catch (error: any) {
         console.error('Error enviando email:', error);
         return NextResponse.json(
