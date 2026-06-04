@@ -1,49 +1,46 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 export default function TextSection() {
+    const sectionRef = useRef<HTMLElement>(null);
+
+    // Scroll-linked parallax: la sección reacciona durante TODO su paso por el viewport.
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"],
+    });
+
+    const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
+
+    // Parallax sutil: la frase sube continuamente conforme avanza el scroll
+    const y = useTransform(smooth, [0, 1], [80, -80]);
+    // Fade-in al entrar y fade-out al salir
+    const opacity = useTransform(smooth, [0, 0.25, 0.75, 1], [0, 1, 1, 0.4]);
+
+    // Color: arranca negro al entrar y llega a gris justo cuando la frase queda centrada para leer
+    const sideColor = useTransform(
+        smooth,
+        [0.15, 0.45],
+        ["rgba(29, 29, 31, 1)", "rgba(29, 29, 31, 0.22)"]
+    );
+
     return (
-        <section className="w-full py-24 px-6 md:px-12 text-black bg-[#FAFAFA]">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
-
-                {/* Left Column: Service Tag */}
-                <div className="md:col-span-4">
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        viewport={{ once: true }}
-                        className="text-lg md:text-xl font-light text-[#333333]"
-                    >
-                        Servicio de diseño web.
-                    </motion.p>
-                </div>
-
-                {/* Right Column: Heading & Description */}
-                <div className="md:col-span-8 flex flex-col gap-8">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                        viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-bold leading-tight tracking-tight text-black"
-                    >
-                        Expertos en diseño y desarrollo web.<br />
-                        Creamos páginas ideales para potenciar su negocio.
-                    </motion.h2>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                        viewport={{ once: true }}
-                        className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-3xl"
-                    >
-                        Nos dedicamos a proporcionar servicios digitales para impulsar el crecimiento de su negocio. Especializados en diseño y desarrollo web, tiendas virtuales, SEO, optimización de velocidad, hospedaje web y diseño de identidad de marca.
-                    </motion.p>
-                </div>
-
+        <section ref={sectionRef} className="bg-[#FAFAFA] py-32 md:py-48 px-6 md:px-12">
+            <div className="max-w-7xl mx-auto">
+                <motion.h2
+                    style={{ y, opacity }}
+                    className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.15] tracking-tight text-[#1d1d1f] font-heading"
+                >
+                    <motion.span style={{ color: sideColor }}>
+                        Como agencia digital experta en creación de sitios web,
+                    </motion.span>{" "}
+                    <span className="font-normal">Keting le ofrece servicios a medida para potenciar su presencia online.</span>{" "}
+                    <motion.span style={{ color: sideColor }}>
+                        Combinamos creatividad, pensamiento estratégico y tecnología para crear soluciones personalizadas que contribuirán a su éxito.
+                    </motion.span>
+                </motion.h2>
             </div>
         </section>
     );

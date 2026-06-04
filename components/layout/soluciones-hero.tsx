@@ -84,11 +84,14 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
 
                                 {/* Main Title Group */}
                                 <div className="flex flex-col justify-center h-full mt-20 md:mt-0 md:ml-[15%] w-fit relative z-10">
-                                    <h1 className="flex flex-col text-6xl md:text-[8vw] leading-none tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
+                                    <h1 className="flex flex-col text-6xl md:text-[8vw] leading-[0.95] tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
                                         <span className="block whitespace-nowrap">Experiencias</span>
-                                        <span className="block whitespace-nowrap"><span className="font-bold italic">digitales</span></span>
-                                        <span className="block whitespace-nowrap">únicas</span>
-                                        <span className="block whitespace-nowrap">e innovadoras</span>
+                                        <span className="block whitespace-nowrap font-[family-name:var(--font-playfair)] italic font-normal normal-case text-[1.1em]">digitales</span>
+                                        <span className="block whitespace-nowrap font-medium">únicas</span>
+                                        <span className="block whitespace-nowrap relative">
+                                            e <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">innovadoras</span>
+                                            <span className="inline-block ml-2 align-top text-[0.5em] rotate-12 text-white/40">*</span>
+                                        </span>
 
                                         {/* Circular Video next to text */}
                                         <motion.div

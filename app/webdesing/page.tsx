@@ -12,9 +12,8 @@ const PortfolioSection = dynamic(() => import("./PortfolioSection"), { ssr: fals
 const Testimonials = dynamic(() => import("@/components/layout/testimonials").then(mod => mod.Testimonials), { ssr: false });
 
 const WebDesignServices = dynamic(() => import("@/components/layout/web-design-services").then(mod => mod.WebDesignServices), { ssr: false });
+const ClientsShowcase = dynamic(() => import("./ClientsShowcase"), { ssr: false });
 const Footer = dynamic(() => import("@/components/layout/footer").then(mod => mod.Footer), { ssr: false });
-import { SnakeLine } from "./SnakeLine";
-import { ExpertiseSlider } from "./ExpertiseSlider";
 
 export default function GravityPage() {
     const pageRef = useRef(null);
@@ -38,11 +37,10 @@ export default function GravityPage() {
             <GravityHeader />
             <GravityHero />
             <ZoomSection />
-            <SnakeLine />
             <TextSection />
             <PortfolioSection />
+            <ClientsShowcase />
             <Testimonials />
-            <ExpertiseSlider />
 
             <WebDesignServices />
             <Footer />

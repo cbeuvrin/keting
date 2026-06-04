@@ -40,20 +40,26 @@ export function Testimonials() {
     return (
         <section ref={containerRef} className="relative z-20 py-32 bg-[#FAFAFA] text-[#111111] overflow-hidden">
             <div className="container mx-auto px-6 md:px-12 max-w-7xl">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="mb-20 text-center md:text-left"
-                >
-                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 font-heading text-[#111]">
+                <div className="mb-20 text-center md:text-left">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
+                    >
                         ¿Y qué dicen nuestros clientes?
-                    </h2>
-                    <p className="text-gray-500 text-lg md:text-xl font-light">
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-gray-500 text-lg md:text-xl font-light"
+                    >
                         Resultados reales para marcas reales.
-                    </p>
-                </motion.div>
+                    </motion.p>
+                </div>
 
                 <div className="flex flex-col">
                     {testimonials.map((item, index) => {
@@ -76,7 +82,7 @@ export function Testimonials() {
                                     style={{ y: yStat }}
                                     className="md:w-1/4 flex flex-col md:items-start items-center text-center md:text-left pt-2"
                                 >
-                                    <span className="text-[5rem] md:text-[6.5rem] font-bold tracking-tighter leading-[0.8] mb-4 text-[#111]">
+                                    <span className="text-[5rem] md:text-[6.5rem] font-normal tracking-tighter leading-[0.8] mb-4 text-[#111]">
                                         {item.stat}
                                     </span>
                                     <span className="text-[10px] md:text-[11px] text-[#666] uppercase tracking-[0.2em] font-mono font-medium">

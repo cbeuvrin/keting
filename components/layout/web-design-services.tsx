@@ -1,15 +1,23 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ServiceItemProps {
   title: string;
+  description: string;
   delay: number;
 }
 
-const ServiceItem = ({ title, delay }: ServiceItemProps) => {
+const ServiceItem = ({ title, description, delay }: ServiceItemProps) => {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div className="relative py-6 md:py-8 lg:py-10 group cursor-default">
+    <div
+      className="relative py-6 md:py-8 lg:py-10 group cursor-default"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       {/* Animated Line */}
       <motion.div
         initial={{ scaleX: 0 }}
@@ -18,8 +26,8 @@ const ServiceItem = ({ title, delay }: ServiceItemProps) => {
         transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
         className="absolute top-0 left-0 w-full h-px bg-black/10 origin-left group-hover:bg-black/40 transition-colors duration-500"
       />
-      
-      <motion.p 
+
+      <motion.p
         initial={{ opacity: 0, x: -10 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
@@ -28,62 +36,105 @@ const ServiceItem = ({ title, delay }: ServiceItemProps) => {
       >
         {title}
       </motion.p>
+
+      {/* Popover informativo en hover */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute left-0 top-full mt-3 max-w-sm bg-white rounded-2xl shadow-2xl shadow-black/10 border border-black/5 p-5 z-30 pointer-events-none"
+          >
+            <p className="text-sm md:text-base font-light text-[#1d1d1f]/70 leading-relaxed font-sans">
+              {description}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export function WebDesignServices() {
   const designServices = [
-    "Dirección de arte",
-    "Diseño UX/UI",
-    "Diseño de movimiento",
-    "Sistema de diseño",
-    "Estrategia de contenido",
-    "Pruebas de usabilidad",
+    {
+      title: "Dirección de arte",
+      description: "Definimos la voz visual de su marca con composiciones que comunican intención en cada detalle.",
+    },
+    {
+      title: "Diseño UX/UI",
+      description: "Interfaces claras y funcionales, optimizadas para convertir y deleitar al usuario en cada interacción.",
+    },
+    {
+      title: "Diseño de movimiento",
+      description: "Animaciones precisas que dan vida al producto y guían la atención sin distraer.",
+    },
+    {
+      title: "Sistema de diseño",
+      description: "Componentes y reglas reutilizables para escalar el producto con consistencia y velocidad.",
+    },
+    {
+      title: "Estrategia de contenido",
+      description: "Mensajes con jerarquía y propósito que conectan con su audiencia en cada touchpoint.",
+    },
+    {
+      title: "Pruebas de usabilidad",
+      description: "Validamos decisiones con usuarios reales para reducir riesgos antes del lanzamiento.",
+    },
   ];
 
   const developmentServices = [
-    "Desarrollo Front-end/back-end",
-    "Sitios web WordPress a medida",
-    "E-Commerce Shopify personalizado",
-    "Desarrollo web creativo",
-    "Gamificación",
-    "SEO",
+    {
+      title: "Desarrollo Front-end/back-end",
+      description: "Stack moderno y arquitectura sólida para productos rápidos, estables y escalables.",
+    },
+    {
+      title: "Sitios web WordPress a medida",
+      description: "WordPress optimizado al milímetro, sin plantillas, con la flexibilidad de un desarrollo a medida.",
+    },
+    {
+      title: "E-Commerce personalizado",
+      description: "Tiendas en línea diseñadas para vender: UX impecable, performance excepcional y conversión arriba.",
+    },
+    {
+      title: "Desarrollo web creativo",
+      description: "Experiencias web con identidad: WebGL, scroll narrativo e interacciones que distinguen su marca.",
+    },
+    {
+      title: "Gamificación",
+      description: "Mecánicas de juego que aumentan engagement, retención y lealtad sin sentirse forzadas.",
+    },
+    {
+      title: "SEO",
+      description: "Optimización técnica y de contenido para que Google entienda su propuesta y la posicione arriba.",
+    },
   ];
 
   return (
     <section className="bg-[#F5F5F7] text-[#1d1d1f] py-32 md:py-48 lg:py-56 px-6 sm:px-10 md:px-16 lg:px-24">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 mb-24 md:mb-40">
-          <div className="space-y-8">
-             <span className="text-[#d8ff00] text-lg font-bold tracking-tight font-sulphur">
-              Keting®
-            </span>
-            <p className="text-sm md:text-base text-[#1d1d1f]/50 uppercase tracking-[0.2em] font-medium font-sans">
-              ES SIMPLE, HACEMOS 2 COSAS.
-            </p>
-          </div>
-          <div className="max-w-xl self-start">
-            <p className="text-xl md:text-2xl lg:text-[28px] font-light leading-[1.4] text-[#1d1d1f]/90 font-sans">
-              Como agencia digital experta en creación de sitios web, <span className="text-[#1d1d1f] font-bold underline decoration-black/10 underline-offset-8">Keting</span> le ofrece servicios a medida para potenciar su presencia online. Combinamos creatividad, pensamiento estratégico y tecnología para crear soluciones personalizadas que contribuirán a su éxito.
-            </p>
-          </div>
-        </div>
-
         {/* Services Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-32 lg:gap-x-48">
           {/* Design Column */}
           <div className="flex flex-col">
-            <h2 className="text-6xl md:text-7xl lg:text-[100px] font-bold tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
+            >
               Diseño
-            </h2>
+            </motion.h2>
             <div className="relative border-b border-black/10">
               {designServices.map((service, index) => (
-                <ServiceItem 
-                  key={service} 
-                  title={service} 
-                  delay={index * 0.12} 
+                <ServiceItem
+                  key={service.title}
+                  title={service.title}
+                  description={service.description}
+                  delay={index * 0.12}
                 />
               ))}
             </div>
@@ -91,15 +142,22 @@ export function WebDesignServices() {
 
           {/* Development Column */}
           <div className="flex flex-col mt-32 md:mt-0">
-            <h2 className="text-6xl md:text-7xl lg:text-[100px] font-bold tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
+            >
               Desarrollo
-            </h2>
+            </motion.h2>
             <div className="relative border-b border-black/10">
               {developmentServices.map((service, index) => (
-                <ServiceItem 
-                  key={service} 
-                  title={service} 
-                  delay={index * 0.12 + 0.4} 
+                <ServiceItem
+                  key={service.title}
+                  title={service.title}
+                  description={service.description}
+                  delay={index * 0.12 + 0.4}
                 />
               ))}
             </div>

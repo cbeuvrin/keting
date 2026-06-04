@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ScrambleText from "./ScrambleText";
 
@@ -9,6 +10,7 @@ export default function GravityHero() {
     const sceneRef = useRef<HTMLDivElement>(null);
     const engineRef = useRef<Matter.Engine | null>(null);
     const runnerRef = useRef<Matter.Runner | null>(null);
+    const [avatarHover, setAvatarHover] = useState(false);
 
     // Refs for the DOM elements corresponding to the bodies
     const lettersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -82,8 +84,15 @@ export default function GravityHero() {
             },
         });
 
+        // Quitar listeners de wheel que Matter adjunta — bloquean el scroll de página
         mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
         mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
+        if ((mouse as any).wheel) {
+            mouse.element.removeEventListener("wheel", (mouse as any).wheel);
+        }
+        // Permitir explícitamente que el scroll de página funcione sobre el hero
+        const allowScroll = (e: Event) => { e.stopPropagation(); };
+        mouse.element.addEventListener("wheel", allowScroll, { passive: true });
 
         Composite.add(engine.world, mouseConstraint);
         Runner.run(runner, engine);
@@ -131,7 +140,7 @@ export default function GravityHero() {
                         "text-white border-none pointer-events-auto"
                     )}
                     style={{
-                        touchAction: 'none',
+                        touchAction: 'pan-y',
                         opacity: 0,
                         willChange: "transform",
                         fontSize: "clamp(4rem, 15vw, 12rem)",
@@ -159,12 +168,36 @@ export default function GravityHero() {
                                 Programador
                             </p>
                         </div>
-                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 flex-shrink-0 shadow-xl flex items-center justify-center">
-                            <img
-                                src="/carlos-beuvrin.png"
-                                alt="Carlos Beuvrin"
-                                className="w-full h-full object-cover grayscale brightness-110 scale-125"
-                            />
+                        <div
+                            className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0"
+                            onMouseEnter={() => setAvatarHover(true)}
+                            onMouseLeave={() => setAvatarHover(false)}
+                        >
+                            <div className="w-full h-full rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-xl flex items-center justify-center cursor-pointer">
+                                <img
+                                    src="/carlos-beuvrin.png"
+                                    alt="Carlos Beuvrin"
+                                    className="w-full h-full object-cover grayscale brightness-110 scale-125"
+                                />
+                            </div>
+
+                            <AnimatePresence>
+                                {avatarHover && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.85, y: -10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.92, y: -8 }}
+                                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute top-full right-0 mt-4 w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.5)] z-50 pointer-events-none"
+                                    >
+                                        <img
+                                            src="/carlos-beuvrin.png"
+                                            alt="Carlos Beuvrin"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </div>

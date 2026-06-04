@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Source asset folders (copies are in public/)
+/Favicom/
+/LOGOS CLIENTES/
+/Soluciones digitales imagenes/
+/scratch/
+/KETINGfavicom*.png
+/favicom*.png

@@ -65,6 +65,7 @@ REGLAS DE ESTILO:
 4. NO menciones que eres IA. Escribe como editorial humana de élite
 5. En español, pensado para directivos y emprendedores premium de México y LATAM
 6. El artículo debe siente como publicado en Harvard Business Review en español
+7. PROHIBIDO: No uses la palabra "Sinfonía" en el título bajo ninguna circunstancia. Busca títulos más modernos y estratégicos.
 
 IMPORTANTE: Devuelve ÚNICAMENTE un objeto JSON puro (sin bloques de código markdown) con esta estructura:
 {

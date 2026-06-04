@@ -215,6 +215,7 @@ export function Hero() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 1, duration: 0.8 }}
+                        suppressHydrationWarning
                         className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
                         <div className="text-base text-gray-500 max-w-lg text-right leading-relaxed">
@@ -236,6 +237,7 @@ export function Hero() {
                         >
                             <motion.h2
                                 style={{ opacity, y: subtextY }}
+                                suppressHydrationWarning
                                 className="text-[10px] md:text-xs font-bold tracking-[4px] uppercase text-gray-400 mb-8 md:mb-12"
                             >
                                 / Estrategia & Diseño Digital /
@@ -255,6 +257,7 @@ export function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1.2, duration: 0.8 }}
+                        suppressHydrationWarning
                         className="lg:hidden mt-8 md:mt-12 max-w-sm md:max-w-lg mb-8"
                     >
                         <p className="text-sm md:text-base text-gray-500 leading-relaxed text-left">

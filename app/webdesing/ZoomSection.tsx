@@ -34,7 +34,7 @@ export default function ZoomSection() {
                 {/* Overlay Text */}
                 <div className="absolute inset-0 flex items-center justify-end px-6 md:pr-48 pointer-events-none">
                     <div className="text-right">
-                        <h2 className="text-5xl md:text-7xl lg:text-[6.5rem] font-heading font-bold leading-[1.05] tracking-tight text-black">
+                        <h2 className="text-5xl md:text-7xl lg:text-[6.5rem] font-heading font-normal leading-[1.05] tracking-tight text-black">
                             <span className="block">
                                 <span className="font-[family-name:var(--font-playfair)] italic font-black mr-1">V</span>
                                 ibe
