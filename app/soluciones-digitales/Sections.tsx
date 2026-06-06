@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ArrowRight, ArrowDown, Sparkles, Plus } from "lucide-react";
 
 /* ==========================================================================
@@ -233,25 +233,43 @@ function Ipad3D() {
     });
     const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.6 });
 
-    // Empieza inclinado 3D, se endereza
+    // Empieza inclinado 3D, se endereza (sin opacidad para que sea opaco siempre)
     const rotateY = useTransform(smooth, [0, 1], [-45, 0]);
     const rotateX = useTransform(smooth, [0, 1], [12, 0]);
     const scale = useTransform(smooth, [0, 1], [0.85, 1]);
-    const opacity = useTransform(smooth, [0, 0.3, 1], [0, 0.7, 1]);
 
     return (
         <div
             ref={ref}
-            className="mb-16 md:mb-24 flex justify-center"
+            className="relative mb-16 md:mb-24 flex justify-center py-12 md:py-16"
             style={{ perspective: "1200px" }}
         >
+            {/* Líneas resaltadas + puntos viajando (detrás del iPad) */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+                {/* Línea 1 — superior */}
+                <div className="absolute top-[28%] left-0 right-0 h-px bg-[#1d1d1f]/25" />
+                <motion.div
+                    className="absolute top-[28%] -translate-y-1/2 w-2 h-2 rounded-full bg-[#1d1d1f] shadow-[0_0_10px_rgba(29,29,31,0.5)]"
+                    animate={{ left: ["-2%", "102%"] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Línea 2 — inferior */}
+                <div className="absolute top-[72%] left-0 right-0 h-px bg-[#1d1d1f]/25" />
+                <motion.div
+                    className="absolute top-[72%] -translate-y-1/2 w-2 h-2 rounded-full bg-[#1d1d1f] shadow-[0_0_10px_rgba(29,29,31,0.5)]"
+                    animate={{ left: ["102%", "-2%"] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
+            </div>
+
             <motion.div
                 style={{
                     rotateY,
                     rotateX,
                     scale,
-                    opacity,
                     transformStyle: "preserve-3d",
+                    zIndex: 10,
                 }}
                 className="relative w-full max-w-xs md:max-w-md lg:max-w-md"
             >
@@ -297,7 +315,7 @@ export function NuestroEnfoque() {
     const progressWidth = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
 
     return (
-        <section ref={ref} className="bg-[#F5F5F7] relative overflow-clip" style={{ minHeight: "150vh" }}>
+        <section ref={ref} className="bg-[#F5F5F7] relative overflow-clip" style={{ minHeight: "195vh" }}>
 
             {/* Grid background sutil */}
             <div
@@ -732,7 +750,233 @@ function HoverLetters({ text }: { text: string }) {
 }
 
 /* ==========================================================================
-   4. CASOS DE ÉXITO — Header introductorio antes de los casos
+   4. APPS HIPERPERSONALIZADAS — Manifiesto + iPhone con sway continuo
+   No es un sector como los de la lista — es la firma del estudio.
+   ========================================================================== */
+
+export function AppsHiperpersonalizadas() {
+    const ref = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"],
+    });
+    const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
+
+    const rotateAst = useTransform(smooth, [0, 1], [0, 540]);
+
+    // iPhone — entrada con escala + opacidad ligada al scroll
+    const phoneScale = useTransform(smooth, [0.1, 0.5], [0.85, 1]);
+    const phoneOpacity = useTransform(smooth, [0.05, 0.3, 1], [0, 1, 1]);
+
+    return (
+        <section ref={ref} className="bg-[#1a1a1a] text-white relative py-32 md:py-44 px-6 md:px-12 lg:px-24 overflow-clip">
+
+            {/* Grid background blanco sobre dark */}
+            <div
+                className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                style={{
+                    backgroundImage: "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+
+            <motion.span
+                style={{ rotate: rotateAst }}
+                className="absolute top-[12%] left-[5%] text-[8rem] md:text-[14rem] text-white/[0.06] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
+            <div className="max-w-7xl mx-auto relative">
+
+                {/* Eyebrow + badge 05 */}
+                <div className="flex items-center justify-between mb-12 md:mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center gap-3"
+                    >
+                        <span className="block w-12 h-px bg-white/40" />
+                        <span className="text-xs uppercase tracking-[0.3em] text-white/60 font-sans">
+                            Nuestra firma
+                        </span>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center"
+                    >
+                        <span className="font-serif italic text-2xl md:text-3xl text-[#1a1a1a]">05</span>
+                    </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+
+                    {/* Texto editorial */}
+                    <div className="lg:col-span-7">
+                        <div className="uppercase leading-[0.95] tracking-tight text-white">
+                            <RiseText delay={0}>
+                                <span className="block text-5xl md:text-7xl lg:text-8xl font-light">
+                                    Apps
+                                </span>
+                            </RiseText>
+                            <RiseText delay={0.12}>
+                                <span className="block text-3xl md:text-5xl lg:text-6xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 md:mt-3 tracking-tight">
+                                    hiperpersonalizadas
+                                    <motion.span
+                                        initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
+                                        whileInView={{ opacity: 1, rotate: 18, scale: 1 }}
+                                        viewport={{ once: true, margin: "-10%" }}
+                                        transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                                        className="inline-block ml-2 text-2xl md:text-4xl align-top text-white/40 not-italic"
+                                    >*</motion.span>
+                                </span>
+                            </RiseText>
+                        </div>
+
+                        <RiseText delay={0.1}>
+                            <p className="text-base md:text-lg lg:text-xl text-white/75 font-light leading-relaxed max-w-xl mt-10 md:mt-12">
+                                Una app{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">a la medida</span>{" "}
+                                se construye desde tu{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">marca</span>, tu{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">flujo</span>{" "}
+                                y tu{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">lógica</span>{" "}
+                                de negocio. Cada pantalla, cada interacción y cada estado{" "}
+                                <span className="font-normal text-white">están pensados para tu equipo y tus usuarios</span>.
+                                Es{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic">tu app</span>,
+                                con tu manera de operar.
+                            </p>
+                        </RiseText>
+
+                        <RiseText delay={0.25}>
+                            <div className="flex flex-wrap items-center gap-3 mt-10 md:mt-12">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-mono">
+                                    Cada app es:
+                                </span>
+                                {["Tu operación", "Tu equipo", "Tu lógica", "Tu marca"].map((t, i) => (
+                                    <span
+                                        key={t}
+                                        className="text-xs md:text-sm font-mono uppercase tracking-widest border border-white/20 px-3 py-1.5 rounded-full text-white/80"
+                                        style={{ transitionDelay: `${i * 50}ms` }}
+                                    >
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+                        </RiseText>
+                    </div>
+
+                    {/* iPhone Toogo con tilt 3D cursor-tracked */}
+                    <div className="lg:col-span-5 flex justify-center items-center">
+                        <motion.div
+                            style={{ scale: phoneScale, opacity: phoneOpacity }}
+                            className="relative"
+                        >
+                            <Tilt3DPhone />
+
+                            {/* Tag flotante cliente */}
+                            <div className="absolute -top-2 -right-4 bg-white text-[#1a1a1a] text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full z-20 pointer-events-none">
+                                Cliente · Toogo
+                            </div>
+
+                            {/* Dot indicador "diseño único" */}
+                            <div className="absolute -bottom-2 -left-2 flex items-center gap-2 z-20 pointer-events-none">
+                                <motion.span
+                                    animate={{ opacity: [0.4, 1, 0.4] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                    className="block w-2 h-2 rounded-full bg-emerald-400"
+                                />
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
+                                    Diseño único
+                                </span>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+/* iPhone con tilt 3D cursor-tracked: el teléfono rota en perspective según
+   donde está el cursor sobre él. Spring suavizado para que el movimiento se
+   sienta orgánico. Fallback: en mobile/touch, oscilación sutil continua. */
+function Tilt3DPhone() {
+    const ref = useRef<HTMLDivElement>(null);
+    const rotX = useMotionValue(0);
+    const rotY = useMotionValue(0);
+    const springX = useSpring(rotX, { stiffness: 120, damping: 18, mass: 0.5 });
+    const springY = useSpring(rotY, { stiffness: 120, damping: 18, mass: 0.5 });
+
+    // Mientras no hay hover, oscilación lenta continua (fallback + ambient)
+    useEffect(() => {
+        let frame: number;
+        let t = 0;
+        const tick = () => {
+            t += 0.008;
+            // Solo aplicar si no hay cursor activo
+            if (!ref.current?.matches(":hover")) {
+                rotY.set(Math.sin(t) * 14);
+                rotX.set(Math.cos(t * 0.7) * 6);
+            }
+            frame = requestAnimationFrame(tick);
+        };
+        tick();
+        return () => cancelAnimationFrame(frame);
+    }, [rotX, rotY]);
+
+    const handleMove = (e: React.MouseEvent) => {
+        const el = ref.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;   // 0..1
+        const y = (e.clientY - rect.top) / rect.height;   // 0..1
+        // rotateY positivo = mira a la derecha; rotateX positivo = inclina hacia atrás (top va atrás)
+        rotY.set((x - 0.5) * 40);    // ±20deg
+        rotX.set((0.5 - y) * 30);    // ±15deg
+    };
+
+    const handleLeave = () => {
+        // El bucle ambient retomará el control automáticamente
+    };
+
+    return (
+        <div style={{ perspective: "1400px" }} className="inline-block">
+            <motion.div
+                ref={ref}
+                onMouseMove={handleMove}
+                onMouseLeave={handleLeave}
+                style={{
+                    rotateX: springX,
+                    rotateY: springY,
+                    transformStyle: "preserve-3d",
+                }}
+                className="relative cursor-grab active:cursor-grabbing"
+            >
+                {/* Sombra al piso (queda en el plano del piso) */}
+                <div
+                    className="absolute -bottom-8 left-[10%] right-[10%] h-8 bg-[#1d1d1f]/25 blur-2xl rounded-full"
+                    style={{ transform: "translateZ(-60px)" }}
+                />
+                <img
+                    src="/soluciones/iphone-toogo.png"
+                    alt="Toogo · App hiperpersonalizada"
+                    className="relative w-full h-auto max-w-[240px] md:max-w-[280px] drop-shadow-2xl pointer-events-none"
+                    draggable={false}
+                />
+            </motion.div>
+        </div>
+    );
+}
+
+/* ==========================================================================
+   5. CASOS DE ÉXITO — Header introductorio antes de los casos
    ========================================================================== */
 
 export function CasosDeExitoIntro() {
@@ -876,7 +1120,7 @@ export function GoberniaShowcase() {
                         </div>
 
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center">
-                            <span className="font-serif italic text-2xl md:text-3xl text-white">05</span>
+                            <span className="font-serif italic text-2xl md:text-3xl text-white">06</span>
                         </div>
                     </div>
                 </div>
@@ -966,7 +1210,7 @@ export function DidisShowcase() {
     const rotateAst = useTransform(smooth, [0, 1], [0, -480]);
 
     return (
-        <section ref={ref} className="bg-[#1a1a1a] text-white relative overflow-clip" style={{ minHeight: "200vh" }}>
+        <section ref={ref} className="bg-[#1a1a1a] text-white relative overflow-clip md:min-h-[200vh]">
 
             {/* Grid background sutil */}
             <div
@@ -982,7 +1226,7 @@ export function DidisShowcase() {
                 className="absolute top-[8%] right-[6%] text-[10rem] md:text-[16rem] text-white/[0.05] select-none font-light leading-none inline-block origin-center pointer-events-none"
             >*</motion.span>
 
-            <div className="sticky top-0 h-screen flex flex-col px-6 md:px-12 lg:px-24 pt-8 md:pt-12 pb-20 md:pb-28">
+            <div className="md:sticky md:top-0 md:h-screen flex flex-col px-6 md:px-12 lg:px-24 pt-8 md:pt-12 pb-24 md:pb-28">
                 <div className="max-w-7xl mx-auto w-full relative">
 
                     {/* Eyebrow + badge 06 — al inicio con padding */}
@@ -995,13 +1239,13 @@ export function DidisShowcase() {
                         </div>
 
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
-                            <span className="font-serif italic text-2xl md:text-3xl text-[#1a1a1a]">06</span>
+                            <span className="font-serif italic text-2xl md:text-3xl text-[#1a1a1a]">07</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto w-full relative flex-1 flex items-center">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center w-full">
+                <div className="max-w-7xl mx-auto w-full relative flex-1 flex items-start md:items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-16 items-center w-full">
 
                         {/* Texto + contador a la izquierda */}
                         <motion.div
@@ -1050,7 +1294,10 @@ export function DidisShowcase() {
                         <div className="md:col-span-7 relative flex justify-center items-center">
                             <div
                                 className="relative overflow-hidden flex items-center justify-center"
-                                style={{ width: "min(380px, 48vh)", height: "min(507px, 64vh)" }}
+                                style={{
+                                    width: "min(75vw, 380px, 48vh)",
+                                    height: "min(100vw, 507px, 64vh)",
+                                }}
                             >
                                 <motion.div
                                     style={{ y: imageY, scale: imageScale, opacity: imageOpacity }}
@@ -1142,7 +1389,7 @@ export function IaComoAliado() {
                         transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                         className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center"
                     >
-                        <span className="font-serif italic text-2xl md:text-3xl text-white">07</span>
+                        <span className="font-serif italic text-2xl md:text-3xl text-white">08</span>
                     </motion.div>
                 </div>
 
@@ -1389,7 +1636,7 @@ export function Cierre() {
                         transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                         className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center"
                     >
-                        <span className="font-serif italic text-2xl md:text-3xl text-white">08</span>
+                        <span className="font-serif italic text-2xl md:text-3xl text-white">09</span>
                     </motion.div>
                 </div>
             </div>

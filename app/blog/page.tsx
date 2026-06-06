@@ -99,10 +99,11 @@ export default function BlogPage() {
         );
     }, [allArticles, activeCategory]);
 
-    // Most read articles (sorted by views)
-    const mostReadArticles = useMemo(() => {
-        return [...allArticles].sort((a, b) => b.views - a.views).slice(0, 9);
-    }, [allArticles]);
+    // Resto de artículos — todos los que no entraron en el grid destacado (los primeros 4)
+    // Mantiene el orden cronológico (más nuevo → más viejo)
+    const remainingArticles = useMemo(() => {
+        return filteredArticles.slice(4);
+    }, [filteredArticles]);
 
     if (!mounted) return null;
 
@@ -248,28 +249,27 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Section 2: "Los más leídos" */}
-            <section className="py-20 px-6 sm:px-12 bg-white">
-                <div className="container mx-auto">
-                    <h2 className="text-3xl font-extrabold mb-10 tracking-tight text-gray-900">Los más leídos</h2>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        {/* Grid of Large Cards */}
-                        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {mostReadArticles.slice(0, 4).map((article) => (
+            {/* Section 2: Todos los artículos (resto, por fecha) */}
+            {remainingArticles.length > 0 && (
+                <section className="py-20 px-6 sm:px-12 bg-white">
+                    <div className="container mx-auto">
+                        <div className="flex items-end justify-between mb-10">
+                            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">
+                                Más artículos
+                            </h2>
+                            <span className="text-xs uppercase tracking-widest text-gray-400 font-mono">
+                                {remainingArticles.length} {remainingArticles.length === 1 ? "artículo" : "artículos"}
+                            </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {remainingArticles.map((article) => (
                                 <VerticalCard key={article.slug} article={article} />
                             ))}
                         </div>
-
-                        {/* List of Small Items */}
-                        <div className="lg:col-span-4 space-y-6">
-                            {mostReadArticles.slice(4, 9).map((article) => (
-                                <HorizontalItem key={article.slug} article={article} />
-                            ))}
-                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             <Footer />
         </main>

@@ -8,6 +8,7 @@ import {
     HeroBajada,
     NuestroEnfoque,
     DondeLoAplicamos,
+    AppsHiperpersonalizadas,
     CasosDeExitoIntro,
     GoberniaShowcase,
     DidisShowcase,
@@ -26,6 +27,7 @@ export default function SolucionesDigitalesPage() {
             <HeroBajada />
             <NuestroEnfoque />
             <DondeLoAplicamos />
+            <AppsHiperpersonalizadas />
             <CasosDeExitoIntro />
             <GoberniaShowcase />
             <DidisShowcase />
