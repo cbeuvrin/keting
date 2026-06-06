@@ -13,7 +13,7 @@ const menuItems = [
     { label: "Diseño web", href: "/webdesing" },
     { label: "Soluciones digitales", href: "/soluciones-digitales" },
     { label: "Precio", href: "/precioweb" },
-    { label: "Portafolio", href: "/#portafolio" },
+    { label: "Portafolio", href: "/portafolio" },
     { label: "Blog", href: "/blog" },
 ];
 

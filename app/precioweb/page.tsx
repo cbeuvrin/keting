@@ -56,7 +56,7 @@ export default function PricingPage() {
                         {/* Nav Items */}
                         <nav className="flex items-center gap-6 px-2">
                             <Link href="/" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Inicio</Link>
-                            <Link href="/#portafolio" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Portafolio</Link>
+                            <Link href="/portafolio" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Portafolio</Link>
                             <Link href="#" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">App</Link>
                         </nav>
 

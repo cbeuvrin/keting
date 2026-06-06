@@ -180,7 +180,7 @@ const projectsLogos = [
     { name: "Gobernia", short: "Governance · IA" },
     { name: "Happtek", short: "Audio premium" },
     { name: "Barmored Security", short: "Blindaje automotriz" },
-    { name: "Toogò", short: "SaaS E-commerce" },
+    { name: "Toogo", short: "SaaS E-commerce" },
     { name: "Rosymar González", short: "Joyería" },
     { name: "Ivan Ivanovich", short: "Protección ejecutiva" },
 ];
@@ -633,7 +633,7 @@ export function CaseToogo() {
         <CaseCard
             badge="07"
             eyebrow="Caso · SaaS E-commerce"
-            titleTop="Toogò."
+            titleTop="Toogo."
             titleAccent="Tu tienda,"
             titleBottom="lista en minutos."
             body={<>Plataforma <span className="font-[family-name:var(--font-playfair)] italic font-normal">SaaS multi-tenant</span> para que cualquier vendedor lance su tienda en línea en minutos — sin programador, sin diseñador. Onboarding asistido por IA, dashboard del comerciante, billing por suscripción y arquitectura aislada por inquilino.</>}
@@ -644,7 +644,7 @@ export function CaseToogo() {
             metric={{ value: "100+", label: "Tiendas activas" }}
             url="https://www.toogo.store/"
             image="/portafolio/screenshots/toogo.png"
-            imageAlt="Toogò · SaaS E-commerce multi-tenant"
+            imageAlt="Toogo · SaaS E-commerce multi-tenant"
             effect="rise"
         />
     );
@@ -724,6 +724,15 @@ export function PortafolioCierre() {
                 <div className="md:col-span-6">
                     <RiseText delay={0}>
                         <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f] font-light leading-relaxed max-w-xl">
+                            <motion.span
+                                initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
+                                whileInView={{ opacity: 1, rotate: 18, scale: 1 }}
+                                viewport={{ once: true, margin: "-10%" }}
+                                transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                className="inline-block mr-2 text-2xl md:text-3xl align-top text-[#1d1d1f]/40 leading-none"
+                            >
+                                *
+                            </motion.span>
                             Si tu marca necesita una web que esté{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal">a la altura</span> —{" "}
                             <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">hablemos</span>.

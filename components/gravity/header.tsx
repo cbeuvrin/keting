@@ -51,7 +51,7 @@ export function GravityHeader() {
                         </Link>
                         <nav className="flex items-center gap-6 px-2">
                             <Link href="/" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Inicio</Link>
-                            <Link href="/#portafolio" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Portafolio</Link>
+                            <Link href="/portafolio" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Portafolio</Link>
                             <Link href="/precioweb" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Precio</Link>
                         </nav>
                         <button
