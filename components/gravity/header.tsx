@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Menu, ShoppingCart } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 
@@ -28,17 +28,15 @@ export function GravityHeader() {
                             className="h-6 w-auto object-contain"
                         />
                     </Link>
-                    <button className="p-1 hover:bg-black/5 rounded-lg transition-colors relative">
-                        <ShoppingCart className="w-5 h-5" />
-                    </button>
+                    <span className="w-7" />
                 </div>
             </motion.header>
 
-            {/* Desktop Header - Top Left */}
+            {/* Desktop Header - Top Right */}
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className="fixed top-6 left-6 z-50 items-center pointer-events-none hidden md:flex"
+                className="fixed top-6 right-6 z-50 items-center pointer-events-none hidden md:flex"
             >
                 <div className="flex items-center gap-2 pointer-events-auto">
                     <div className="bg-white border border-black/10 p-1.5 pl-6 pr-2 rounded-2xl flex items-center gap-1 shadow-2xl">
@@ -61,9 +59,6 @@ export function GravityHeader() {
                             Let&apos;s Talk
                         </button>
                     </div>
-                    <button className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-black/10 hover:bg-zinc-50 transition-colors group shadow-2xl">
-                        <ShoppingCart className="w-5 h-5 text-zinc-600 group-hover:text-black transition-colors" />
-                    </button>
                 </div>
             </motion.header>
 

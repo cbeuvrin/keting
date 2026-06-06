@@ -40,8 +40,20 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         setLastY(latest);
     });
 
-    // Color from Hero is #FAFAFA
-    const backgroundColor = isScrolled ? "bg-[#FAFAFA]/95 backdrop-blur-xl" : "bg-[#FAFAFA]";
+    // Tema dark = fondo de página oscuro detrás del header → header transparente con texto blanco
+    // Tema light (default) = fondo claro → header con fondo blanco y texto negro
+    const isDark = forcedTheme === "dark";
+
+    const backgroundColor = isDark
+        ? (isScrolled ? "bg-[#0a0a0a]/80 backdrop-blur-xl" : "bg-transparent")
+        : (isScrolled ? "bg-[#FAFAFA]/95 backdrop-blur-xl" : "bg-[#FAFAFA]");
+
+    const textColor = isDark ? "text-white" : "text-black";
+    const dividerColor = isDark ? "bg-white/20" : "bg-gray-200";
+    const buttonBg = isDark
+        ? "bg-white text-black hover:bg-white/90"
+        : "bg-black text-white hover:bg-zinc-800";
+    const logoSrc = isDark ? "/keting-logo-white.png" : "/keting-logo-black.png";
 
     return (
         <>
@@ -68,9 +80,9 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             <Link href="/">
                                 <motion.div className="cursor-pointer">
                                     <img
-                                        src="/keting-logo-black.png"
+                                        src={logoSrc}
                                         alt="Keting Media"
-                                        className="h-9 md:h-10 w-auto object-contain"
+                                        className="h-9 md:h-10 w-auto object-contain transition-opacity duration-500"
                                     />
                                 </motion.div>
                             </Link>
@@ -82,12 +94,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 height: showLogo ? 24 : 0,
                                 opacity: showLogo ? 1 : 0
                             }}
-                            className="w-[1px] bg-gray-200 mx-2 hidden md:block"
+                            className={cn("w-[1px] mx-2 hidden md:block transition-colors duration-500", dividerColor)}
                         />
 
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="hidden md:flex items-center gap-3 group text-black"
+                            className={cn("hidden md:flex items-center gap-3 group transition-colors duration-500", textColor)}
                         >
                             <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
                             <span className="text-sm font-heading font-normal tracking-[1px] uppercase">menu</span>
@@ -97,14 +109,17 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     <div className="flex items-center gap-4 relative">
                         <button
                             onClick={() => setIsContactOpen(true)}
-                            className="hidden md:block bg-black text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-zinc-800 transition-colors shadow-lg"
+                            className={cn(
+                                "hidden md:block px-8 py-3 rounded-2xl text-sm font-bold transition-colors shadow-lg",
+                                buttonBg
+                            )}
                         >
                             Hablemos
                         </button>
 
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="md:hidden flex items-center group text-black"
+                            className={cn("md:hidden flex items-center group transition-colors duration-500", textColor)}
                         >
                             <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
                         </button>

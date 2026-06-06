@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/components/layout/header";
+import { GravityHeader } from "@/components/gravity/header";
 import { Footer } from "@/components/layout/footer";
 import {
     PortafolioHeroV2,
@@ -18,7 +18,7 @@ import {
 export default function PortafolioPage() {
     return (
         <main className="min-h-screen bg-[#0a0a0a] text-white">
-            <Header />
+            <GravityHeader />
 
             <PortafolioHeroV2 />
 
