@@ -23,9 +23,18 @@ export function Toogo() {
                 width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, 
                 borderRadius: typeof window !== 'undefined' && window.innerWidth < 768 ? "0rem" : borderRadius 
             }}
-            className="relative z-20 mx-auto min-h-0 md:h-[51vh] py-20 bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
+            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
         >
-            <div className="container mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-center">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(26,35,50,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(26,35,50,0.6) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }}
+            />
+            <div className="container mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-center relative">
                 <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
 
                     {/* Text Content */}
@@ -36,6 +45,19 @@ export function Toogo() {
                         transition={{ duration: 0.8 }}
                         className="flex flex-col justify-center text-left items-start w-full"
                     >
+                        {/* Eyebrow editorial */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="flex items-center gap-3 mb-4 md:mb-6"
+                        >
+                            <span className="block w-10 h-px bg-[#1a2332]/40" />
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1a2332]/60 font-sans">
+                                Caso · Toogo
+                            </span>
+                        </motion.div>
                         <motion.h2
                             style={{
                                 color: "rgba(26, 35, 50, 0.1)",
@@ -48,7 +70,8 @@ export function Toogo() {
                             }}
                             className="text-6xl md:text-7xl font-bold mb-8 tracking-tight text-left w-full leading-[0.9]"
                         >
-                            toogo.<br className="md:hidden" /><span className="italic font-light">store</span>
+                            toogo.<br className="md:hidden" /><span className="font-[family-name:var(--font-playfair)] italic font-normal">store</span>
+                            <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-[#1a2332]/30">*</span>
                         </motion.h2>
 
                         <div 

@@ -27,18 +27,43 @@ export default function TextSection() {
     );
 
     return (
-        <section ref={sectionRef} className="bg-[#FAFAFA] py-32 md:py-48 px-6 md:px-12">
-            <div className="max-w-7xl mx-auto">
+        <section ref={sectionRef} className="relative bg-[#FAFAFA] py-32 md:py-48 px-6 md:px-12 overflow-hidden">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }}
+            />
+            {/* Asterisco decorativo */}
+            <span className="absolute top-[10%] right-[5%] text-[5rem] sm:text-[8rem] md:text-[14rem] text-black/[0.04] select-none font-light leading-none rotate-12 pointer-events-none">*</span>
+
+            <div className="max-w-7xl mx-auto relative">
+                {/* Eyebrow editorial */}
+                <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center gap-3 mb-10 md:mb-14"
+                >
+                    <span className="block w-12 h-px bg-black/40" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                        Manifiesto
+                    </span>
+                </motion.div>
                 <motion.h2
                     style={{ y, opacity }}
                     className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.15] tracking-tight text-[#1d1d1f] font-heading"
                 >
                     <motion.span style={{ color: sideColor }}>
-                        Como agencia digital experta en creación de sitios web,
+                        Como <span className="font-[family-name:var(--font-playfair)] italic font-normal">agencia digital</span> experta en creación de sitios web,
                     </motion.span>{" "}
                     <span className="font-normal">Keting le ofrece servicios a medida para potenciar su presencia online.</span>{" "}
                     <motion.span style={{ color: sideColor }}>
-                        Combinamos creatividad, pensamiento estratégico y tecnología para crear soluciones personalizadas que contribuirán a su éxito.
+                        Combinamos <span className="font-[family-name:var(--font-playfair)] italic font-normal">creatividad</span>, pensamiento estratégico y <span className="font-[family-name:var(--font-playfair)] italic font-normal">tecnología</span> para crear soluciones personalizadas que contribuirán a su éxito.
                     </motion.span>
                 </motion.h2>
             </div>

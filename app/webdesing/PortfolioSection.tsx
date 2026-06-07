@@ -144,15 +144,28 @@ export default function PortfolioSection() {
                 {/* Overlay Vignette */}
                 <div className="absolute inset-0 bg-black/40 pointer-events-none" />
 
-                {/* Center Button */}
-                <div className="relative z-10">
+                {/* Center Button con eyebrow editorial */}
+                <div className="relative z-10 flex flex-col items-center gap-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center gap-3"
+                    >
+                        <span className="block w-10 h-px bg-white/50" />
+                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/70 font-sans">
+                            Trabajo selecto
+                        </span>
+                        <span className="block w-10 h-px bg-white/50" />
+                    </motion.div>
                     <Link href="/portafolio">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="group flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full text-xl font-medium tracking-tight hover:shadow-2xl hover:shadow-white/20 transition-all"
                         >
-                            Portafolio
+                            Ver <span className="font-[family-name:var(--font-playfair)] italic font-normal">portafolio</span>
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                     </Link>

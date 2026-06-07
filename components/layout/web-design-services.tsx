@@ -113,8 +113,31 @@ export function WebDesignServices() {
   ];
 
   return (
-    <section className="bg-[#F5F5F7] text-[#1d1d1f] py-32 md:py-48 lg:py-56 px-6 sm:px-10 md:px-16 lg:px-24">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative bg-[#F5F5F7] text-[#1d1d1f] py-32 md:py-48 lg:py-56 px-6 sm:px-10 md:px-16 lg:px-24 overflow-hidden">
+      {/* Grid background sutil */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+      <div className="max-w-7xl mx-auto relative">
+        {/* Eyebrow editorial general */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-center gap-3 mb-12 md:mb-16"
+        >
+          <span className="block w-12 h-px bg-black/40" />
+          <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+            Lo que hacemos
+          </span>
+        </motion.div>
+
         {/* Services Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-32 lg:gap-x-48">
           {/* Design Column */}
@@ -126,7 +149,8 @@ export function WebDesignServices() {
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
             >
-              Diseño
+              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">D</span>iseño
+              <span className="inline-block ml-2 md:ml-3 text-3xl md:text-5xl align-top rotate-12 text-black/30 font-sans">*</span>
             </motion.h2>
             <div className="relative border-b border-black/10">
               {designServices.map((service, index) => (
@@ -149,7 +173,8 @@ export function WebDesignServices() {
               transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
             >
-              Desarrollo
+              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">D</span>esarrollo
+              <span className="inline-block ml-2 md:ml-3 text-3xl md:text-5xl align-top rotate-12 text-black/30 font-sans">*</span>
             </motion.h2>
             <div className="relative border-b border-black/10">
               {developmentServices.map((service, index) => (

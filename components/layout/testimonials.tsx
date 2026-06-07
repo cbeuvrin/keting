@@ -1,13 +1,45 @@
 "use client";
 
 import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 
-const testimonials = [
+// Helpers para resaltar texto en las citas
+const Chip = ({ children }: { children: ReactNode }) => (
+    <span className="not-italic bg-black text-white px-2 py-0.5 font-medium">{children}</span>
+);
+const Italic = ({ children }: { children: ReactNode }) => (
+    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{children}</span>
+);
+const Under = ({ children }: { children: ReactNode }) => (
+    <span className="not-italic relative inline-block text-black font-medium">
+        {children}
+        <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/80" />
+    </span>
+);
+const Bold = ({ children }: { children: ReactNode }) => (
+    <span className="not-italic text-black font-semibold">{children}</span>
+);
+
+type Testimonial = {
+    stat: string;
+    subtitle: string;
+    quote: ReactNode;
+    name: string;
+    role: string;
+    tags: string[];
+};
+
+const testimonials: Testimonial[] = [
     {
         stat: "4x",
         subtitle: "CRECIMIENTO INTERANUAL",
-        quote: "\"El salto de calidad con la web 3D fue el catalizador que necesitábamos. El reconocimiento de la marca se ha disparado; no solo vimos un aumento del 600% en el engagement de redes sociales, sino que logramos entrar en los estantes de los principales distribuidores nacionales en tiempo récord. La web se ve increíble y proyecta una solidez tal que, en las reuniones de ventas, los compradores ya vienen convencidos. No podríamos estar más emocionados con el resultado\"",
+        quote: (
+            <>
+                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                El <Under>salto de calidad</Under> con la web 3D fue el <Italic>catalizador</Italic> que necesitábamos. El reconocimiento de la marca se ha disparado; no solo vimos un aumento del <Chip>+600%</Chip> en el engagement de redes sociales, sino que logramos entrar en los <Bold>estantes de los principales distribuidores nacionales</Bold> en tiempo récord. La web se ve increíble y proyecta una solidez tal que, en las reuniones de ventas, los <Italic>compradores ya vienen convencidos</Italic>. No podríamos estar más emocionados con el resultado.
+                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+            </>
+        ),
         name: "CARLOS R.",
         role: "Co-Fundador & Presidente, NuRange Coffee",
         tags: ["Diseño Web"]
@@ -15,7 +47,13 @@ const testimonials = [
     {
         stat: "7x",
         subtitle: "EXPANSIÓN DE PRODUCTO",
-        quote: "\"Nuestro concepto ha tenido una adopción masiva, impulsada en gran medida por una experiencia web inmersiva, audaz y llamativa que nos hizo reconocibles al instante en un mercado saturado. Más allá de lo visual, el sistema de marca integrado nos ha permitido escalar con una agilidad increíble hacia nuevas audiencias. La navegación es tan fluida que el usuario se sumerge en nuestra propuesta de valor sin fricciones. Estamos extremadamente contentos con el resultado\"",
+        quote: (
+            <>
+                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                Nuestro concepto ha tenido una adopción masiva, impulsada por una experiencia web <Italic>inmersiva, audaz y llamativa</Italic> que nos hizo <Bold>reconocibles al instante</Bold> en un <Under>mercado saturado</Under>. Más allá de lo visual, el sistema de marca integrado nos ha permitido <Chip>escalar con agilidad</Chip> hacia nuevas audiencias. La navegación es tan fluida que el usuario se sumerge en nuestra propuesta de valor <Italic>sin fricciones</Italic>. Estamos extremadamente contentos con el resultado.
+                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+            </>
+        ),
         name: "RAQUEL S.",
         role: "Fundadora & Propietaria, Escapely",
         tags: ["UX/UI", "Diseño Web"]
@@ -23,7 +61,13 @@ const testimonials = [
     {
         stat: "10x",
         subtitle: "LEADS CUALIFICADOS",
-        quote: "\"El lanzamiento de nuestra nueva landing page marcó un antes y un después en nuestra estrategia comercial. Pasamos de tener visitas pasivas a generar leads de alta calidad de forma constante. No se trata solo de que el diseño sea impactante y moderno, es que la estructura está tan bien optimizada que la conversión de nuevos clientes se duplicó en el primer mes. Ha sido la herramienta clave para que el mercado entienda nuestro valor real y el crecimiento ha sido inmediato\"",
+        quote: (
+            <>
+                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                El lanzamiento de nuestra nueva landing page marcó un <Italic>antes y un después</Italic> en nuestra estrategia comercial. Pasamos de tener visitas pasivas a generar <Chip>leads de alta calidad</Chip> de forma constante. No se trata solo de que el diseño sea impactante y moderno, es que la estructura está tan bien optimizada que la <Under>conversión de nuevos clientes se duplicó</Under> en el <Bold>primer mes</Bold>. Ha sido la herramienta clave para que el mercado entienda nuestro valor real y el <Italic>crecimiento ha sido inmediato</Italic>.
+                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+            </>
+        ),
         name: "ESTEBAN C.",
         role: "Socio & Director, Butcher Bird",
         tags: ["Landing", "Web e Interactivo", "Estrategia"]
@@ -41,6 +85,19 @@ export function Testimonials() {
         <section ref={containerRef} className="relative z-20 py-32 bg-[#FAFAFA] text-[#111111] overflow-hidden">
             <div className="container mx-auto px-6 md:px-12 max-w-7xl">
                 <div className="mb-20 text-center md:text-left">
+                    {/* Eyebrow editorial */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center justify-center md:justify-start gap-3 mb-4 md:mb-6"
+                    >
+                        <span className="block w-10 h-px bg-black/40" />
+                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                            Testimonios
+                        </span>
+                    </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -48,7 +105,10 @@ export function Testimonials() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                         className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
                     >
-                        ¿Y qué dicen nuestros clientes?
+                        ¿Y qué{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">dicen</span>{" "}
+                        nuestros clientes?
+                        <span className="inline-block ml-2 text-xl md:text-3xl align-top rotate-12 text-black/30">*</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 24 }}
@@ -57,7 +117,13 @@ export function Testimonials() {
                         transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         className="text-gray-500 text-lg md:text-xl font-light"
                     >
-                        Resultados reales para marcas reales.
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">Resultados</span>{" "}
+                        reales para{" "}
+                        <span className="relative inline-block text-black font-medium">
+                            marcas
+                            <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/70" />
+                        </span>{" "}
+                        reales.
                     </motion.p>
                 </div>
 

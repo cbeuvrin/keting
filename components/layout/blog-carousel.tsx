@@ -246,12 +246,27 @@ export function BlogCarousel() {
             <div className="container mx-auto px-6 md:px-12 mb-16 relative z-10">
                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
                     <div>
-                        <p className="text-xs font-bold tracking-[3px] uppercase text-gray-400 mb-3">
-                            Blog &amp; Recursos
-                        </p>
+                        {/* Eyebrow editorial */}
+                        <div className="flex items-center gap-3 mb-4 md:mb-6">
+                            <span className="block w-10 h-px bg-black/40" />
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                                Blog & Recursos
+                            </span>
+                        </div>
                         <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-[#1a1a1a] leading-none">
-                            Ideas que<br />
-                            <span className="italic font-light">inspiran</span>
+                            <span className="relative inline-block">
+                                Ideas
+                                <motion.span
+                                    initial={{ scaleX: 0 }}
+                                    whileInView={{ scaleX: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                    className="absolute -bottom-1 md:-bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-black origin-left"
+                                />
+                            </span>{" "}
+                            que<br />
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">inspiran</span>
+                            <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-black/30">*</span>
                         </h2>
                     </div>
 
@@ -282,10 +297,14 @@ export function BlogCarousel() {
                     </div>
                 </div>
 
-                {/* Hint text */}
-                <p className="mt-4 text-xs text-gray-400 flex items-center gap-1.5">
-                    <span>← Arrastra el carrusel con el cursor →</span>
-                </p>
+                {/* Hint text — editorial */}
+                <div className="mt-6 md:mt-8 flex items-center gap-3">
+                    <span className="block w-8 h-px bg-black/30" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40 font-sans">
+                        Arrastra <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case tracking-normal text-black/60">o</span> usa las flechas
+                    </span>
+                    <span className="block flex-1 h-px bg-black/10" />
+                </div>
             </div>
 
             {/* ── Track container ── */}

@@ -85,9 +85,25 @@ export default function ClientsShowcase() {
     };
 
     return (
-        <section className="bg-[#F5F5F7] text-[#111] pt-16 md:pt-20 pb-16 md:pb-20 overflow-hidden">
+        <section className="relative bg-[#F5F5F7] text-[#111] pt-16 md:pt-20 pb-16 md:pb-20 overflow-hidden">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }}
+            />
+            {/* Asterisco gigante decorativo girando */}
+            <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+                className="absolute top-[15%] left-[-5%] text-[8rem] sm:text-[14rem] md:text-[22rem] text-black/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
             {/* Línea divisoria superior */}
-            <div className="container mx-auto px-6 md:px-12 mb-8 md:mb-10">
+            <div className="container mx-auto px-6 md:px-12 mb-8 md:mb-10 relative">
                 <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
@@ -97,9 +113,39 @@ export default function ClientsShowcase() {
                 />
             </div>
 
-            {/* Header alineado a la derecha */}
-            <div className="container mx-auto px-6 md:px-12 mb-8 md:mb-10 flex justify-end">
+            {/* Header — izquierda counter + derecha titular */}
+            <div className="container mx-auto px-6 md:px-12 mb-8 md:mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative">
+
+                {/* Lado izquierdo: contador editorial */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-2"
+                >
+                    <span className="text-black/30 font-mono text-xs tracking-wider">
+                        04 / 05
+                    </span>
+                    <span className="text-black/40 text-[10px] md:text-xs font-[family-name:var(--font-playfair)] italic">
+                        Una década de colaboraciones selectas
+                    </span>
+                </motion.div>
+
                 <div className="text-right">
+                    {/* Eyebrow editorial */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center justify-end gap-3 mb-4 md:mb-6"
+                    >
+                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                            Clientes
+                        </span>
+                        <span className="block w-10 h-px bg-black/40" />
+                    </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -107,7 +153,19 @@ export default function ClientsShowcase() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                         className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
                     >
-                        Marcas que confían en nosotros
+                        Marcas que{" "}
+                        <span className="relative inline-block font-[family-name:var(--font-playfair)] italic font-normal">
+                            confían
+                            <motion.span
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true, margin: "-10%" }}
+                                transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black origin-left"
+                            />
+                        </span>{" "}
+                        en nosotros
+                        <span className="inline-block ml-2 text-xl md:text-3xl align-top rotate-12 text-black/30">*</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 24 }}
@@ -116,7 +174,8 @@ export default function ClientsShowcase() {
                         transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         className="text-gray-500 text-lg md:text-xl font-light mb-6"
                     >
-                        Cada colaboración, una historia que escala.
+                        Cada{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">colaboración</span>, una historia que escala.
                     </motion.p>
 
                     {/* Flechas navegación */}

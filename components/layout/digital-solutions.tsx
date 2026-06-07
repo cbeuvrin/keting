@@ -20,9 +20,21 @@ export function DigitalSolutions() {
         <motion.section
             ref={containerRef}
             style={{ width, borderRadius }}
-            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#F5F5F0] text-[#333333] shadow-2xl font-heading flex items-center justify-center mb-40"
+            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#F5F5F0] text-[#333333] shadow-2xl font-heading flex items-center justify-center mb-40 overflow-hidden"
         >
-            <div className="container mx-auto px-6 md:px-12 h-full flex items-center">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }}
+            />
+            {/* Asterisco decorativo */}
+            <span className="absolute top-[8%] right-[5%] text-[6rem] sm:text-[10rem] md:text-[16rem] text-black/[0.05] select-none font-light leading-none rotate-12 pointer-events-none">*</span>
+
+            <div className="container mx-auto px-6 md:px-12 h-full flex items-center relative">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
 
                     {/* Text Content */}
@@ -33,6 +45,19 @@ export function DigitalSolutions() {
                         transition={{ duration: 0.8 }}
                         className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
+                        {/* Eyebrow editorial */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="flex items-center gap-3 mb-4 md:mb-6"
+                        >
+                            <span className="block w-10 h-px bg-black/40" />
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                                02 · Servicio
+                            </span>
+                        </motion.div>
                         <motion.h2
                             style={{
                                 color: "rgba(182, 182, 182, 0.2)",
@@ -45,7 +70,7 @@ export function DigitalSolutions() {
                             }}
                             className="text-4xl md:text-7xl font-bold mb-2 tracking-tight"
                         >
-                            Soluciones <span className="italic font-light">digitales</span>
+                            Soluciones <span className="font-[family-name:var(--font-playfair)] italic font-normal">digitales</span>
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0, x: -10 }}

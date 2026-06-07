@@ -1,20 +1,57 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 
-export function GravityHeader() {
+export function GravityHeader({ position = "right" }: { position?: "left" | "right" }) {
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
+    const lastY = useRef(0);
+
+    const { scrollY } = useScroll();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = lastY.current;
+        const diff = latest - previous;
+
+        // Solo reacciona si el cambio es significativo (evita parpadeo)
+        if (Math.abs(diff) < 6) return;
+
+        if (latest < 80) {
+            // Cerca del tope: siempre visible
+            setHidden(false);
+        } else if (diff > 0) {
+            // Scroll abajo: ocultar
+            setHidden(true);
+        } else {
+            // Scroll arriba: mostrar
+            setHidden(false);
+        }
+
+        lastY.current = latest;
+    });
+
+    const animateState = hidden
+        ? { y: -120, opacity: 0 }
+        : { y: 0, opacity: 1 };
+
+    const transition = {
+        type: "spring" as const,
+        stiffness: 220,
+        damping: 28,
+        mass: 0.6,
+    };
 
     return (
         <>
             {/* Mobile Header - Top */}
             <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
+                initial={{ y: -100, opacity: 0 }}
+                animate={animateState}
+                transition={transition}
                 className="fixed top-6 left-0 right-0 z-50 flex justify-center items-center pointer-events-none px-4 md:hidden"
             >
                 <div className="w-full max-w-sm bg-white text-black rounded-xl p-3 flex items-center justify-between shadow-2xl pointer-events-auto border border-black/10">
@@ -32,11 +69,12 @@ export function GravityHeader() {
                 </div>
             </motion.header>
 
-            {/* Desktop Header - Top Right */}
+            {/* Desktop Header - Top Right/Left */}
             <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                className="fixed top-6 right-6 z-50 items-center pointer-events-none hidden md:flex"
+                initial={{ y: -100, opacity: 0 }}
+                animate={animateState}
+                transition={transition}
+                className={`fixed top-6 z-50 items-center pointer-events-none hidden md:flex ${position === "left" ? "left-6" : "right-6"}`}
             >
                 <div className="flex items-center gap-2 pointer-events-auto">
                     <div className="bg-white border border-black/10 p-1.5 pl-6 pr-2 rounded-2xl flex items-center gap-1 shadow-2xl">

@@ -8,6 +8,7 @@ import { Toogo } from "@/components/layout/toogo";
 import { AboutUs } from "@/components/layout/about-us";
 import { Footer } from "@/components/layout/footer";
 import { BlogCarousel } from "@/components/layout/blog-carousel";
+import { BrandsConstellation } from "@/components/layout/brands-constellation";
 import { Preloader } from "@/components/ui/preloader";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
@@ -64,6 +65,7 @@ export default function Home() {
         <Toogo />
         <AboutUs />
         <BlogCarousel />
+        <BrandsConstellation />
         <Footer />
       </motion.main>
     </>

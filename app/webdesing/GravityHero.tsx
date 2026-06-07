@@ -47,7 +47,8 @@ export default function GravityHero() {
         const bodies: Matter.Body[] = [];
 
         const totalWidth = labels.length * letterSize;
-        const startX = (width - totalWidth) / 2 + letterSize / 2;
+        // Desplazado a la izquierda — leftmost edge ~10% del viewport
+        const startX = width * 0.1 + letterSize / 2;
 
         labels.forEach((label, index) => {
             const x = startX + index * letterSize * 1.05;
@@ -131,6 +132,64 @@ export default function GravityHero() {
             ref={sceneRef}
             className="relative w-full h-screen overflow-hidden text-white pointer-events-none"
         >
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+
+            {/* Asteriscos decorativos gigantes (detrás de las letras) */}
+            <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                className="absolute top-[8%] left-[2%] text-[7rem] sm:text-[12rem] md:text-[22rem] text-white/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+            <motion.span
+                animate={{ rotate: -360 }}
+                transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-[12%] right-[3%] text-[5rem] sm:text-[8rem] md:text-[16rem] text-white/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
+            {/* Esquina superior izquierda — badge numero + label (oculto en mobile para no chocar con el menú) */}
+            <div className="absolute top-24 md:top-32 left-6 md:left-12 pointer-events-none hidden sm:flex items-start gap-3 md:gap-4 z-10">
+                <span className="text-white/30 font-mono text-xs md:text-sm tracking-wider mt-1 md:mt-2">
+                    01 / 05
+                </span>
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                        <span className="block w-8 h-px bg-white/40" />
+                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
+                            World Wide Web
+                        </span>
+                    </div>
+                    <span className="text-white/40 text-[10px] md:text-xs font-[family-name:var(--font-playfair)] italic ml-10">
+                        arrástralas
+                    </span>
+                </div>
+            </div>
+
+            {/* Bottom — label editorial alineado con el manifiesto (oculto en mobile para evitar saturación) */}
+            <div className="absolute bottom-12 md:bottom-16 left-0 right-0 pointer-events-none z-10 hidden sm:block">
+              <div className="container mx-auto px-6 md:px-12 flex justify-end">
+                <div className="flex flex-col items-end gap-3 max-w-md">
+                <div className="flex items-center gap-3">
+                    <span className="block w-12 md:w-16 h-px bg-white/30" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.4em] uppercase text-white/50 font-sans">
+                        Diseño <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case tracking-normal text-white/70">web</span> · 2026
+                    </span>
+                    <span className="block w-12 md:w-16 h-px bg-white/30" />
+                </div>
+                <span className="text-white/30 text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                    Scroll
+                </span>
+                </div>
+              </div>
+            </div>
+
             {["W", "W", "W", "."].map((char, i) => (
                 <div
                     key={i}
@@ -154,9 +213,27 @@ export default function GravityHero() {
             <div className="absolute inset-x-0 top-0 h-full pointer-events-none">
                 <div className="container mx-auto px-6 md:px-12 h-full flex flex-col justify-start">
                     <div className="flex justify-end mt-20 md:mt-32 pointer-events-auto">
-                        <p className="text-sm md:text-base text-white/80 max-w-md text-right leading-relaxed font-light">
-                            Como <ScrambleText text="Vibe Coder" className="font-bold text-white" />, diseñamos y estructuramos soluciones digitales precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en desarrollo web, SEO y optimización de velocidad, construyendo sitios sólidos y eficientes que impulsan el crecimiento real de tu negocio.
+                      <div className="flex flex-col items-end max-w-md">
+                        {/* Eyebrow editorial */}
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
+                                Manifiesto
+                            </span>
+                            <span className="block w-10 h-px bg-white/40" />
+                        </div>
+                        <p className="text-sm md:text-base text-white/80 text-right leading-relaxed font-light">
+                            Como <ScrambleText text="Vibe Coder" className="font-bold text-white" />, diseñamos y estructuramos{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">soluciones digitales</span>{" "}
+                            precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en{" "}
+                            <span className="relative inline-block text-white font-medium">
+                                desarrollo web
+                                <span className="absolute -bottom-0.5 left-0 right-0 h-[1px] bg-white/70" />
+                            </span>
+                            , SEO y optimización de velocidad, construyendo sitios sólidos y eficientes que impulsan el{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">crecimiento real</span>{" "}
+                            de tu negocio.
                         </p>
+                      </div>
                     </div>
 
                     <div className="flex items-center justify-end gap-4 mt-8 pointer-events-auto">

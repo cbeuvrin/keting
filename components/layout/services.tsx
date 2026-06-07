@@ -26,9 +26,18 @@ export function Services() {
         <motion.section
             ref={containerRef}
             style={{ width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, borderRadius: borderRadius }}
-            className="relative z-20 mb-40 mx-auto min-h-0 md:h-[51vh] py-16 md:py-0 md:bg-[#222222] text-[#222222] md:text-white md:shadow-2xl font-heading flex items-center justify-center snap-start w-full overflow-x-hidden md:overflow-visible"
+            className="relative z-20 mb-40 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 md:bg-[#222222] text-[#222222] md:text-white md:shadow-2xl font-heading flex items-center justify-center snap-start w-full overflow-x-hidden md:overflow-visible"
         >
-            <div className="container mx-auto px-6 md:px-12 h-full flex items-start md:items-center">
+            {/* Grid background sutil (sólo en desktop con bg dark) */}
+            <div
+                className="absolute inset-0 hidden md:block opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }}
+            />
+            <div className="container mx-auto px-6 md:px-12 h-full flex items-start md:items-center relative">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start md:items-center w-full">
 
                     {/* Text Content */}
@@ -40,6 +49,19 @@ export function Services() {
                         className="flex flex-col justify-center items-start text-left w-full"
                     >
                         <Link href="/webdesing" className="block group cursor-pointer w-full">
+                            {/* Eyebrow editorial */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8 }}
+                                className="flex items-center gap-3 mb-4 md:mb-6"
+                            >
+                                <span className="block w-10 h-px bg-black/40 md:bg-white/40" />
+                                <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 md:text-white/60 font-sans">
+                                    01 · Servicio
+                                </span>
+                            </motion.div>
                             <motion.h2
                                 style={{
                                     color: "rgba(128, 128, 128, 0.3)",
@@ -52,7 +74,8 @@ export function Services() {
                                 }}
                                 className="text-6xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-left text-left w-full [--title-fill:#000000] md:[--title-fill:#ffffff]"
                             >
-                                Diseño <span className="italic font-light">web</span>
+                                Diseño <span className="font-[family-name:var(--font-playfair)] italic font-normal">web</span>
+                                <span className="inline-block ml-2 md:ml-3 text-3xl md:text-4xl align-top rotate-12 text-black/30 md:text-white/30">*</span>
                             </motion.h2>
 
                             {/* Animated Separator */}

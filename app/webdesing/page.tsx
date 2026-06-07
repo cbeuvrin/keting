@@ -34,7 +34,7 @@ export default function GravityPage() {
             style={{ backgroundColor }}
             className="min-h-screen"
         >
-            <GravityHeader />
+            <GravityHeader position="left" />
             <GravityHero />
             <ZoomSection />
             <TextSection />

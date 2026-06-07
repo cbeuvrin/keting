@@ -177,13 +177,27 @@ export function Hero() {
         return (
             <span className="block">
                 {words.map((word, i) => {
-                    const cleanWord = word.replace(/[.,]/g, "");
-                    const isStyled = cleanWord === "escalan" || cleanWord === "negocios";
+                    const cleanWord = word.replace(/[.,]/g, "").toLowerCase();
+                    // Playfair italic en palabras clave editoriales
+                    const isPlayfair = cleanWord === "digitales" || cleanWord === "escalan";
+                    // Pseudo-subrayado en la palabra final
+                    const isUnderlined = cleanWord === "ambiciosos";
+                    const isItalic = cleanWord === "negocios";
+
+                    let className = "";
+                    if (isPlayfair) {
+                        className = "font-[family-name:var(--font-playfair)] italic font-normal";
+                    } else if (isItalic) {
+                        className = "italic font-light";
+                    } else if (isUnderlined) {
+                        className = "relative inline-block underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black";
+                    }
+
                     return (
                         <AnimatedWord
                             key={i}
                             word={word}
-                            className={isStyled ? "italic font-light" : ""}
+                            className={className}
                         />
                     );
                 })}
@@ -207,6 +221,14 @@ export function Hero() {
         >
             <div className="sticky top-0 h-screen flex flex-col justify-center relative">
 
+                {/* Asterisco decorativo gigante girando con el scroll */}
+                <motion.span
+                    style={{ rotate: rotateK, opacity }}
+                    suppressHydrationWarning
+                    className="absolute top-[6%] right-[4%] lg:top-[12%] lg:right-[8%] text-[5rem] sm:text-[8rem] md:text-[14rem] lg:text-[18rem] text-black/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
+                >
+                    *
+                </motion.span>
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-44 md:pb-24 lg:pb-14">
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
@@ -219,9 +241,18 @@ export function Hero() {
                         className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
                         <div className="text-base text-gray-500 max-w-lg text-right leading-relaxed">
-                            Más del <span className="font-bold text-black">80%</span> de nuestros <span className="font-bold text-black">proyectos</span> son <span className="font-bold text-black">referidos</span><br />
+                            Más del{" "}
+                            <span className="bg-black text-white px-2 py-0.5 font-medium">80%</span>{" "}
+                            de nuestros{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">proyectos</span>{" "}
+                            son{" "}
+                            <span className="relative inline-block font-medium text-black">
+                                referidos
+                                <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/80" />
+                            </span>
+                            <br />
                             por clientes anteriores que conocen<br />
-                            nuestro trabajo y compromiso
+                            nuestro trabajo y compromiso.
                         </div>
                     </motion.div>
 
@@ -235,13 +266,16 @@ export function Hero() {
                             suppressHydrationWarning
                             className="w-full origin-center relative z-10 pb-4 lg:pb-2"
                         >
-                            <motion.h2
+                            <motion.div
                                 style={{ opacity, y: subtextY }}
                                 suppressHydrationWarning
-                                className="text-[10px] md:text-xs font-bold tracking-[4px] uppercase text-gray-400 mb-8 md:mb-12"
+                                className="flex items-center gap-3 mb-8 md:mb-12"
                             >
-                                / Estrategia & Diseño Digital /
-                            </motion.h2>
+                                <span className="block w-12 h-px bg-gray-400" />
+                                <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-gray-500 font-sans">
+                                    Estrategia & Diseño Digital
+                                </span>
+                            </motion.div>
 
                             <motion.h1
                                 className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
@@ -261,9 +295,18 @@ export function Hero() {
                         className="lg:hidden mt-8 md:mt-12 max-w-sm md:max-w-lg mb-8"
                     >
                         <p className="text-sm md:text-base text-gray-500 leading-relaxed text-left">
-                            Más del <span className="font-bold text-black">80%</span> de nuestros <span className="font-bold text-black">proyectos</span> son <span className="font-bold text-black">referidos</span><br />
+                            Más del{" "}
+                            <span className="bg-black text-white px-2 py-0.5 font-medium">80%</span>{" "}
+                            de nuestros{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">proyectos</span>{" "}
+                            son{" "}
+                            <span className="relative inline-block font-medium text-black">
+                                referidos
+                                <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/80" />
+                            </span>
+                            <br />
                             por clientes anteriores que conocen<br />
-                            nuestro trabajo y compromiso
+                            nuestro trabajo y compromiso.
                         </p>
 
                         <button
