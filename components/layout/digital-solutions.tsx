@@ -4,8 +4,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { CornerButton } from "@/components/ui/corner-button";
 import { Sparkles, TrendingUp, Smartphone, Zap } from "lucide-react";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function DigitalSolutions() {
+    const { t } = useLang();
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -55,7 +57,7 @@ export function DigitalSolutions() {
                         >
                             <span className="block w-10 h-px bg-black/40" />
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                                02 · Servicio
+                                {t.digital.eyebrow}
                             </span>
                         </motion.div>
                         <motion.h2
@@ -70,7 +72,7 @@ export function DigitalSolutions() {
                             }}
                             className="text-4xl md:text-7xl font-bold mb-2 tracking-tight"
                         >
-                            Soluciones <span className="font-[family-name:var(--font-playfair)] italic font-normal">digitales</span>
+                            {t.digital.title} <span className="font-[family-name:var(--font-playfair)] italic font-normal">{t.digital.titleItalic}</span>
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0, x: -10 }}
@@ -78,7 +80,7 @@ export function DigitalSolutions() {
                             transition={{ duration: 0.8, delay: 0.8 }}
                             className="text-sm md:text-base text-gray-400 font-light mb-8 tracking-wide italic"
                         >
-                            Apps hiper-personalizadas
+                            {t.digital.subtitle}
                         </motion.p>
 
                         <div className="w-full h-px bg-gray-300 mb-8 max-w-[100px] md:max-w-none"></div>
@@ -87,7 +89,7 @@ export function DigitalSolutions() {
                             className="text-gray-600 leading-relaxed font-light"
                             style={{ fontSize: "clamp(0.875rem, 0.8092rem + 0.2105vw, 1.125rem)" }}
                         >
-                            Transformamos negocios digitales globales mediante soluciones innovadoras que integran inteligencia artificial, optimizando la experiencia del usuario, automatizando procesos y maximizando resultados con tecnología avanzada.
+                            {t.digital.description}
                         </p>
                     </motion.div>
 

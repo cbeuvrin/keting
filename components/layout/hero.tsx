@@ -3,9 +3,11 @@ import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionVal
 import { useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useLang } from "@/lib/i18n/lang-context";
 
 
 export function Hero() {
+    const { t } = useLang();
     const targetRef = useRef<HTMLDivElement>(null);
     const [hasAnimated, setHasAnimated] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -170,26 +172,24 @@ export function Hero() {
         )
     }
 
-    // Helper to split text into words and animate them
-    const AnimatedLine = ({ text }: { text: string }) => {
+    // Helper to split text into words and animate them con styles desde el dictionary
+    const AnimatedLine = ({ text, styles }: { text: string; styles: { playfair?: readonly string[]; italic?: readonly string[]; underlined?: readonly string[] } }) => {
         const words = text.split(" ");
+        const playfair = (styles.playfair ?? []).map((w) => w.toLowerCase().replace(/[.,]/g, ""));
+        const italic = (styles.italic ?? []).map((w) => w.toLowerCase().replace(/[.,]/g, ""));
+        const underlined = (styles.underlined ?? []).map((w) => w.toLowerCase().replace(/[.,]/g, ""));
 
         return (
             <span className="block">
                 {words.map((word, i) => {
-                    const cleanWord = word.replace(/[.,]/g, "").toLowerCase();
-                    // Playfair italic en palabras clave editoriales
-                    const isPlayfair = cleanWord === "digitales" || cleanWord === "escalan";
-                    // Pseudo-subrayado en la palabra final
-                    const isUnderlined = cleanWord === "ambiciosos";
-                    const isItalic = cleanWord === "negocios";
+                    const cleanWord = word.toLowerCase().replace(/[.,]/g, "");
 
                     let className = "";
-                    if (isPlayfair) {
+                    if (playfair.includes(cleanWord)) {
                         className = "font-[family-name:var(--font-playfair)] italic font-normal";
-                    } else if (isItalic) {
+                    } else if (italic.includes(cleanWord)) {
                         className = "italic font-light";
-                    } else if (isUnderlined) {
+                    } else if (underlined.includes(cleanWord)) {
                         className = "relative inline-block underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black";
                     }
 
@@ -241,18 +241,18 @@ export function Hero() {
                         className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
                         <div className="text-base text-gray-500 max-w-lg text-right leading-relaxed">
-                            Más del{" "}
-                            <span className="bg-black text-white px-2 py-0.5 font-medium">80%</span>{" "}
-                            de nuestros{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">proyectos</span>{" "}
-                            son{" "}
+                            {t.hero.stats.prefix}{" "}
+                            <span className="bg-black text-white px-2 py-0.5 font-medium">{t.hero.stats.stat}</span>{" "}
+                            {t.hero.stats.middle}{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{t.hero.stats.projects}</span>{" "}
+                            {t.hero.stats.are}{" "}
                             <span className="relative inline-block font-medium text-black">
-                                referidos
+                                {t.hero.stats.referred}
                                 <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/80" />
                             </span>
                             <br />
-                            por clientes anteriores que conocen<br />
-                            nuestro trabajo y compromiso.
+                            {t.hero.stats.line2}<br />
+                            {t.hero.stats.line3}
                         </div>
                     </motion.div>
 
@@ -273,14 +273,14 @@ export function Hero() {
                             >
                                 <span className="block w-12 h-px bg-gray-400" />
                                 <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-gray-500 font-sans">
-                                    Estrategia & Diseño Digital
+                                    {t.hero.eyebrow}
                                 </span>
                             </motion.div>
 
                             <motion.h1
                                 className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
                             >
-                                <AnimatedLine text="Soluciones digitales que escalan negocios ambiciosos." />
+                                <AnimatedLine text={t.hero.title} styles={t.hero.titleStyles} />
                             </motion.h1>
                         </motion.div>
                     </div>
@@ -295,25 +295,25 @@ export function Hero() {
                         className="lg:hidden mt-8 md:mt-12 max-w-sm md:max-w-lg mb-8"
                     >
                         <p className="text-sm md:text-base text-gray-500 leading-relaxed text-left">
-                            Más del{" "}
-                            <span className="bg-black text-white px-2 py-0.5 font-medium">80%</span>{" "}
-                            de nuestros{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">proyectos</span>{" "}
-                            son{" "}
+                            {t.hero.stats.prefix}{" "}
+                            <span className="bg-black text-white px-2 py-0.5 font-medium">{t.hero.stats.stat}</span>{" "}
+                            {t.hero.stats.middle}{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{t.hero.stats.projects}</span>{" "}
+                            {t.hero.stats.are}{" "}
                             <span className="relative inline-block font-medium text-black">
-                                referidos
+                                {t.hero.stats.referred}
                                 <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/80" />
                             </span>
                             <br />
-                            por clientes anteriores que conocen<br />
-                            nuestro trabajo y compromiso.
+                            {t.hero.stats.line2}<br />
+                            {t.hero.stats.line3}
                         </p>
 
                         <button
                             onClick={() => setIsContactOpen(true)}
                             className="mt-8 bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-lg hover:bg-zinc-800 transition-colors w-fit"
                         >
-                            Hablemos
+                            {t.hero.cta}
                         </button>
                     </motion.div>
 

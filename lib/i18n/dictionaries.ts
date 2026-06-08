@@ -29,6 +29,7 @@ const es = {
         whatWeDo: "Lo que hacemos",
         selectedWork: "Trabajo selecto",
         cookies: "Cookies",
+        and: "y",
     },
     cookie: {
         text: "Usamos cookies para mejorar tu experiencia y analizar el tráfico.",
@@ -60,19 +61,32 @@ const es = {
     },
     hero: {
         eyebrow: "Estrategia & Diseño Digital",
-        title1: "Soluciones digitales que escalan",
-        title2: "negocios ambiciosos.",
-        statsLine1: "Más del 80% de nuestros proyectos son referidos",
-        statsLine2: "por clientes anteriores que conocen",
-        statsLine3: "nuestro trabajo y compromiso.",
+        title: "Soluciones digitales que escalan negocios ambiciosos.",
+        titleStyles: {
+            playfair: ["digitales", "escalan"],
+            italic: ["negocios"],
+            underlined: ["ambiciosos"],
+        },
+        stats: {
+            prefix: "Más del",
+            stat: "80%",
+            middle: "de nuestros",
+            projects: "proyectos",
+            are: "son",
+            referred: "referidos",
+            line2: "por clientes anteriores que conocen",
+            line3: "nuestro trabajo y compromiso.",
+        },
         cta: "Hablemos",
     },
     services: {
         eyebrow: "01 · Servicio",
         title: "Diseño",
         titleItalic: "web",
-        description:
-            "Desarrollamos e-commerce, plataformas y landing pages. Fusionamos diseño estético con estrategias SEO para escalar tu negocio.",
+        descIntro: "Desarrollamos",
+        descTags: ["e-commerce", "plataformas", "landing pages"],
+        descTail:
+            ". Fusionamos diseño estético con estrategias SEO para escalar tu negocio.",
     },
     digital: {
         eyebrow: "02 · Servicio",
@@ -192,6 +206,7 @@ const en: typeof es = {
         whatWeDo: "What we do",
         selectedWork: "Selected work",
         cookies: "Cookies",
+        and: "and",
     },
     cookie: {
         text: "We use cookies to improve your experience and analyze traffic.",
@@ -223,19 +238,32 @@ const en: typeof es = {
     },
     hero: {
         eyebrow: "Strategy & Digital Design",
-        title1: "Digital solutions that scale",
-        title2: "ambitious businesses.",
-        statsLine1: "Over 80% of our projects come from referrals",
-        statsLine2: "by past clients who know",
-        statsLine3: "our craft and commitment.",
+        title: "Digital solutions that scale ambitious businesses.",
+        titleStyles: {
+            playfair: ["Digital", "scale"],
+            italic: ["ambitious"],
+            underlined: ["businesses."],
+        },
+        stats: {
+            prefix: "Over",
+            stat: "80%",
+            middle: "of our",
+            projects: "projects",
+            are: "come from",
+            referred: "referrals",
+            line2: "by past clients who know",
+            line3: "our craft and commitment.",
+        },
         cta: "Let's Talk",
     },
     services: {
         eyebrow: "01 · Service",
         title: "Web",
         titleItalic: "design",
-        description:
-            "We build e-commerce, platforms and landing pages. We blend editorial design with SEO strategy to scale your business.",
+        descIntro: "We build",
+        descTags: ["e-commerce", "platforms", "landing pages"],
+        descTail:
+            ". We blend editorial design with SEO strategy to scale your business.",
     },
     digital: {
         eyebrow: "02 · Service",

@@ -6,8 +6,10 @@ import { useRef } from "react";
 import Link from "next/link";
 import { CornerButton } from "@/components/ui/corner-button";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function Services() {
+    const { t } = useLang();
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -59,7 +61,7 @@ export function Services() {
                             >
                                 <span className="block w-10 h-px bg-black/40 md:bg-white/40" />
                                 <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 md:text-white/60 font-sans">
-                                    01 · Servicio
+                                    {t.services.eyebrow}
                                 </span>
                             </motion.div>
                             <motion.h2
@@ -74,7 +76,7 @@ export function Services() {
                                 }}
                                 className="text-6xl md:text-7xl font-bold mb-4 md:mb-8 tracking-tight group-hover:scale-105 transition-transform origin-left text-left w-full [--title-fill:#000000] md:[--title-fill:#ffffff]"
                             >
-                                Diseño <span className="font-[family-name:var(--font-playfair)] italic font-normal">web</span>
+                                {t.services.title} <span className="font-[family-name:var(--font-playfair)] italic font-normal">{t.services.titleItalic}</span>
                                 <span className="inline-block ml-2 md:ml-3 text-3xl md:text-4xl align-top rotate-12 text-black/30 md:text-white/30">*</span>
                             </motion.h2>
 
@@ -95,7 +97,14 @@ export function Services() {
                                 }}
                                 className="text-gray-600 md:text-gray-300 leading-relaxed font-light text-left w-full"
                             >
-                                Desarrollamos <strong className="text-black md:text-white font-bold">e-commerce</strong>, <strong className="text-black md:text-white font-bold">plataformas</strong> y <strong className="text-black md:text-white font-bold">landing pages</strong>. Fusionamos diseño estético con estrategias SEO para escalar tu negocio.
+                                {t.services.descIntro}{" "}
+                                {t.services.descTags.map((tag, i) => (
+                                    <span key={tag}>
+                                        <strong className="text-black md:text-white font-bold">{tag}</strong>
+                                        {i < t.services.descTags.length - 2 ? ", " : i === t.services.descTags.length - 2 ? ` ${t.common.and} ` : ""}
+                                    </span>
+                                ))}
+                                {t.services.descTail}
                             </motion.p>
                         </Link>
                     </motion.div>
