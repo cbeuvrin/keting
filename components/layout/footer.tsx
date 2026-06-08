@@ -35,45 +35,21 @@ export function Footer() {
 
             <div className="relative container mx-auto px-6 md:px-12 lg:px-20 pt-20 md:pt-28 pb-12">
 
-                {/* Kicker / eyebrow */}
+                {/* Logo grande centrado */}
                 <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-center gap-3 mb-10 md:mb-14"
-                >
-                    <span className="block w-12 h-px bg-white/40" />
-                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
-                        {t.footer.kicker}
-                    </span>
-                </motion.div>
-
-                {/* Slogan editorial gigante */}
-                <motion.h2
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: "-10%" }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-14 md:mb-20 max-w-5xl"
+                    className="flex items-center justify-center mb-14 md:mb-20"
                 >
-                    {t.footer.slogan1}{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">
-                        {t.footer.sloganItalic}
-                    </span>{" "}
-                    {t.footer.slogan2}{" "}
-                    <span className="relative inline-block font-normal">
-                        {t.footer.slogan3}
-                        <motion.span
-                            initial={{ scaleX: 0 }}
-                            whileInView={{ scaleX: 1 }}
-                            viewport={{ once: true, margin: "-10%" }}
-                            transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                            className="absolute -bottom-1 md:-bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-white origin-left"
-                        />
-                    </span>
-                    <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-white/30">*</span>
-                </motion.h2>
+                    <img
+                        src="/keting-logo-white.png"
+                        alt="Keting Media"
+                        className="w-[80%] md:w-[70%] lg:w-[60%] max-w-[900px] h-auto object-contain"
+                        draggable={false}
+                    />
+                </motion.div>
 
                 {/* Línea separadora */}
                 <motion.div
