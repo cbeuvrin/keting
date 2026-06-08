@@ -72,26 +72,49 @@ export function GoogleTranslateInit() {
 
 /**
  * Hook para alternar el idioma usando la cookie googtrans del widget.
+ * Para volver a español: borra la cookie (no la setea a /es/es, lo cual fallaba).
  */
 export function useTranslate() {
     const [lang, setLang] = useState<"es" | "en">("es");
 
     useEffect(() => {
-        const m = typeof document !== "undefined"
-            ? document.cookie.match(/googtrans=([^;]+)/)
-            : null;
-        if (m && decodeURIComponent(m[1]).includes("/en")) setLang("en");
+        if (typeof document === "undefined") return;
+        const m = document.cookie.match(/googtrans=([^;]+)/);
+        const value = m ? decodeURIComponent(m[1]) : "";
+        if (value.includes("/en")) setLang("en");
+        else setLang("es");
     }, []);
+
+    const clearCookie = (host: string) => {
+        const expire = "Thu, 01 Jan 1970 00:00:00 GMT";
+        // Borra en TODAS las variantes posibles de path/domain
+        document.cookie = `googtrans=; expires=${expire}; path=/;`;
+        document.cookie = `googtrans=; expires=${expire}; path=/; domain=${host};`;
+        document.cookie = `googtrans=; expires=${expire}; path=/; domain=.${host};`;
+        // Variante para subdominios anidados
+        const parts = host.split(".");
+        if (parts.length > 1) {
+            const root = "." + parts.slice(-2).join(".");
+            document.cookie = `googtrans=; expires=${expire}; path=/; domain=${root};`;
+        }
+    };
 
     const switchTo = (target: "es" | "en") => {
         const host = window.location.hostname;
-        const value = target === "es" ? "/es/es" : "/es/en";
-        // Cookie con dominio actual + variantes (root y con punto inicial)
-        document.cookie = `googtrans=${value}; path=/; domain=${host}`;
-        document.cookie = `googtrans=${value}; path=/; domain=.${host}`;
-        document.cookie = `googtrans=${value}; path=/`;
-        // Reload aplica la traducción
-        window.location.reload();
+
+        if (target === "es") {
+            // Volver a español: borrar cookie y recargar
+            clearCookie(host);
+        } else {
+            // Traducir a inglés
+            const value = "/es/en";
+            document.cookie = `googtrans=${value}; path=/`;
+            document.cookie = `googtrans=${value}; path=/; domain=${host}`;
+            document.cookie = `googtrans=${value}; path=/; domain=.${host}`;
+        }
+
+        // Pequeño delay para asegurar escritura de cookies antes del reload
+        setTimeout(() => window.location.reload(), 50);
     };
 
     return { lang, switchTo };

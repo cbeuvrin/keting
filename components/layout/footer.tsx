@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslate } from "@/components/ui/google-translate";
 
 export function Footer() {
+    const { lang, switchTo } = useTranslate();
     return (
         <footer className="bg-[#242424] text-white border-t border-gray-800">
             {/* Main Footer Content */}
@@ -20,14 +24,24 @@ export function Footer() {
 
                     {/* Right Section: Language & Contact */}
                     <div className="flex flex-col items-center md:items-end gap-6 w-full md:w-auto">
-                        {/* Language Switcher */}
-                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base">
-                            <span className="cursor-pointer hover:text-gray-300 transition-colors">
-                                Spanish
-                            </span>
-                            <span className="cursor-pointer hover:text-gray-300 transition-colors">
+                        {/* Language Switcher — funcional */}
+                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base notranslate" translate="no">
+                            <button
+                                onClick={() => switchTo("es")}
+                                className={`transition-colors ${
+                                    lang === "es" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
+                                }`}
+                            >
+                                Español
+                            </button>
+                            <button
+                                onClick={() => switchTo("en")}
+                                className={`transition-colors ${
+                                    lang === "en" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
+                                }`}
+                            >
                                 English
-                            </span>
+                            </button>
                         </div>
 
                         {/* Contact Buttons */}
