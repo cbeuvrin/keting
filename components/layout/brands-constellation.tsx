@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 const logos = [
@@ -15,6 +15,11 @@ const logos = [
     { src: "/logos-clientes/11.png", alt: "360 Protective" },
     { src: "/logos-clientes/12.png", alt: "Blindajes" },
 ];
+
+// Mezclamos para que cada fila tenga orden distinto
+const rowA = [...logos, ...logos];
+const rowB = [...logos.slice(3), ...logos.slice(0, 3), ...logos.slice(3), ...logos.slice(0, 3)];
+const rowC = [...logos.slice(6), ...logos.slice(0, 6), ...logos.slice(6), ...logos.slice(0, 6)];
 
 export function BrandsConstellation() {
     const ref = useRef<HTMLElement>(null);
@@ -104,13 +109,19 @@ export function BrandsConstellation() {
                 </h2>
             </div>
 
-            {/* Logos formados por partículas — morph en loop */}
-            <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
-                <LogoParticles />
+            {/* Triple marquee — 3 filas, direcciones alternadas, distintas velocidades */}
+            <div className="space-y-0 relative -my-2 md:-my-3">
+                <MarqueeRow logos={rowA} direction={-1} duration={50} size="md" />
+                <MarqueeRow logos={rowB} direction={1} duration={70} size="lg" />
+                <MarqueeRow logos={rowC} direction={-1} duration={60} size="sm" />
+
+                {/* Fade edges */}
+                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent pointer-events-none z-10" />
+                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent pointer-events-none z-10" />
             </div>
 
             {/* Footer line + counter */}
-            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-12 md:mt-16 relative">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-16 md:mt-24 relative">
                 <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
@@ -128,214 +139,54 @@ export function BrandsConstellation() {
     );
 }
 
-
-/**
- * LogoParticles — miles de partículas se reúnen para formar cada logo en secuencia,
- * se dispersan y vuelven a formar el siguiente. Implementado con Canvas 2D puro.
- */
-function LogoParticles() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        let rafId = 0;
-        let running = true;
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        // Dimensiones
-        const setup = () => {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        };
-        setup();
-
-        let W = canvas.clientWidth;
-        let H = canvas.clientHeight;
-
-        // Pool de partículas
-        const COUNT = 3500;
-        const particles = Array.from({ length: COUNT }, () => ({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            tx: Math.random() * W,
-            ty: Math.random() * H,
-            vx: 0,
-            vy: 0,
-        }));
-
-        // Extrae puntos donde el logo tiene contenido (alfa > umbral y no es blanco)
-        const extractPoints = (src: string): Promise<Array<[number, number]>> =>
-            new Promise((resolve) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => {
-                    // Escala el logo para que ocupe ~55% del menor lado del canvas
-                    const targetSize = Math.min(W, H) * 0.55;
-                    const scale = targetSize / Math.max(img.width, img.height);
-                    const w = Math.round(img.width * scale);
-                    const h = Math.round(img.height * scale);
-                    const off = document.createElement("canvas");
-                    off.width = w;
-                    off.height = h;
-                    const octx = off.getContext("2d");
-                    if (!octx) return resolve([]);
-                    octx.drawImage(img, 0, 0, w, h);
-                    const data = octx.getImageData(0, 0, w, h).data;
-                    const points: Array<[number, number]> = [];
-                    const step = 3; // densidad de muestreo
-                    const offsetX = (W - w) / 2;
-                    const offsetY = (H - h) / 2;
-                    for (let y = 0; y < h; y += step) {
-                        for (let x = 0; x < w; x += step) {
-                            const idx = (y * w + x) * 4;
-                            const r = data[idx];
-                            const g = data[idx + 1];
-                            const b = data[idx + 2];
-                            const a = data[idx + 3];
-                            // Es parte del logo: alpha alto Y no es blanco/casi blanco
-                            const avg = (r + g + b) / 3;
-                            if (a > 150 && avg < 220) {
-                                points.push([x + offsetX, y + offsetY]);
-                            }
-                        }
-                    }
-                    resolve(points);
-                };
-                img.onerror = () => resolve([]);
-                img.src = src;
-            });
-
-        // Asigna targets a partir de los puntos extraídos
-        const assignTargets = (points: Array<[number, number]>) => {
-            if (!points.length) return;
-            // Shuffle
-            for (let i = points.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [points[i], points[j]] = [points[j], points[i]];
-            }
-            particles.forEach((p, i) => {
-                const point = points[i % points.length];
-                if (point) {
-                    // Pequeño jitter orgánico
-                    p.tx = point[0] + (Math.random() - 0.5) * 2;
-                    p.ty = point[1] + (Math.random() - 0.5) * 2;
-                }
-            });
-        };
-
-        // Targets dispersos (estado entre logos)
-        const dispersedTargets = () => {
-            particles.forEach((p) => {
-                p.tx = Math.random() * W;
-                p.ty = Math.random() * H;
-            });
-        };
-
-        // Secuencia de logos
-        const sources = LOGO_SRCS;
-        let logoIndex = 0;
-        let phase: "forming" | "holding" | "dispersing" = "dispersing";
-        let phaseStart = performance.now();
-        const DURATIONS = { forming: 1800, holding: 1600, dispersing: 1200 };
-
-        dispersedTargets();
-
-        const advance = async () => {
-            if (!running) return;
-            if (phase === "dispersing") {
-                phase = "forming";
-                const pts = await extractPoints(sources[logoIndex]);
-                assignTargets(pts);
-                phaseStart = performance.now();
-            } else if (phase === "forming") {
-                phase = "holding";
-                phaseStart = performance.now();
-            } else if (phase === "holding") {
-                phase = "dispersing";
-                dispersedTargets();
-                phaseStart = performance.now();
-                logoIndex = (logoIndex + 1) % sources.length;
-            }
-        };
-
-        // Inicial: extrae el primer logo y empieza
-        (async () => {
-            const pts = await extractPoints(sources[0]);
-            assignTargets(pts);
-            phase = "forming";
-            phaseStart = performance.now();
-        })();
-
-        const draw = (now: number) => {
-            if (!running) return;
-
-            const elapsed = now - phaseStart;
-            const duration = DURATIONS[phase];
-
-            if (elapsed >= duration) advance();
-
-            // Lerp factor según fase (más suave al formar, más rápido al dispersar)
-            const lerp = phase === "forming" ? 0.045 : phase === "holding" ? 0.08 : 0.025;
-
-            // Limpiar canvas con un negro semi-transparente para trail orgánico
-            ctx.fillStyle = "rgba(10, 10, 10, 0.30)";
-            ctx.fillRect(0, 0, W, H);
-
-            ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                p.x += (p.tx - p.x) * lerp;
-                p.y += (p.ty - p.y) * lerp;
-                ctx.fillRect(p.x, p.y, 1.4, 1.4);
-            }
-
-            rafId = requestAnimationFrame(draw);
-        };
-        rafId = requestAnimationFrame(draw);
-
-        const handleResize = () => {
-            setup();
-            W = canvas.clientWidth;
-            H = canvas.clientHeight;
-        };
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            running = false;
-            cancelAnimationFrame(rafId);
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
+function MarqueeRow({
+    logos,
+    direction,
+    duration,
+    size,
+}: {
+    logos: { src: string; alt: string }[];
+    direction: 1 | -1;
+    duration: number;
+    size: "sm" | "md" | "lg";
+}) {
+    const heights = {
+        sm: "h-14 sm:h-20 md:h-28",
+        md: "h-16 sm:h-24 md:h-36",
+        lg: "h-20 sm:h-28 md:h-44",
+    };
+    const widths = {
+        sm: "w-32 sm:w-44 md:w-64",
+        md: "w-36 sm:w-52 md:w-80",
+        lg: "w-44 sm:w-64 md:w-96",
+    };
 
     return (
-        <div className="relative w-full h-[420px] md:h-[560px] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]">
-            <canvas ref={canvasRef} className="w-full h-full block" />
-            {/* Label esquina */}
-            <div className="absolute top-4 left-4 flex items-center gap-2 z-10 pointer-events-none">
-                <span className="block w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" />
-                <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-mono">
-                    Marcas · loop
-                </span>
-            </div>
+        <div className="overflow-hidden">
+            <motion.div
+                className="flex gap-2 md:gap-4 w-max"
+                animate={{ x: direction === -1 ? ["0%", "-50%"] : ["-50%", "0%"] }}
+                transition={{
+                    duration,
+                    repeat: Infinity,
+                    ease: "linear",
+                }}
+            >
+                {logos.map((logo, i) => (
+                    <div
+                        key={i}
+                        className={`flex items-center justify-center flex-shrink-0 ${heights[size]} ${widths[size]}`}
+                    >
+                        <img
+                            src={logo.src}
+                            alt={logo.alt}
+                            className="max-w-full max-h-full object-contain opacity-70 hover:opacity-100 transition-opacity duration-500"
+                            style={{ filter: "invert(1)" }}
+                            draggable={false}
+                        />
+                    </div>
+                ))}
+            </motion.div>
         </div>
     );
 }
-
-const LOGO_SRCS = [
-    "/logos-clientes/2.png",
-    "/logos-clientes/3.png",
-    "/logos-clientes/1.png",
-    "/logos-clientes/6.png",
-    "/logos-clientes/4.png",
-    "/logos-clientes/7.png",
-    "/logos-clientes/9.png",
-    "/logos-clientes/10.png",
-    "/logos-clientes/11.png",
-    "/logos-clientes/12.png",
-];
