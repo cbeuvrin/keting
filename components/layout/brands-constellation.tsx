@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 const logos = [
@@ -104,9 +104,9 @@ export function BrandsConstellation() {
                 </h2>
             </div>
 
-            {/* Mundo 3D con marcas orbitando */}
+            {/* Logos formados por partículas — morph en loop */}
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
-                <Globe3D />
+                <LogoParticles />
             </div>
 
             {/* Footer line + counter */}
@@ -128,164 +128,214 @@ export function BrandsConstellation() {
     );
 }
 
+
 /**
- * Mundo 3D estilizado con los logos orbitando uniformemente en su ecuador.
- * Implementado con CSS 3D transforms — performante y sin librerías externas.
+ * LogoParticles — miles de partículas se reúnen para formar cada logo en secuencia,
+ * se dispersan y vuelven a formar el siguiente. Implementado con Canvas 2D puro.
  */
-function Globe3D() {
-    return (
-        <div className="globe-scene relative w-full flex items-center justify-center py-8 md:py-12">
-            {/* Estrellas de fondo decorativas */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {Array.from({ length: 40 }).map((_, i) => {
-                    const top = (i * 53) % 100;
-                    const left = (i * 67) % 100;
-                    const size = (i % 3) + 1;
-                    const opacity = ((i % 5) + 2) * 0.05;
-                    return (
-                        <span
-                            key={i}
-                            className="absolute rounded-full bg-white"
-                            style={{
-                                top: `${top}%`,
-                                left: `${left}%`,
-                                width: `${size}px`,
-                                height: `${size}px`,
-                                opacity,
-                            }}
-                        />
-                    );
-                })}
-            </div>
+function LogoParticles() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-            {/* Escena 3D */}
-            <div
-                className="relative w-full h-[420px] md:h-[560px] flex items-center justify-center"
-                style={{ perspective: "1400px" }}
-            >
-                {/* Eje rotador (preserve-3d) */}
-                <div
-                    className="relative"
-                    style={{
-                        transformStyle: "preserve-3d",
-                        animation: "globe-spin 28s linear infinite",
-                        transform: "rotateX(-12deg)",
-                    }}
-                >
-                    {/* Globo central */}
-                    <div className="globe-sphere" />
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
 
-                    {/* Anillo ecuatorial sutil */}
-                    <div className="globe-ring" />
+        let rafId = 0;
+        let running = true;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-                    {/* Logos orbitando uniformemente */}
-                    {logos.map((logo, i) => {
-                        const angle = (360 / logos.length) * i;
-                        return (
-                            <div
-                                key={i}
-                                className="globe-logo"
-                                style={{
-                                    transform: `rotateY(${angle}deg) translateZ(var(--orbit-radius))`,
-                                }}
-                            >
-                                <img
-                                    src={logo.src}
-                                    alt={logo.alt}
-                                    className="max-w-[80%] max-h-[80%] object-contain"
-                                    style={{ filter: "invert(1)" }}
-                                    draggable={false}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
+        // Dimensiones
+        const setup = () => {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        };
+        setup();
 
-                {/* Halo radial bajo el globo */}
-                <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[60%] h-12 bg-white/10 blur-3xl rounded-full pointer-events-none" />
-            </div>
+        let W = canvas.clientWidth;
+        let H = canvas.clientHeight;
 
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: `
-                @keyframes globe-spin {
-                    from { transform: rotateX(-12deg) rotateY(0deg); }
-                    to { transform: rotateX(-12deg) rotateY(360deg); }
-                }
-                .globe-sphere {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: var(--globe-size);
-                    height: var(--globe-size);
-                    margin-top: calc(var(--globe-size) / -2);
-                    margin-left: calc(var(--globe-size) / -2);
-                    border-radius: 50%;
-                    background:
-                        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04) 0%, transparent 60%),
-                        linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 50%, #050505 100%);
-                    box-shadow:
-                        inset -20px -20px 60px rgba(0,0,0,0.6),
-                        inset 20px 20px 40px rgba(255,255,255,0.05),
-                        0 0 80px rgba(255,255,255,0.08);
-                    transform: translateZ(0);
-                }
-                .globe-sphere::before,
-                .globe-sphere::after {
-                    content: "";
-                    position: absolute;
-                    inset: 0;
-                    border-radius: 50%;
-                    border: 1px solid rgba(255,255,255,0.06);
-                }
-                .globe-sphere::after {
-                    inset: 12%;
-                    border: 1px solid rgba(255,255,255,0.04);
-                }
-                .globe-ring {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: calc(var(--orbit-radius) * 2 + 24px);
-                    height: calc(var(--orbit-radius) * 2 + 24px);
-                    margin-top: calc((var(--orbit-radius) * 2 + 24px) / -2);
-                    margin-left: calc((var(--orbit-radius) * 2 + 24px) / -2);
-                    border-radius: 50%;
-                    border: 1px dashed rgba(255,255,255,0.08);
-                    transform: rotateX(90deg);
-                    pointer-events: none;
-                }
-                .globe-logo {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: var(--logo-size);
-                    height: var(--logo-size);
-                    margin-top: calc(var(--logo-size) / -2);
-                    margin-left: calc(var(--logo-size) / -2);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transform-style: preserve-3d;
-                    backface-visibility: hidden;
-                }
-                /* Variables scopeadas al componente */
-                .globe-scene {
-                    --globe-size: 140px;
-                    --orbit-radius: 130px;
-                    --logo-size: 96px;
-                }
-                @media (min-width: 768px) {
-                    .globe-scene {
-                        --globe-size: 220px;
-                        --orbit-radius: 220px;
-                        --logo-size: 140px;
+        // Pool de partículas
+        const COUNT = 3500;
+        const particles = Array.from({ length: COUNT }, () => ({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            tx: Math.random() * W,
+            ty: Math.random() * H,
+            vx: 0,
+            vy: 0,
+        }));
+
+        // Extrae puntos donde el logo tiene contenido (alfa > umbral y no es blanco)
+        const extractPoints = (src: string): Promise<Array<[number, number]>> =>
+            new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    // Escala el logo para que ocupe ~55% del menor lado del canvas
+                    const targetSize = Math.min(W, H) * 0.55;
+                    const scale = targetSize / Math.max(img.width, img.height);
+                    const w = Math.round(img.width * scale);
+                    const h = Math.round(img.height * scale);
+                    const off = document.createElement("canvas");
+                    off.width = w;
+                    off.height = h;
+                    const octx = off.getContext("2d");
+                    if (!octx) return resolve([]);
+                    octx.drawImage(img, 0, 0, w, h);
+                    const data = octx.getImageData(0, 0, w, h).data;
+                    const points: Array<[number, number]> = [];
+                    const step = 3; // densidad de muestreo
+                    const offsetX = (W - w) / 2;
+                    const offsetY = (H - h) / 2;
+                    for (let y = 0; y < h; y += step) {
+                        for (let x = 0; x < w; x += step) {
+                            const idx = (y * w + x) * 4;
+                            const r = data[idx];
+                            const g = data[idx + 1];
+                            const b = data[idx + 2];
+                            const a = data[idx + 3];
+                            // Es parte del logo: alpha alto Y no es blanco/casi blanco
+                            const avg = (r + g + b) / 3;
+                            if (a > 150 && avg < 220) {
+                                points.push([x + offsetX, y + offsetY]);
+                            }
+                        }
                     }
+                    resolve(points);
+                };
+                img.onerror = () => resolve([]);
+                img.src = src;
+            });
+
+        // Asigna targets a partir de los puntos extraídos
+        const assignTargets = (points: Array<[number, number]>) => {
+            if (!points.length) return;
+            // Shuffle
+            for (let i = points.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [points[i], points[j]] = [points[j], points[i]];
+            }
+            particles.forEach((p, i) => {
+                const point = points[i % points.length];
+                if (point) {
+                    // Pequeño jitter orgánico
+                    p.tx = point[0] + (Math.random() - 0.5) * 2;
+                    p.ty = point[1] + (Math.random() - 0.5) * 2;
                 }
-            `,
-                }}
-            />
+            });
+        };
+
+        // Targets dispersos (estado entre logos)
+        const dispersedTargets = () => {
+            particles.forEach((p) => {
+                p.tx = Math.random() * W;
+                p.ty = Math.random() * H;
+            });
+        };
+
+        // Secuencia de logos
+        const sources = LOGO_SRCS;
+        let logoIndex = 0;
+        let phase: "forming" | "holding" | "dispersing" = "dispersing";
+        let phaseStart = performance.now();
+        const DURATIONS = { forming: 1800, holding: 1600, dispersing: 1200 };
+
+        dispersedTargets();
+
+        const advance = async () => {
+            if (!running) return;
+            if (phase === "dispersing") {
+                phase = "forming";
+                const pts = await extractPoints(sources[logoIndex]);
+                assignTargets(pts);
+                phaseStart = performance.now();
+            } else if (phase === "forming") {
+                phase = "holding";
+                phaseStart = performance.now();
+            } else if (phase === "holding") {
+                phase = "dispersing";
+                dispersedTargets();
+                phaseStart = performance.now();
+                logoIndex = (logoIndex + 1) % sources.length;
+            }
+        };
+
+        // Inicial: extrae el primer logo y empieza
+        (async () => {
+            const pts = await extractPoints(sources[0]);
+            assignTargets(pts);
+            phase = "forming";
+            phaseStart = performance.now();
+        })();
+
+        const draw = (now: number) => {
+            if (!running) return;
+
+            const elapsed = now - phaseStart;
+            const duration = DURATIONS[phase];
+
+            if (elapsed >= duration) advance();
+
+            // Lerp factor según fase (más suave al formar, más rápido al dispersar)
+            const lerp = phase === "forming" ? 0.045 : phase === "holding" ? 0.08 : 0.025;
+
+            // Limpiar canvas con un negro semi-transparente para trail orgánico
+            ctx.fillStyle = "rgba(10, 10, 10, 0.30)";
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.x += (p.tx - p.x) * lerp;
+                p.y += (p.ty - p.y) * lerp;
+                ctx.fillRect(p.x, p.y, 1.4, 1.4);
+            }
+
+            rafId = requestAnimationFrame(draw);
+        };
+        rafId = requestAnimationFrame(draw);
+
+        const handleResize = () => {
+            setup();
+            W = canvas.clientWidth;
+            H = canvas.clientHeight;
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            running = false;
+            cancelAnimationFrame(rafId);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    return (
+        <div className="relative w-full h-[420px] md:h-[560px] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]">
+            <canvas ref={canvasRef} className="w-full h-full block" />
+            {/* Label esquina */}
+            <div className="absolute top-4 left-4 flex items-center gap-2 z-10 pointer-events-none">
+                <span className="block w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" />
+                <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-mono">
+                    Marcas · loop
+                </span>
+            </div>
         </div>
     );
 }
+
+const LOGO_SRCS = [
+    "/logos-clientes/2.png",
+    "/logos-clientes/3.png",
+    "/logos-clientes/1.png",
+    "/logos-clientes/6.png",
+    "/logos-clientes/4.png",
+    "/logos-clientes/7.png",
+    "/logos-clientes/9.png",
+    "/logos-clientes/10.png",
+    "/logos-clientes/11.png",
+    "/logos-clientes/12.png",
+];
