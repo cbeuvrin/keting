@@ -10,7 +10,9 @@ const es = {
     nav: {
         home: "Inicio",
         webdesign: "Diseño web",
+        webdesignShort: "Diseño",
         digital: "Soluciones digitales",
+        digitalShort: "Soluciones",
         price: "Precio",
         portfolio: "Portafolio",
         blog: "Blog",
@@ -203,7 +205,9 @@ const en: typeof es = {
     nav: {
         home: "Home",
         webdesign: "Web Design",
+        webdesignShort: "Design",
         digital: "Digital Solutions",
+        digitalShort: "Solutions",
         price: "Pricing",
         portfolio: "Portfolio",
         blog: "Journal",

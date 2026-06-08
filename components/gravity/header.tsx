@@ -76,8 +76,10 @@ export function GravityHeader({
                                 className="h-8 md:h-9 w-auto object-contain"
                             />
                         </Link>
-                        <nav className="flex items-center gap-6 px-2">
+                        <nav className="flex items-center gap-5 px-2">
                             <Link href="/" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.home}</Link>
+                            <Link href="/webdesing" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.webdesignShort}</Link>
+                            <Link href="/soluciones-digitales" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
                             <Link href="/portafolio" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
                             <Link href="/precioweb" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.price}</Link>
                         </nav>
