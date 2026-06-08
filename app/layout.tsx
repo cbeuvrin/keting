@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { GoogleTranslateInit } from "@/components/ui/google-translate";
+import { CookieConsent } from "@/components/ui/cookie-consent";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
@@ -148,6 +149,7 @@ export default function RootLayout({
         {children}
         <WhatsAppButton />
         <GoogleTranslateInit />
+        <CookieConsent />
       </body>
     </html>
   );
