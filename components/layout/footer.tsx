@@ -1,77 +1,210 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-react";
+import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
 
 export function Footer() {
     const { lang, setLang, t } = useLang();
+    const ref = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end end"],
+    });
+    const smooth = useSpring(scrollYProgress, { stiffness: 50, damping: 22, mass: 0.6 });
+    const rotateAst = useTransform(smooth, [0, 1], [0, 540]);
+
     return (
-        <footer className="bg-[#242424] text-white border-t border-gray-800">
-            {/* Main Footer Content */}
-            <div className="container mx-auto px-6 py-12">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                    {/* Logo */}
-                    <div className="flex-shrink-0">
-                        <Image
-                            src="/keting-logo-gray.png"
-                            alt="Keting Logo"
-                            width={600}
-                            height={200}
-                            className="w-[300px] md:w-[400px] h-auto"
+        <footer ref={ref} className="relative bg-[#0a0a0a] text-white overflow-hidden">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+            {/* Asterisco gigante girando con scroll */}
+            <motion.span
+                style={{ rotate: rotateAst }}
+                className="absolute top-[8%] right-[4%] text-[8rem] sm:text-[12rem] md:text-[20rem] text-white/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
+            <div className="relative container mx-auto px-6 md:px-12 lg:px-20 pt-20 md:pt-28 pb-12">
+
+                {/* Kicker / eyebrow */}
+                <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center gap-3 mb-10 md:mb-14"
+                >
+                    <span className="block w-12 h-px bg-white/40" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
+                        {t.footer.kicker}
+                    </span>
+                </motion.div>
+
+                {/* Slogan editorial gigante */}
+                <motion.h2
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-14 md:mb-20 max-w-5xl"
+                >
+                    {t.footer.slogan1}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">
+                        {t.footer.sloganItalic}
+                    </span>{" "}
+                    {t.footer.slogan2}{" "}
+                    <span className="relative inline-block font-normal">
+                        {t.footer.slogan3}
+                        <motion.span
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true, margin: "-10%" }}
+                            transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                            className="absolute -bottom-1 md:-bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-white origin-left"
                         />
+                    </span>
+                    <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-white/30">*</span>
+                </motion.h2>
+
+                {/* Línea separadora */}
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="h-px bg-white/15 w-full origin-left mb-10 md:mb-14"
+                />
+
+                {/* Grid de 4 columnas */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14 md:mb-20">
+                    {/* Servicios */}
+                    <div>
+                        <div className="text-[10px] font-medium tracking-[0.3em] uppercase text-white/40 mb-5">
+                            {t.footer.servicesTitle}
+                        </div>
+                        <ul className="space-y-3">
+                            <li><Link href="/webdesing" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
+                            <li><Link href="/soluciones-digitales" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
+                            <li><Link href="/precioweb" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.price}</Link></li>
+                        </ul>
                     </div>
 
-                    {/* Right Section: Language & Contact */}
-                    <div className="flex flex-col items-center md:items-end gap-6 w-full md:w-auto">
-                        {/* Language Switcher — funcional */}
-                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base">
-                            <button
-                                onClick={() => setLang("es")}
-                                className={`transition-colors ${
-                                    lang === "es" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
-                                }`}
-                            >
-                                {t.footer.es}
-                            </button>
-                            <button
-                                onClick={() => setLang("en")}
-                                className={`transition-colors ${
-                                    lang === "en" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
-                                }`}
-                            >
-                                {t.footer.en}
-                            </button>
+                    {/* Recursos */}
+                    <div>
+                        <div className="text-[10px] font-medium tracking-[0.3em] uppercase text-white/40 mb-5">
+                            {t.footer.resourcesTitle}
+                        </div>
+                        <ul className="space-y-3">
+                            <li><Link href="/portafolio" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
+                            <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
+                            <li><Link href="/" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Contacto */}
+                    <div>
+                        <div className="text-[10px] font-medium tracking-[0.3em] uppercase text-white/40 mb-5">
+                            {t.footer.contactTitle}
+                        </div>
+                        <ul className="space-y-3 text-sm">
+                            <li>
+                                <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-1">{t.footer.emailLabel}</span>
+                                <Link href="mailto:info@ketingmedia.com" className="group inline-flex items-center gap-1 text-white/85 hover:text-white">
+                                    info@ketingmedia.com
+                                    <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                </Link>
+                            </li>
+                            <li>
+                                <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-1">{t.footer.phoneLabel}</span>
+                                <Link href="tel:5543830150" className="text-white/85 hover:text-white">
+                                    +52 55 4383 0150
+                                </Link>
+                            </li>
+                            <li>
+                                <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-1">{t.footer.cityLabel}</span>
+                                <span className="text-white/85">{t.footer.cityValue}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Síguenos + idioma */}
+                    <div>
+                        <div className="text-[10px] font-medium tracking-[0.3em] uppercase text-white/40 mb-5">
+                            {t.footer.followTitle}
+                        </div>
+                        <div className="flex gap-3 mb-8">
+                            <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                                <Instagram className="w-4 h-4" />
+                            </a>
+                            <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                                <Linkedin className="w-4 h-4" />
+                            </a>
+                            <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                                <Facebook className="w-4 h-4" />
+                            </a>
                         </div>
 
-                        {/* Contact Buttons */}
-                        <div className="flex flex-wrap justify-center md:justify-end gap-4 w-full">
-                            <Link
-                                href="mailto:info@ketingmedia.com"
-                                className="px-6 md:px-8 py-3 bg-white text-black rounded-2xl hover:bg-gray-200 transition-colors flex items-center gap-2 text-xs md:text-sm font-bold"
-                            >
-                                Email ⊕
-                            </Link>
-                            <Link
-                                href="tel:5543830150"
-                                className="px-6 md:px-8 py-3 bg-white text-black rounded-2xl hover:bg-gray-200 transition-colors flex items-center gap-2 text-xs md:text-sm font-bold"
-                            >
-                                5543830150 ⊕
-                            </Link>
+                        {/* Disponibilidad */}
+                        <div className="mb-6">
+                            <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-1">{t.footer.availability}</span>
+                            <span className="text-white/85 text-sm flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                {t.footer.availabilityValue}
+                            </span>
+                        </div>
+
+                        {/* Toggle idioma */}
+                        <div>
+                            <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-2">{t.nav.idiom}</span>
+                            <div className="flex items-center gap-0.5">
+                                <button
+                                    onClick={() => setLang("es")}
+                                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
+                                        lang === "es" ? "bg-white text-black" : "text-white/50 hover:text-white"
+                                    }`}
+                                >
+                                    ES
+                                </button>
+                                <span className="text-white/20">·</span>
+                                <button
+                                    onClick={() => setLang("en")}
+                                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
+                                        lang === "en" ? "bg-white text-black" : "text-white/50 hover:text-white"
+                                    }`}
+                                >
+                                    EN
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Bottom Legal Line */}
-            <div className="border-t border-gray-800">
-                <div className="container mx-auto px-6 py-6">
-                    <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                        <p>&copy; {new Date().getFullYear()} Keting Media. {t.footer.rights}</p>
-                        <div className="flex gap-4 mt-4 md:mt-0">
-                            <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">{t.footer.privacy}</Link>
-                            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">{t.footer.terms}</Link>
-                        </div>
+                {/* Línea inferior */}
+                <div className="h-px bg-white/10 w-full mb-8" />
+
+                {/* Bottom legal line */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-xs text-white/40 font-mono uppercase tracking-[0.15em]">
+                    <p>&copy; {new Date().getFullYear()} Keting Media · {t.footer.rights}</p>
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                        <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">{t.footer.privacy}</Link>
+                        <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">{t.footer.terms}</Link>
+                        <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                            className="inline-flex items-center gap-2 hover:text-white transition-colors"
+                            aria-label={t.footer.backToTop}
+                        >
+                            {t.footer.backToTop}
+                            <ArrowUp className="w-3 h-3" />
+                        </button>
                     </div>
                 </div>
             </div>
