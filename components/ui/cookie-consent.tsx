@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/lang-context";
 
 const STORAGE_KEY = "keting_cookie_consent";
 
 export function CookieConsent() {
     const [visible, setVisible] = useState(false);
+    const { t } = useLang();
 
     useEffect(() => {
         // Espera un poco antes de mostrar para no chocar con la carga inicial
@@ -59,17 +61,17 @@ export function CookieConsent() {
                         <div className="flex items-center gap-3 mb-3">
                             <span className="block w-8 h-px bg-white/40" />
                             <span className="text-[10px] font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
-                                Cookies
+                                {t.common.cookies}
                             </span>
                         </div>
 
                         <p className="text-sm leading-relaxed text-white/80 mb-5 pr-6">
-                            Usamos cookies para mejorar tu experiencia y analizar el tráfico.{" "}
+                            {t.cookie.text}{" "}
                             <Link
                                 href="/aviso-de-privacidad"
                                 className="font-[family-name:var(--font-playfair)] italic font-normal text-white underline underline-offset-4 decoration-white/40 hover:decoration-white"
                             >
-                                Más información
+                                {t.cookie.moreInfo}
                             </Link>
                             .
                         </p>
@@ -79,13 +81,13 @@ export function CookieConsent() {
                                 onClick={() => decide("accepted")}
                                 className="flex-1 bg-white text-black px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-white/90 transition-colors"
                             >
-                                Aceptar
+                                {t.cookie.accept}
                             </button>
                             <button
                                 onClick={() => decide("rejected")}
                                 className="px-4 py-2.5 text-sm font-medium text-white/60 hover:text-white transition-colors"
                             >
-                                Rechazar
+                                {t.cookie.reject}
                             </button>
                         </div>
                     </div>

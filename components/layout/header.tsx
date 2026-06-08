@@ -6,17 +6,10 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { cn } from "@/lib/utils";
 import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
-import { useTranslate } from "@/components/ui/google-translate";
+import { useLang } from "@/lib/i18n/lang-context";
 
 
-const menuItems = [
-    { label: "Inicio", href: "/#home" },
-    { label: "Diseño web", href: "/webdesing" },
-    { label: "Soluciones digitales", href: "/soluciones-digitales" },
-    { label: "Precio", href: "/precioweb" },
-    { label: "Portafolio", href: "/portafolio" },
-    { label: "Blog", href: "/blog" },
-];
+// Items se generan en el render usando el dictionary
 
 // HeaderProps updated to include initialColor and forcedTheme
 export function Header({ className, showLogo = true, initialColor = "black", forcedTheme }: { className?: string; showLogo?: boolean; initialColor?: "black" | "white", forcedTheme?: "light" | "dark" }) {
@@ -25,7 +18,16 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastY, setLastY] = useState(0);
-    const { lang, switchTo } = useTranslate();
+    const { lang, setLang, t } = useLang();
+
+    const menuItems = [
+        { label: t.nav.home, href: "/#home" },
+        { label: t.nav.webdesign, href: "/webdesing" },
+        { label: t.nav.digital, href: "/soluciones-digitales" },
+        { label: t.nav.price, href: "/precioweb" },
+        { label: t.nav.portfolio, href: "/portafolio" },
+        { label: t.nav.blog, href: "/blog" },
+    ];
 
     const { scrollY } = useScroll();
 
@@ -104,7 +106,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             className={cn("hidden md:flex items-center gap-3 group transition-colors duration-500", textColor)}
                         >
                             <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-heading font-normal tracking-[1px] uppercase">menu</span>
+                            <span className="text-sm font-heading font-normal tracking-[1px] uppercase">{t.nav.menu}</span>
                         </button>
                     </div>
 
@@ -116,7 +118,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 buttonBg
                             )}
                         >
-                            Hablemos
+                            {t.nav.letsTalk}
                         </button>
 
                         <button
@@ -169,7 +171,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     className="flex items-center gap-3 mb-16 group"
                                 >
                                     <X className="w-8 h-8 stroke-[1.5] group-hover:rotate-90 transition-transform" />
-                                    <span className="text-sm font-bold tracking-widest uppercase">MENU</span>
+                                    <span className="text-sm font-bold tracking-widest uppercase">{t.nav.menu}</span>
                                 </button>
 
                                 <nav className="space-y-1">
@@ -199,12 +201,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     className="mt-12 md:mt-16 flex items-center justify-end gap-4"
                                 >
                                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
-                                        Idioma
+                                        {t.nav.idiom}
                                     </span>
                                     <span className="block w-8 h-px bg-black/20" />
-                                    <div className="flex items-center gap-1 notranslate" translate="no">
+                                    <div className="flex items-center gap-1">
                                         <button
-                                            onClick={() => switchTo("es")}
+                                            onClick={() => setLang("es")}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 lang === "es"
                                                     ? "bg-black text-white rounded-md"
@@ -215,7 +217,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         </button>
                                         <span className="text-black/20">·</span>
                                         <button
-                                            onClick={() => switchTo("en")}
+                                            onClick={() => setLang("en")}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 lang === "en"
                                                     ? "bg-black text-white rounded-md"

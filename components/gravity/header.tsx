@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { Header } from "@/components/layout/header";
-import { useTranslate } from "@/components/ui/google-translate";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function GravityHeader({
     position = "right",
@@ -17,7 +17,7 @@ export function GravityHeader({
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
-    const { lang, switchTo } = useTranslate();
+    const { lang, setLang, t } = useLang();
 
     const { scrollY } = useScroll();
 
@@ -77,14 +77,14 @@ export function GravityHeader({
                             />
                         </Link>
                         <nav className="flex items-center gap-6 px-2">
-                            <Link href="/" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Inicio</Link>
-                            <Link href="/portafolio" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Portafolio</Link>
-                            <Link href="/precioweb" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">Precio</Link>
+                            <Link href="/" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.home}</Link>
+                            <Link href="/portafolio" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
+                            <Link href="/precioweb" className="text-sm font-medium text-zinc-600 hover:text-black transition-colors">{t.nav.price}</Link>
                         </nav>
                         {/* Toggle ES/EN */}
-                        <div className="flex items-center gap-0.5 ml-3 notranslate" translate="no">
+                        <div className="flex items-center gap-0.5 ml-3">
                             <button
-                                onClick={() => switchTo("es")}
+                                onClick={() => setLang("es")}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     lang === "es" ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
@@ -93,7 +93,7 @@ export function GravityHeader({
                                 ES
                             </button>
                             <button
-                                onClick={() => switchTo("en")}
+                                onClick={() => setLang("en")}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     lang === "en" ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
@@ -106,7 +106,7 @@ export function GravityHeader({
                             onClick={() => setIsContactOpen(true)}
                             className="bg-black text-white px-6 h-10 rounded-xl text-sm font-medium hover:bg-zinc-800 transition-colors ml-3"
                         >
-                            Let&apos;s Talk
+                            {t.nav.letsTalk}
                         </button>
                     </div>
                 </div>

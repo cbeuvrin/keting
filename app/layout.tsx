@@ -3,8 +3,8 @@ import { Inter, Montserrat, Playfair_Display, Sulphur_Point } from "next/font/go
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
-import { GoogleTranslateInit } from "@/components/ui/google-translate";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { LangProvider } from "@/lib/i18n/lang-context";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
@@ -146,10 +146,11 @@ export default function RootLayout({
         className={cn(inter.variable, montserrat.variable, playfair.variable, sulphur.variable, "font-sans antialiased bg-[#FAFAFA] text-[#333333]")}
         suppressHydrationWarning
       >
-        {children}
-        <WhatsAppButton />
-        <GoogleTranslateInit />
-        <CookieConsent />
+        <LangProvider>
+          {children}
+          <WhatsAppButton />
+          <CookieConsent />
+        </LangProvider>
       </body>
     </html>
   );

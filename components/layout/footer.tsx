@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslate } from "@/components/ui/google-translate";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function Footer() {
-    const { lang, switchTo } = useTranslate();
+    const { lang, setLang, t } = useLang();
     return (
         <footer className="bg-[#242424] text-white border-t border-gray-800">
             {/* Main Footer Content */}
@@ -25,22 +25,22 @@ export function Footer() {
                     {/* Right Section: Language & Contact */}
                     <div className="flex flex-col items-center md:items-end gap-6 w-full md:w-auto">
                         {/* Language Switcher — funcional */}
-                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base notranslate" translate="no">
+                        <div className="flex gap-6 md:gap-8 text-white text-sm md:text-base">
                             <button
-                                onClick={() => switchTo("es")}
+                                onClick={() => setLang("es")}
                                 className={`transition-colors ${
                                     lang === "es" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
                                 }`}
                             >
-                                Español
+                                {t.footer.es}
                             </button>
                             <button
-                                onClick={() => switchTo("en")}
+                                onClick={() => setLang("en")}
                                 className={`transition-colors ${
                                     lang === "en" ? "text-white font-bold underline underline-offset-4" : "text-gray-400 hover:text-gray-200"
                                 }`}
                             >
-                                English
+                                {t.footer.en}
                             </button>
                         </div>
 
@@ -67,10 +67,10 @@ export function Footer() {
             <div className="border-t border-gray-800">
                 <div className="container mx-auto px-6 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                        <p>&copy; {new Date().getFullYear()} Keting Media. Todos los derechos reservados.</p>
+                        <p>&copy; {new Date().getFullYear()} Keting Media. {t.footer.rights}</p>
                         <div className="flex gap-4 mt-4 md:mt-0">
-                            <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de Privacidad</Link>
-                            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+                            <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">{t.footer.privacy}</Link>
+                            <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">{t.footer.terms}</Link>
                         </div>
                     </div>
                 </div>
