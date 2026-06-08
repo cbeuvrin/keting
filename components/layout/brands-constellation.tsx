@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import Matter from "matter-js";
+import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 
 const logos = [
     { src: "/logos-clientes/2.png", alt: "Nike Strength" },
@@ -15,11 +16,6 @@ const logos = [
     { src: "/logos-clientes/11.png", alt: "360 Protective" },
     { src: "/logos-clientes/12.png", alt: "Blindajes" },
 ];
-
-// Mezclamos para que cada fila tenga orden distinto
-const rowA = [...logos, ...logos];
-const rowB = [...logos.slice(3), ...logos.slice(0, 3), ...logos.slice(3), ...logos.slice(0, 3)];
-const rowC = [...logos.slice(6), ...logos.slice(0, 6), ...logos.slice(6), ...logos.slice(0, 6)];
 
 export function BrandsConstellation() {
     const ref = useRef<HTMLElement>(null);
@@ -109,19 +105,13 @@ export function BrandsConstellation() {
                 </h2>
             </div>
 
-            {/* Triple marquee — 3 filas, direcciones alternadas, distintas velocidades */}
-            <div className="space-y-0 relative -my-2 md:-my-3">
-                <MarqueeRow logos={rowA} direction={-1} duration={50} size="md" />
-                <MarqueeRow logos={rowB} direction={1} duration={70} size="lg" />
-                <MarqueeRow logos={rowC} direction={-1} duration={60} size="sm" />
-
-                {/* Fade edges */}
-                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent pointer-events-none z-10" />
-                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent pointer-events-none z-10" />
+            {/* Tanque de física — logos caen y se acumulan */}
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative">
+                <LogoTank />
             </div>
 
             {/* Footer line + counter */}
-            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-16 md:mt-24 relative">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-12 md:mt-16 relative">
                 <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
@@ -139,54 +129,172 @@ export function BrandsConstellation() {
     );
 }
 
-function MarqueeRow({
-    logos,
-    direction,
-    duration,
-    size,
-}: {
-    logos: { src: string; alt: string }[];
-    direction: 1 | -1;
-    duration: number;
-    size: "sm" | "md" | "lg";
-}) {
-    const heights = {
-        sm: "h-14 sm:h-20 md:h-28",
-        md: "h-16 sm:h-24 md:h-36",
-        lg: "h-20 sm:h-28 md:h-44",
-    };
-    const widths = {
-        sm: "w-32 sm:w-44 md:w-64",
-        md: "w-36 sm:w-52 md:w-80",
-        lg: "w-44 sm:w-64 md:w-96",
-    };
+/**
+ * Tanque con física: los logos caen desde arriba en cascada y se acumulan en el fondo.
+ * Arrastrables con el cursor (como las WWW. en /webdesing).
+ */
+function LogoTank() {
+    const sceneRef = useRef<HTMLDivElement>(null);
+    const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const engineRef = useRef<Matter.Engine | null>(null);
+    const runnerRef = useRef<Matter.Runner | null>(null);
+    const isInView = useInView(sceneRef, { once: true, margin: "-5%" });
+    const [armed, setArmed] = useState(false);
+
+    useEffect(() => {
+        if (isInView) setArmed(true);
+    }, [isInView]);
+
+    useEffect(() => {
+        if (!armed || !sceneRef.current) return;
+
+        const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint } = Matter;
+
+        const engine = Engine.create();
+        engine.gravity.y = 1;
+        engineRef.current = engine;
+
+        const runner = Runner.create();
+        runnerRef.current = runner;
+
+        const rect = sceneRef.current.getBoundingClientRect();
+        const tankWidth = rect.width;
+        const tankHeight = rect.height;
+        const isMobile = window.innerWidth < 768;
+
+        // Tamaño de cada caja contenedora del logo (más pequeño en mobile)
+        const cellW = isMobile ? 110 : 170;
+        const cellH = isMobile ? 60 : 90;
+
+        // Paredes y suelo
+        const wallThickness = 60;
+        const ground = Bodies.rectangle(
+            tankWidth / 2,
+            tankHeight + wallThickness / 2 - 1,
+            tankWidth * 2,
+            wallThickness,
+            { isStatic: true, label: "ground" },
+        );
+        const leftWall = Bodies.rectangle(
+            -wallThickness / 2,
+            tankHeight / 2,
+            wallThickness,
+            tankHeight * 2,
+            { isStatic: true },
+        );
+        const rightWall = Bodies.rectangle(
+            tankWidth + wallThickness / 2,
+            tankHeight / 2,
+            wallThickness,
+            tankHeight * 2,
+            { isStatic: true },
+        );
+        Composite.add(engine.world, [ground, leftWall, rightWall]);
+
+        // Mouse para arrastrar
+        const mouse = Mouse.create(sceneRef.current);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse,
+            constraint: { stiffness: 0.15, render: { visible: false } },
+        });
+        // No bloquear scroll de página
+        mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
+        mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
+        if ((mouse as any).wheel) {
+            mouse.element.removeEventListener("wheel", (mouse as any).wheel);
+        }
+        const allowScroll = (e: Event) => e.stopPropagation();
+        mouse.element.addEventListener("wheel", allowScroll, { passive: true });
+        Composite.add(engine.world, mouseConstraint);
+
+        Runner.run(runner, engine);
+
+        // Spawning escalonado: un logo cada 250ms
+        const bodies: Matter.Body[] = [];
+        const spawnTimers: ReturnType<typeof setTimeout>[] = [];
+
+        logos.forEach((_, index) => {
+            const timer = setTimeout(() => {
+                const x = cellW / 2 + Math.random() * (tankWidth - cellW);
+                const y = -cellH - Math.random() * 100;
+                const body = Bodies.rectangle(x, y, cellW, cellH, {
+                    restitution: 0.35,
+                    friction: 0.45,
+                    chamfer: { radius: 12 },
+                    angle: (Math.random() - 0.5) * 0.3,
+                });
+                bodies[index] = body;
+                Composite.add(engine.world, body);
+            }, index * 280);
+            spawnTimers.push(timer);
+        });
+
+        // Loop de sincronización física → DOM
+        let rafId: number;
+        const updateLoop = () => {
+            bodies.forEach((body, i) => {
+                const el = logoRefs.current[i];
+                if (body && el) {
+                    const { x, y } = body.position;
+                    el.style.transform = `translate(${x - cellW / 2}px, ${y - cellH / 2}px) rotate(${body.angle}rad)`;
+                    el.style.width = `${cellW}px`;
+                    el.style.height = `${cellH}px`;
+                    el.style.opacity = "1";
+                }
+            });
+            rafId = requestAnimationFrame(updateLoop);
+        };
+        updateLoop();
+
+        return () => {
+            cancelAnimationFrame(rafId);
+            spawnTimers.forEach(clearTimeout);
+            Runner.stop(runner);
+            Engine.clear(engine);
+            engineRef.current = null;
+            runnerRef.current = null;
+        };
+    }, [armed]);
 
     return (
-        <div className="overflow-hidden">
-            <motion.div
-                className="flex gap-2 md:gap-4 w-max"
-                animate={{ x: direction === -1 ? ["0%", "-50%"] : ["-50%", "0%"] }}
-                transition={{
-                    duration,
-                    repeat: Infinity,
-                    ease: "linear",
-                }}
-            >
-                {logos.map((logo, i) => (
-                    <div
-                        key={i}
-                        className={`flex items-center justify-center flex-shrink-0 ${heights[size]} ${widths[size]}`}
-                    >
-                        <img
-                            src={logo.src}
-                            alt={logo.alt}
-                            className="max-w-full max-h-full object-contain opacity-70 hover:opacity-100 transition-opacity duration-500"
-                            style={{ filter: "invert(1)" }}
-                            draggable={false}
-                        />
-                    </div>
-                ))}
-            </motion.div>
+        <div
+            ref={sceneRef}
+            className="relative w-full h-[400px] md:h-[520px] overflow-hidden rounded-2xl border border-white/10"
+        >
+            {/* Marca interior sutil (línea inferior tipo recipiente) */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-white/15 pointer-events-none z-10" />
+
+            {/* Label flotante esquina */}
+            <div className="absolute top-4 left-4 flex items-center gap-2 z-10 pointer-events-none">
+                <span className="block w-1.5 h-1.5 rounded-full bg-white/40" />
+                <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-mono">
+                    Arrástralos
+                </span>
+            </div>
+
+            {/* Logos como DOM nodes */}
+            {logos.map((logo, i) => (
+                <div
+                    key={i}
+                    ref={(el) => {
+                        logoRefs.current[i] = el;
+                    }}
+                    className="absolute top-0 left-0 flex items-center justify-center select-none pointer-events-auto cursor-grab active:cursor-grabbing"
+                    style={{
+                        touchAction: "pan-y",
+                        opacity: 0,
+                        willChange: "transform",
+                    }}
+                >
+                    <img
+                        src={logo.src}
+                        alt={logo.alt}
+                        className="max-w-[80%] max-h-[80%] object-contain"
+                        style={{ filter: "invert(1)" }}
+                        draggable={false}
+                    />
+                </div>
+            ))}
         </div>
     );
 }
