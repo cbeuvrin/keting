@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Matter from "matter-js";
-import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 const logos = [
     { src: "/logos-clientes/2.png", alt: "Nike Strength" },
@@ -105,9 +104,9 @@ export function BrandsConstellation() {
                 </h2>
             </div>
 
-            {/* Tanque de física — logos caen y se acumulan */}
-            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative">
-                <LogoTank />
+            {/* Mundo 3D con marcas orbitando */}
+            <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
+                <Globe3D />
             </div>
 
             {/* Footer line + counter */}
@@ -130,171 +129,163 @@ export function BrandsConstellation() {
 }
 
 /**
- * Tanque con física: los logos caen desde arriba en cascada y se acumulan en el fondo.
- * Arrastrables con el cursor (como las WWW. en /webdesing).
+ * Mundo 3D estilizado con los logos orbitando uniformemente en su ecuador.
+ * Implementado con CSS 3D transforms — performante y sin librerías externas.
  */
-function LogoTank() {
-    const sceneRef = useRef<HTMLDivElement>(null);
-    const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const engineRef = useRef<Matter.Engine | null>(null);
-    const runnerRef = useRef<Matter.Runner | null>(null);
-    const isInView = useInView(sceneRef, { once: true, margin: "-5%" });
-    const [armed, setArmed] = useState(false);
-
-    useEffect(() => {
-        if (isInView) setArmed(true);
-    }, [isInView]);
-
-    useEffect(() => {
-        if (!armed || !sceneRef.current) return;
-
-        const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint } = Matter;
-
-        const engine = Engine.create();
-        engine.gravity.y = 1;
-        engineRef.current = engine;
-
-        const runner = Runner.create();
-        runnerRef.current = runner;
-
-        const rect = sceneRef.current.getBoundingClientRect();
-        const tankWidth = rect.width;
-        const tankHeight = rect.height;
-        const isMobile = window.innerWidth < 768;
-
-        // Tamaño de cada caja contenedora del logo (más pequeño en mobile)
-        const cellW = isMobile ? 110 : 170;
-        const cellH = isMobile ? 60 : 90;
-
-        // Paredes y suelo
-        const wallThickness = 60;
-        const ground = Bodies.rectangle(
-            tankWidth / 2,
-            tankHeight + wallThickness / 2 - 1,
-            tankWidth * 2,
-            wallThickness,
-            { isStatic: true, label: "ground" },
-        );
-        const leftWall = Bodies.rectangle(
-            -wallThickness / 2,
-            tankHeight / 2,
-            wallThickness,
-            tankHeight * 2,
-            { isStatic: true },
-        );
-        const rightWall = Bodies.rectangle(
-            tankWidth + wallThickness / 2,
-            tankHeight / 2,
-            wallThickness,
-            tankHeight * 2,
-            { isStatic: true },
-        );
-        Composite.add(engine.world, [ground, leftWall, rightWall]);
-
-        // Mouse para arrastrar
-        const mouse = Mouse.create(sceneRef.current);
-        const mouseConstraint = MouseConstraint.create(engine, {
-            mouse,
-            constraint: { stiffness: 0.15, render: { visible: false } },
-        });
-        // No bloquear scroll de página
-        mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
-        mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
-        if ((mouse as any).wheel) {
-            mouse.element.removeEventListener("wheel", (mouse as any).wheel);
-        }
-        const allowScroll = (e: Event) => e.stopPropagation();
-        mouse.element.addEventListener("wheel", allowScroll, { passive: true });
-        Composite.add(engine.world, mouseConstraint);
-
-        Runner.run(runner, engine);
-
-        // Spawning escalonado: un logo cada 250ms
-        const bodies: Matter.Body[] = [];
-        const spawnTimers: ReturnType<typeof setTimeout>[] = [];
-
-        logos.forEach((_, index) => {
-            const timer = setTimeout(() => {
-                const x = cellW / 2 + Math.random() * (tankWidth - cellW);
-                const y = -cellH - Math.random() * 100;
-                const body = Bodies.rectangle(x, y, cellW, cellH, {
-                    restitution: 0.35,
-                    friction: 0.45,
-                    chamfer: { radius: 12 },
-                    angle: (Math.random() - 0.5) * 0.3,
-                });
-                bodies[index] = body;
-                Composite.add(engine.world, body);
-            }, index * 280);
-            spawnTimers.push(timer);
-        });
-
-        // Loop de sincronización física → DOM
-        let rafId: number;
-        const updateLoop = () => {
-            bodies.forEach((body, i) => {
-                const el = logoRefs.current[i];
-                if (body && el) {
-                    const { x, y } = body.position;
-                    el.style.transform = `translate(${x - cellW / 2}px, ${y - cellH / 2}px) rotate(${body.angle}rad)`;
-                    el.style.width = `${cellW}px`;
-                    el.style.height = `${cellH}px`;
-                    el.style.opacity = "1";
-                }
-            });
-            rafId = requestAnimationFrame(updateLoop);
-        };
-        updateLoop();
-
-        return () => {
-            cancelAnimationFrame(rafId);
-            spawnTimers.forEach(clearTimeout);
-            Runner.stop(runner);
-            Engine.clear(engine);
-            engineRef.current = null;
-            runnerRef.current = null;
-        };
-    }, [armed]);
-
+function Globe3D() {
     return (
-        <div
-            ref={sceneRef}
-            className="relative w-full h-[400px] md:h-[520px] overflow-hidden rounded-2xl border border-white/10"
-        >
-            {/* Marca interior sutil (línea inferior tipo recipiente) */}
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-white/15 pointer-events-none z-10" />
-
-            {/* Label flotante esquina */}
-            <div className="absolute top-4 left-4 flex items-center gap-2 z-10 pointer-events-none">
-                <span className="block w-1.5 h-1.5 rounded-full bg-white/40" />
-                <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-mono">
-                    Arrástralos
-                </span>
+        <div className="globe-scene relative w-full flex items-center justify-center py-8 md:py-12">
+            {/* Estrellas de fondo decorativas */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {Array.from({ length: 40 }).map((_, i) => {
+                    const top = (i * 53) % 100;
+                    const left = (i * 67) % 100;
+                    const size = (i % 3) + 1;
+                    const opacity = ((i % 5) + 2) * 0.05;
+                    return (
+                        <span
+                            key={i}
+                            className="absolute rounded-full bg-white"
+                            style={{
+                                top: `${top}%`,
+                                left: `${left}%`,
+                                width: `${size}px`,
+                                height: `${size}px`,
+                                opacity,
+                            }}
+                        />
+                    );
+                })}
             </div>
 
-            {/* Logos como DOM nodes */}
-            {logos.map((logo, i) => (
+            {/* Escena 3D */}
+            <div
+                className="relative w-full h-[420px] md:h-[560px] flex items-center justify-center"
+                style={{ perspective: "1400px" }}
+            >
+                {/* Eje rotador (preserve-3d) */}
                 <div
-                    key={i}
-                    ref={(el) => {
-                        logoRefs.current[i] = el;
-                    }}
-                    className="absolute top-0 left-0 flex items-center justify-center select-none pointer-events-auto cursor-grab active:cursor-grabbing"
+                    className="relative"
                     style={{
-                        touchAction: "pan-y",
-                        opacity: 0,
-                        willChange: "transform",
+                        transformStyle: "preserve-3d",
+                        animation: "globe-spin 28s linear infinite",
+                        transform: "rotateX(-12deg)",
                     }}
                 >
-                    <img
-                        src={logo.src}
-                        alt={logo.alt}
-                        className="max-w-[80%] max-h-[80%] object-contain"
-                        style={{ filter: "invert(1)" }}
-                        draggable={false}
-                    />
+                    {/* Globo central */}
+                    <div className="globe-sphere" />
+
+                    {/* Anillo ecuatorial sutil */}
+                    <div className="globe-ring" />
+
+                    {/* Logos orbitando uniformemente */}
+                    {logos.map((logo, i) => {
+                        const angle = (360 / logos.length) * i;
+                        return (
+                            <div
+                                key={i}
+                                className="globe-logo"
+                                style={{
+                                    transform: `rotateY(${angle}deg) translateZ(var(--orbit-radius))`,
+                                }}
+                            >
+                                <img
+                                    src={logo.src}
+                                    alt={logo.alt}
+                                    className="max-w-[80%] max-h-[80%] object-contain"
+                                    style={{ filter: "invert(1)" }}
+                                    draggable={false}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
-            ))}
+
+                {/* Halo radial bajo el globo */}
+                <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[60%] h-12 bg-white/10 blur-3xl rounded-full pointer-events-none" />
+            </div>
+
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: `
+                @keyframes globe-spin {
+                    from { transform: rotateX(-12deg) rotateY(0deg); }
+                    to { transform: rotateX(-12deg) rotateY(360deg); }
+                }
+                .globe-sphere {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: var(--globe-size);
+                    height: var(--globe-size);
+                    margin-top: calc(var(--globe-size) / -2);
+                    margin-left: calc(var(--globe-size) / -2);
+                    border-radius: 50%;
+                    background:
+                        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04) 0%, transparent 60%),
+                        linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 50%, #050505 100%);
+                    box-shadow:
+                        inset -20px -20px 60px rgba(0,0,0,0.6),
+                        inset 20px 20px 40px rgba(255,255,255,0.05),
+                        0 0 80px rgba(255,255,255,0.08);
+                    transform: translateZ(0);
+                }
+                .globe-sphere::before,
+                .globe-sphere::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    border-radius: 50%;
+                    border: 1px solid rgba(255,255,255,0.06);
+                }
+                .globe-sphere::after {
+                    inset: 12%;
+                    border: 1px solid rgba(255,255,255,0.04);
+                }
+                .globe-ring {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: calc(var(--orbit-radius) * 2 + 24px);
+                    height: calc(var(--orbit-radius) * 2 + 24px);
+                    margin-top: calc((var(--orbit-radius) * 2 + 24px) / -2);
+                    margin-left: calc((var(--orbit-radius) * 2 + 24px) / -2);
+                    border-radius: 50%;
+                    border: 1px dashed rgba(255,255,255,0.08);
+                    transform: rotateX(90deg);
+                    pointer-events: none;
+                }
+                .globe-logo {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: var(--logo-size);
+                    height: var(--logo-size);
+                    margin-top: calc(var(--logo-size) / -2);
+                    margin-left: calc(var(--logo-size) / -2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transform-style: preserve-3d;
+                    backface-visibility: hidden;
+                }
+                /* Variables scopeadas al componente */
+                .globe-scene {
+                    --globe-size: 140px;
+                    --orbit-radius: 130px;
+                    --logo-size: 96px;
+                }
+                @media (min-width: 768px) {
+                    .globe-scene {
+                        --globe-size: 220px;
+                        --orbit-radius: 220px;
+                        --logo-size: 140px;
+                    }
+                }
+            `,
+                }}
+            />
         </div>
     );
 }
