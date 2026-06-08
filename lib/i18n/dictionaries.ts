@@ -199,7 +199,7 @@ const es = {
         availabilityValue: "Lun — Vie · 9—18h CDT",
         backToTop: "Volver arriba",
     },
-} as const;
+};
 
 const en: typeof es = {
     nav: {
