@@ -15,6 +15,7 @@ export function Footer() {
     });
     const smooth = useSpring(scrollYProgress, { stiffness: 50, damping: 22, mass: 0.6 });
     const rotateAst = useTransform(smooth, [0, 1], [0, 540]);
+    const watermarkX = useTransform(smooth, [0, 1], ["-8%", "8%"]);
 
     return (
         <footer ref={ref} className="relative bg-[#0a0a0a] text-white overflow-hidden">
@@ -35,21 +36,30 @@ export function Footer() {
 
             <div className="relative container mx-auto px-6 md:px-12 lg:px-20 pt-20 md:pt-28 pb-12">
 
-                {/* Logo grande centrado */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.92 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-center justify-center mb-14 md:mb-20"
-                >
-                    <img
+                {/* Logo grande centrado con logo gigante semi-transparente detrás */}
+                <div className="relative flex items-center justify-center mb-14 md:mb-20 overflow-hidden">
+                    {/* Logo gigante de fondo, tipo About Us watermark */}
+                    <motion.img
+                        style={{ x: watermarkX }}
                         src="/keting-logo-white.png"
-                        alt="Keting Media"
-                        className="w-[80%] md:w-[70%] lg:w-[60%] max-w-[900px] h-auto object-contain"
+                        alt=""
+                        aria-hidden
+                        className="absolute pointer-events-none select-none w-[200%] md:w-[180%] lg:w-[160%] max-w-none h-auto object-contain opacity-[0.05]"
                         draggable={false}
                     />
-                </motion.div>
+
+                    {/* Logo en primer plano */}
+                    <motion.img
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        src="/keting-logo-white.png"
+                        alt="Keting Media"
+                        className="relative w-[80%] md:w-[70%] lg:w-[60%] max-w-[900px] h-auto object-contain"
+                        draggable={false}
+                    />
+                </div>
 
                 {/* Línea separadora */}
                 <motion.div
