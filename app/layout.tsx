@@ -3,6 +3,7 @@ import { Inter, Montserrat, Playfair_Display, Sulphur_Point } from "next/font/go
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { GoogleTranslateInit } from "@/components/ui/google-translate";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
@@ -71,11 +72,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/keting-logo.png",
   },
   verification: {
     // Si tienes Google Search Console, agrega aquí el verification code
@@ -151,6 +147,7 @@ export default function RootLayout({
       >
         {children}
         <WhatsAppButton />
+        <GoogleTranslateInit />
       </body>
     </html>
   );

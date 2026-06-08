@@ -6,6 +6,7 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { cn } from "@/lib/utils";
 import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useTranslate } from "@/components/ui/google-translate";
 
 
 const menuItems = [
@@ -24,7 +25,8 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastY, setLastY] = useState(0);
-    
+    const { lang, switchTo } = useTranslate();
+
     const { scrollY } = useScroll();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
@@ -188,6 +190,42 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         </motion.div>
                                     ))}
                                 </nav>
+
+                                {/* Toggle de idioma */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                    className="mt-12 md:mt-16 flex items-center justify-end gap-4"
+                                >
+                                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
+                                        Idioma
+                                    </span>
+                                    <span className="block w-8 h-px bg-black/20" />
+                                    <div className="flex items-center gap-1 notranslate" translate="no">
+                                        <button
+                                            onClick={() => switchTo("es")}
+                                            className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
+                                                lang === "es"
+                                                    ? "bg-black text-white rounded-md"
+                                                    : "text-black/50 hover:text-black"
+                                            }`}
+                                        >
+                                            ES
+                                        </button>
+                                        <span className="text-black/20">·</span>
+                                        <button
+                                            onClick={() => switchTo("en")}
+                                            className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
+                                                lang === "en"
+                                                    ? "bg-black text-white rounded-md"
+                                                    : "text-black/50 hover:text-black"
+                                            }`}
+                                        >
+                                            EN
+                                        </button>
+                                    </div>
+                                </motion.div>
                             </div>
                         </motion.div>
                     </>
