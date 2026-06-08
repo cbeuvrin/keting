@@ -146,7 +146,7 @@ export function Testimonials() {
                                 {/* Stat Column */}
                                 <motion.div
                                     style={{ y: yStat }}
-                                    className="md:w-1/4 flex flex-col md:items-start items-center text-center md:text-left pt-2"
+                                    className="md:w-1/4 flex flex-col items-start text-left pt-2"
                                 >
                                     <span className="text-[5rem] md:text-[6.5rem] font-normal tracking-tighter leading-[0.8] mb-4 text-[#111]">
                                         {item.stat}
@@ -161,7 +161,7 @@ export function Testimonials() {
                                     style={{ y: yQuote }}
                                     className="md:w-1/2 flex items-start pt-4"
                                 >
-                                    <p className="text-lg md:text-[1.125rem] leading-[1.8] text-[#333] font-medium tracking-tight italic">
+                                    <p className="text-lg md:text-[1.125rem] leading-[1.8] text-[#333] font-medium tracking-tight italic text-justify md:text-left">
                                         {item.quote}
                                     </p>
                                 </motion.div>

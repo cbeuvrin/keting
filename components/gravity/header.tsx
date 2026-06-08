@@ -2,11 +2,17 @@
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { Header } from "@/components/layout/header";
 
-export function GravityHeader({ position = "right" }: { position?: "left" | "right" }) {
+export function GravityHeader({
+    position = "right",
+    mobileTheme = "dark",
+}: {
+    position?: "left" | "right";
+    mobileTheme?: "light" | "dark";
+}) {
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
@@ -47,27 +53,10 @@ export function GravityHeader({ position = "right" }: { position?: "left" | "rig
 
     return (
         <>
-            {/* Mobile Header - Top */}
-            <motion.header
-                initial={{ y: -100, opacity: 0 }}
-                animate={animateState}
-                transition={transition}
-                className="fixed top-6 left-0 right-0 z-50 flex justify-center items-center pointer-events-none px-4 md:hidden"
-            >
-                <div className="w-full max-w-sm bg-white text-black rounded-xl p-3 flex items-center justify-between shadow-2xl pointer-events-auto border border-black/10">
-                    <button className="p-1 hover:bg-black/5 rounded-lg transition-colors">
-                        <Menu className="w-5 h-5" />
-                    </button>
-                    <Link href="/" className="flex items-center">
-                        <img
-                            src="/keting-logo-black.png"
-                            alt="Keting Media"
-                            className="h-6 w-auto object-contain"
-                        />
-                    </Link>
-                    <span className="w-7" />
-                </div>
-            </motion.header>
+            {/* Mobile Header — usa el mismo Header del home para uniformidad */}
+            <div className="md:hidden">
+                <Header showLogo={true} forcedTheme={mobileTheme} />
+            </div>
 
             {/* Desktop Header - Top Right/Left */}
             <motion.header

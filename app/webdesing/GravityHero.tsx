@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ScrambleText from "./ScrambleText";
 
@@ -14,6 +14,14 @@ export default function GravityHero() {
 
     // Refs for the DOM elements corresponding to the bodies
     const lettersRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    // Scroll-driven rotation para el asterisco gigante mobile (estilo soluciones-digitales)
+    const { scrollYProgress: heroScroll } = useScroll({
+        target: sceneRef,
+        offset: ["start end", "end start"],
+    });
+    const smoothHero = useSpring(heroScroll, { stiffness: 50, damping: 22, mass: 0.6 });
+    const asteriskRotate = useTransform(smoothHero, [0, 1], [0, 540]);
 
     useEffect(() => {
         if (!sceneRef.current) return;
@@ -42,7 +50,7 @@ export default function GravityHero() {
 
         // --- Create Bodies ---
         const isMobile = width < 768;
-        const letterSize = Math.min(width * (isMobile ? 0.25 : 0.15), 200);
+        const letterSize = Math.min(width * (isMobile ? 0.38 : 0.15), 220);
         const labels = ["W", "W", "W", "."];
         const bodies: Matter.Body[] = [];
 
@@ -154,6 +162,12 @@ export default function GravityHero() {
                 className="absolute bottom-[12%] right-[3%] text-[5rem] sm:text-[8rem] md:text-[16rem] text-white/[0.04] select-none font-light leading-none inline-block origin-center pointer-events-none"
             >*</motion.span>
 
+            {/* Asterisco gigante centrado solo en mobile — gira con el scroll, estilo soluciones-digitales */}
+            <motion.span
+                style={{ rotate: asteriskRotate, x: "-50%", y: "-50%" }}
+                className="md:hidden absolute top-1/2 left-1/2 text-[20rem] text-white/[0.07] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
             {/* Esquina superior izquierda — badge numero + label (oculto en mobile para no chocar con el menú) */}
             <div className="absolute top-24 md:top-32 left-6 md:left-12 pointer-events-none hidden sm:flex items-start gap-3 md:gap-4 z-10">
                 <span className="text-white/30 font-mono text-xs md:text-sm tracking-wider mt-1 md:mt-2">
@@ -195,7 +209,7 @@ export default function GravityHero() {
                     key={i}
                     ref={(el) => { lettersRef.current[i] = el; }}
                     className={cn(
-                        "absolute top-0 left-0 flex items-center justify-center font-bold select-none cursor-grab active:cursor-grabbing",
+                        "absolute top-0 left-0 hidden md:flex items-center justify-center font-bold select-none cursor-grab active:cursor-grabbing",
                         "text-white border-none pointer-events-auto"
                     )}
                     style={{
@@ -212,7 +226,7 @@ export default function GravityHero() {
 
             <div className="absolute inset-x-0 top-0 h-full pointer-events-none">
                 <div className="container mx-auto px-6 md:px-12 h-full flex flex-col justify-start">
-                    <div className="flex justify-end mt-20 md:mt-32 pointer-events-auto">
+                    <div className="flex justify-end mt-[40vh] md:mt-32 pointer-events-auto">
                       <div className="flex flex-col items-end max-w-md">
                         {/* Eyebrow editorial */}
                         <div className="flex items-center gap-3 mb-4">
@@ -221,7 +235,7 @@ export default function GravityHero() {
                             </span>
                             <span className="block w-10 h-px bg-white/40" />
                         </div>
-                        <p className="text-sm md:text-base text-white/80 text-right leading-relaxed font-light">
+                        <p className="text-sm md:text-base text-white/80 text-justify md:text-right leading-relaxed font-light">
                             Como <ScrambleText text="Vibe Coder" className="font-bold text-white" />, diseñamos y estructuramos{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">soluciones digitales</span>{" "}
                             precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en{" "}

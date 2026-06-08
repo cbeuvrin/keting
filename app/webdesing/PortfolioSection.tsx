@@ -56,11 +56,11 @@ export default function PortfolioSection() {
     };
 
     return (
-        <div className="w-full flex justify-center py-10 md:py-20 bg-[#FAFAFA]">
+        <div className="w-full flex justify-center py-6 md:py-20 bg-[#FAFAFA]">
             <motion.section
                 ref={containerRef}
                 style={{ width, borderRadius }}
-                className="relative h-[80vh] bg-black overflow-hidden flex items-center justify-center p-4"
+                className="relative h-[55vh] md:h-[80vh] bg-black overflow-hidden flex items-center justify-center p-4"
             >
                 {/* Background Grid - Rotated for diagonal effect */}
                 <div className="absolute inset-[-50%] flex items-center justify-center rotate-12 scale-125">

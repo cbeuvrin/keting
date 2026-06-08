@@ -36,8 +36,8 @@ export default function GravityPage() {
         >
             <GravityHeader position="left" />
             <GravityHero />
-            <ZoomSection />
             <TextSection />
+            <ZoomSection />
             <PortfolioSection />
             <ClientsShowcase />
             <Testimonials />

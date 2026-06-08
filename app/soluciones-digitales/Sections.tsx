@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ArrowRight, ArrowDown, Sparkles, Plus } from "lucide-react";
+import { ContactModal } from "@/components/pricing/contact-modal";
 
 /* ==========================================================================
    1. HERO BAJADA — Editorial gigante con mezcla de pesos, italics, deco
@@ -1727,8 +1728,9 @@ export function Cierre() {
 }
 
 function MagneticButton() {
-    const ref = useRef<HTMLAnchorElement>(null);
+    const ref = useRef<HTMLButtonElement>(null);
     const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [isContactOpen, setIsContactOpen] = useState(false);
 
     const handleMouseMove = (e: React.MouseEvent) => {
         const el = ref.current;
@@ -1744,17 +1746,20 @@ function MagneticButton() {
     const handleMouseLeave = () => setPos({ x: 0, y: 0 });
 
     return (
-        <motion.a
-            ref={ref}
-            href="#contacto"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            animate={{ x: pos.x, y: pos.y }}
-            transition={{ type: "spring", stiffness: 200, damping: 18 }}
-            className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-white px-10 py-6 rounded-full text-lg md:text-xl font-medium hover:bg-black transition-colors duration-300"
-        >
-            Hablemos
-            <Plus className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" />
-        </motion.a>
+        <>
+            <motion.button
+                ref={ref}
+                onClick={() => setIsContactOpen(true)}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                animate={{ x: pos.x, y: pos.y }}
+                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-white px-10 py-6 rounded-full text-lg md:text-xl font-medium hover:bg-black transition-colors duration-300"
+            >
+                Hablemos
+                <Plus className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" />
+            </motion.button>
+            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+        </>
     );
 }

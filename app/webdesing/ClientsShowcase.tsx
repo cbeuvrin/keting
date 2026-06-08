@@ -210,7 +210,7 @@ export default function ClientsShowcase() {
                 className="overflow-x-auto pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-                <div className="flex gap-5 md:gap-6 pl-[35vw] md:pl-[30vw] pr-6 md:pr-12 snap-x snap-mandatory w-max">
+                <div className="flex gap-5 md:gap-6 pl-6 md:pl-12 pr-6 md:pr-12 snap-x snap-mandatory w-max">
                     {clients.map((c, i) => (
                         <ClientCard key={c.name} {...c} index={i} />
                     ))}

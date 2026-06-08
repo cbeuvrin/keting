@@ -56,7 +56,7 @@ export default function TextSection() {
                 </motion.div>
                 <motion.h2
                     style={{ y, opacity }}
-                    className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.15] tracking-tight text-[#1d1d1f] font-heading"
+                    className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.15] tracking-tight text-[#1d1d1f] font-heading text-justify md:text-left"
                 >
                     <motion.span style={{ color: sideColor }}>
                         Como <span className="font-[family-name:var(--font-playfair)] italic font-normal">agencia digital</span> experta en creación de sitios web,

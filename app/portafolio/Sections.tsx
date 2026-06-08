@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Plus } from "lucide-react";
+import { ContactModal } from "@/components/pricing/contact-modal";
 
 /* ==========================================================================
    Utilidades editoriales
@@ -698,6 +699,7 @@ export function CaseHapptek() {
    ========================================================================== */
 
 export function PortafolioCierre() {
+    const [isContactOpen, setIsContactOpen] = useState(false);
     return (
         <section className="bg-[#F5F5F7] relative py-32 md:py-44 overflow-clip">
 
@@ -742,17 +744,18 @@ export function PortafolioCierre() {
                 </div>
 
                 <div className="md:col-span-6 flex flex-col md:items-end gap-6">
-                    <motion.a
+                    <motion.button
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                        href="#contacto"
+                        onClick={() => setIsContactOpen(true)}
                         className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-white px-10 py-6 rounded-full text-lg md:text-xl font-medium hover:bg-black transition-colors duration-300"
                     >
                         Hablemos
                         <Plus className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" />
-                    </motion.a>
+                    </motion.button>
+                    <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
                     <motion.a
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}

@@ -1,0 +1,63 @@
+import { ImageResponse } from "next/og";
+
+export const runtime = "edge";
+export const alt = "Keting Media · Agencia de diseño web y soluciones digitales con IA";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+
+export default async function Image() {
+    return new ImageResponse(
+        (
+            <div
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "#0a0a0a",
+                    color: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    padding: "70px 80px",
+                    fontFamily: "sans-serif",
+                    position: "relative",
+                }}
+            >
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 40,
+                        right: 60,
+                        fontSize: 360,
+                        color: "rgba(255,255,255,0.05)",
+                        lineHeight: 1,
+                        display: "flex",
+                    }}
+                >
+                    *
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                    <div style={{ width: 48, height: 1, background: "rgba(255,255,255,0.5)", display: "flex" }} />
+                    <div style={{ fontSize: 20, letterSpacing: 8, textTransform: "uppercase", color: "rgba(255,255,255,0.7)", display: "flex" }}>
+                        Agencia Digital · México
+                    </div>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ fontSize: 110, lineHeight: 1, fontWeight: 700, letterSpacing: "-0.03em", display: "flex" }}>
+                        Soluciones digitales
+                    </div>
+                    <div style={{ fontSize: 110, lineHeight: 1, fontWeight: 400, fontStyle: "italic", color: "rgba(255,255,255,0.85)", letterSpacing: "-0.02em", display: "flex" }}>
+                        que escalan negocios.
+                    </div>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 18, letterSpacing: 5, textTransform: "uppercase", color: "rgba(255,255,255,0.5)" }}>
+                    <div style={{ display: "flex" }}>ketingmedia.com</div>
+                    <div style={{ display: "flex" }}>Keting Media · 2026</div>
+                </div>
+            </div>
+        ),
+        { ...size },
+    );
+}

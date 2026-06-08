@@ -9,57 +9,122 @@ const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 const sulphur = Sulphur_Point({ weight: ["300", "400", "700"], subsets: ["latin"], variable: "--font-sulphur" });
 
+const SITE_URL = "https://ketingmedia.com";
+const SITE_NAME = "Keting Media";
+
 export const metadata: Metadata = {
   title: {
-    default: "Keting Media | Soluciones de Marketing Digital y Diseño Web en México",
-    template: "%s | Keting Media"
+    default: "Keting Media · Agencia de diseño web y soluciones digitales con IA en México",
+    template: "%s · Keting Media"
   },
-  description: "Agencia de marketing digital en México especializada en diseño web, e-commerce y estrategias de crecimiento que escalan negocios ambiciosos. Innovación impulsada por IA.",
-  keywords: ["marketing digital méxico", "diseño web profesional", "agencia e-commerce", "posicionamiento seo", "desarrollo web ia", "keting media"],
-  authors: [{ name: "Carlos Beuvrin" }],
-  creator: "Keting Media",
-  publisher: "Keting Media",
+  description: "Agencia digital en México que diseña webs editoriales, e-commerce y soluciones impulsadas por IA para marcas que cambian su industria. +80% de proyectos referidos.",
+  keywords: [
+    "agencia diseño web méxico",
+    "diseño web editorial",
+    "e-commerce a medida",
+    "soluciones digitales con IA",
+    "desarrollo web mexico",
+    "agencia digital cdmx",
+    "landing pages alto impacto",
+    "estrategia digital",
+    "keting media",
+    "carlos beuvrin",
+  ],
+  authors: [{ name: "Carlos Beuvrin", url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  applicationName: SITE_NAME,
+  category: "Agencia Digital",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://keting.media"), // Reemplazar con el dominio real si es distinto
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
+    languages: { "es-MX": "/" },
   },
   openGraph: {
-    title: "Keting Media | Soluciones de Marketing Digital y Diseño Web",
-    description: "Escalamos negocios ambiciosos con diseño web de vanguardia y estrategias digitales de alto impacto.",
-    url: "https://keting.media",
-    siteName: "Keting Media",
-    images: [
-      {
-        url: "/keting-logo.png", // Asegúrate de que esta imagen sea óptima para compartir (1200x630 recomendado)
-        width: 1200,
-        height: 630,
-        alt: "Keting Media Logo",
-      },
-    ],
+    title: "Keting Media · Diseño web e ideas que escalan negocios ambiciosos",
+    description: "Estudios, plataformas y experiencias digitales para marcas que cambian su industria. Diseño editorial, ingeniería y IA aplicada.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "es_MX",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keting Media | Marketing Digital de Vanguardia",
-    description: "Diseño web y estrategias SEO que escalan tu negocio.",
-    images: ["/keting-logo.png"],
+    title: "Keting Media · Diseño web editorial · IA · México",
+    description: "Webs editoriales, e-commerce y soluciones con IA para marcas ambiciosas.",
+    creator: "@ketingmedia",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/keting-logo.png",
+  },
+  verification: {
+    // Si tienes Google Search Console, agrega aquí el verification code
+    // google: "tu-codigo-de-verificacion",
+  },
+};
+
+// JSON-LD: Organization + LocalBusiness para señalar a Google
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/keting-logo.png`,
+  description: "Agencia digital en México especializada en diseño web editorial, e-commerce y soluciones con IA.",
+  founder: {
+    "@type": "Person",
+    name: "Carlos Beuvrin",
+  },
+  foundingDate: "2019",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "MX",
+    addressLocality: "Ciudad de México",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+52-55-4383-0150",
+    email: "info@ketingmedia.com",
+    contactType: "Sales",
+    areaServed: "MX",
+    availableLanguage: ["es"],
+  },
+  sameAs: [
+    "https://www.linkedin.com/company/ketingmedia",
+    "https://www.instagram.com/ketingmedia",
+    "https://www.facebook.com/ketingmedia",
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/blog?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
   },
 };
 
@@ -69,7 +134,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es-MX">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </head>
       <body
         className={cn(inter.variable, montserrat.variable, playfair.variable, sulphur.variable, "font-sans antialiased bg-[#FAFAFA] text-[#333333]")}
         suppressHydrationWarning
