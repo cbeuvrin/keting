@@ -46,6 +46,8 @@ export default function SDPage() {
         phone: ""
     });
     const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+    // Honeypot anti-spam: invisible para humanos; los bots tienden a rellenarlo.
+    const [contactCompany, setContactCompany] = useState("");
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const scrollTop = e.currentTarget.scrollTop;
@@ -62,6 +64,7 @@ export default function SDPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...contactFormData,
+                    company: contactCompany, // honeypot
                     source: "Página SD (Hero)"
                 }),
             });
@@ -173,6 +176,17 @@ export default function SDPage() {
                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[320px] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 z-[9999]"
                                                     >
                                                         <form className="space-y-4 text-left" onSubmit={handleContactSubmit}>
+                                                            {/* Honeypot anti-spam: oculto a humanos */}
+                                                            <input
+                                                                type="text"
+                                                                name="company"
+                                                                value={contactCompany}
+                                                                onChange={(e) => setContactCompany(e.target.value)}
+                                                                tabIndex={-1}
+                                                                autoComplete="off"
+                                                                aria-hidden="true"
+                                                                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                                                            />
                                                             <input
                                                                 type="text"
                                                                 required

@@ -22,6 +22,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     });
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
     const [mounted, setMounted] = useState(false);
+    // Honeypot anti-spam: invisible para humanos; los bots tienden a rellenarlo.
+    const [company, setCompany] = useState("");
 
     useEffect(() => {
         setMounted(true);
@@ -59,6 +61,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...formData,
+                    company, // honeypot
                     interests: selectedInterest,
                     source: "Modal Precios"
                 }),
@@ -124,6 +127,17 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                     <div className="border-t border-dashed border-gray-300 my-4 w-full" />
 
                                     <form className="space-y-4" onSubmit={handleSubmit}>
+                                        {/* Honeypot anti-spam: oculto a humanos, los bots lo rellenan */}
+                                        <input
+                                            type="text"
+                                            name="company"
+                                            value={company}
+                                            onChange={(e) => setCompany(e.target.value)}
+                                            tabIndex={-1}
+                                            autoComplete="off"
+                                            aria-hidden="true"
+                                            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                                        />
                                         {/* Interests */}
                                         <div className="space-y-3">
                                             <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">
