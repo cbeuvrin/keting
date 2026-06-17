@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+
+// Envío vía SMTP (Banahost). Requiere SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_TO.
+export const runtime = 'nodejs';
 
 // --- Anti-spam: rate limit en memoria (best-effort) -------------------------
 // Nota: en serverless cada instancia tiene su propio mapa, así que esto frena
@@ -81,15 +84,38 @@ export async function POST(request: Request) {
         const interestsList =
             interests && Array.isArray(interests) ? interests.map(escapeHtml).join(', ') : 'N/A';
 
-        // Inicializar Resend con la API Key (dentro del handler para evitar errores en build)
-        const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
+        // 4. Configurar SMTP (Banahost)
+        const host = process.env.SMTP_HOST;
+        const user = process.env.SMTP_USER;
+        const pass = process.env.SMTP_PASS;
+        const to = process.env.SMTP_TO || user;
+        const port = Number(process.env.SMTP_PORT) || 465;
 
-        // 4. Enviar el correo (todos los campos escapados)
-        const { data, error } = await resend.emails.send({
-            from: process.env.RESEND_FROM || 'onboarding@resend.dev',
-            to: [process.env.SMTP_TO || 'carlos@keting.media'],
-            reply_to: email,
-            subject: `Nuevo contacto desde la web (${escapeHtml(source || 'General')})`,
+        if (!host || !user || !pass) {
+            console.error('Faltan variables SMTP (SMTP_HOST/SMTP_USER/SMTP_PASS).');
+            return NextResponse.json(
+                { success: false, error: 'Servicio de correo no configurado.' },
+                { status: 500 }
+            );
+        }
+
+        const transporter = nodemailer.createTransport({
+            host,
+            port,
+            secure: port === 465, // 465 = SSL; 587/25 = STARTTLS
+            auth: { user, pass },
+            // Fallar rápido si el servidor no responde (no colgar la función).
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000,
+        });
+
+        // 5. Enviar el correo (todos los campos escapados)
+        await transporter.sendMail({
+            from: `"Keting Web" <${user}>`, // debe ser una cuenta del dominio autenticada
+            to,
+            replyTo: email,
+            subject: `Nuevo contacto desde la web (${String(source || 'General').slice(0, 120)})`,
             html: `
                 <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px;">
                     <h2 style="color: #000;">Nuevo mensaje de contacto</h2>
@@ -107,19 +133,7 @@ export async function POST(request: Request) {
             `,
         });
 
-        if (error) {
-            console.error('Error de Resend:', error);
-            return NextResponse.json(
-                { success: false, error: 'Error en el servicio de correo' },
-                { status: 400 }
-            );
-        }
-
-        return NextResponse.json({
-            success: true,
-            message: 'Correo enviado con éxito',
-            id: data?.id,
-        });
+        return NextResponse.json({ success: true, message: 'Correo enviado con éxito' });
     } catch (error: any) {
         console.error('Error enviando email:', error);
         return NextResponse.json(
