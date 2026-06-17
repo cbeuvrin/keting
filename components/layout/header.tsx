@@ -203,24 +203,32 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 </div>
 
                                 <nav className="space-y-1">
-                                    {menuItems.map((item, index) => (
-                                        <motion.div
-                                            key={item.label}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.05 }}
-                                            className="text-right"
-                                        >
-                                            <Link
-                                                href={item.href}
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="group relative inline-block text-3xl md:text-6xl font-heading font-normal uppercase tracking-[1px] py-1 md:py-2 hover:text-gray-600 transition-colors duration-300"
+                                    {menuItems.map((item, index) => {
+                                        // Ritmo editorial del sitio: alterna cursiva Playfair y mayúscula subrayada.
+                                        const isItalic = index % 2 === 0;
+                                        return (
+                                            <motion.div
+                                                key={item.label}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: index * 0.05 }}
+                                                className="text-right"
                                             >
-                                                {item.label}
-                                                <span className="absolute bottom-1 md:bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-black scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left transition-transform duration-300" />
-                                            </Link>
-                                        </motion.div>
-                                    ))}
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={() => setIsMenuOpen(false)}
+                                                    className={cn(
+                                                        "inline-block text-3xl md:text-6xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55",
+                                                        isItalic
+                                                            ? "font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                                            : "font-heading font-normal uppercase tracking-[1px] underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80"
+                                                    )}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
                                 </nav>
 
                                 {/* Toggle de idioma */}
