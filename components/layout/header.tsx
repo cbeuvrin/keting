@@ -153,7 +153,29 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             transition={{ type: "spring", damping: 30, stiffness: 300 }}
                             className="fixed left-0 top-0 bottom-0 w-full bg-[#F5F5F0] z-[70] overflow-y-auto"
                         >
-                            <div className="absolute left-8 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-6">
+                            {/* Capa decorativa: cuadrícula + asteriscos en movimiento (estilo editorial del sitio) */}
+                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                <div
+                                    className="absolute inset-0 opacity-[0.05]"
+                                    style={{
+                                        backgroundImage:
+                                            "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
+                                        backgroundSize: "60px 60px",
+                                    }}
+                                />
+                                <motion.span
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -top-12 -right-20 text-[18rem] md:text-[28rem] text-black/[0.04] select-none font-light leading-none inline-block origin-center"
+                                >*</motion.span>
+                                <motion.span
+                                    animate={{ rotate: -360 }}
+                                    transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -bottom-16 -left-12 text-[12rem] md:text-[20rem] text-black/[0.04] select-none font-light leading-none inline-block origin-center"
+                                >*</motion.span>
+                            </div>
+
+                            <div className="absolute left-8 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-10">
                                 <a href="#" className="hover:scale-110 transition-transform">
                                     <Facebook className="w-6 h-6" />
                                 </a>
@@ -165,14 +187,20 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 </a>
                             </div>
 
-                            <div className="p-8 md:p-12">
+                            <div className="relative z-10 p-8 md:p-12">
                                 <button
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center gap-3 mb-8 md:mb-16 group"
+                                    className="flex items-center gap-3 mb-6 md:mb-10 group"
                                 >
                                     <X className="w-8 h-8 stroke-[1.5] group-hover:rotate-90 transition-transform" />
                                     <span className="text-sm font-bold tracking-widest uppercase">{t.nav.menu}</span>
                                 </button>
+
+                                {/* Eyebrow editorial en Playfair italic */}
+                                <div className="flex items-center justify-end gap-3 mb-5 md:mb-8">
+                                    <span className="font-[family-name:var(--font-playfair)] italic text-black/40 text-base md:text-xl">explora</span>
+                                    <span className="block w-10 h-px bg-black/30" />
+                                </div>
 
                                 <nav className="space-y-1">
                                     {menuItems.map((item, index) => (
@@ -181,13 +209,15 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: index * 0.05 }}
+                                            className="text-right"
                                         >
                                             <Link
                                                 href={item.href}
                                                 onClick={() => setIsMenuOpen(false)}
-                                                className="block text-3xl md:text-6xl font-heading font-normal uppercase tracking-[1px] py-1 md:py-2 hover:tracking-wider hover:text-gray-500 transition-all duration-300 text-right"
+                                                className="group relative inline-block text-3xl md:text-6xl font-heading font-normal uppercase tracking-[1px] py-1 md:py-2 hover:text-gray-600 transition-colors duration-300"
                                             >
                                                 {item.label}
+                                                <span className="absolute bottom-1 md:bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-black scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left transition-transform duration-300" />
                                             </Link>
                                         </motion.div>
                                     ))}
