@@ -20,14 +20,23 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [lastY, setLastY] = useState(0);
     const { lang, setLang, t } = useLang();
 
+    // styles: estilo editorial por palabra → "italic" (cursiva Playfair),
+    // "bold" (mayúscula + subrayado), "italicUnderline" (cursiva + subrayado).
     const menuItems = [
-        { label: t.nav.home, href: "/#home" },
-        { label: t.nav.webdesign, href: "/webdesing" },
-        { label: t.nav.digital, href: "/soluciones-digitales" },
-        { label: t.nav.price, href: "/precioweb" },
-        { label: t.nav.portfolio, href: "/portafolio" },
-        { label: t.nav.blog, href: "/blog" },
+        { label: t.nav.home, href: "/#home", styles: ["italic"] },
+        { label: t.nav.webdesign, href: "/webdesing", styles: ["bold", "italic"] },
+        { label: t.nav.digital, href: "/soluciones-digitales", styles: ["italic", "bold"] },
+        { label: t.nav.price, href: "/precioweb", styles: ["italic"] },
+        { label: t.nav.portfolio, href: "/portafolio", styles: ["italic"] },
+        { label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] },
     ];
+
+    const underline = "underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80";
+    const wordStyle = (token: string) => {
+        if (token === "bold") return cn("font-heading font-normal uppercase tracking-[1px]", underline);
+        if (token === "italicUnderline") return cn("font-[family-name:var(--font-playfair)] italic font-normal tracking-tight", underline);
+        return "font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"; // italic
+    };
 
     const { scrollY } = useScroll();
 
@@ -204,8 +213,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
 
                                 <nav className="space-y-1">
                                     {menuItems.map((item, index) => {
-                                        // Ritmo editorial del sitio: alterna cursiva Playfair y mayúscula subrayada.
-                                        const isItalic = index % 2 === 0;
+                                        const words = item.label.split(" ");
                                         return (
                                             <motion.div
                                                 key={item.label}
@@ -217,14 +225,17 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 <Link
                                                     href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
-                                                    className={cn(
-                                                        "inline-block text-3xl md:text-6xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55",
-                                                        isItalic
-                                                            ? "font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
-                                                            : "font-heading font-normal uppercase tracking-[1px] underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80"
-                                                    )}
+                                                    className="inline-block text-3xl md:text-6xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
                                                 >
-                                                    {item.label}
+                                                    {words.map((word, wi) => (
+                                                        <span
+                                                            key={wi}
+                                                            className={wordStyle(item.styles[wi] ?? item.styles[item.styles.length - 1])}
+                                                        >
+                                                            {word}
+                                                            {wi < words.length - 1 ? " " : ""}
+                                                        </span>
+                                                    ))}
                                                 </Link>
                                             </motion.div>
                                         );
