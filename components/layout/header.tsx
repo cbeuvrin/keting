@@ -168,7 +168,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             <div className="p-8 md:p-12">
                                 <button
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center gap-3 mb-16 group"
+                                    className="flex items-center gap-3 mb-8 md:mb-16 group"
                                 >
                                     <X className="w-8 h-8 stroke-[1.5] group-hover:rotate-90 transition-transform" />
                                     <span className="text-sm font-bold tracking-widest uppercase">{t.nav.menu}</span>
@@ -185,7 +185,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                             <Link
                                                 href={item.href}
                                                 onClick={() => setIsMenuOpen(false)}
-                                                className="block text-4xl md:text-6xl font-heading font-normal uppercase tracking-[1px] py-2 hover:tracking-wider hover:text-gray-500 transition-all duration-300 text-right"
+                                                className="block text-3xl md:text-6xl font-heading font-normal uppercase tracking-[1px] py-1 md:py-2 hover:tracking-wider hover:text-gray-500 transition-all duration-300 text-right"
                                             >
                                                 {item.label}
                                             </Link>
@@ -198,7 +198,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 }}
-                                    className="mt-12 md:mt-16 flex items-center justify-end gap-4"
+                                    className="mt-8 md:mt-16 flex items-center justify-end gap-4"
                                 >
                                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
                                         {t.nav.idiom}
@@ -234,14 +234,14 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.45 }}
-                                    className="mt-10"
+                                    className="mt-6 md:mt-10"
                                 >
                                     <button
                                         onClick={() => {
                                             setIsMenuOpen(false);
                                             setIsContactOpen(true);
                                         }}
-                                        className="w-full bg-black text-white py-4 rounded-2xl text-base font-bold tracking-[1px] uppercase hover:bg-zinc-800 transition-colors shadow-lg"
+                                        className="w-full bg-black text-white py-3.5 md:py-4 rounded-2xl text-base font-bold tracking-[1px] uppercase hover:bg-zinc-800 transition-colors shadow-lg"
                                     >
                                         {t.nav.letsTalk}
                                     </button>
