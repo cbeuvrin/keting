@@ -182,6 +182,13 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
                                     className="absolute -bottom-16 -left-12 text-[12rem] md:text-[20rem] text-black/[0.04] select-none font-light leading-none inline-block origin-center"
                                 >*</motion.span>
+                                {/* Asterisco grande centrado — móvil y desktop, estilo soluciones-digitales */}
+                                <motion.span
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+                                    style={{ x: "-50%", y: "-50%" }}
+                                    className="block absolute top-1/2 left-1/2 text-[22rem] md:text-[40rem] text-[#1d1d1f]/[0.06] select-none font-light leading-none origin-center"
+                                >*</motion.span>
                             </div>
 
                             <div className="absolute left-8 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-10">
@@ -225,7 +232,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 <Link
                                                     href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
-                                                    className="inline-block text-2xl md:text-5xl py-0.5 md:py-1.5 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
+                                                    className="inline-block text-4xl md:text-7xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
                                                 >
                                                     {words.map((word, wi) => (
                                                         <span
@@ -253,7 +260,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 setIsMenuOpen(false);
                                                 setIsContactOpen(true);
                                             }}
-                                            className="inline-block text-2xl md:text-5xl py-0.5 md:py-1.5 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                            className="inline-block text-4xl md:text-7xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
                                         >
                                             {t.nav.contact}
                                         </button>
@@ -301,7 +308,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.45 }}
-                                    className="md:hidden mt-5"
+                                    className="md:hidden mt-12"
                                 >
                                     <button
                                         onClick={() => {
