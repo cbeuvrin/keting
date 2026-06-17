@@ -24,8 +24,8 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     // "bold" (mayúscula + subrayado), "italicUnderline" (cursiva + subrayado).
     const menuItems = [
         { label: t.nav.home, href: "/#home", styles: ["italic"] },
-        { label: t.nav.webdesign, href: "/webdesing", styles: ["bold", "italic"] },
-        { label: t.nav.digital, href: "/soluciones-digitales", styles: ["italic", "bold"] },
+        { label: t.nav.webdesign, href: "/webdesing", styles: ["italic"] },
+        { label: t.nav.digital, href: "/soluciones-digitales", styles: ["italic"] },
         { label: t.nav.price, href: "/precioweb", styles: ["italic"] },
         { label: t.nav.portfolio, href: "/portafolio", styles: ["italic"] },
         { label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] },
@@ -199,15 +199,15 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             <div className="relative z-10 p-8 md:p-12">
                                 <button
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center gap-3 mb-6 md:mb-10 group"
+                                    className="flex items-center gap-3 mb-5 md:mb-8 group"
                                 >
                                     <X className="w-8 h-8 stroke-[1.5] group-hover:rotate-90 transition-transform" />
                                     <span className="text-sm font-bold tracking-widest uppercase">{t.nav.menu}</span>
                                 </button>
 
                                 {/* Eyebrow editorial en Playfair italic */}
-                                <div className="flex items-center justify-end gap-3 mb-5 md:mb-8">
-                                    <span className="font-[family-name:var(--font-playfair)] italic text-black/40 text-base md:text-xl">explora</span>
+                                <div className="flex items-center justify-end gap-3 mb-4 md:mb-6">
+                                    <span className="font-[family-name:var(--font-playfair)] italic text-black/40 text-sm md:text-lg">explora</span>
                                     <span className="block w-10 h-px bg-black/30" />
                                 </div>
 
@@ -225,7 +225,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 <Link
                                                     href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
-                                                    className="inline-block text-3xl md:text-6xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
+                                                    className="inline-block text-2xl md:text-5xl py-0.5 md:py-1.5 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
                                                 >
                                                     {words.map((word, wi) => (
                                                         <span
@@ -247,7 +247,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 }}
-                                    className="mt-8 md:mt-16 flex items-center justify-end gap-4"
+                                    className="mt-6 md:mt-10 flex items-center justify-end gap-4"
                                 >
                                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
                                         {t.nav.idiom}
@@ -283,14 +283,14 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.45 }}
-                                    className="mt-6 md:mt-10"
+                                    className="mt-5 md:mt-8"
                                 >
                                     <button
                                         onClick={() => {
                                             setIsMenuOpen(false);
                                             setIsContactOpen(true);
                                         }}
-                                        className="w-full bg-black text-white py-3.5 md:py-4 rounded-2xl text-base font-bold tracking-[1px] uppercase hover:bg-zinc-800 transition-colors shadow-lg"
+                                        className="w-full bg-black text-white py-3 md:py-3.5 rounded-2xl text-sm md:text-base font-bold tracking-[1px] uppercase hover:bg-zinc-800 transition-colors shadow-lg"
                                     >
                                         {t.nav.letsTalk}
                                     </button>
