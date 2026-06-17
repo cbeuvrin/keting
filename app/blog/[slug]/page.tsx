@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
 import { NewsletterForm } from "@/components/blog/newsletter-form";
 import { createClient } from '@supabase/supabase-js';
 import { getCategoryImage } from "@/lib/blog-utils";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -92,6 +93,14 @@ export default async function ArticlePage({ params }: { params: any }) {
     if (!article) {
         notFound();
     }
+
+    // "Siguiente lectura": el artículo puede venir solo de la DB (no está en la
+    // lista estática), así que buscamos por slug y caemos al primero distinto.
+    const idx = articles.findIndex(a => a.slug.trim() === article!.slug.trim());
+    const nextArticle =
+        idx === -1
+            ? (articles.find(a => a.slug.trim() !== article!.slug.trim()) ?? articles[0])
+            : articles[(idx + 1) % articles.length];
 
     return (
         <main className="min-h-screen bg-[#FAFAFA] text-black font-heading overflow-hidden">
@@ -200,7 +209,7 @@ export default async function ArticlePage({ params }: { params: any }) {
 
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-20">
                         <div className="blog-content max-w-none">
-                            <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
                         </div>
 
                         <aside className="space-y-12">
@@ -234,12 +243,12 @@ export default async function ArticlePage({ params }: { params: any }) {
                 <div className="container mx-auto px-6 md:px-12">
                     <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[4px] mb-8">Siguiente lectura</p>
-                        <Link 
-                            href={`/blog/${articles[(articles.indexOf(article) + 1) % articles.length].slug}`}
+                        <Link
+                            href={`/blog/${nextArticle.slug}`}
                             className="group"
                         >
                             <h2 className="text-2xl md:text-4xl font-bold tracking-tight leading-tight group-hover:text-gray-500 transition-colors">
-                                {articles[(articles.indexOf(article) + 1) % articles.length].title}
+                                {nextArticle.title}
                             </h2>
                             <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest group-hover:gap-4 transition-all">
                                 Leer ahora <ArrowRight size={14} />

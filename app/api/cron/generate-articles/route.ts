@@ -3,6 +3,7 @@ import { ArticleGenerator } from '@/lib/ai/article-generator';
 import { MultimediaSearch } from '@/lib/ai/multimedia-search';
 import { seedTopics } from '@/lib/ai/topics';
 import { createClient } from '@supabase/supabase-js';
+import { sanitizeHtml } from '@/lib/sanitize-html';
 
 // Vercel Pro: permitir hasta 120s para la generación IA + imagen
 export const maxDuration = 120;
@@ -14,9 +15,11 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 const CRON_SECRET = process.env.CRON_SECRET;
 
 export async function GET(request: Request) {
-    // 1. Verificación de seguridad
-    const { searchParams } = new URL(request.url);
-    if (searchParams.get('key') !== CRON_SECRET) {
+    // 1. Verificación de seguridad mediante header (Vercel inyecta
+    //    `Authorization: Bearer ${CRON_SECRET}` automáticamente en los crons).
+    //    El secreto ya no viaja en la URL, así no se filtra en logs.
+    const authHeader = request.headers.get('authorization');
+    if (!CRON_SECRET || authHeader !== `Bearer ${CRON_SECRET}`) {
         return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
@@ -74,7 +77,7 @@ export async function GET(request: Request) {
             date: article.date,
             image: imageUrl,
             youtube_id: youtubeId,
-            content: article.content,
+            content: sanitizeHtml(article.content),
             word_count: article.wordCount,
             color: "#F9F9F9",
             accent: "#000000"

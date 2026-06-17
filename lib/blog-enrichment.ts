@@ -54,7 +54,7 @@ export async function fetchYoutubeVideoId(query: string): Promise<string | null>
         if (!response.ok) throw new Error(`YouTube API error: ${response.statusText}`);
         
         const data = await response.json();
-        return data.items[0]?.id?.videoId || null;
+        return data.items?.[0]?.id?.videoId || null;
     } catch (error) {
         console.error("Error fetching YouTube video:", error);
         return null;

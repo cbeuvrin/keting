@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Image as ImageIcon, Youtube, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Sparkles, Image as ImageIcon, Youtube, Send, Loader2, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
 import { Header } from "@/components/layout/header";
 
 export default function AdminBlogPage() {
@@ -10,6 +10,9 @@ export default function AdminBlogPage() {
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<null | 'success' | 'error'>(null);
     const [message, setMessage] = useState("");
+    // Secreto de admin: se ingresa una vez y se envía en cada request a los endpoints.
+    const [secret, setSecret] = useState("");
+    const [unlocked, setUnlocked] = useState(false);
 
     const handleGenerate = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +27,10 @@ export default function AdminBlogPage() {
             // Para propósitos de este dashboard, vamos a llamar a un endpoint manual que pasaremos el topic
             const res = await fetch("/api/blog/manual-generate", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-admin-secret": secret,
+                },
                 body: JSON.stringify({ topic }),
             });
 
@@ -45,6 +51,44 @@ export default function AdminBlogPage() {
             setLoading(false);
         }
     };
+
+    // Gate de acceso: sin secreto no se muestra el panel.
+    if (!unlocked) {
+        return (
+            <main className="min-h-screen bg-black text-white font-heading flex items-center justify-center px-6">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        if (secret.trim()) setUnlocked(true);
+                    }}
+                    className="w-full max-w-sm space-y-6 text-center"
+                >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs font-bold tracking-[2px] uppercase text-zinc-400">
+                        <Sparkles size={14} className="text-blue-400" />
+                        Área restringida
+                    </div>
+                    <h1 className="text-3xl font-bold">Panel de administración</h1>
+                    <input
+                        type="password"
+                        value={secret}
+                        onChange={(e) => setSecret(e.target.value)}
+                        placeholder="Secreto de administrador"
+                        autoFocus
+                        className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                    />
+                    <button
+                        type="submit"
+                        className="w-full py-4 rounded-2xl bg-white text-black font-bold hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                    >
+                        Entrar
+                    </button>
+                    <p className="text-[11px] text-zinc-600">
+                        El secreto se valida en el servidor al generar contenido.
+                    </p>
+                </form>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-black text-white font-heading overflow-hidden relative">
@@ -199,7 +243,10 @@ export default function AdminBlogPage() {
                                 setStatus(null);
                                 setMessage("Buscando assets reales en Unsplash y YouTube...");
                                 try {
-                                    const res = await fetch("/api/blog/enrich", { method: "POST" });
+                                    const res = await fetch("/api/blog/enrich", {
+                                        method: "POST",
+                                        headers: { "x-admin-secret": secret },
+                                    });
                                     const data = await res.json();
                                     if (res.ok) {
                                         setStatus('success');
@@ -247,5 +294,3 @@ export default function AdminBlogPage() {
         </main>
     );
 }
-
-import { ArrowRight } from "lucide-react";

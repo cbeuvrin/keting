@@ -14,6 +14,28 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  // Cabeceras de seguridad aplicadas a todas las rutas. (No se incluye una CSP
+  // estricta aquí para no romper estilos inline / fuentes / embeds; se puede
+  // añadir por separado y probar con calma.)
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          // Evita que el sitio sea embebido en un <iframe> (clickjacking).
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          // Evita MIME-sniffing.
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // Limita la información de Referer enviada a terceros.
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // Restringe APIs sensibles del navegador.
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          // Fuerza HTTPS durante 2 años (incluye subdominios).
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+        ],
+      },
+    ];
+  },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).
   outputFileTracingRoot: path.join(__dirname),
   // Excluye del bundle de cada función serverless paquetes que no se usan en

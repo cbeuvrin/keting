@@ -2,12 +2,18 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { enrichArticle } from '@/lib/blog-enrichment';
+import { isAuthorizedAdmin } from '@/lib/admin-auth';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-export async function POST() {
+export async function POST(request: Request) {
+    // Auth: solo admin (evita abuso de IA y escrituras no autorizadas).
+    if (!isAuthorizedAdmin(request)) {
+        return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     try {
         // 1. Fetch articles that need enrichment (those with default images or missing YouTube IDs)
         const { data: articles, error } = await supabase

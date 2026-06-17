@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { ArticleGenerator } from '@/lib/ai/article-generator';
 import { MultimediaSearch } from '@/lib/ai/multimedia-search';
 import { createClient } from '@supabase/supabase-js';
+import { isAuthorizedAdmin } from '@/lib/admin-auth';
+import { sanitizeHtml } from '@/lib/sanitize-html';
 
 // Permitir hasta 120 segundos (Vercel Pro / local dev)
 export const maxDuration = 120;
@@ -12,6 +14,11 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 
 export async function POST(request: Request) {
+    // Auth: solo admin puede disparar generación de IA (evita abuso de costos).
+    if (!isAuthorizedAdmin(request)) {
+        return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     if (!GEMINI_API_KEY) {
         return NextResponse.json({ error: "Falta la variable GEMINI_API_KEY en el servidor." }, { status: 500 });
     }
@@ -56,7 +63,7 @@ export async function POST(request: Request) {
                 date: article.date,
                 image: imageUrl,
                 youtube_id: youtubeId,
-                content: article.content,
+                content: sanitizeHtml(article.content),
                 word_count: article.wordCount,
                 color: "#F5F5F5",
                 accent: "#000000"
