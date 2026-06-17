@@ -80,6 +80,13 @@ export async function POST(request: Request) {
                 { status: 400 }
             );
         }
+        // El formulario del modal exige elegir al menos un servicio (calidad de lead + anti-bot).
+        if (source === 'Modal Precios' && (!Array.isArray(interests) || interests.length === 0)) {
+            return NextResponse.json(
+                { success: false, error: 'Selecciona al menos un servicio.' },
+                { status: 400 }
+            );
+        }
 
         const interestsList =
             interests && Array.isArray(interests) ? interests.map(escapeHtml).join(', ') : 'N/A';

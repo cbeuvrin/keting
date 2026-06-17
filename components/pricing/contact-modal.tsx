@@ -24,6 +24,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [mounted, setMounted] = useState(false);
     // Honeypot anti-spam: invisible para humanos; los bots tienden a rellenarlo.
     const [company, setCompany] = useState("");
+    // Validación: obligar a elegir al menos un servicio.
+    const [interestError, setInterestError] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -44,6 +46,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const interests = ["Diseño Web", "Precio", "Solución digital"];
 
     const toggleInterest = (interest: string) => {
+        setInterestError(false);
         if (selectedInterest.includes(interest)) {
             setSelectedInterest(selectedInterest.filter(i => i !== interest));
         } else {
@@ -53,6 +56,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Obligatorio: al menos un servicio seleccionado.
+        if (selectedInterest.length === 0) {
+            setInterestError(true);
+            return;
+        }
         setStatus("sending");
 
         try {
@@ -141,7 +149,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         {/* Interests */}
                                         <div className="space-y-3">
                                             <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">
-                                                ¿En qué podemos ayudarte?
+                                                ¿En qué podemos ayudarte?*
                                             </label>
                                             <div className="flex flex-wrap gap-2">
                                                 {interests.map((interest) => (
@@ -153,13 +161,19 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                             "px-4 py-1.5 rounded-full border text-xs transition-all duration-200",
                                                             selectedInterest.includes(interest)
                                                                 ? "bg-transparent text-black border-black border-2 font-bold"
-                                                                : "bg-white text-gray-500 border-gray-300 hover:border-black hover:text-black"
+                                                                : "bg-white text-gray-500 border-gray-300 hover:border-black hover:text-black",
+                                                            interestError && "border-red-400"
                                                         )}
                                                     >
                                                         {interest}
                                                     </button>
                                                 ))}
                                             </div>
+                                            {interestError && (
+                                                <p className="text-xs text-red-600 font-medium">
+                                                    Selecciona al menos un servicio para continuar.
+                                                </p>
+                                            )}
                                         </div>
 
                                         {/* Inputs Grid */}
