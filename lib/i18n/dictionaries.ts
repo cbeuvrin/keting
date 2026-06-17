@@ -136,7 +136,7 @@ const es = {
     webdesign: {
         manifestoEyebrow: "Manifiesto",
         manifestoIntro: "Como",
-        vibeCoder: "Vibe Coder",
+        aiEngineer: "AI Engineer",
         manifesto1:
             ", diseñamos y estructuramos soluciones digitales precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en",
         webDev: "desarrollo web",
@@ -331,7 +331,7 @@ const en: typeof es = {
     webdesign: {
         manifestoEyebrow: "Manifesto",
         manifestoIntro: "As",
-        vibeCoder: "Vibe Coders",
+        aiEngineer: "AI Engineers",
         manifesto1:
             ", we design and engineer precise digital solutions — from online stores to course platforms. We specialize in",
         webDev: "web development",

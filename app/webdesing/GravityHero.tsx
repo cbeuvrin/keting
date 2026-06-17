@@ -236,7 +236,7 @@ export default function GravityHero() {
                             <span className="block w-10 h-px bg-white/40" />
                         </div>
                         <p className="text-sm md:text-base text-white/80 text-justify md:text-right leading-relaxed font-light">
-                            Como <ScrambleText text="Vibe Coder" className="font-bold text-white" />, diseñamos y estructuramos{" "}
+                            Como <ScrambleText text="AI Engineer" className="font-bold text-white" />, diseñamos y estructuramos{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">soluciones digitales</span>{" "}
                             precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en{" "}
                             <span className="relative inline-block text-white font-medium">

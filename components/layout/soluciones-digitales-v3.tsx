@@ -14,10 +14,10 @@ function Typography3D() {
     // Estructura EXACTA como la referencia
     const words = [
         "NOW IT'S",    // Horizontal (piso)
-        "TIME",        // VERTICAL (pared)  
+        "TIME",        // VERTICAL (pared)
         "TO USE",      // Horizontal
-        "A VIBE",      // Horizontal
-        "CODER"        // Horizontal
+        "AN AI",       // Horizontal
+        "ENGINEER"     // Horizontal
     ];
 
     return (

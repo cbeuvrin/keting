@@ -862,7 +862,7 @@ export function PortafolioHeroV2() {
                     className="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-6 md:px-12 lg:px-24 flex items-end justify-between text-white/40 text-[10px] uppercase tracking-[0.3em] font-mono"
                 >
                     <span>↓ Scroll</span>
-                    <span>Keting Media · Vibe Coders</span>
+                    <span>Keting Media · AI Engineers</span>
                 </motion.div>
             </div>
         </section>

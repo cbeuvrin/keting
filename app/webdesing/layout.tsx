@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Diseño Web · Sitios editoriales y e-commerce que escalan",
     description:
-        "Diseño web editorial, e-commerce y landing pages de alto impacto en México. Estrategia, UX/UI, desarrollo a medida y SEO técnico. Vibe coding · Producción 2026.",
+        "Diseño web editorial, e-commerce y landing pages de alto impacto en México. Estrategia, UX/UI, desarrollo a medida y SEO técnico. AI Engineering · Producción 2026.",
     keywords: [
         "diseño web méxico",
         "agencia diseño web cdmx",

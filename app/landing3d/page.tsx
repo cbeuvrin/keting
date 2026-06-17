@@ -257,7 +257,7 @@ export default function ScrollyTellingLanding() {
                                             </div>
 
                                             <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-3 font-mono">
-                                                Studio · Vibe Coder
+                                                Studio · AI Engineer
                                             </span>
                                             <h2 className="font-[family-name:var(--font-playfair)] italic text-white text-7xl leading-none">
                                                 KETING
@@ -311,7 +311,7 @@ export default function ScrollyTellingLanding() {
                     <motion.div className="flex whitespace-nowrap" style={{ x: marqueeX }}>
                         {Array.from({ length: 12 }).map((_, i) => (
                             <span key={i} className="text-black text-5xl md:text-7xl font-heading font-black uppercase tracking-wider mx-8">
-                                vibe coder <span className="text-black/30 mx-4">✦</span>
+                                AI Engineer <span className="text-black/30 mx-4">✦</span>
                             </span>
                         ))}
                     </motion.div>
@@ -329,7 +329,7 @@ export default function ScrollyTellingLanding() {
                         className="text-2xl md:text-4xl lg:text-5xl font-medium leading-snug md:leading-tight tracking-tight"
                     >
                         <span className="text-zinc-900">Soy un </span>
-                        <span className="italic text-zinc-600">vibe coder</span>
+                        <span className="italic text-zinc-600">AI Engineer</span>
                         <span className="text-zinc-900">, diseñador & desarrollador web </span>
                         <span className="text-zinc-500">que trabaja en la intersección del diseño visual, la experiencia de usuario y el movimiento. </span>
                         <span className="text-zinc-400">Ayudo a marcas y equipos creativos a construir sitios web expresivos que se sienten audaces, intuitivos y diseñados para destacar.</span>
