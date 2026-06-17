@@ -228,6 +228,24 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         </button>
                                     </div>
                                 </motion.div>
+
+                                {/* CTA principal "Hablemos" — visible en el menú (incluye móvil) */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.45 }}
+                                    className="mt-10"
+                                >
+                                    <button
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setIsContactOpen(true);
+                                        }}
+                                        className="w-full bg-black text-white py-4 rounded-2xl text-base font-bold tracking-[1px] uppercase hover:bg-zinc-800 transition-colors shadow-lg"
+                                    >
+                                        {t.nav.letsTalk}
+                                    </button>
+                                </motion.div>
                             </div>
                         </motion.div>
                     </>
