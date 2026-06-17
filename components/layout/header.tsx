@@ -240,6 +240,24 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                             </motion.div>
                                         );
                                     })}
+
+                                    {/* Contacto: ítem del menú en tablet/desktop (en móvil se usa el botón "Hablemos") */}
+                                    <motion.div
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: menuItems.length * 0.05 }}
+                                        className="hidden md:block text-right"
+                                    >
+                                        <button
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                setIsContactOpen(true);
+                                            }}
+                                            className="inline-block text-2xl md:text-5xl py-0.5 md:py-1.5 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                        >
+                                            {t.nav.contact}
+                                        </button>
+                                    </motion.div>
                                 </nav>
 
                                 {/* Toggle de idioma */}
@@ -278,12 +296,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     </div>
                                 </motion.div>
 
-                                {/* CTA principal "Hablemos" — visible en el menú (incluye móvil) */}
+                                {/* CTA "Hablemos" — botón negro SOLO en móvil (en tablet/desktop va el ítem "Contacto") */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.45 }}
-                                    className="mt-5 md:mt-8"
+                                    className="md:hidden mt-5"
                                 >
                                     <button
                                         onClick={() => {
