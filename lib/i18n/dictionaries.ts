@@ -63,7 +63,7 @@ const es = {
         close: "Cerrar",
     },
     hero: {
-        eyebrow: "Estrategia & Diseño Digital",
+        eyebrow: "Diseño y desarrollo digital",
         title: "Soluciones digitales que escalan negocios ambiciosos.",
         titleStyles: {
             playfair: ["digitales", "escalan"],
@@ -89,7 +89,7 @@ const es = {
         descIntro: "Desarrollamos",
         descTags: ["e-commerce", "plataformas", "landing pages"],
         descTail:
-            ". Fusionamos diseño estético con estrategias SEO para escalar tu negocio.",
+            ". Fusionamos diseño editorial con SEO técnico y rendimiento para escalar tu negocio.",
     },
     digital: {
         eyebrow: "02 · Servicio",
@@ -115,7 +115,7 @@ const es = {
         subline4: "para proyectos que rompen el molde.",
         quoteEyebrow: "Manifiesto",
         quote:
-            "Me enfoco en trabajar con marcas que buscan escalar su presencia digital mediante soluciones innovadoras y un diseño que realmente conecta con sus clientes.",
+            "Me enfoco en trabajar con marcas que buscan escalar su negocio mediante soluciones innovadoras y un diseño que realmente conecta con sus clientes.",
         quoteAuthor: "— Carlos Beuvrin",
     },
     blog: {
@@ -148,9 +148,9 @@ const es = {
         carlos: "Carlos Beuvrin",
         carlosRole: "Programador",
         textSection1: "Como",
-        agencyDigital: "agencia digital",
+        agencyDigital: "expertos",
         textSection2:
-            "experta en creación de sitios web, Keting le ofrece servicios a medida para potenciar su presencia online. Combinamos",
+            "en creación de sitios web, Keting le ofrece servicios a medida para potenciar su presencia online. Combinamos",
         creativity: "creatividad",
         textSection3: ", pensamiento estratégico y",
         technology: "tecnología",
@@ -259,7 +259,7 @@ const en: typeof es = {
         close: "Close",
     },
     hero: {
-        eyebrow: "Strategy & Digital Design",
+        eyebrow: "Digital design & development",
         title: "Digital solutions that scale ambitious businesses.",
         titleStyles: {
             playfair: ["Digital", "scale"],
@@ -285,7 +285,7 @@ const en: typeof es = {
         descIntro: "We build",
         descTags: ["e-commerce", "platforms", "landing pages"],
         descTail:
-            ". We blend editorial design with SEO strategy to scale your business.",
+            ". We blend editorial design with technical SEO and performance to scale your business.",
     },
     digital: {
         eyebrow: "02 · Service",
@@ -311,7 +311,7 @@ const en: typeof es = {
         subline4: "for projects that break the mold.",
         quoteEyebrow: "Manifesto",
         quote:
-            "I focus on working with brands that want to scale their digital presence through innovative solutions and design that truly connects with their customers.",
+            "I focus on working with brands that want to scale their business through innovative solutions and design that truly connects with their customers.",
         quoteAuthor: "— Carlos Beuvrin",
     },
     blog: {

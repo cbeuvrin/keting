@@ -109,7 +109,7 @@ export function AboutUs() {
                                 Me enfoco en trabajar con{" "}
                                 <span className="not-italic font-sans font-medium text-black">marcas</span>{" "}
                                 que buscan escalar su{" "}
-                                <span className="not-italic font-sans font-medium text-black underline decoration-2 underline-offset-4 decoration-black/40">presencia digital</span>{" "}
+                                <span className="not-italic font-sans font-medium text-black underline decoration-2 underline-offset-4 decoration-black/40">negocio</span>{" "}
                                 mediante soluciones innovadoras y un{" "}
                                 <span className="not-italic font-sans font-medium text-black">diseño</span>{" "}
                                 que realmente conecta con sus clientes.
@@ -139,7 +139,7 @@ export function AboutUs() {
                         >
                             <img
                                 src="/carlos-beuvrin.png"
-                                alt="Carlos Beuvrin - Director de Keting Media, especializado en Marketing Digital y Diseño Web en México"
+                                alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
                                 className="w-full h-full object-cover"
                                 style={{ objectPosition: "center 5%" }}
                                 loading="lazy"

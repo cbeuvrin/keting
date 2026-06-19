@@ -16,19 +16,20 @@ const SITE_NAME = "Keting Media";
 
 export const metadata: Metadata = {
   title: {
-    default: "Keting Media · Agencia de diseño web y soluciones digitales con IA en México",
+    default: "Keting Media · Diseño y desarrollo de software, web y apps",
     template: "%s · Keting Media"
   },
-  description: "Agencia digital en México que diseña webs editoriales, e-commerce y soluciones impulsadas por IA para marcas que cambian su industria. +80% de proyectos referidos.",
+  description: "Diseño y desarrollo de software, web y apps a medida en México. Del sitio web al sistema interno que te opera. Diseño, ingeniería e IA. +80% de proyectos referidos.",
   keywords: [
-    "agencia diseño web méxico",
-    "diseño web editorial",
+    "diseño y desarrollo de software",
+    "desarrollo web méxico",
+    "diseño web a medida",
+    "apps a medida méxico",
     "e-commerce a medida",
-    "soluciones digitales con IA",
-    "desarrollo web mexico",
-    "agencia digital cdmx",
-    "landing pages alto impacto",
-    "estrategia digital",
+    "plataformas saas",
+    "desarrollo web next.js",
+    "software a medida",
+    "soluciones digitales con ia",
     "keting media",
     "carlos beuvrin",
   ],
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   applicationName: SITE_NAME,
-  category: "Agencia Digital",
+  category: "Diseño y desarrollo de software, web y apps",
   formatDetection: {
     email: false,
     address: false,
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Keting Media · Diseño web e ideas que escalan negocios ambiciosos",
-    description: "Estudios, plataformas y experiencias digitales para marcas que cambian su industria. Diseño editorial, ingeniería y IA aplicada.",
+    description: "Diseño y desarrollo de software, web y apps a medida. Diseño, ingeniería e IA aplicada.",
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: "es_MX",

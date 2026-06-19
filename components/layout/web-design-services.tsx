@@ -60,10 +60,6 @@ const ServiceItem = ({ title, description, delay }: ServiceItemProps) => {
 export function WebDesignServices() {
   const designServices = [
     {
-      title: "Dirección de arte",
-      description: "Definimos la voz visual de su marca con composiciones que comunican intención en cada detalle.",
-    },
-    {
       title: "Diseño UX/UI",
       description: "Interfaces claras y funcionales, optimizadas para convertir y deleitar al usuario en cada interacción.",
     },
@@ -89,10 +85,6 @@ export function WebDesignServices() {
     {
       title: "Desarrollo Front-end/back-end",
       description: "Stack moderno y arquitectura sólida para productos rápidos, estables y escalables.",
-    },
-    {
-      title: "Sitios web WordPress a medida",
-      description: "WordPress optimizado al milímetro, sin plantillas, con la flexibilidad de un desarrollo a medida.",
     },
     {
       title: "E-Commerce personalizado",

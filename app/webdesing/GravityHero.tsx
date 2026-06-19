@@ -267,7 +267,7 @@ export default function GravityHero() {
                             <div className="w-full h-full rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-xl flex items-center justify-center cursor-pointer">
                                 <img
                                     src="/carlos-beuvrin.png"
-                                    alt="Carlos Beuvrin"
+                                    alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
                                     className="w-full h-full object-cover grayscale brightness-110 scale-125"
                                 />
                             </div>
@@ -283,7 +283,7 @@ export default function GravityHero() {
                                     >
                                         <img
                                             src="/carlos-beuvrin.png"
-                                            alt="Carlos Beuvrin"
+                                            alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
                                             className="w-full h-full object-cover"
                                         />
                                     </motion.div>

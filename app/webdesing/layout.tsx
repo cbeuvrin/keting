@@ -6,12 +6,10 @@ export const metadata: Metadata = {
         "Diseño web editorial, e-commerce y landing pages de alto impacto en México. Estrategia, UX/UI, desarrollo a medida y SEO técnico. AI Engineering · Producción 2026.",
     keywords: [
         "diseño web méxico",
-        "agencia diseño web cdmx",
         "desarrollo web a medida",
         "diseño ux ui",
         "ecommerce shopify",
         "landing pages",
-        "wordpress a medida",
         "seo técnico",
     ],
     alternates: { canonical: "/webdesing" },
