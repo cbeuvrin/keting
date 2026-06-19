@@ -526,7 +526,7 @@ export function CaseIvanIvanovich() {
             titleAccent="Ivanovich"
             titleBottom="Academy."
             body={<>Plataforma para la academia de protección ejecutiva más reconocida de México. <span className="font-[family-name:var(--font-playfair)] italic font-normal">Cursos en vivo</span>, eventos, blog y un sistema de afiliados — todo bajo una identidad de autoridad y precisión.</>}
-            tags={["WordPress · Custom", "Multi-idioma", "E-Commerce", "Eventos"]}
+            tags={["Web Design · Custom", "Multi-idioma", "E-Commerce", "Eventos"]}
             palette={["#0A0A0A", "#C8102E", "#C5A572", "#F5F5F0"]}
             font="Montserrat"
             fontStyle="display"
@@ -615,7 +615,7 @@ export function CaseBarmored() {
             titleAccent="Security."
             titleBottom="Blindaje perfecto."
             body={<>Sitio para una firma líder en <span className="font-[family-name:var(--font-playfair)] italic font-normal">blindaje automotriz</span> de alto perfil. Estética cinematográfica con video hero, certificaciones internacionales visibles y un flujo de cotización directo — porque cuando se trata de seguridad, no hay tiempo para fricciones.</>}
-            tags={["WordPress · Custom", "Video hero", "Cotización", "B2B"]}
+            tags={["Web Design · Custom", "Video hero", "Cotización", "B2B"]}
             palette={["#0A0A0A", "#C8102E", "#A0A0A0", "#FFFFFF"]}
             font="Montserrat"
             fontStyle="display"
@@ -659,7 +659,7 @@ export function CaseRosymar() {
             titleTop="Rosymar"
             titleAccent="González."
             body={<>E-commerce de joyería con baño en <span className="font-[family-name:var(--font-playfair)] italic font-normal">oro 18k y 24k</span>. Catálogo curado, manifiesto de marca y experiencia de compra cuidada al detalle — para que cada pieza llegue como debe llegar.</>}
-            tags={["WordPress · WooCommerce", "Custom theme", "Manifiesto", "Tienda"]}
+            tags={["E-Commerce", "Custom theme", "Manifiesto", "Tienda"]}
             palette={["#1A1A1A", "#D4AF37", "#F5F0E8", "#FFFFFF"]}
             font="Cormorant Garamond"
             fontStyle="serif"
