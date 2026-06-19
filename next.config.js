@@ -36,6 +36,43 @@ const nextConfig = {
       },
     ];
   },
+  // Redirecciones 301 de URLs del sitio WordPress anterior (evitan 404 en Google
+  // y conservan el SEO). Las rutas basura (/wp-*.php, /wp-content/...) se dejan en
+  // 404 a propósito: son escaneos de bots, no vale la pena redirigirlas.
+  async redirects() {
+    return [
+      // Posts antiguos con permalink por fecha (/AAAA/MM/DD/...) → blog
+      { source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*', destination: '/blog', permanent: true },
+      { source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})', destination: '/blog', permanent: true },
+      // Categorías y feeds de WordPress
+      { source: '/category/:path*', destination: '/blog', permanent: true },
+      // Paginación antigua del blog
+      { source: '/blog/page/:n*', destination: '/blog', permanent: true },
+      // Páginas de servicios antiguas
+      { source: '/web', destination: '/webdesing', permanent: true },
+      { source: '/diseno-web-2', destination: '/webdesing', permanent: true },
+      { source: '/web-informativa-landing-page', destination: '/webdesing', permanent: true },
+      { source: '/portafolio-web', destination: '/portafolio', permanent: true },
+      { source: '/plataforma-de-cursos', destination: '/soluciones-digitales', permanent: true },
+      { source: '/google-ads', destination: '/soluciones-digitales', permanent: true },
+      { source: '/meta-ads', destination: '/soluciones-digitales', permanent: true },
+      { source: '/cotizar', destination: '/precioweb', permanent: true },
+      { source: '/asesorias', destination: '/precioweb', permanent: true },
+      { source: '/nosotros', destination: '/', permanent: true },
+      { source: '/inicio-3', destination: '/', permanent: true },
+      { source: '/community-manager-2-minimal', destination: '/', permanent: true },
+      { source: '/blog-2', destination: '/blog', permanent: true },
+      { source: '/blogger', destination: '/blog', permanent: true },
+      // Versión en inglés (ya no existe): específicas primero, luego catch-all
+      { source: '/en/blog/:path*', destination: '/blog', permanent: true },
+      { source: '/en/web', destination: '/webdesing', permanent: true },
+      { source: '/en/portafolio-web', destination: '/portafolio', permanent: true },
+      { source: '/en/google-ads', destination: '/soluciones-digitales', permanent: true },
+      { source: '/en/meta-ads', destination: '/soluciones-digitales', permanent: true },
+      { source: '/en/blogger', destination: '/blog', permanent: true },
+      { source: '/en/:path*', destination: '/', permanent: true },
+    ];
+  },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).
   outputFileTracingRoot: path.join(__dirname),
   // Excluye del bundle de cada función serverless paquetes que no se usan en
