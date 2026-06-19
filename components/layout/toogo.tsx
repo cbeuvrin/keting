@@ -107,9 +107,11 @@ export function Toogo() {
 
                 </div>
             </div>
-            <CornerButton 
-                href="https://www.toogo.store" 
+            <CornerButton
+                href="https://www.toogo.store"
                 iconColor="border-black text-black"
+                bareArrowOnMobile
+                className="bottom-4 right-4 md:bottom-8 md:right-8"
             />
         </motion.section>
     );
