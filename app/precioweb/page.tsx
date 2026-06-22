@@ -7,6 +7,7 @@ import Link from "next/link";
 import { PricingCard } from "@/components/pricing/pricing-card";
 import { pricingData } from "@/components/pricing/data";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { FaqSection } from "@/components/seo/faq-section";
 
 export default function PricingPage() {
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -220,6 +221,15 @@ export default function PricingPage() {
                         </div>
                     </div>
                 </section>
+
+                <FaqSection
+                    items={[
+                        { q: "¿Cuánto cuesta una página web en México en 2026?", a: "Una landing a medida arranca desde $12,500 MXN; un sitio corporativo con gestor de contenido va de $25,000 a $70,000 MXN; un e-commerce a medida de $45,000 a $150,000 MXN; y una app o plataforma SaaS desde $120,000 MXN." },
+                        { q: "¿Qué incluye el precio?", a: "Un proyecto serio incluye estrategia, diseño UX/UI a medida, desarrollo con tecnología moderna (Next.js/React), SEO técnico, optimización de velocidad, pruebas, despliegue y capacitación para que tú administres tu sitio." },
+                        { q: "¿Ofrecen mantenimiento?", a: "Sí. El mantenimiento o iguala mensual va de $2,500 a $12,000 MXN, según el alcance: actualizaciones, seguridad, mejoras y soporte." },
+                        { q: "¿Por qué un proyecto a medida cuesta más que una plantilla?", a: "Porque diseñamos y programamos desde cero para tu negocio: mejor rendimiento, seguridad, integraciones y diferenciación. Cuesta más al inicio, pero evita rehacer todo cuando el negocio crece." },
+                    ]}
+                />
 
                 {/* Footer Simplified - Dark Text */}
                 <footer className="py-12 border-t border-gray-100 text-center text-zinc-400 text-sm bg-white">
