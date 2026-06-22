@@ -1,0 +1,19 @@
+# Keting Media
+
+> Estudio de diseño y desarrollo de software, web y apps a medida en México. Del sitio web al sistema interno que opera tu negocio: diseño editorial, ingeniería e IA aplicada. +80% de proyectos referidos.
+
+Keting Media diseña y desarrolla productos digitales a medida —sitios web, e-commerce, aplicaciones y plataformas/SaaS— combinando diseño editorial, ingeniería (Next.js, React) e inteligencia artificial aplicada. Dirigido por Carlos Beuvrin, trabaja con marcas y empresas en México y Latinoamérica que buscan escalar su negocio. Contacto: info@ketingmedia.com · +52 55 4383 0150 · Ciudad de México.
+
+## Servicios
+- [Diseño y desarrollo web](https://ketingmedia.com/webdesing): Sitios editoriales, e-commerce y landing pages a medida, con SEO técnico y rendimiento (Next.js, React).
+- [Soluciones digitales y software a medida](https://ketingmedia.com/soluciones-digitales): Apps, plataformas y sistemas internos con IA, hiper-personalizados para cada operación.
+- [Portafolio](https://ketingmedia.com/portafolio): Casos y proyectos seleccionados de marcas que cambian su industria.
+- [Precios](https://ketingmedia.com/precioweb): Inversión, alcance y tiempos de proyectos web.
+
+## Blog
+- [Blog de Keting Media](https://ketingmedia.com/blog): Artículos y guías sobre diseño web, desarrollo de software, IA aplicada y crecimiento digital.
+
+## Optional
+- [Inicio](https://ketingmedia.com): Página principal de Keting Media.
+- [Aviso de privacidad](https://ketingmedia.com/aviso-de-privacidad)
+- [Términos y condiciones](https://ketingmedia.com/terminos-y-condiciones)
