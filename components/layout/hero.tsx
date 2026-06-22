@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionValueEvent, useSpring, animate, cubicBezier } from "framer-motion";
+import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionValueEvent, useSpring, animate, cubicBezier, useReducedMotion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
 import { ContactModal } from "@/components/pricing/contact-modal";
@@ -58,29 +58,30 @@ export function Hero() {
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const prefersReduced = useReducedMotion();
 
     // Automatic sweep animation on load
     useEffect(() => {
-        if (!targetRef.current || hasAnimated) return;
+        if (!targetRef.current || hasAnimated || prefersReduced) return;
 
         const section = targetRef.current;
         const sectionWidth = section.offsetWidth;
 
-        // Wait a bit for the page to load, then animate
+        // Barrido de bienvenida: la "lupa" recorre el título al cargar.
+        // Arranca pronto (ya no hay preloader que esperar) y con un ease suave.
         const timer = setTimeout(() => {
-            // Animate mouseX from left to right to create the sweep effect
             animate(mouseX, sectionWidth, {
-                duration: 2.5,
-                ease: "easeInOut",
+                duration: 2.8,
+                ease: [0.4, 0, 0.2, 1],
                 onComplete: () => {
                     setHasAnimated(true);
                     mouseX.set(0); // Reset after animation
                 }
             });
-        }, 2500); // Delayed to start AFTER preloader disappears (~2s)
+        }, 700);
 
         return () => clearTimeout(timer);
-    }, [hasAnimated, mouseX]); // Added mouseX to dependencies
+    }, [hasAnimated, mouseX, prefersReduced]);
 
     function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
         let { left, top } = currentTarget.getBoundingClientRect();
@@ -91,59 +92,46 @@ export function Hero() {
     // Individual character component that reacts to mouse with Magnifying Glass effect
     const MagnifyingChar = ({ char, index, baseDelay }: { char: string, index: number, baseDelay: number }) => {
         const ref = useRef<HTMLSpanElement>(null);
+        // Centro X del carácter (relativo a la sección), medido UNA vez y cacheado.
+        // Antes se llamaba getBoundingClientRect en cada frame por cada letra →
+        // layout thrash y tirones. Cacheado = movimiento fluido.
+        const centerX = useRef(0);
 
-        // Map mouse distance to Scale
-        const scale = useTransform(mouseX, (val: number) => {
-            if (!ref.current) return 1;
-            const rect = ref.current.getBoundingClientRect();
-            // Get center relative to parent
-            const parentRect = ref.current.closest('section')?.getBoundingClientRect();
-            if (!parentRect) return 1;
+        useEffect(() => {
+            const measure = () => {
+                const el = ref.current;
+                const parent = el?.closest("section");
+                if (!el || !parent) return;
+                const r = el.getBoundingClientRect();
+                const p = parent.getBoundingClientRect();
+                centerX.current = r.left + r.width / 2 - p.left;
+            };
+            measure();
+            // Re-mide cuando el layout se asienta tras la entrada y al redimensionar.
+            const t = setTimeout(measure, 700);
+            window.addEventListener("resize", measure);
+            return () => {
+                clearTimeout(t);
+                window.removeEventListener("resize", measure);
+            };
+        }, []);
 
-            const centerX = (rect.left + rect.width / 2) - parentRect.left;
-            const diffX = val - centerX;
+        const RADIUS = 160;
+        // Smoothstep: caída suave en los bordes del radio (burbuja natural).
+        const falloff = (val: number) => {
+            if (prefersReduced) return 0;
+            const dist = Math.abs(val - centerX.current);
+            if (dist >= RADIUS) return 0;
+            const k = 1 - dist / RADIUS;
+            return k * k * (3 - 2 * k);
+        };
 
-            // We also need Y distance for a true circular "glass" effect
-            // But useTransform only accepts one value. We can combine or just use X for horizontal ripple.
-            // User asked for "lupa" which implies circular.
-            // However, useTransform(mouseX) only updates on X change. logic needs to be inside.
-            // We can just use the X distance for the "wave" effect which is very common with text.
-            // If we want true circular, we need a shared MotionValue or use a Raf.
-            // Let's rely on X first as it's cleaner to hook into mouseX.
-            // If we want both, we can try to assume Y is close or use the Y motion value too?
-            // simpler: Let's use distance on X axis primarily for the line, as lines are horizontal.
+        const scale = useTransform(mouseX, (val: number) => 1 + falloff(val) * 1.4);
+        const yShift = useTransform(mouseX, (val: number) => -falloff(val) * 10);
 
-            const dist = Math.abs(diffX);
-
-            // Interaction radius
-            if (dist < 150) {
-                // Gaussian-ish curve for smooth bubble
-                const strength = 1 - (dist / 150);
-                // Scale up to 1.5x
-                return 1 + (strength * 1.5);
-            }
-            return 1;
-        });
-
-        // Optional: Y shift to center the magnification or "bulge" up
-        const yShift = useTransform(mouseX, (val: number) => {
-            if (!ref.current) return 0;
-            const rect = ref.current.getBoundingClientRect();
-            const parentRect = ref.current.closest('section')?.getBoundingClientRect();
-            if (!parentRect) return 0;
-            const centerX = (rect.left + rect.width / 2) - parentRect.left;
-            const dist = Math.abs(val - centerX);
-            if (dist < 150) {
-                const strength = 1 - (dist / 150);
-                return -strength * 10; // Lift up slightly
-            }
-            return 0;
-        });
-
-
-        // Smooth physics
-        const smoothScale = useSpring(scale, { damping: 15, stiffness: 200, mass: 0.5 });
-        const smoothY = useSpring(yShift, { damping: 15, stiffness: 200, mass: 0.5 });
+        // Física suave: glide fluido sin jitter.
+        const smoothScale = useSpring(scale, { damping: 20, stiffness: 170, mass: 0.55 });
+        const smoothY = useSpring(yShift, { damping: 20, stiffness: 170, mass: 0.55 });
 
         return (
             <motion.span

@@ -13,16 +13,33 @@ export function CookieConsent() {
     const { t } = useLang();
 
     useEffect(() => {
-        // Espera un poco antes de mostrar para no chocar con la carga inicial
-        const timer = setTimeout(() => {
+        let timer: ReturnType<typeof setTimeout>;
+
+        const reveal = () => {
             try {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (!stored) setVisible(true);
             } catch {
                 setVisible(true);
             }
-        }, 1200);
-        return () => clearTimeout(timer);
+        };
+
+        // Aparece DESPUÉS de que la página termine de cargar (evento load) + un
+        // respiro, para que no tape el título mientras el hero entra.
+        const onLoaded = () => {
+            timer = setTimeout(reveal, 1800);
+        };
+
+        if (document.readyState === "complete") {
+            onLoaded();
+        } else {
+            window.addEventListener("load", onLoaded, { once: true });
+        }
+
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener("load", onLoaded);
+        };
     }, []);
 
     const decide = (value: "accepted" | "rejected") => {
