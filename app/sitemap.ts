@@ -6,6 +6,10 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ketingmedia.com';
 
+// Revalida cada hora: el sitemap refleja altas/bajas de artículos en la DB sin
+// necesidad de un redeploy (antes era estático y quedaba desfasado).
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 1. Obtener artículos de Supabase
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
