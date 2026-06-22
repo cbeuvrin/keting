@@ -220,11 +220,10 @@ export function Hero() {
 
                 <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-44 md:pb-24 lg:pb-14">
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
+                    {/* Visible desde el primer paint (sin gate de opacidad) — es el elemento LCP.
+                        Conserva el parallax/fade al hacer scroll vía `style`. */}
                     <motion.div
                         style={{ opacity, y: subtextY }}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 1, duration: 0.8 }}
                         suppressHydrationWarning
                         className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
@@ -273,12 +272,11 @@ export function Hero() {
                         </motion.div>
                     </div>
 
-                    {/* Mobile/Tablet Subtext (Below title) */}
+                    {/* Mobile/Tablet Subtext (Below title) — elemento LCP en celular.
+                        Visible al instante (sin opacity:0 + delay que retrasaban el LCP ~2.7s);
+                        el fade/parallax al scroll se mantiene vía `style`. */}
                     <motion.div
                         style={{ opacity, y: subtextY }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.2, duration: 0.8 }}
                         suppressHydrationWarning
                         className="lg:hidden mt-8 md:mt-12 max-w-sm md:max-w-lg mb-8"
                     >
