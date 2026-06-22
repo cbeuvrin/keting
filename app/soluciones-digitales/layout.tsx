@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
     title: "Soluciones Digitales · Apps hiper-personalizadas con IA",
@@ -28,5 +29,21 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return children;
+    return (
+        <>
+            <JsonLd
+                data={[
+                    service({
+                        name: "Software y soluciones digitales a medida con IA",
+                        serviceType: "Desarrollo de software y soluciones digitales",
+                        description:
+                            "Apps, plataformas/SaaS, agentes y automatización con IA hiper-personalizados para empresas que escalan.",
+                        path: "/soluciones-digitales",
+                    }),
+                    breadcrumb("Soluciones Digitales", "/soluciones-digitales"),
+                ]}
+            />
+            {children}
+        </>
+    );
 }

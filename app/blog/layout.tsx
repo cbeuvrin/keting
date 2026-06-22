@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
     title: "Blog · Ideas que inspiran sobre diseño web, IA y crecimiento digital",
@@ -26,5 +27,10 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return children;
+    return (
+        <>
+            <JsonLd data={breadcrumb("Blog", "/blog")} />
+            {children}
+        </>
+    );
 }
