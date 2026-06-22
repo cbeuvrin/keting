@@ -6,6 +6,8 @@ import { ArrowLeft, ArrowRight, Calendar, Clock, Share2 } from "lucide-react";
 import { Metadata } from 'next';
 import { notFound } from "next/navigation";
 import { ViewTracker } from "@/components/blog/view-tracker";
+import { AuthorBio } from "@/components/blog/author-bio";
+import { AUTHOR } from "@/lib/author";
 
 // Generate static params for all articles
 export async function generateStaticParams() {
@@ -145,8 +147,10 @@ export default async function ArticlePage({ params }: { params: any }) {
         image: article.image ? [article.image] : undefined,
         datePublished: article.date,
         author: {
-            "@type": article.author === "Editorial Keting" ? "Organization" : "Person",
-            name: article.author || "Keting Media",
+            "@type": "Person",
+            name: AUTHOR.name,
+            jobTitle: AUTHOR.jobTitle,
+            url: AUTHOR.linkedin,
         },
         publisher: {
             "@type": "Organization",
@@ -271,6 +275,7 @@ export default async function ArticlePage({ params }: { params: any }) {
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-20">
                         <div className="blog-content max-w-none">
                             <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
+                            <AuthorBio />
                         </div>
 
                         <aside className="space-y-12">

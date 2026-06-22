@@ -100,7 +100,9 @@ const organizationJsonLd = {
   founder: {
     "@type": "Person",
     name: "Carlos Beuvrin",
-    jobTitle: "Fundador y Director",
+    jobTitle: "Ingeniero de IA y Fundador",
+    description: "Ingeniero IA y fundador, especializado en el diseño y desarrollo de productos digitales de extremo a extremo: aplicaciones web, plataformas SaaS y soluciones de comercio, con modelos de IA en el núcleo del producto.",
+    sameAs: ["https://www.linkedin.com/in/carlos-fernando-beuvrin-rodriguez-520526222/"],
   },
   foundingDate: "2019",
   address: {
