@@ -9,6 +9,11 @@ import { ViewTracker } from "@/components/blog/view-tracker";
 import { AuthorBio } from "@/components/blog/author-bio";
 import { AUTHOR } from "@/lib/author";
 
+// Revalida cada hora: los artículos de la DB (altas, ediciones, bajas) se
+// reflejan sin necesidad de un redeploy. Antes la página quedaba cacheada
+// indefinidamente y servía contenido viejo.
+export const revalidate = 3600;
+
 // Generate static params for all articles
 export async function generateStaticParams() {
     return articles.map((article) => ({
