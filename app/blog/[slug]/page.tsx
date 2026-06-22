@@ -17,20 +17,53 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
     const resolvedParams = await params;
     const slug = resolvedParams.slug;
-    const article = articles.find(a => a.slug.trim() === slug.trim());
-    
+
+    // Busca primero en los artículos estáticos; si no está, en Supabase (los
+    // artículos generados por IA viven solo en la DB). Sin esto, todos esos
+    // posts heredaban el título "Artículo no encontrado" en Google.
+    type ArticleMeta = { title: string; excerpt?: string; author?: string; date?: string; image?: string };
+    let article: ArticleMeta | undefined = articles.find(a => a.slug.trim() === slug.trim());
+
+    if (!article) {
+        const { data } = await supabase
+            .from('articles')
+            .select('title, excerpt, author, date, image')
+            .eq('slug', slug)
+            .single();
+        if (data) article = data as ArticleMeta;
+    }
+
     if (!article) return { title: "Artículo no encontrado - Keting Media" };
+
+    // Algunos artículos de IA guardaron JSON crudo en el excerpt (p.ej. "title:…,
+    // category:…"). Si viene malformado, usa un fallback limpio basado en el título.
+    let rawDesc = article.excerpt || "";
+    const looksMalformed = rawDesc.trim().startsWith("{") || /\b(title|category|content)\s*:/i.test(rawDesc);
+    if (!rawDesc || looksMalformed) {
+        rawDesc = `${article.title}. Análisis y estrategia por Keting Media — diseño y desarrollo de software, web y apps.`;
+    }
+    const description = rawDesc.replace(/[{}[\]"]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
+    const image = article.image && article.image.startsWith('http') ? article.image : undefined;
 
     return {
         title: `${article.title} - Blog de Keting Media`,
-        description: article.excerpt,
+        description,
+        alternates: { canonical: `/blog/${slug}` },
         openGraph: {
             title: article.title,
-            description: article.excerpt,
+            description,
+            url: `/blog/${slug}`,
             type: 'article',
-            authors: [article.author],
-            publishedTime: article.date,
-        }
+            ...(article.author ? { authors: [article.author] } : {}),
+            ...(article.date ? { publishedTime: article.date } : {}),
+            ...(image ? { images: [{ url: image }] } : {}),
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: article.title,
+            description,
+            ...(image ? { images: [image] } : {}),
+        },
     };
 }
 
@@ -102,8 +135,36 @@ export default async function ArticlePage({ params }: { params: any }) {
             ? (articles.find(a => a.slug.trim() !== article!.slug.trim()) ?? articles[0])
             : articles[(idx + 1) % articles.length];
 
+    // Schema Article: ayuda a Google y a las IA a entender autoría, fecha e imagen
+    // del artículo (mejora indexación y citabilidad).
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: article.title,
+        description: article.excerpt,
+        image: article.image ? [article.image] : undefined,
+        datePublished: article.date,
+        author: {
+            "@type": article.author === "Editorial Keting" ? "Organization" : "Person",
+            name: article.author || "Keting Media",
+        },
+        publisher: {
+            "@type": "Organization",
+            name: "Keting Media",
+            logo: { "@type": "ImageObject", url: "https://ketingmedia.com/keting-logo.png" },
+        },
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `https://ketingmedia.com/blog/${article.slug}`,
+        },
+    };
+
     return (
         <main className="min-h-screen bg-[#FAFAFA] text-black font-heading overflow-hidden">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+            />
             <Header />
 
             {/* View Tracker - Increments views in Supabase */}
