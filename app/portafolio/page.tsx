@@ -10,6 +10,7 @@ import {
     CaseSmileBetter,
     CaseBarmored,
     CaseToogo,
+    CaseSuzuki,
     CaseRosymar,
     CaseHapptek,
     PortafolioCierre,
@@ -28,6 +29,7 @@ export default function PortafolioPage() {
             <CaseHapptek />
             <CaseBarmored />
             <CaseToogo />
+            <CaseSuzuki />
             <CaseRosymar />
             <CaseIvanIvanovich />
 

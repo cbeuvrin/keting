@@ -694,6 +694,29 @@ export function CaseHapptek() {
     );
 }
 
+export function CaseSuzuki() {
+    return (
+        <CaseCard
+            badge="10"
+            eyebrow="Caso · Activación de evento"
+            titleTop="Suzuki."
+            titleAccent="¿Qué coche"
+            titleBottom="eres?"
+            body={<>App de <span className="font-[family-name:var(--font-playfair)] italic font-normal">quiz interactivo</span> para una activación de Suzuki en vivo. En un iPad, los asistentes respondían un test de personalidad y la app les sugería el modelo Suzuki ideal — una experiencia de marca memorable que más de 500 personas vivieron en el evento. En alianza con <span className="font-[family-name:var(--font-playfair)] italic font-normal">Enso Media</span>.</>}
+            tags={["App de evento", "Quiz interactivo", "iPad", "Activación de marca"]}
+            palette={["#0A0A0A", "#E30613", "#003DA5", "#F5F5F0"]}
+            font="Montserrat"
+            fontStyle="display"
+            metric={{ value: "500+", label: "Quizzes en el evento" }}
+            url="/soluciones-digitales"
+            image="/soluciones/suzuki-ipad.png"
+            imageAlt="Suzuki · App de quiz para evento, en alianza con Enso Media"
+            dark
+            effect="tilt"
+        />
+    );
+}
+
 /* ==========================================================================
    CIERRE
    ========================================================================== */
