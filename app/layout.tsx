@@ -88,10 +88,19 @@ const organizationJsonLd = {
   name: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/keting-logo.png`,
-  description: "Agencia digital en México especializada en diseño web editorial, e-commerce y soluciones con IA.",
+  description: "Estudio de diseño y desarrollo de software, web y apps a medida en México: sitios, e-commerce, plataformas/SaaS e IA aplicada.",
+  knowsAbout: [
+    "Diseño y desarrollo web",
+    "Desarrollo de software a medida",
+    "Aplicaciones móviles y multiplataforma",
+    "E-commerce",
+    "Plataformas SaaS",
+    "Inteligencia artificial aplicada",
+  ],
   founder: {
     "@type": "Person",
     name: "Carlos Beuvrin",
+    jobTitle: "Fundador y Director",
   },
   foundingDate: "2019",
   address: {
