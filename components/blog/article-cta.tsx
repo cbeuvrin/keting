@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+
+// Líneas de la cuadrícula (mismas que el resto del sitio, en blanco para fondo oscuro).
+const GRID_LINES =
+    "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)";
 
 /**
  * Banner de conversión al pie de cada artículo: abre el formulario de contacto
@@ -11,6 +15,17 @@ import { ContactModal } from "@/components/pricing/contact-modal";
  */
 export function ArticleCTA({ title }: { title?: string }) {
     const [open, setOpen] = useState(false);
+    const cardRef = useRef<HTMLElement>(null);
+
+    // Efecto "linterna": mueve el foco de luz/cuadrícula hacia el cursor.
+    // Escribe variables CSS directamente en el nodo (sin re-render).
+    const handleMove = (e: React.MouseEvent) => {
+        const el = cardRef.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    };
 
     const waMessage = encodeURIComponent(
         title
@@ -21,20 +36,42 @@ export function ArticleCTA({ title }: { title?: string }) {
 
     return (
         <>
-            <aside className="not-prose relative overflow-hidden rounded-[2rem] bg-[#0A0A0A] text-white my-16 px-8 py-12 md:px-12 md:py-14">
-                {/* Fondo cuadriculado sutil */}
+            <aside
+                ref={cardRef}
+                onMouseMove={handleMove}
+                style={{ "--mx": "50%", "--my": "50%" } as React.CSSProperties}
+                className="group/cta not-prose relative overflow-hidden rounded-[2rem] bg-[#0A0A0A] text-white my-16 px-8 py-12 md:px-12 md:py-14"
+            >
+                {/* Cuadrícula base — siempre visible, sutil (como el resto del sitio) */}
                 <div
-                    className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                    className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                    style={{ backgroundImage: GRID_LINES, backgroundSize: "60px 60px" }}
+                />
+                {/* Cuadrícula iluminada — solo se revela alrededor del cursor (linterna) */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
                     style={{
-                        backgroundImage:
-                            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                        backgroundSize: "48px 48px",
+                        backgroundImage: GRID_LINES,
+                        backgroundSize: "60px 60px",
+                        opacity: 0.35,
+                        WebkitMaskImage:
+                            "radial-gradient(circle 170px at var(--mx) var(--my), #000 0%, transparent 72%)",
+                        maskImage:
+                            "radial-gradient(circle 170px at var(--mx) var(--my), #000 0%, transparent 72%)",
+                    }}
+                />
+                {/* Resplandor suave que sigue al cursor */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background:
+                            "radial-gradient(circle 220px at var(--mx) var(--my), rgba(255,255,255,0.07), transparent 70%)",
                     }}
                 />
                 {/* Asterisco girando (respeta reduce-motion) */}
                 <span
                     aria-hidden
-                    className="pointer-events-none select-none absolute -top-20 -right-10 text-[14rem] md:text-[18rem] font-light leading-none text-white/[0.06] animate-[spin_90s_linear_infinite] motion-reduce:animate-none"
+                    className="pointer-events-none select-none absolute -top-20 -right-10 text-[14rem] md:text-[18rem] font-light leading-none text-white/[0.06] animate-[spin_90s_linear_infinite] motion-reduce:animate-none transition-colors duration-500 group-hover/cta:text-white/[0.10]"
                 >
                     *
                 </span>
