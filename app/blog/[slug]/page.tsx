@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { notFound } from "next/navigation";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { AuthorBio } from "@/components/blog/author-bio";
+import { ArticleCTA } from "@/components/blog/article-cta";
 import { AUTHOR } from "@/lib/author";
 
 // Revalida cada hora: los artículos de la DB (altas, ediciones, bajas) se
@@ -282,6 +283,7 @@ export default async function ArticlePage({ params }: { params: any }) {
                             {/* La clase blog-content va SOLO en el HTML del artículo: sus reglas
                                 de img/p/etc. (width:100%, etc.) rompían la caja de autor. */}
                             <div className="blog-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
+                            <ArticleCTA title={article.title} />
                             <AuthorBio />
                         </div>
 
