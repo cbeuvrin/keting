@@ -278,8 +278,10 @@ export default async function ArticlePage({ params }: { params: any }) {
                     )}
 
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-20">
-                        <div className="blog-content max-w-none">
-                            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
+                        <div className="max-w-none">
+                            {/* La clase blog-content va SOLO en el HTML del artículo: sus reglas
+                                de img/p/etc. (width:100%, etc.) rompían la caja de autor. */}
+                            <div className="blog-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
                             <AuthorBio />
                         </div>
 
