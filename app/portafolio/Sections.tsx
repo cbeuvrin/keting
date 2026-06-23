@@ -268,12 +268,13 @@ type CaseProps = {
     image: string;
     imageAlt: string;
     imageMaxClass?: string;   // limita el ancho del marco (ej. Suzuki más pequeño)
+    bareImage?: boolean;      // muestra la imagen sin marco de navegador (ej. render de iPad)
     dark?: boolean;
     effect?: "tilt" | "slide" | "rise" | "float";
 };
 
 function CaseCard({
-    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, dark = false, effect = "slide",
+    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, bareImage = false, dark = false, effect = "slide",
 }: CaseProps) {
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -448,8 +449,18 @@ function CaseCard({
                             className={`relative ${imageMaxClass ?? ""}`}
                         >
                             {/* Sombra al piso */}
-                            <div className={`absolute -inset-x-8 -bottom-8 h-12 ${dark ? "bg-black/50" : "bg-[#1d1d1f]/20"} blur-3xl rounded-full pointer-events-none`} />
+                            <div className={`absolute ${bareImage ? "-inset-x-4 -bottom-4 h-8" : "-inset-x-8 -bottom-8 h-12"} ${dark ? "bg-black/50" : "bg-[#1d1d1f]/20"} blur-3xl rounded-full pointer-events-none`} />
 
+                            {/* Imagen sin marco — render de dispositivo (ej. iPad de Suzuki) */}
+                            {bareImage ? (
+                                <img
+                                    src={image}
+                                    alt={imageAlt}
+                                    className="relative w-full h-auto drop-shadow-2xl"
+                                    draggable={false}
+                                />
+                            ) : (
+                            <>
                             {/* Marco tipo monitor / browser */}
                             <div
                                 className={`relative rounded-xl md:rounded-2xl overflow-hidden ${dark ? "bg-[#0a0a0a] ring-1 ring-white/10" : "bg-[#1a1a1a] ring-1 ring-black/20"} shadow-2xl`}
@@ -492,6 +503,8 @@ function CaseCard({
                                     />
                                 </div>
                             </div>
+                            </>
+                            )}
 
                             {/* Firma KETING debajo del marco */}
                             <div className="mt-5 md:mt-6 flex items-center justify-center gap-3">
@@ -714,6 +727,7 @@ export function CaseSuzuki() {
             image="/soluciones/suzuki-ipad.png"
             imageAlt="Suzuki · App de quiz para evento, en alianza con Enso Media"
             imageMaxClass="max-w-[82%] mx-auto"
+            bareImage
             dark
             effect="tilt"
         />
