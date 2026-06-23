@@ -16,7 +16,9 @@ export function DigitalSolutions() {
 
     const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
     const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
-    const titleFill = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
+    // Alto 150% (no 100%) para que el relleno cubra los descendentes de la "g"
+    // que sobresalen de la caja de línea ajustada.
+    const titleFill = useTransform(scrollYProgress, [0.1, 0.5], ["0% 150%", "100% 150%"]);
 
     return (
         <motion.section

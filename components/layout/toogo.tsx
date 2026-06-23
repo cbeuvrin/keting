@@ -14,7 +14,9 @@ export function Toogo() {
     const width = useTransform(scrollYProgress, [0, 1], ["100%", "80%"]);
     const mobileWidth = "100%"; // Fixed at 100% for mobile
     const borderRadius = useTransform(scrollYProgress, [0, 1], ["0rem", "3rem"]);
-    const titleFillProgress = useTransform(scrollYProgress, [0.1, 0.5], ["0% 100%", "100% 100%"]);
+    // Alto 150% (no 100%) para que el relleno cubra los descendentes de la "g"
+    // que sobresalen de la caja de línea ajustada (leading-[0.9]).
+    const titleFillProgress = useTransform(scrollYProgress, [0.1, 0.5], ["0% 150%", "100% 150%"]);
 
     return (
         <motion.section
