@@ -189,6 +189,8 @@ export default async function ArticlePage({ params }: { params: any }) {
                     .blog-content img { width: 100%; border-radius: 2.5rem; margin: 4rem 0; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
                     .blog-content img:hover { transform: scale(1.02); }
                     .blog-content strong { color: #000; font-weight: 700; }
+                    .blog-content a { color: #000; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: opacity 0.2s ease; }
+                    .blog-content a:hover { opacity: 0.6; }
                     .blog-content ul { margin-bottom: 3rem; space-y: 4; }
                     .blog-content li { font-size: 1.125rem; margin-bottom: 1rem; color: #4B5563; position: relative; padding-left: 1.5rem; }
                     .blog-content li::before { content: "—"; position: absolute; left: 0; color: #9CA3AF; font-weight: bold; }
