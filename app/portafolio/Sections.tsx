@@ -264,15 +264,16 @@ type CaseProps = {
     font: string;             // tipografía principal
     fontStyle?: "serif" | "sans" | "display";  // para renderizado del nombre
     metric?: { value: string; label: string };
-    url: string;
+    url?: string;
     image: string;
     imageAlt: string;
+    imageMaxClass?: string;   // limita el ancho del marco (ej. Suzuki más pequeño)
     dark?: boolean;
     effect?: "tilt" | "slide" | "rise" | "float";
 };
 
 function CaseCard({
-    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, dark = false, effect = "slide",
+    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, dark = false, effect = "slide",
 }: CaseProps) {
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -350,7 +351,7 @@ function CaseCard({
                                 <span className="block text-3xl md:text-5xl lg:text-6xl font-light">{titleTop}</span>
                             </RiseText>
                             <RiseText delay={0.12}>
-                                <span className="block text-3xl md:text-5xl lg:text-6xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 tracking-tight">
+                                <span className="block text-3xl md:text-5xl lg:text-6xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 tracking-tight px-[0.08em] pb-[0.14em]">
                                     {titleAccent}
                                 </span>
                             </RiseText>
@@ -425,15 +426,17 @@ function CaseCard({
                                         </div>
                                     </div>
                                 )}
-                                <a
-                                    href={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`group inline-flex items-center gap-2 text-sm font-medium ${dark ? "text-white hover:text-white/70" : "text-[#1d1d1f] hover:text-[#1d1d1f]/70"} transition-colors`}
-                                >
-                                    Ver en vivo
-                                    <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                                </a>
+                                {url && (
+                                    <a
+                                        href={url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`group inline-flex items-center gap-2 text-sm font-medium ${dark ? "text-white hover:text-white/70" : "text-[#1d1d1f] hover:text-[#1d1d1f]/70"} transition-colors`}
+                                    >
+                                        Ver en vivo
+                                        <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                                    </a>
+                                )}
                             </div>
                         </RiseText>
                     </div>
@@ -442,7 +445,7 @@ function CaseCard({
                     <div className={`lg:col-span-7 ${effect === "slide" ? "order-2" : ""}`} style={perspective ? { perspective: "1400px" } : {}}>
                         <motion.div
                             style={{ ...imageMotion, transformStyle: perspective ? "preserve-3d" : undefined }}
-                            className="relative"
+                            className={`relative ${imageMaxClass ?? ""}`}
                         >
                             {/* Sombra al piso */}
                             <div className={`absolute -inset-x-8 -bottom-8 h-12 ${dark ? "bg-black/50" : "bg-[#1d1d1f]/20"} blur-3xl rounded-full pointer-events-none`} />
@@ -463,7 +466,7 @@ function CaseCard({
                                     {/* URL bar */}
                                     <div className="flex-1 mx-2 md:mx-4 h-6 rounded bg-white/5 flex items-center px-3">
                                         <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">
-                                            {url.replace(/^https?:\/\//, "")}
+                                            {url ? url.replace(/^https?:\/\//, "") : "App de evento · iPad"}
                                         </span>
                                     </div>
                                     {/* LIVE indicator */}
@@ -708,9 +711,9 @@ export function CaseSuzuki() {
             font="Montserrat"
             fontStyle="display"
             metric={{ value: "500+", label: "Quizzes en el evento" }}
-            url="/soluciones-digitales"
             image="/soluciones/suzuki-ipad.png"
             imageAlt="Suzuki · App de quiz para evento, en alianza con Enso Media"
+            imageMaxClass="max-w-[82%] mx-auto"
             dark
             effect="tilt"
         />
