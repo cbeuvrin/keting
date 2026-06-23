@@ -85,9 +85,9 @@ export function ArticleCTA({ title }: { title?: string }) {
                         </span>
                     </div>
 
-                    <h3 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-4">
+                    <h3 className="text-white text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-4">
                         Hagamos que{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">
                             suceda
                         </span>
                         .
