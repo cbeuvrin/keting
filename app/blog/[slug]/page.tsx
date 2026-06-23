@@ -75,7 +75,6 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
     };
 }
 
-import { NewsletterForm } from "@/components/blog/newsletter-form";
 import { createClient } from '@supabase/supabase-js';
 import { getCategoryImage } from "@/lib/blog-utils";
 import { sanitizeHtml } from "@/lib/sanitize-html";
@@ -288,14 +287,6 @@ export default async function ArticlePage({ params }: { params: any }) {
                         </div>
 
                         <aside className="space-y-12">
-                            <div className="p-8 bg-[#FAFAFA] rounded-3xl">
-                                <h4 className="text-lg font-bold mb-4">Suscríbete al newsletter</h4>
-                                <p className="text-sm text-gray-500 mb-6 font-light">
-                                    Recibe los mejores consejos sobre diseño y negocios una vez por semana.
-                                </p>
-                                <NewsletterForm />
-                            </div>
-
                             <div>
                                 <h4 className="text-lg font-bold mb-6">Artículos relacionados</h4>
                                 <div className="space-y-6">
