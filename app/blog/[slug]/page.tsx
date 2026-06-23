@@ -2,12 +2,13 @@ import { articles } from "@/lib/blog-data";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Calendar, Clock, Share2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
 import { Metadata } from 'next';
 import { notFound } from "next/navigation";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { AuthorBio } from "@/components/blog/author-bio";
 import { ArticleCTA } from "@/components/blog/article-cta";
+import { ShareButton } from "@/components/blog/share-button";
 import { AUTHOR } from "@/lib/author";
 
 // Revalida cada hora: los artículos de la DB (altas, ediciones, bajas) se
@@ -247,9 +248,7 @@ export default async function ArticlePage({ params }: { params: any }) {
                             </div>
                         </div>
                         <div className="ml-auto">
-                            <button className="flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full hover:bg-black hover:text-white transition-all text-sm font-medium">
-                                <Share2 size={16} /> Compartir
-                            </button>
+                            <ShareButton title={article.title} />
                         </div>
                     </div>
 
