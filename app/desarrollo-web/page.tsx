@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import GravityHero from "./GravityHero";
 import TextSection from "./TextSection"; // SSR: su prosa debe estar en el HTML (SEO)
 import { WebDesignServices } from "@/components/layout/web-design-services"; // SSR: lista de servicios crawlable (e-commerce, UX/UI, SEO...)
+import { EcommerceSection } from "./EcommerceSection"; // SSR: sección dedicada de e-commerce (caso Rosymar)
 import { GravityHeader } from "@/components/gravity/header";
 import { FaqSection } from "@/components/seo/faq-section";
 
@@ -44,6 +45,7 @@ export default function GravityPage() {
             <Testimonials />
 
             <WebDesignServices />
+            <EcommerceSection />
             <FaqSection
                 items={[
                     { q: "¿Cuánto cuesta una página web a medida en México?", a: "En 2026, una landing a medida arranca desde $12,500 MXN y un sitio corporativo con gestor de contenido va de $25,000 a $70,000 MXN. El precio depende del alcance, las integraciones y el nivel de diseño e ingeniería." },
