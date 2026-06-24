@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 2. Definir rutas estáticas principales
     const staticRoutes: MetadataRoute.Sitemap = [
         { url: SITE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
-        { url: `${SITE_URL}/webdesing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/desarrollo-web`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/soluciones-digitales`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
         { url: `${SITE_URL}/precioweb`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },

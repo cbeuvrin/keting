@@ -24,7 +24,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     // "bold" (mayúscula + subrayado), "italicUnderline" (cursiva + subrayado).
     const menuItems = [
         { label: t.nav.home, href: "/#home", styles: ["italic"] },
-        { label: t.nav.webdesign, href: "/webdesing", styles: ["italic"] },
+        { label: t.nav.webdesign, href: "/desarrollo-web", styles: ["italic"] },
         { label: t.nav.digital, href: "/soluciones-digitales", styles: ["italic"] },
         { label: t.nav.price, href: "/precioweb", styles: ["italic"] },
         { label: t.nav.portfolio, href: "/portafolio", styles: ["italic"] },

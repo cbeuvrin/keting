@@ -8,6 +8,7 @@ import {
     HeroBajada,
     NuestroEnfoque,
     DondeLoAplicamos,
+    IntegracionSistemas,
     AppsHiperpersonalizadas,
     CasosDeExitoIntro,
     GoberniaShowcase,
@@ -28,6 +29,7 @@ export default function SolucionesDigitalesPage() {
             <HeroBajada />
             <NuestroEnfoque />
             <DondeLoAplicamos />
+            <IntegracionSistemas />
             <AppsHiperpersonalizadas />
             <CasosDeExitoIntro />
             <GoberniaShowcase />

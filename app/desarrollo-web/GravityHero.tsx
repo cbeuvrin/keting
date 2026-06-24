@@ -150,6 +150,10 @@ export default function GravityHero() {
                 }}
             />
 
+            {/* H1 semántico para SEO — el hero es visual (letras de física), así que
+                el encabezado va accesible (sr-only) con la keyword ancla de la página. */}
+            <h1 className="sr-only">Diseño y desarrollo web a medida en México</h1>
+
             {/* Asteriscos decorativos gigantes (detrás de las letras) */}
             <motion.span
                 animate={{ rotate: 360 }}

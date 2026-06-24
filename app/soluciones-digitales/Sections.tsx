@@ -1763,3 +1763,41 @@ function MagneticButton() {
         </>
     );
 }
+
+/* ==========================================================================
+   INTEGRACIÓN DE SISTEMAS Y APIs — bloque de servicio visible (SEO/AEO)
+   Captura la keyword "integración de sistemas" con su propio encabezado.
+   ========================================================================== */
+
+export function IntegracionSistemas() {
+    return (
+        <section className="relative bg-[#FAFAFA] py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
+            {/* Grid background sutil */}
+            <div
+                className="absolute inset-0 opacity-[0.025] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(0,0,0,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.8) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+            <div className="max-w-4xl mx-auto relative">
+                <div className="flex items-center gap-3 mb-6">
+                    <span className="block w-10 h-px bg-[#1d1d1f]/40" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
+                        Servicio · Integración
+                    </span>
+                </div>
+                <h3 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-5 text-[#1d1d1f]">
+                    Integración de sistemas y{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">APIs</span>
+                </h3>
+                <p className="text-base md:text-lg text-[#1d1d1f]/60 font-light max-w-2xl leading-relaxed">
+                    Conectamos tu ERP, tus herramientas y tus fuentes de datos en un solo flujo.
+                    Integraciones a medida y APIs que eliminan el trabajo manual entre sistemas —
+                    para que tu operación funcione como una sola pieza.
+                </p>
+            </div>
+        </section>
+    );
+}

@@ -5,7 +5,7 @@ type Faq = { q: string; a: string };
 /**
  * Sección de Preguntas Frecuentes — acordeón nativo (<details>, sin JS de cliente),
  * estilo editorial de la marca (monocromo, Playfair italic, cuadrícula + asterisco).
- * `dark` adapta los colores para páginas de fondo oscuro (ej. /webdesing).
+ * `dark` adapta los colores para páginas de fondo oscuro (ej. /desarrollo-web).
  * Incluye schema FAQPage (respuestas que la IA cita + rich results en Google).
  */
 export function FaqSection({

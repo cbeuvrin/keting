@@ -51,10 +51,12 @@ const nextConfig = {
       { source: '/category/:path*', destination: '/blog', permanent: true },
       // Paginación antigua del blog
       { source: '/blog/page/:n*', destination: '/blog', permanent: true },
-      // Páginas de servicios antiguas
-      { source: '/web', destination: '/webdesing', permanent: true },
-      { source: '/diseno-web-2', destination: '/webdesing', permanent: true },
-      { source: '/web-informativa-landing-page', destination: '/webdesing', permanent: true },
+      // Slug renombrado: /webdesing → /desarrollo-web (keyword + corrige typo)
+      { source: '/webdesing', destination: '/desarrollo-web', permanent: true },
+      // Páginas de servicios antiguas (apuntan directo al slug nuevo, sin encadenar)
+      { source: '/web', destination: '/desarrollo-web', permanent: true },
+      { source: '/diseno-web-2', destination: '/desarrollo-web', permanent: true },
+      { source: '/web-informativa-landing-page', destination: '/desarrollo-web', permanent: true },
       { source: '/portafolio-web', destination: '/portafolio', permanent: true },
       { source: '/plataforma-de-cursos', destination: '/soluciones-digitales', permanent: true },
       { source: '/google-ads', destination: '/soluciones-digitales', permanent: true },
@@ -71,7 +73,7 @@ const nextConfig = {
       { source: '/blogger', destination: '/blog', permanent: true },
       // Versión en inglés (ya no existe): específicas primero, luego catch-all
       { source: '/en/blog/:path*', destination: '/blog', permanent: true },
-      { source: '/en/web', destination: '/webdesing', permanent: true },
+      { source: '/en/web', destination: '/desarrollo-web', permanent: true },
       { source: '/en/portafolio-web', destination: '/portafolio', permanent: true },
       { source: '/en/google-ads', destination: '/soluciones-digitales', permanent: true },
       { source: '/en/meta-ads', destination: '/soluciones-digitales', permanent: true },

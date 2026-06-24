@@ -50,7 +50,7 @@ export function Services() {
                         transition={{ duration: 0.8 }}
                         className="flex flex-col justify-center items-start text-left w-full"
                     >
-                        <Link href="/webdesing" className="block group cursor-pointer w-full">
+                        <Link href="/desarrollo-web" className="block group cursor-pointer w-full">
                             {/* Eyebrow editorial */}
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
@@ -156,7 +156,7 @@ export function Services() {
 
                 </div>
             </div>
-            <CornerButton href="/webdesing" iconColor="border-black md:border-white text-black md:text-white" />
+            <CornerButton href="/desarrollo-web" iconColor="border-black md:border-white text-black md:text-white" />
             <ScrollArrow />
         </motion.section>
     );

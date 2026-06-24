@@ -11,7 +11,7 @@ export default function Image() {
         lineSans: "Sitios editoriales",
         lineSerif: "que escalan negocios.",
         sub: "Sitios web y e-commerce a medida.",
-        url: "ketingmedia.com/webdesing",
+        url: "ketingmedia.com/desarrollo-web",
         theme: "dark",
     });
 }

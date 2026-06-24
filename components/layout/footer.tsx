@@ -78,7 +78,7 @@ export function Footer() {
                             {t.footer.servicesTitle}
                         </div>
                         <ul className="space-y-3">
-                            <li><Link href="/webdesing" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
+                            <li><Link href="/desarrollo-web" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
                             <li><Link href="/soluciones-digitales" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
                             <li><Link href="/precioweb" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.price}</Link></li>
                         </ul>
