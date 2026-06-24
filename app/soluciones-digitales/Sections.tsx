@@ -1180,6 +1180,121 @@ export function GoberniaShowcase() {
 }
 
 /* ==========================================================================
+   IVAN IVANOVICH SHOWCASE — LMS a medida (software). Captura web en marco de
+   navegador; entra desde la izquierda (variación respecto a Gobernia).
+   ========================================================================== */
+
+export function IvanShowcase() {
+    const ref = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"],
+    });
+    const smooth = useSpring(scrollYProgress, { stiffness: 50, damping: 22, mass: 0.6 });
+
+    const x = useTransform(smooth, [0, 0.55], ["-26%", "0%"]);
+    const rotate = useTransform(smooth, [0, 0.55], [-5, 0]);
+    const scale = useTransform(smooth, [0, 0.55, 1], [0.9, 1, 1.05]);
+    const opacity = useTransform(smooth, [0, 0.2, 0.9, 1], [0, 1, 1, 0.85]);
+
+    const textY = useTransform(smooth, [0.1, 0.8], ["20%", "-20%"]);
+    const textOpacity = useTransform(smooth, [0.15, 0.35, 0.85, 1], [0, 1, 1, 0.4]);
+    const rotateAst = useTransform(smooth, [0, 1], [0, -540]);
+
+    return (
+        <section ref={ref} className="bg-[#FAFAFA] relative overflow-clip" style={{ minHeight: "180vh" }}>
+
+            <div
+                className="absolute inset-0 opacity-[0.025] pointer-events-none"
+                style={{
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.8) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+
+            <motion.span
+                style={{ rotate: rotateAst }}
+                className="absolute top-[12%] right-[5%] text-[8rem] md:text-[14rem] text-[#1d1d1f]/[0.07] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >*</motion.span>
+
+            <div className="sticky top-0 h-screen flex flex-col px-6 md:px-12 lg:px-24 py-16 md:py-20">
+                <div className="max-w-7xl mx-auto w-full relative">
+                    <div className="flex items-center justify-between mb-12 md:mb-16">
+                        <div className="flex items-center gap-3">
+                            <span className="block w-12 h-px bg-[#1d1d1f]/40" />
+                            <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
+                                Un caso · Ivan Ivanovich
+                            </span>
+                        </div>
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center">
+                            <span className="font-serif italic text-2xl md:text-3xl text-white">07</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="max-w-7xl mx-auto w-full relative flex-1 flex items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center w-full">
+
+                        {/* Captura web en marco de navegador (entra desde la izquierda) */}
+                        <motion.div
+                            style={{ x, rotate, scale, opacity }}
+                            className="md:col-span-7 relative order-2 md:order-1"
+                        >
+                            <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/10 blur-3xl rounded-full pointer-events-none" />
+                            <div className="relative rounded-xl md:rounded-2xl overflow-hidden bg-[#1a1a1a] ring-1 ring-black/10 shadow-2xl" style={{ padding: "0.4rem" }}>
+                                <div className="flex items-center gap-2 px-3 py-2 bg-[#222] rounded-t-lg md:rounded-t-xl">
+                                    <span className="block w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
+                                    <span className="block w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+                                    <span className="block w-2.5 h-2.5 rounded-full bg-[#28C840]" />
+                                    <div className="flex-1 mx-2 md:mx-4 h-5 rounded bg-white/5 flex items-center px-3">
+                                        <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">ivanivanovich.com</span>
+                                    </div>
+                                </div>
+                                <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
+                                    <img
+                                        src="/portafolio/screenshots/ivanivanovich.png"
+                                        alt="Ivan Ivanovich Academy · LMS a medida"
+                                        className="block w-full h-auto"
+                                        draggable={false}
+                                    />
+                                </div>
+                            </div>
+                            <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
+                                5,000+ alumnos
+                            </div>
+                        </motion.div>
+
+                        {/* Texto con explicación técnica del LMS */}
+                        <motion.div
+                            style={{ y: textY, opacity: textOpacity }}
+                            className="md:col-span-5 relative z-10 order-1 md:order-2"
+                        >
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light leading-[1.1] tracking-tight text-[#1d1d1f] mb-6">
+                                Una academia entera operando sobre un{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">LMS a medida</span>.
+                            </h2>
+                            <p className="text-base md:text-lg text-[#1d1d1f]/70 font-light leading-relaxed max-w-md">
+                                Para{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">Ivan Ivanovich Academy</span>{" "}
+                                —la academia de protección ejecutiva más reconocida de México— construimos un{" "}
+                                <strong className="font-semibold text-[#1d1d1f]">LMS</strong> (sistema de gestión de aprendizaje) a medida:
+                                cursos en vivo y grabados, inscripciones y cobros, área de alumnos,
+                                sistema de afiliados y soporte multi-idioma. Hoy opera con 5,000+ alumnos,
+                                40% internacionales.
+                            </p>
+                            <div className="mt-8 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/40 font-mono">
+                                <span className="block w-8 h-px bg-[#1d1d1f]/30" />
+                                LMS · Cursos · Multi-idioma · E-commerce
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+/* ==========================================================================
    5. DIDIS SHOWCASE — iPad con reveal-from-bottom + contador live + parallax
    Distinto a Gobernia: aquí el iPad sube como elevándose mientras un contador
    tickea en tiempo real y un texto a la izquierda hace parallax inverso.
@@ -1240,7 +1355,7 @@ export function DidisShowcase() {
                         </div>
 
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center">
-                            <span className="font-serif italic text-2xl md:text-3xl text-[#1a1a1a]">07</span>
+                            <span className="font-serif italic text-2xl md:text-3xl text-[#1a1a1a]">08</span>
                         </div>
                     </div>
                 </div>
@@ -1390,7 +1505,7 @@ export function IaComoAliado() {
                         transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                         className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center"
                     >
-                        <span className="font-serif italic text-2xl md:text-3xl text-white">08</span>
+                        <span className="font-serif italic text-2xl md:text-3xl text-white">09</span>
                     </motion.div>
                 </div>
 
@@ -1637,7 +1752,7 @@ export function Cierre() {
                         transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                         className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center"
                     >
-                        <span className="font-serif italic text-2xl md:text-3xl text-white">09</span>
+                        <span className="font-serif italic text-2xl md:text-3xl text-white">10</span>
                     </motion.div>
                 </div>
             </div>

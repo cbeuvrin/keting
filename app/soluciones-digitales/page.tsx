@@ -12,6 +12,7 @@ import {
     AppsHiperpersonalizadas,
     CasosDeExitoIntro,
     GoberniaShowcase,
+    IvanShowcase,
     DidisShowcase,
     IaComoAliado,
     Cierre,
@@ -33,6 +34,7 @@ export default function SolucionesDigitalesPage() {
             <AppsHiperpersonalizadas />
             <CasosDeExitoIntro />
             <GoberniaShowcase />
+            <IvanShowcase />
             <DidisShowcase />
             <IaComoAliado />
             <Cierre />
