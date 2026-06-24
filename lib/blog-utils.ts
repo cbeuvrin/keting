@@ -34,6 +34,8 @@ export function getCategoryImage(article: { image?: string; slug?: string; categ
 
     // Category-specific pools for varied but relevant images
     const pools: Record<string, number[]> = {
+        'Desarrollo Web':       [0, 1, 5], // minimalism, typography, react-nextjs
+        'Software':             [5, 7, 3], // react-nextjs, app-sales, animations
         'Diseño Web':           [0, 1, 3], // minimalism, typography, animations
         'Marketing':            [4, 2, 7], // identity-ai, landing, app-sales
         'Estrategia Digital':   [2, 5, 8], // landing, react-nextjs, geo-optimization

@@ -33,13 +33,11 @@ export const seedTopics = [
  * Categorías permitidas para el blog
  */
 export const categoriesFlat = [
-    "Diseño Web",
-    "Inteligencia Artificial",
-    "Ventas",
-    "Marketing",
-    "Posicionamiento",
+    "Desarrollo Web",
+    "Software",
     "Aplicaciones",
-    "Estrategia Digital"
+    "Inteligencia Artificial",
+    "E-commerce"
 ];
 
 export const categories = categoriesFlat;
