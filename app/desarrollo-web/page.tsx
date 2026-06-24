@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import GravityHero from "./GravityHero";
 import TextSection from "./TextSection"; // SSR: su prosa debe estar en el HTML (SEO)
+import { WebDesignServices } from "@/components/layout/web-design-services"; // SSR: lista de servicios crawlable (e-commerce, UX/UI, SEO...)
 import { GravityHeader } from "@/components/gravity/header";
 import { FaqSection } from "@/components/seo/faq-section";
 
@@ -12,7 +13,6 @@ const ZoomSection = dynamic(() => import("./ZoomSection"), { ssr: false });
 const PortfolioSection = dynamic(() => import("./PortfolioSection"), { ssr: false });
 const Testimonials = dynamic(() => import("@/components/layout/testimonials").then(mod => mod.Testimonials), { ssr: false });
 
-const WebDesignServices = dynamic(() => import("@/components/layout/web-design-services").then(mod => mod.WebDesignServices), { ssr: false });
 const ClientsShowcase = dynamic(() => import("./ClientsShowcase"), { ssr: false });
 const Footer = dynamic(() => import("@/components/layout/footer").then(mod => mod.Footer), { ssr: false });
 
