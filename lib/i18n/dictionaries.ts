@@ -64,9 +64,9 @@ const es = {
     },
     hero: {
         eyebrow: "Diseño y desarrollo digital",
-        title: "Soluciones digitales que escalan negocios ambiciosos.",
+        title: "Desarrollo de software, web y apps para negocios ambiciosos.",
         titleStyles: {
-            playfair: ["digitales", "escalan"],
+            playfair: ["software", "apps"],
             italic: ["negocios"],
             underlined: ["ambiciosos"],
         },
@@ -260,9 +260,9 @@ const en: typeof es = {
     },
     hero: {
         eyebrow: "Digital design & development",
-        title: "Digital solutions that scale ambitious businesses.",
+        title: "Custom software, web and app development for ambitious businesses.",
         titleStyles: {
-            playfair: ["Digital", "scale"],
+            playfair: ["software", "app"],
             italic: ["ambitious"],
             underlined: ["businesses."],
         },

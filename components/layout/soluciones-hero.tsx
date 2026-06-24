@@ -45,9 +45,9 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
 
                 {/* Main Title - Z-index 10 to stay behind phone */}
                 <motion.h1
-                    className="text-[clamp(3rem,8vw,7rem)] font-heading font-medium leading-none tracking-tighter text-black text-center z-10 relative"
+                    className="text-[clamp(2.5rem,7vw,6rem)] font-heading font-medium leading-[0.95] tracking-tighter text-black text-center z-10 relative max-w-5xl px-6"
                 >
-                    Soluciones Digitales
+                    Desarrollo de software y apps
                 </motion.h1>
 
                 {/* Phone Image Container */}
@@ -84,7 +84,7 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
 
                                 {/* Main Title Group */}
                                 <div className="flex flex-col justify-center h-full mt-20 md:mt-0 md:ml-[15%] w-fit relative z-10">
-                                    <h1 className="flex flex-col text-6xl md:text-[8vw] leading-[0.95] tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
+                                    <h2 className="flex flex-col text-6xl md:text-[8vw] leading-[0.95] tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
                                         <span className="block whitespace-nowrap">Experiencias</span>
                                         <span className="block whitespace-nowrap font-[family-name:var(--font-playfair)] italic font-normal normal-case text-[1.1em]">digitales</span>
                                         <span className="block whitespace-nowrap font-medium">únicas</span>
@@ -106,7 +106,7 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                                             {/* Black Arrow */}
                                             <ArrowDown className="relative w-12 h-12 text-black" />
                                         </motion.div>
-                                    </h1>
+                                    </h2>
                                 </div>
 
 

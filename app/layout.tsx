@@ -16,15 +16,18 @@ const SITE_NAME = "Keting Media";
 
 export const metadata: Metadata = {
   title: {
-    default: "Keting Media · Diseño y desarrollo de software, web y apps",
+    default: "Desarrollo de software, web y apps en México · Keting Media",
     template: "%s · Keting Media"
   },
-  description: "Diseño y desarrollo de software, web y apps a medida en México. Del sitio web al sistema interno que te opera. Diseño, ingeniería e IA. +80% de proyectos referidos.",
+  description: "Empresa mexicana de desarrollo de software, aplicaciones web y móviles a medida. Del sitio web al sistema interno que opera tu negocio. Diseño, ingeniería e IA.",
   keywords: [
-    "diseño y desarrollo de software",
+    "desarrollo de software",
+    "empresa de desarrollo de software",
+    "fábrica de software",
     "desarrollo web méxico",
-    "diseño web a medida",
-    "apps a medida méxico",
+    "desarrollo de aplicaciones móviles",
+    "desarrollo de apps",
+    "aplicaciones web",
     "e-commerce a medida",
     "plataformas saas",
     "desarrollo web next.js",
@@ -49,8 +52,8 @@ export const metadata: Metadata = {
     languages: { "es-MX": "/" },
   },
   openGraph: {
-    title: "Keting Media · Diseño web e ideas que escalan negocios ambiciosos",
-    description: "Diseño y desarrollo de software, web y apps a medida. Diseño, ingeniería e IA aplicada.",
+    title: "Keting Media · Desarrollo de software, web y apps en México",
+    description: "Desarrollo de software, aplicaciones web y móviles a medida en México. Diseño, ingeniería e IA aplicada.",
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: "es_MX",
@@ -58,8 +61,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keting Media · Diseño web editorial · IA · México",
-    description: "Webs editoriales, e-commerce y soluciones con IA para marcas ambiciosas.",
+    title: "Desarrollo de software, web y apps · México · IA",
+    description: "Software, e-commerce, plataformas y apps a medida con IA para negocios ambiciosos.",
     creator: "@ketingmedia",
   },
   robots: {
