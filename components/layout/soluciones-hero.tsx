@@ -47,7 +47,7 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                 <motion.h1
                     className="text-[clamp(2.5rem,7vw,6rem)] font-heading font-medium leading-[0.95] tracking-tighter text-black text-center z-10 relative max-w-5xl px-6"
                 >
-                    Desarrollo de software y apps
+                    Desarrollo de software y aplicaciones móviles
                 </motion.h1>
 
                 {/* Phone Image Container */}
