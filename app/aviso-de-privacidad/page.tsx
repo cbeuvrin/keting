@@ -121,7 +121,7 @@ export default function AvisoDePrivacidad() {
                         <section className="space-y-4">
                             <h2 className="text-2xl font-bold text-black border-b border-gray-200 pb-2">9) Autoridad competente</h2>
                             <p>
-                                Si el Titular considera que su derecho a la protección de datos personales ha sido vulnerado, podrá acudir ante el Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI), en <a href="https://www.inai.org.mx" target="_blank" rel="noopener noreferrer" className="text-black border-b border-black">www.inai.org.mx</a>.
+                                Si el Titular considera que su derecho a la protección de datos personales ha sido vulnerado, podrá acudir ante el Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI) o ante la autoridad competente en materia de protección de datos personales que lo sustituya conforme a la legislación vigente.
                             </p>
                         </section>
                     </div>

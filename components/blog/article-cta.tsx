@@ -109,7 +109,7 @@ export function ArticleCTA({ title }: { title?: string }) {
                         <a
                             href={waHref}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="nofollow noopener noreferrer"
                             className="group inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#25D366] text-white rounded-full text-sm font-bold hover:bg-[#1ebe5a] transition-colors"
                         >
                             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="w-5 h-5">

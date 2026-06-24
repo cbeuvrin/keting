@@ -18,7 +18,7 @@ export function WhatsAppButton() {
                         <motion.a
                             href="https://wa.me/525543830150" // Updated with current phone
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="nofollow noopener noreferrer"
                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.8 }}

@@ -228,6 +228,10 @@ export default function PricingPage() {
                         { q: "¿Qué incluye el precio?", a: "Un proyecto serio incluye estrategia, diseño UX/UI a medida, desarrollo con tecnología moderna (Next.js/React), SEO técnico, optimización de velocidad, pruebas, despliegue y capacitación para que tú administres tu sitio." },
                         { q: "¿Ofrecen mantenimiento?", a: "Sí. El mantenimiento o iguala mensual va de $2,500 a $12,000 MXN, según el alcance: actualizaciones, seguridad, mejoras y soporte." },
                         { q: "¿Por qué un proyecto a medida cuesta más que una plantilla?", a: "Porque diseñamos y programamos desde cero para tu negocio: mejor rendimiento, seguridad, integraciones y diferenciación. Cuesta más al inicio, pero evita rehacer todo cuando el negocio crece." },
+                        { q: "¿Cuánto cuesta una tienda en línea (e-commerce)?", a: "Un e-commerce a medida va de $45,000 a $150,000 MXN, según el tamaño del catálogo, las pasarelas de pago y las integraciones (inventario, facturación, envíos) que necesites." },
+                        { q: "¿Cuánto cuesta una app o plataforma a medida?", a: "Una app móvil o plataforma SaaS a medida arranca desde $120,000 MXN, y un sistema interno de gestión desde $100,000 MXN. El precio final depende del alcance funcional y las integraciones." },
+                        { q: "¿Se puede pagar en parcialidades?", a: "Sí. Dividimos el proyecto en hitos con pagos por etapa (anticipo, avances y entrega), para que el flujo y el riesgo sean manejables para ambas partes. Emitimos factura (CFDI) por todos nuestros servicios." },
+                        { q: "¿Cuánto tarda en estar listo?", a: "Una landing toma de 1 a 2 semanas; un sitio corporativo de 3 a 6 semanas; un e-commerce o una plataforma, de 2 a 4 meses. Definimos el cronograma por fases desde el inicio." },
                     ]}
                 />
 

@@ -116,6 +116,24 @@ export default function BlogPage() {
             {/* Filter Bar / Navigation */}
             <section className="pt-32 pb-6 px-6 sm:px-12 bg-[#F0F2F5]">
                 <div className="container mx-auto">
+                    {/* Encabezado editorial — da H1 + texto crawlable a la página de blog */}
+                    <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+                        <div className="flex items-center justify-center gap-3 mb-5">
+                            <span className="block w-10 h-px bg-black/30" />
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50">Blog</span>
+                            <span className="block w-10 h-px bg-black/30" />
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5">
+                            Ideas sobre{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">desarrollo</span>, software e IA
+                        </h1>
+                        <p className="text-base md:text-lg text-gray-600 font-light leading-relaxed">
+                            Guías y análisis sobre desarrollo de software, aplicaciones web y móviles,
+                            e-commerce e inteligencia artificial aplicada a negocios. Escrito por el equipo
+                            de Keting Media para ayudarte a tomar mejores decisiones tecnológicas.
+                        </p>
+                    </div>
+
                     {/* Desktop Filters */}
                     <div className="hidden md:flex flex-wrap items-center justify-center gap-2 mb-12">
                         {availableCategories.map((cat) => (
