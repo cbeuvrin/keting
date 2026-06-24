@@ -1,6 +1,16 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 // Sección de E-commerce para /desarrollo-web.
-// Server component (sin "use client"): renderiza en servidor → texto siempre en el
-// HTML (crawlable + SEO). Animación del asterisco por CSS, sin gate de JS.
+// Client component pero importado normalmente (NO ssr:false) → el texto sí
+// renderiza en el HTML del servidor (crawlable); solo se anima al entrar.
+
+const reveal = {
+    initial: { opacity: 0, y: 28 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-15%" },
+} as const;
 
 export function EcommerceSection() {
     const tags = ["Catálogo curado", "Pagos en línea", "Inventario", "SEO técnico"];
@@ -26,7 +36,11 @@ export function EcommerceSection() {
 
             <div className="max-w-7xl mx-auto relative grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
                 {/* Texto */}
-                <div className="md:col-span-5">
+                <motion.div
+                    {...reveal}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="md:col-span-5"
+                >
                     <div className="flex items-center gap-3 mb-6">
                         <span className="block w-10 h-px bg-[#1d1d1f]/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
@@ -53,10 +67,14 @@ export function EcommerceSection() {
                             </span>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Imagen del caso Rosymar en marco de navegador */}
-                <div className="md:col-span-7 relative">
+                <motion.div
+                    {...reveal}
+                    transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                    className="md:col-span-7 relative"
+                >
                     <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/10 blur-3xl rounded-full pointer-events-none" />
                     <div
                         className="relative rounded-xl md:rounded-2xl overflow-hidden bg-[#1a1a1a] ring-1 ring-black/10 shadow-2xl"
@@ -85,7 +103,7 @@ export function EcommerceSection() {
                     <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
                         ↑ 5x ventas
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

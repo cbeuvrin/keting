@@ -1,6 +1,15 @@
-// Sección de Landing pages para /desarrollo-web.
-// Server component (SSR) → texto siempre en el HTML (crawlable). Versión oscura
-// para hacer juego con la estética brutalista del caso Iudex.
+"use client";
+
+import { motion } from "framer-motion";
+
+// Sección de Landing pages para /desarrollo-web (versión oscura, hace juego con
+// Iudex). Importada normalmente (NO ssr:false) → texto en el HTML; solo anima al entrar.
+
+const reveal = {
+    initial: { opacity: 0, y: 28 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-15%" },
+} as const;
 
 export function LandingSection() {
     const tags = ["Mensaje claro", "Carga veloz", "Orientada a conversión", "SEO técnico"];
@@ -26,7 +35,11 @@ export function LandingSection() {
 
             <div className="max-w-7xl mx-auto relative grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
                 {/* Imagen del caso Iudex en marco de navegador (izquierda) */}
-                <div className="md:col-span-7 relative order-2 md:order-1">
+                <motion.div
+                    {...reveal}
+                    transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                    className="md:col-span-7 relative order-2 md:order-1"
+                >
                     <div className="absolute -inset-x-8 -bottom-8 h-12 bg-black/50 blur-3xl rounded-full pointer-events-none" />
                     <div
                         className="relative rounded-xl md:rounded-2xl overflow-hidden bg-[#0a0a0a] ring-1 ring-white/10 shadow-2xl"
@@ -53,10 +66,14 @@ export function LandingSection() {
                     <div className="absolute top-4 right-4 bg-white text-black text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
                         100k+ sesiones/mes
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Texto (derecha) */}
-                <div className="md:col-span-5 order-1 md:order-2">
+                <motion.div
+                    {...reveal}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="md:col-span-5 order-1 md:order-2"
+                >
                     <div className="flex items-center gap-3 mb-6">
                         <span className="block w-10 h-px bg-white/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/50">
@@ -83,7 +100,7 @@ export function LandingSection() {
                             </span>
                         ))}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
