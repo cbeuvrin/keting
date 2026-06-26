@@ -7,10 +7,14 @@ import { DigitalSolutions } from "@/components/layout/digital-solutions";
 import { Toogo } from "@/components/layout/toogo";
 import { AboutUs } from "@/components/layout/about-us";
 import { Footer } from "@/components/layout/footer";
-import { BlogCarousel } from "@/components/layout/blog-carousel";
-import { BrandsConstellation } from "@/components/layout/brands-constellation";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
+// Below-the-fold y sin valor SEO crítico (decorativa / contenido ya en /blog) →
+// se cargan diferidas, fuera del JS inicial, para bajar TBT y "JS sin usar".
+const BlogCarousel = dynamic(() => import("@/components/layout/blog-carousel").then((m) => m.BlogCarousel), { ssr: false });
+const BrandsConstellation = dynamic(() => import("@/components/layout/brands-constellation").then((m) => m.BrandsConstellation), { ssr: false });
 
 export default function Home() {
   // El logo del header se muestra de inmediato (sin preloader que demore la página).
