@@ -122,6 +122,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 {/* Mobile Close Button */}
                                 <button
                                     onClick={onClose}
+                                    aria-label="Cerrar"
                                     className="absolute top-4 right-4 z-50 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white p-2 rounded-full md:hidden shadow-lg transition-transform active:scale-90"
                                 >
                                     <X className="w-5 h-5" />

@@ -132,6 +132,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
 
                         <button
                             onClick={() => setIsMenuOpen(true)}
+                            aria-label="Abrir menú"
                             className={cn("md:hidden flex items-center group transition-colors duration-500", textColor)}
                         >
                             <MenuIcon className="w-8 h-8 stroke-[1.5] group-hover:scale-110 transition-transform" />
