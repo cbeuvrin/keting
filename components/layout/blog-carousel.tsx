@@ -112,7 +112,9 @@ export function BlogCarousel() {
         const fetchDynamicArticles = async () => {
             const { data, error } = await supabase
                 .from('articles')
-                .select('*')
+                // Solo las columnas que usa la tarjeta — NO traer `content` (HTML
+                // completo de cada artículo) que pesaba ~112KB de más.
+                .select('id, slug, title, excerpt, category, image, color, accent, author, date')
                 .order('created_at', { ascending: false });
             
             if (data && data.length > 0) {
