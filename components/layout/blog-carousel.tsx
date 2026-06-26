@@ -5,6 +5,7 @@ import { motion, useAnimationFrame } from "framer-motion";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { articles } from "@/lib/blog-data";
+import { optimizeImageUrl } from "@/lib/blog-utils";
 
 // Deterministic tilt per card index
 const TILTS = articles.map((_, i) => ((i * 137 + 31) % 29) - 14);
@@ -39,7 +40,7 @@ function BlogCard({
                 <div
                     className="absolute inset-0 opacity-15 grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-700"
                     style={{
-                        backgroundImage: `url(${article.image || '/images/blog/placeholder.png'})`,
+                        backgroundImage: `url(${optimizeImageUrl(article.image || '/images/blog/placeholder.png', 700)})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center'
                     }}

@@ -337,7 +337,7 @@ function BlogImage({ src, alt, className, slug }: { src: string; alt: string; cl
 
 function FeaturedCard({ article, size }: CardProps) {
     const isLarge = size === "lg";
-    const imageUrl = getCategoryImage(article);
+    const imageUrl = getCategoryImage(article, 600);
     
     return (
         <Link href={`/blog/${article.slug}`} className="block h-full w-full">
@@ -377,7 +377,7 @@ function FeaturedCard({ article, size }: CardProps) {
 }
 
 function VerticalCard({ article }: { article: any }) {
-    const imageUrl = getCategoryImage(article);
+    const imageUrl = getCategoryImage(article, 600);
     
     return (
         <Link href={`/blog/${article.slug}`} className="block group">
@@ -413,7 +413,7 @@ function VerticalCard({ article }: { article: any }) {
 }
 
 function HorizontalItem({ article }: { article: any }) {
-    const imageUrl = getCategoryImage(article);
+    const imageUrl = getCategoryImage(article, 600);
     
     return (
         <Link href={`/blog/${article.slug}`} className="block group">

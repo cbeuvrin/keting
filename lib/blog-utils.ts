@@ -8,14 +8,28 @@ export function getHash(str: string) {
     return Math.abs(hash);
 }
 
-export function getCategoryImage(article: { image?: string; slug?: string; category?: string | string[] }): string {
+/**
+ * Optimiza imágenes de Supabase Storage usando su endpoint de transformación
+ * (redimensiona + comprime al vuelo, sin re-subir). Reduce ~87% el peso.
+ * Las imágenes locales (ya redimensionadas) se devuelven sin cambios.
+ */
+export function optimizeImageUrl(url: string, width = 1000, quality = 72): string {
+    if (url.includes("supabase.co/storage/v1/object/")) {
+        const transformed = url.replace("/storage/v1/object/", "/storage/v1/render/image/");
+        const sep = transformed.includes("?") ? "&" : "?";
+        return `${transformed}${sep}width=${width}&quality=${quality}`;
+    }
+    return url;
+}
+
+export function getCategoryImage(article: { image?: string; slug?: string; category?: string | string[] }, width = 1000): string {
     // Accept any full external URL (pollinations, supabase, etc.) or a local path that is not "default"
     const img = article.image || "";
     const isValid = (img.startsWith("https://") || img.startsWith("http://")) ||
                     (img.startsWith("/") && !img.includes("default") && !img.includes("placeholder"));
-    
+
     if (isValid && img.length > 0) {
-        return img;
+        return optimizeImageUrl(img, width);
     }
 
     const fallbacks = [
