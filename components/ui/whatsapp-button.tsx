@@ -19,6 +19,7 @@ export function WhatsAppButton() {
                             href="https://wa.me/525543830150" // Updated with current phone
                             target="_blank"
                             rel="nofollow noopener noreferrer"
+                            aria-label="Escríbenos por WhatsApp"
                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.8 }}
@@ -31,6 +32,7 @@ export function WhatsAppButton() {
                         {/* Email Option */}
                         <motion.a
                             href="mailto:info@ketingmedia.com" // Updated with current email
+                            aria-label="Escríbenos por correo"
                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.8 }}
@@ -46,6 +48,8 @@ export function WhatsAppButton() {
             {/* Main Toggle Button */}
             <motion.button
                 onClick={toggleMenu}
+                aria-label={isOpen ? "Cerrar menú de contacto" : "Abrir menú de contacto"}
+                aria-expanded={isOpen}
                 className="flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-2xl hover:scale-105 transition-transform"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
