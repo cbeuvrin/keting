@@ -56,7 +56,7 @@ export function LandingSection() {
                         <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src="/portafolio/screenshots/iudex.png"
+                                src="/portafolio/screenshots/iudex.jpg"
                                 alt="Iudex · Landing de alto impacto (Legal AI)"
                                 className="block w-full h-auto"
                                 draggable={false}

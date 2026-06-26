@@ -548,7 +548,7 @@ export function CaseIvanIvanovich() {
             fontStyle="display"
             metric={{ value: "↑ 4x", label: "Tráfico anual" }}
             url="https://ivanivanovich.com/"
-            image="/portafolio/screenshots/ivanivanovich.png"
+            image="/portafolio/screenshots/ivanivanovich.jpg"
             imageAlt="Ivan Ivanovich · Academia de Protección Ejecutiva"
             effect="tilt"
         />
@@ -569,7 +569,7 @@ export function CaseIudex() {
             fontStyle="sans"
             metric={{ value: "100k+", label: "Sesiones mes" }}
             url="https://www.iudex.mx/"
-            image="/portafolio/screenshots/iudex.png"
+            image="/portafolio/screenshots/iudex.jpg"
             imageAlt="Iudex · Legal AI"
             dark
             effect="slide"
@@ -592,7 +592,7 @@ export function CaseGobernia() {
             fontStyle="sans"
             metric={{ value: "↑ 8x", label: "Conversión" }}
             url="https://gobernia-liard.vercel.app/"
-            image="/portafolio/screenshots/gobernia.png"
+            image="/portafolio/screenshots/gobernia.jpg"
             imageAlt="Gobernia · 4 agentes IA"
             effect="rise"
         />
@@ -614,7 +614,7 @@ export function CaseSmileBetter() {
             fontStyle="sans"
             metric={{ value: "↑ 3x", label: "Citas mensuales" }}
             url="https://smilebetterclinics.com/"
-            image="/portafolio/screenshots/smilebetter.png"
+            image="/portafolio/screenshots/smilebetter.jpg"
             imageAlt="Smile Better · Clínica dental"
             dark
             effect="tilt"
@@ -637,7 +637,7 @@ export function CaseBarmored() {
             fontStyle="display"
             metric={{ value: "↑ 7x", label: "Cotizaciones" }}
             url="https://www.barmoredsecurity.com/"
-            image="/portafolio/screenshots/barmored.png"
+            image="/portafolio/screenshots/barmored.jpg"
             imageAlt="Barmored Security · Blindaje automotriz"
             dark
             effect="tilt"
@@ -660,7 +660,7 @@ export function CaseToogo() {
             fontStyle="sans"
             metric={{ value: "100+", label: "Tiendas activas" }}
             url="https://www.toogo.store/"
-            image="/portafolio/screenshots/toogo.png"
+            image="/portafolio/screenshots/toogo.jpg"
             imageAlt="Toogo · SaaS E-commerce multi-tenant"
             effect="rise"
         />
@@ -681,7 +681,7 @@ export function CaseRosymar() {
             fontStyle="serif"
             metric={{ value: "↑ 5x", label: "Ventas online" }}
             url="https://rosymargonzalez.com/"
-            image="/portafolio/screenshots/rosymargonzalez.png"
+            image="/portafolio/screenshots/rosymargonzalez.jpg"
             imageAlt="Rosymar González · Joyería"
             effect="float"
         />
@@ -702,7 +702,7 @@ export function CaseHapptek() {
             fontStyle="serif"
             metric={{ value: "↑ 6x", label: "Tiempo en sitio" }}
             url="https://audio-five-blue.vercel.app/"
-            image="/portafolio/screenshots/audiofive.png"
+            image="/portafolio/screenshots/audiofive.jpg"
             imageAlt="Happtek · Audio premium"
             dark
             effect="slide"

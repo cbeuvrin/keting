@@ -93,7 +93,7 @@ export function EcommerceSection() {
                         <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src="/portafolio/screenshots/rosymargonzalez.png"
+                                src="/portafolio/screenshots/rosymargonzalez.jpg"
                                 alt="Rosymar González · E-commerce de joyería a medida"
                                 className="block w-full h-auto"
                                 draggable={false}

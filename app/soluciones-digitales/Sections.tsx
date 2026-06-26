@@ -1252,7 +1252,7 @@ export function IvanShowcase() {
                                 </div>
                                 <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                                     <img
-                                        src="/portafolio/screenshots/ivanivanovich.png"
+                                        src="/portafolio/screenshots/ivanivanovich.jpg"
                                         alt="Ivan Ivanovich Academy · LMS a medida"
                                         className="block w-full h-auto"
                                         draggable={false}

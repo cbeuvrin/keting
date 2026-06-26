@@ -180,6 +180,8 @@ function MarqueeRow({
                         <img
                             src={logo.src}
                             alt={logo.alt}
+                            width={300}
+                            height={300}
                             className="max-w-full max-h-full object-contain opacity-70 hover:opacity-100 transition-opacity duration-500"
                             style={{ filter: "invert(1)" }}
                             draggable={false}

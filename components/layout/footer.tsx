@@ -56,6 +56,8 @@ export function Footer() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                         src="/keting-logo-white.png"
                         alt="Keting Media"
+                        width={1024}
+                        height={585}
                         className="relative w-[80%] md:w-[70%] lg:w-[60%] max-w-[900px] h-auto object-contain"
                         draggable={false}
                     />
