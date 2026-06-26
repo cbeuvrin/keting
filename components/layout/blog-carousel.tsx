@@ -121,7 +121,8 @@ export function BlogCarousel() {
                 // Solo la DB → sincronizado y sin duplicar los estáticos (que también
                 // viven en la DB). Si borras un artículo, su card desaparece. Los
                 // `articles` estáticos quedan solo como fallback inicial (SSR / sin JS).
-                setAllArticles(data);
+                // `data` no trae `content` (lo excluimos del select); la tarjeta no lo usa.
+                setAllArticles(data as unknown as typeof articles);
                 setTotalWidth(CARD_WIDTH * data.length);
             }
         };
