@@ -60,6 +60,20 @@ export function Hero() {
     const mouseY = useMotionValue(0);
     const prefersReduced = useReducedMotion();
 
+    // El efecto lupa crea ~2 springs por letra (~100 en total) → muy costoso en
+    // JS y, en móvil/táctil, inútil (no hay mouse que lo active). Solo lo
+    // encendemos en escritorio con puntero fino; en móvil el título va plano
+    // (carga mucho más rápido + mejora el LCP).
+    const [magnify, setMagnify] = useState(false);
+    useEffect(() => {
+        if (prefersReduced) return;
+        const mq = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+        const update = () => setMagnify(mq.matches);
+        update();
+        mq.addEventListener("change", update);
+        return () => mq.removeEventListener("change", update);
+    }, [prefersReduced]);
+
     // Automatic sweep animation on load
     useEffect(() => {
         if (!targetRef.current || hasAnimated || prefersReduced) return;
@@ -149,6 +163,15 @@ export function Hero() {
     }
 
     const AnimatedWord = ({ word, className }: { word: string, className?: string }) => {
+        // Móvil / táctil / reduced-motion: título plano, sin springs por letra.
+        if (!magnify) {
+            return (
+                <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
+                    {word}
+                </span>
+            );
+        }
+
         const chars = word.split("");
 
         return (
