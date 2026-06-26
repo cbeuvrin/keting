@@ -116,9 +116,11 @@ export function BlogCarousel() {
                 .order('created_at', { ascending: false });
             
             if (data && data.length > 0) {
-                const combined = [...data, ...articles];
-                setAllArticles(combined);
-                setTotalWidth(CARD_WIDTH * combined.length);
+                // Solo la DB → sincronizado y sin duplicar los estáticos (que también
+                // viven en la DB). Si borras un artículo, su card desaparece. Los
+                // `articles` estáticos quedan solo como fallback inicial (SSR / sin JS).
+                setAllArticles(data);
+                setTotalWidth(CARD_WIDTH * data.length);
             }
         };
         fetchDynamicArticles();
@@ -344,10 +346,11 @@ export function BlogCarousel() {
             <div className="container mx-auto px-6 md:px-12 mt-12 flex justify-center lg:justify-end relative z-10">
                 <Link
                     href="/blog"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-black transition-colors group"
+                    className="group inline-flex items-center gap-3 text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-sans"
                 >
+                    <span className="block w-8 h-px bg-black/40 transition-all duration-300 group-hover:w-12 group-hover:bg-black" />
                     Ver todos los artículos
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </Link>
             </div>
         </section>
