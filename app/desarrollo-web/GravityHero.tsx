@@ -240,9 +240,9 @@ export default function GravityHero() {
                             <span className="block w-10 h-px bg-white/40" />
                         </div>
                         <p className="text-sm md:text-base text-white/80 text-justify md:text-right leading-relaxed font-light">
-                            Como <ScrambleText text="AI Engineer" className="font-bold text-white" />, diseñamos y estructuramos{" "}
+                            Como <ScrambleText text="AI Engineer" className="font-bold text-white" />, diseño y estructuro{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">soluciones digitales</span>{" "}
-                            precisas, desde tiendas en línea hasta plataformas de cursos. Nos especializamos en{" "}
+                            precisas, desde tiendas en línea hasta plataformas de cursos. Me especializo en{" "}
                             <span className="relative inline-block text-white font-medium">
                                 desarrollo web
                                 <span className="absolute -bottom-0.5 left-0 right-0 h-[1px] bg-white/70" />
@@ -260,7 +260,7 @@ export default function GravityHero() {
                                 Carlos Beuvrin
                             </p>
                             <p className="text-xs md:text-sm text-white/50 font-light italic">
-                                Programador
+                                AI Engineer · Fundador
                             </p>
                         </div>
                         <div

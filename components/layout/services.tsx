@@ -121,8 +121,10 @@ export function Services() {
 
                                 {/* Inner Screen Container */}
                                 <div className="absolute inset-[3px] bg-black rounded-[3rem] overflow-hidden">
+                                    {/* H.264/mp4: el .mov original era HEVC (no reproduce en
+                                        Chrome/Firefox → pantalla negra) y pesaba 40MB. */}
                                     <video
-                                        src="/videos-raros/bideo3.mov"
+                                        src="/videos-raros/bideo3.mp4"
                                         autoPlay
                                         loop
                                         muted

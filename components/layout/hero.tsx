@@ -163,11 +163,16 @@ export function Hero() {
     }
 
     const AnimatedWord = ({ word, className }: { word: string, className?: string }) => {
+        // Nota: el espacio final dentro de cada span NO se ve (CSS colapsa el
+        // whitespace al final de un inline-block; el hueco visual lo da mr-[0.25em]),
+        // pero SÍ queda en el texto extraído — sin él, crawlers y LLMs leían el
+        // H1 como una sola palabra pegada ("Desarrollodesoftware...").
+
         // Móvil / táctil / reduced-motion: título plano, sin springs por letra.
         if (!magnify) {
             return (
                 <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
-                    {word}
+                    {word}{" "}
                 </span>
             );
         }
@@ -178,7 +183,7 @@ export function Hero() {
             <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
                 {chars.map((char, i) => (
                     <MagnifyingChar key={i} char={char} index={i} baseDelay={0} />
-                ))}
+                ))}{" "}
             </span>
         )
     }
@@ -287,7 +292,10 @@ export function Hero() {
                                 </span>
                             </motion.div>
 
+                            {/* aria-label = título completo con espacios, para lectores de
+                                pantalla y agentes que leen el árbol de accesibilidad. */}
                             <motion.h1
+                                aria-label={t.hero.title}
                                 className="text-[clamp(2.5rem,10vw,7.5rem)] font-heading font-medium leading-[0.85] tracking-tighter text-black"
                             >
                                 <AnimatedLine text={t.hero.title} styles={t.hero.titleStyles} />
