@@ -123,8 +123,8 @@ const organizationJsonLd = {
   },
   sameAs: [
     "https://www.linkedin.com/company/ketingmedia",
-    "https://www.instagram.com/ketingmedia",
-    "https://www.facebook.com/ketingmedia",
+    "https://www.instagram.com/keting_media/",
+    "https://www.facebook.com/ketingmedia/",
   ],
 };
 

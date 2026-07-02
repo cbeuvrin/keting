@@ -5,6 +5,7 @@ import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-react";
 import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
+import { SOCIAL } from "@/lib/social";
 
 export function Footer() {
     const { lang, setLang, t } = useLang();
@@ -130,13 +131,13 @@ export function Footer() {
                             {t.footer.followTitle}
                         </div>
                         <div className="flex gap-3 mb-8">
-                            <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                            <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
                                 <Instagram className="w-4 h-4" />
                             </a>
-                            <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                            <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
                                 <Linkedin className="w-4 h-4" />
                             </a>
-                            <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
+                            <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:bg-white hover:text-black hover:border-white transition-all">
                                 <Facebook className="w-4 h-4" />
                             </a>
                         </div>

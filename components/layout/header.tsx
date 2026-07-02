@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
+import { SOCIAL } from "@/lib/social";
 
 
 // Items se generan en el render usando el dictionary
@@ -193,13 +194,13 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                             </div>
 
                             <div className="absolute left-8 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-10">
-                                <a href="#" className="hover:scale-110 transition-transform">
+                                <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:scale-110 transition-transform">
                                     <Facebook className="w-6 h-6" />
                                 </a>
-                                <a href="#" className="hover:scale-110 transition-transform">
+                                <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:scale-110 transition-transform">
                                     <Linkedin className="w-6 h-6" />
                                 </a>
-                                <a href="#" className="hover:scale-110 transition-transform">
+                                <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:scale-110 transition-transform">
                                     <Instagram className="w-6 h-6" />
                                 </a>
                             </div>

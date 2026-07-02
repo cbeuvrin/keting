@@ -4,6 +4,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Wifi, Facebook, Linkedin, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SOCIAL } from "@/lib/social";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 
@@ -295,13 +296,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         <p className="text-xs font-medium">5543830150</p>
                                     </div>
                                     <div className="flex gap-3">
-                                        <a href="#" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
+                                        <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
                                             <Facebook className="w-3.5 h-3.5" />
                                         </a>
-                                        <a href="#" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
+                                        <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
                                             <Linkedin className="w-3.5 h-3.5" />
                                         </a>
-                                        <a href="#" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
+                                        <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-1.5 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-all">
                                             <Instagram className="w-3.5 h-3.5" />
                                         </a>
                                     </div>
