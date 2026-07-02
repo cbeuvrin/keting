@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionValueEvent, useSpring, animate, cubicBezier, useReducedMotion } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { Fragment, useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
@@ -163,16 +163,17 @@ export function Hero() {
     }
 
     const AnimatedWord = ({ word, className }: { word: string, className?: string }) => {
-        // Nota: el espacio final dentro de cada span NO se ve (CSS colapsa el
-        // whitespace al final de un inline-block; el hueco visual lo da mr-[0.25em]),
-        // pero SÍ queda en el texto extraído — sin él, crawlers y LLMs leían el
-        // H1 como una sola palabra pegada ("Desarrollodesoftware...").
+        // El hueco entre palabras es un espacio REAL entre spans (lo pone
+        // AnimatedLine), NO un margin: así el espacio se renderiza, se COPIA
+        // desde el navegador y aparece en el texto extraído. Con margin (o con
+        // espacios internos al final del inline-block, que CSS colapsa), el
+        // título se copiaba pegado: "Desarrollodesoftware...".
 
         // Móvil / táctil / reduced-motion: título plano, sin springs por letra.
         if (!magnify) {
             return (
-                <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
-                    {word}{" "}
+                <span className={cn("inline-block whitespace-nowrap", className)}>
+                    {word}
                 </span>
             );
         }
@@ -180,10 +181,10 @@ export function Hero() {
         const chars = word.split("");
 
         return (
-            <span className={cn("inline-block mr-[0.25em] whitespace-nowrap", className)}>
+            <span className={cn("inline-block whitespace-nowrap", className)}>
                 {chars.map((char, i) => (
                     <MagnifyingChar key={i} char={char} index={i} baseDelay={0} />
-                ))}{" "}
+                ))}
             </span>
         )
     }
@@ -210,11 +211,11 @@ export function Hero() {
                     }
 
                     return (
-                        <AnimatedWord
-                            key={i}
-                            word={word}
-                            className={className}
-                        />
+                        <Fragment key={i}>
+                            <AnimatedWord word={word} className={className} />
+                            {/* Espacio real entre palabras: se copia y se extrae bien */}
+                            {" "}
+                        </Fragment>
                     );
                 })}
             </span>
