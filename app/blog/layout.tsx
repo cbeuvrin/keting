@@ -2,27 +2,20 @@ import type { Metadata } from "next";
 import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Blog · Ideas que inspiran sobre diseño web, IA y crecimiento digital",
+    title: "Blog · Guías sobre desarrollo de software, web, apps e IA",
     description:
-        "Artículos, casos y guías sobre diseño web, SEO técnico, IA aplicada y estrategia digital. Recursos para fundadores, marketers y operadores en México y LATAM.",
-    keywords: [
-        "blog diseño web",
-        "blog marketing digital",
-        "ia aplicada negocios",
-        "artículos seo",
-        "blog ketingmedia",
-    ],
+        "Guías y análisis sobre desarrollo de software, aplicaciones web y móviles, e-commerce e IA aplicada — con precios y datos reales de México. Para fundadores y equipos que construyen productos digitales.",
     alternates: { canonical: "/blog" },
     openGraph: {
         title: "Blog · Keting Media",
-        description: "Ideas que inspiran: diseño web, IA y crecimiento digital.",
+        description: "Guías sobre desarrollo de software, web, apps e IA — con datos reales de México.",
         url: "/blog",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
         title: "Blog · Keting Media",
-        description: "Ideas que inspiran: diseño web, IA y crecimiento digital.",
+        description: "Guías sobre desarrollo de software, web, apps e IA — con datos reales de México.",
     },
 };
 
