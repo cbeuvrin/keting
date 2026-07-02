@@ -35,13 +35,13 @@ export function AnimatedTitleHero() {
             title: <>Sistemas & Software <br />para Empresas</>,
             desc1: 'Creamos la "columna vertebral" de tu negocio para que todo funcione sin errores humanos.',
             desc2: 'Dashboards de control, CRMs personalizados, automatización de procesos internos y herramientas administrativas.',
-            image: '/soluciones-digitales/software.png'
+            image: '/desarrollo-de-software/software.png'
         },
         {
             title: <>Apps Móviles &<br />Web Apps</>,
             desc1: 'Aplicaciones interactivas para iOS y Android, y plataformas web dinámicas que tus clientes pueden usar desde cualquier lugar.',
             desc2: 'Interfaces modernas y fluidas diseñadas para una experiencia de usuario impecable.',
-            image: '/soluciones-digitales/celualrapp.png'
+            image: '/desarrollo-de-software/celualrapp.png'
         }
     ];
 

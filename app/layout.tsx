@@ -91,7 +91,7 @@ const organizationJsonLd = {
   name: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/keting-logo.png`,
-  description: "Estudio de diseño y desarrollo de software, web y apps a medida en México: sitios, e-commerce, plataformas/SaaS e IA aplicada.",
+  description: "Empresa de desarrollo de software, web y apps a medida en México: sitios, e-commerce, plataformas/SaaS e IA aplicada. Ingeniería, diseño de producto e inteligencia artificial en un mismo equipo.",
   knowsAbout: [
     "Diseño y desarrollo web",
     "Desarrollo de software a medida",

@@ -26,7 +26,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const menuItems = [
         { label: t.nav.home, href: "/#home", styles: ["italic"] },
         { label: t.nav.webdesign, href: "/desarrollo-web", styles: ["italic"] },
-        { label: t.nav.digital, href: "/soluciones-digitales", styles: ["italic"] },
+        { label: t.nav.digital, href: "/desarrollo-de-software", styles: ["italic"] },
         { label: t.nav.price, href: "/precioweb", styles: ["italic"] },
         { label: t.nav.portfolio, href: "/portafolio", styles: ["italic"] },
         { label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] },

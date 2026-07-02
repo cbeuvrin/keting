@@ -11,7 +11,7 @@ export default function Image() {
         lineSans: "Apps con",
         lineSerif: "inteligencia.",
         sub: "Plataformas con IA para empresas que escalan.",
-        url: "ketingmedia.com/soluciones-digitales",
+        url: "ketingmedia.com/desarrollo-de-software",
         theme: "light",
     });
 }

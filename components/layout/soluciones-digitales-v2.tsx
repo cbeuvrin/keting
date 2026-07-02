@@ -226,7 +226,7 @@ function SoftwareParallaxSection({ scrollYProgress }: { scrollYProgress: MotionV
             {/* Background Image Layer */}
             <motion.div style={{ y: yBg }} className="absolute inset-x-0 top-0 w-full h-[140%] z-0">
                 <img
-                    src="/soluciones-digitales/software.png"
+                    src="/desarrollo-de-software/software.png"
                     alt="Background"
                     className="w-full h-full object-cover opacity-100" // Increased opacity if needed, checking previous value
                 />
@@ -253,7 +253,7 @@ function SoftwareParallaxSection({ scrollYProgress }: { scrollYProgress: MotionV
                 {/* RIGHT SIDE: PHONE (Single) */}
                 <div className="w-1/2 h-full flex items-center justify-center relative">
                     <motion.div style={{ y: yCel1 }} className="flex-1 max-w-[42%] -rotate-12">
-                        <img src="/soluciones-digitales/cel1.png" alt="Phone 1" className="w-full h-auto object-contain drop-shadow-2xl" />
+                        <img src="/desarrollo-de-software/cel1.png" alt="Phone 1" className="w-full h-auto object-contain drop-shadow-2xl" />
                     </motion.div>
                 </div>
 

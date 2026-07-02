@@ -15,12 +15,12 @@ export const metadata: Metadata = {
         "automatización con ia",
         "agentes ia",
     ],
-    alternates: { canonical: "/soluciones-digitales" },
+    alternates: { canonical: "/desarrollo-de-software" },
     openGraph: {
         title: "Desarrollo de apps y software a medida con IA · Keting Media",
         description:
             "Apps móviles, plataformas y agentes IA a medida para empresas que necesitan escalar más allá del SaaS estándar.",
-        url: "/soluciones-digitales",
+        url: "/desarrollo-de-software",
         type: "website",
     },
     twitter: {
@@ -36,13 +36,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <JsonLd
                 data={[
                     service({
-                        name: "Software y soluciones digitales a medida con IA",
-                        serviceType: "Desarrollo de software y soluciones digitales",
+                        name: "Desarrollo de software y aplicaciones móviles a medida con IA",
+                        serviceType: "Desarrollo de software y aplicaciones móviles",
                         description:
-                            "Apps, plataformas/SaaS, agentes y automatización con IA hiper-personalizados para empresas que escalan.",
-                        path: "/soluciones-digitales",
+                            "Apps móviles, plataformas/SaaS, sistemas internos, agentes y automatización con IA hiper-personalizados para empresas que escalan.",
+                        path: "/desarrollo-de-software",
                     }),
-                    breadcrumb("Soluciones Digitales", "/soluciones-digitales"),
+                    breadcrumb("Desarrollo de Software", "/desarrollo-de-software"),
                 ]}
             />
             {children}

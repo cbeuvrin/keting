@@ -53,17 +53,20 @@ const nextConfig = {
       { source: '/blog/page/:n*', destination: '/blog', permanent: true },
       // Slug renombrado: /webdesing → /desarrollo-web (keyword + corrige typo)
       { source: '/webdesing', destination: '/desarrollo-web', permanent: true },
+      // Slug renombrado: /soluciones-digitales → /desarrollo-de-software (keyword money;
+      // :path* cubre también subrutas como /animated-title)
+      { source: '/soluciones-digitales/:path*', destination: '/desarrollo-de-software/:path*', permanent: true },
       // Páginas de servicios antiguas (apuntan directo al slug nuevo, sin encadenar)
       { source: '/web', destination: '/desarrollo-web', permanent: true },
       { source: '/diseno-web-2', destination: '/desarrollo-web', permanent: true },
       { source: '/web-informativa-landing-page', destination: '/desarrollo-web', permanent: true },
       { source: '/portafolio-web', destination: '/portafolio', permanent: true },
-      { source: '/plataforma-de-cursos', destination: '/soluciones-digitales', permanent: true },
-      { source: '/google-ads', destination: '/soluciones-digitales', permanent: true },
-      { source: '/meta-ads', destination: '/soluciones-digitales', permanent: true },
-      { source: '/soluciones-de-marketing', destination: '/soluciones-digitales', permanent: true },
-      { source: '/marketing', destination: '/soluciones-digitales', permanent: true },
-      { source: '/marketing-digital', destination: '/soluciones-digitales', permanent: true },
+      { source: '/plataforma-de-cursos', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/google-ads', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/meta-ads', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/soluciones-de-marketing', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/marketing', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/marketing-digital', destination: '/desarrollo-de-software', permanent: true },
       { source: '/cotizar', destination: '/precioweb', permanent: true },
       { source: '/asesorias', destination: '/precioweb', permanent: true },
       { source: '/nosotros', destination: '/', permanent: true },
@@ -75,8 +78,8 @@ const nextConfig = {
       { source: '/en/blog/:path*', destination: '/blog', permanent: true },
       { source: '/en/web', destination: '/desarrollo-web', permanent: true },
       { source: '/en/portafolio-web', destination: '/portafolio', permanent: true },
-      { source: '/en/google-ads', destination: '/soluciones-digitales', permanent: true },
-      { source: '/en/meta-ads', destination: '/soluciones-digitales', permanent: true },
+      { source: '/en/google-ads', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/en/meta-ads', destination: '/desarrollo-de-software', permanent: true },
       { source: '/en/blogger', destination: '/blog', permanent: true },
       { source: '/en/:path*', destination: '/', permanent: true },
     ];

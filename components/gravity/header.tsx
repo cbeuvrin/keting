@@ -79,7 +79,7 @@ export function GravityHeader({
                         <nav className="flex items-center gap-5 px-2">
                             <Link href="/" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.home}</Link>
                             <Link href="/desarrollo-web" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.webdesignShort}</Link>
-                            <Link href="/soluciones-digitales" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
+                            <Link href="/desarrollo-de-software" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
                             <Link href="/portafolio" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
                             <Link href="/precioweb" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.price}</Link>
                         </nav>

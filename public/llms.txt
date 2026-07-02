@@ -1,17 +1,20 @@
 # Keting Media
 
-> Estudio de diseño y desarrollo de software, web y apps a medida en México. Del sitio web al sistema interno que opera tu negocio: diseño editorial, ingeniería e IA aplicada. +80% de proyectos referidos.
+> Empresa de desarrollo de software, web y apps a medida en México (CDMX). Del sitio web al sistema interno que opera tu negocio: ingeniería, diseño de producto e IA aplicada. +80% de proyectos referidos.
 
-Keting Media diseña y desarrolla productos digitales a medida —sitios web, e-commerce, aplicaciones y plataformas/SaaS— combinando diseño editorial, ingeniería (Next.js, React) e inteligencia artificial aplicada. Dirigido por Carlos Beuvrin, trabaja con marcas y empresas en México y Latinoamérica que buscan escalar su negocio. Contacto: info@ketingmedia.com · +52 55 4383 0150 · Ciudad de México.
+Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña y programa productos digitales desde cero —sitios web, e-commerce, aplicaciones móviles, plataformas/SaaS y sistemas internos— combinando ingeniería de software (Next.js, React), diseño de producto e inteligencia artificial aplicada. Fundada y dirigida por Carlos Beuvrin (AI Engineer), trabaja con marcas y empresas en México y Latinoamérica. Proyectos destacados: Iudex (IA jurídica, 100,000+ sesiones/mes), Gobernia (agentes de IA para consejos corporativos), Toogo (SaaS de e-commerce, 100+ tiendas) e Ivan Ivanovich Academy (LMS, 5,000+ alumnos). Contacto: info@ketingmedia.com · +52 55 4383 0150 · Ciudad de México.
 
 ## Servicios
-- [Diseño y desarrollo web](https://ketingmedia.com/webdesing): Sitios editoriales, e-commerce y landing pages a medida, con SEO técnico y rendimiento (Next.js, React).
-- [Soluciones digitales y software a medida](https://ketingmedia.com/soluciones-digitales): Apps, plataformas y sistemas internos con IA, hiper-personalizados para cada operación.
+- [Diseño y desarrollo web](https://ketingmedia.com/desarrollo-web): Sitios, aplicaciones web, e-commerce y landing pages a medida, con SEO técnico y rendimiento (Next.js, React).
+- [Desarrollo de software y aplicaciones móviles](https://ketingmedia.com/desarrollo-de-software): Apps, plataformas SaaS, sistemas internos e integración de sistemas con IA, hiper-personalizados para cada operación.
 - [Portafolio](https://ketingmedia.com/portafolio): Casos y proyectos seleccionados de marcas que cambian su industria.
-- [Precios](https://ketingmedia.com/precioweb): Inversión, alcance y tiempos de proyectos web.
+- [Precios](https://ketingmedia.com/precioweb): Cuánto cuesta una web, e-commerce, app o software a medida en México — inversión, alcance y tiempos.
 
 ## Blog
-- [Blog de Keting Media](https://ketingmedia.com/blog): Artículos y guías sobre diseño web, desarrollo de software, IA aplicada y crecimiento digital.
+- [Blog de Keting Media](https://ketingmedia.com/blog): Artículos y guías sobre desarrollo de software, web, apps, e-commerce e IA aplicada.
+- [Desarrollo de software a la medida en CDMX: costos y cómo elegir (2026)](https://ketingmedia.com/blog/desarrollo-de-software-a-la-medida-cdmx-costos-2026): Guía con rangos de precio reales y checklist para contratar.
+- [¿Cuánto cuesta una web o app a medida en México? (2026)](https://ketingmedia.com/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026): Precios reales por tipo de proyecto.
+- [Tienda en línea a medida vs. Shopify](https://ketingmedia.com/blog/tienda-en-linea-a-medida-vs-shopify): Cuál conviene según la etapa del negocio.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.

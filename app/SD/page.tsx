@@ -12,7 +12,7 @@ import { X, Facebook, Linkedin, Instagram, ArrowUpRight } from "lucide-react";
 const menuItems = [
     { label: "Home", href: "/#home" },
     { label: "Diseño web", href: "/desarrollo-web" },
-    { label: "Soluciones digitales", href: "/soluciones-digitales" },
+    { label: "Soluciones digitales", href: "/desarrollo-de-software" },
     { label: "Portafolio", href: "/portafolio" },
     { label: "Contacto", href: "/#contacto" },
     { label: "Blog", href: "/#blog" },
