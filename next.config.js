@@ -51,6 +51,14 @@ const nextConfig = {
       { source: '/category/:path*', destination: '/blog', permanent: true },
       // Paginación antigua del blog
       { source: '/blog/page/:n*', destination: '/blog', permanent: true },
+      // Artículos IA duplicados (generados por el cron con dedup roto, borrados
+      // 2026-07-02) → consolidados en el artículo canónico del tema
+      { source: '/blog/redefiniendo-el-contacto-la-estrategia-definitiva-de-agentes-de-ia-autonoma-para-una-experiencia-cliente-superior', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
+      { source: '/blog/la-nueva-frontera-del-servicio-agentes-de-ia-autonomos-para-la-excelencia-operativa-y-la-conexion-hiper-personalizada', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
+      { source: '/blog/la-arquitectura-invisible-desplegando-agentes-de-ia-autonomos-para-una-experiencia-de-cliente-transformadora', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
+      { source: '/blog/la-arquitectura-invisible-desplegando-agentes-autonomos-de-ia-para-redefinir-la-experiencia-del-cliente-premium', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
+      { source: '/blog/la-vanguardia-del-servicio-como-los-agentes-autonomos-de-ia-redefinen-la-experiencia-del-cliente-en-la-era-digital', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
+      { source: '/blog/desbloqueando-la-excelencia-agentes-de-ia-autonomos-como-motor-de-transformacion-en-el-servicio-al-cliente', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
       // Slug renombrado: /webdesing → /desarrollo-web (keyword + corrige typo)
       { source: '/webdesing', destination: '/desarrollo-web', permanent: true },
       // Slug renombrado: /soluciones-digitales → /desarrollo-de-software (keyword money;
