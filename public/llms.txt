@@ -15,6 +15,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Desarrollo de software a la medida en CDMX: costos y cómo elegir (2026)](https://ketingmedia.com/blog/desarrollo-de-software-a-la-medida-cdmx-costos-2026): Guía con rangos de precio reales y checklist para contratar.
 - [¿Cuánto cuesta una web o app a medida en México? (2026)](https://ketingmedia.com/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026): Precios reales por tipo de proyecto.
 - [Tienda en línea a medida vs. Shopify](https://ketingmedia.com/blog/tienda-en-linea-a-medida-vs-shopify): Cuál conviene según la etapa del negocio.
+- [¿Puedo crear mi app o web solo con IA? (vibe coding)](https://ketingmedia.com/blog/puedo-crear-mi-app-o-web-solo-con-ia-vibe-coding): Qué sí funciona, dónde se rompe y cuándo necesitas ingeniería.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.
