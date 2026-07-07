@@ -360,16 +360,16 @@ export const articles = [
     {
         id: 8,
         slug: "animaciones-web-tendencias-2025",
-        category: "Inteligencia Artificial, Marketing",
-        title: "Animaciones web en 2025: la línea entre wow y molesto",
-        excerpt: "Las micro-animaciones bien usadas aumentan el engagement. Las mal usadas, ahuyentan al usuario. Te enseñamos la diferencia.",
-        author: "Keting Media",
-        date: "Ago 2024",
+        category: "Desarrollo Web",
+        title: "Animaciones web en 2026: la línea entre wow y molesto",
+        excerpt: "Las micro-animaciones bien usadas aumentan el engagement; las mal usadas ahuyentan al usuario. Tendencias 2026: View Transitions, scroll-driven animations y motion con física.",
+        author: "Carlos Beuvrin",
+        date: "Jul 2026",
         color: "#FFF0F0",
         accent: "#9F1239",
         image: "/images/blog/animations.png",
         content: `
-            <p>En el diseño de interfaces moderno, el movimiento es el pegamento que une la estética con la funcionalidad. Una página web estática hoy en día se percibe como algo inacabado o "muerto", carente de la interactividad que el usuario moderno espera. Sin embargo, nos encontramos en una era peligrosa donde es muy fácil abusar de las librerías de animación. Una página que parpadea, rebota y se desliza constantemente sin control se siente ansiosa, desesperada y termina por agotar la paciencia y el procesador del usuario. El equilibrio maestro para 2025 reside en la <i>intencionalidad absoluta de cada movimiento</i>.</p>
+            <p>En el diseño de interfaces moderno, el movimiento es el pegamento que une la estética con la funcionalidad. Una página web estática hoy en día se percibe como algo inacabado o "muerto", carente de la interactividad que el usuario moderno espera. Y en 2026 hay un factor nuevo: con la IA generando miles de sitios que se ven idénticos, <i>el motion premium se volvió uno de los pocos diferenciadores que no se pueden copiar con un prompt</i>. Sin embargo, nos encontramos en una era peligrosa donde es muy fácil abusar de las librerías de animación. Una página que parpadea, rebota y se desliza constantemente sin control se siente ansiosa, desesperada y termina por agotar la paciencia y el procesador del usuario. El equilibrio maestro para 2026 reside en la <i>intencionalidad absoluta de cada movimiento</i>.</p>
             
             <img src="/images/blog/animations.png" alt="Diseño de movimiento fluido y artístico" />
 
@@ -380,6 +380,14 @@ export const articles = [
             <p>La tendencia dominante para los próximos años es el <i>Scroll-Storytelling</i> o narración basada en el desplazamiento. Al ligar el movimiento de los elementos de la web directamente a la acción del usuario sobre el mouse o la pantalla táctil, creas una experiencia inmersiva de descubrimiento. El usuario deja de ser un espectador pasivo para convertirse en el director de la narrativa. No obstante, el secreto de esta técnica es la sutileza: la animación debe ocurrir <i>después</i> de que el usuario demuestre interés y nunca debe bloquear el acceso a la información crítica que el usuario ha venido a buscar.</p>
             
             <img src="/images/blog/animations.png" alt="Visuales abstractos en movimiento digital" />
+
+            <h2>Lo Nuevo de 2026: Tres Técnicas que Cambiaron el Juego</h2>
+            <p>Estas son las tendencias que separan un sitio actual de uno que se quedó en 2024:</p>
+            <ul>
+                <li><strong>View Transitions API:</strong> el navegador ya puede animar la transición <i>entre páginas completas</i> de forma nativa — ese efecto de app fluida que antes requería frameworks pesados hoy funciona con unas líneas de CSS. Las webs que lo adoptan se sienten como aplicaciones, no como documentos.</li>
+                <li><strong>Scroll-driven animations en CSS puro:</strong> las animaciones ligadas al scroll ya no necesitan JavaScript. Con <i>animation-timeline</i> el propio navegador las ejecuta en el hilo del compositor: efectos de scroll perfectamente fluidos con costo de rendimiento casi cero. Menos JavaScript, más velocidad.</li>
+                <li><strong>Motion con física real (springs):</strong> las curvas de animación lineales se sienten robóticas. La tendencia dominante es el movimiento basado en resortes — con masa, tensión y rebote — que responde a la velocidad del gesto del usuario. Es la diferencia entre "se mueve" y "se siente vivo".</li>
+            </ul>
 
             <h2>La Regla de Oro: La Animación debe ser Pedagógica</h2>
             <p>Si quitas una animación de tu sitio y este sigue comunicando exactamente lo mismo con la misma eficacia, entonces esa animación era probablemente puro ruido visual o "decoración barata". En el diseño de alto nivel, la animación debe tener funciones pedagógicas: guiar el ojo hacia la siguiente sección importante, explicar visualmente cómo funciona un proceso complejo o confirmar que una acción (como el envío de un formulario) ha sido procesada por el sistema. El movimiento es información.</p>
@@ -393,7 +401,7 @@ export const articles = [
             </ul>
 
             <h2>Conclusión: El Movimiento como Identidad</h2>
-            <p>En 2025, la forma en que los elementos se mueven en tu sitio web es tan parte de tu identidad de marca como tu logo o tus colores corporativos. Un movimiento fluido y seguro comunica una marca tecnológica y dinámica; un movimiento sutil y pausado comunica lujo y exclusividad. En Keting Media, no solo diseñamos cómo se ve tu marca; diseñamos cómo se mueve y cómo respira.</p>
+            <p>En 2026, la forma en que los elementos se mueven en tu sitio web es tan parte de tu identidad de marca como tu logo o tus colores corporativos. Un movimiento fluido y seguro comunica una marca tecnológica y dinámica; un movimiento sutil y pausado comunica lujo y exclusividad. Y en un mercado saturado de sitios genéricos hechos con IA, esa firma de movimiento es lo que hace que el visitante recuerde el tuyo. En Keting Media, no solo diseñamos cómo se ve tu marca; diseñamos cómo se mueve y cómo respira.</p>
         `
     },
 ];
