@@ -2,7 +2,7 @@ export const articles = [
     {
         id: 9,
         slug: "ya-no-es-seo-ahora-es-geo-futuro-digital",
-        category: "Estrategia Digital, Marketing",
+        category: "Inteligencia Artificial",
         title: "Ya no es SEO, ahora es GEO: Por qué el futuro es generativo",
         excerpt: "Estamos asistiendo al cambio de guardia más drástico desde la invención del navegador web. Descubre por qué el GEO es la nueva prioridad estratégica.",
         author: "Carlos Beuvrin",
@@ -65,7 +65,7 @@ export const articles = [
     {
         id: 1,
         slug: "diseno-minimalista-convierte-mas-clientes",
-        category: "Diseño Web",
+        category: "Desarrollo Web",
         title: "Por qué el diseño minimalista convierte más clientes",
         excerpt: "Menos es más: descubre cómo las marcas líderes usan el espacio en blanco para guiar la atención y multiplicar sus conversiones.",
         author: "Carlos Beuvrin",
@@ -155,7 +155,7 @@ export const articles = [
     {
         id: 3,
         slug: "checklist-lanzar-sitio-web-2025",
-        category: "Posicionamiento",
+        category: "Desarrollo Web",
         title: "El checklist definitivo antes de lanzar tu sitio web en 2025",
         excerpt: "Velocidad, SEO, mobile-first y seguridad. Los 12 puntos que toda web debe cumplir antes de salir al aire.",
         author: "Carlos Beuvrin",
@@ -200,7 +200,7 @@ export const articles = [
     {
         id: 4,
         slug: "tipografia-que-vende",
-        category: "Diseño Web",
+        category: "Desarrollo Web",
         title: "Tipografía que vende: cómo elegir la fuente perfecta para tu marca",
         excerpt: "La tipografía comunica antes de que el usuario lea una sola palabra. Aprende a elegir combinaciones que refuercen tu identidad.",
         author: "Keting Media",
@@ -279,7 +279,7 @@ export const articles = [
     {
         id: 6,
         slug: "identidad-visual-era-ia",
-        category: "Marketing",
+        category: "Inteligencia Artificial",
         title: "Identidad visual en la era de la IA: cómo diferenciarte en un mercado saturado",
         excerpt: "Cuando todos usan las mismas herramientas de IA, la diferencia la hace la estrategia. Así construyes una marca inconfundible.",
         author: "Keting Media",
@@ -318,7 +318,7 @@ export const articles = [
     {
         id: 7,
         slug: "landing-pages-alta-conversion",
-        category: "Ventas, Marketing",
+        category: "Desarrollo Web",
         title: "Landing pages que venden: anatomía de una página de alta conversión",
         excerpt: "Hero, propuesta de valor, prueba social, CTA. Diseccionamos las landing pages que más convierten y te damos la fórmula.",
         author: "Carlos Beuvrin",
