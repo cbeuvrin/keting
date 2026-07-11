@@ -56,7 +56,10 @@ export function Hero() {
         },
     };
 
-    const mouseX = useMotionValue(0);
+    // Arranca "lejos" (-9999) para que NINGUNA letra aparezca magnificada antes
+    // de que el usuario mueva el mouse (con 0, las primeras letras del título
+    // salían agrandadas al cargar).
+    const mouseX = useMotionValue(-9999);
     const mouseY = useMotionValue(0);
     const prefersReduced = useReducedMotion();
 
@@ -84,12 +87,15 @@ export function Hero() {
         // Barrido de bienvenida: la "lupa" recorre el título al cargar.
         // Arranca pronto (ya no hay preloader que esperar) y con un ease suave.
         const timer = setTimeout(() => {
-            animate(mouseX, sectionWidth, {
+            // Keyframes: entra desde justo fuera del borde izquierdo y cruza todo.
+            animate(mouseX, [-200, sectionWidth], {
                 duration: 2.8,
                 ease: [0.4, 0, 0.2, 1],
                 onComplete: () => {
                     setHasAnimated(true);
-                    mouseX.set(0); // Reset after animation
+                    // Estaciona la "lupa" lejos: con 0, las letras de la
+                    // izquierda quedaban magnificadas tras el barrido.
+                    mouseX.set(-9999);
                 }
             });
         }, 700);
@@ -124,6 +130,10 @@ export function Hero() {
             // Re-mide cuando el layout se asienta tras la entrada y al redimensionar.
             const t = setTimeout(measure, 700);
             window.addEventListener("resize", measure);
+            // Y cuando terminan de cargar las webfonts: Playfair entra tarde y
+            // recorre todo el título → los centros cacheados quedaban desfasados
+            // y la lupa inflaba letras equivocadas.
+            document.fonts?.ready?.then(measure).catch(() => {});
             return () => {
                 clearTimeout(t);
                 window.removeEventListener("resize", measure);
@@ -155,7 +165,10 @@ export function Hero() {
                 initial="hidden"
                 animate="show"
                 style={{ scale: smoothScale, y: smoothY, zIndex: smoothScale }} // zIndex to pop over neighbours
-                className="inline-block origin-bottom relative px-[0.02em]" // origin-bottom so it grows up
+                // Sin padding por letra: con px-[0.02em], el título medía ~2em más
+                // ancho en modo lupa que en el render plano del servidor → brinco
+                // de layout al hidratar. Ahora ambos anchos son idénticos.
+                className="inline-block origin-bottom relative" // origin-bottom so it grows up
             >
                 {char}
             </motion.span>
@@ -228,6 +241,11 @@ export function Hero() {
         <section
             ref={targetRef}
             onMouseMove={handleMouseMove}
+            // Al salir del hero (o pasar sobre el header, que está encima), la
+            // lupa se va lejos y TODAS las letras vuelven a su tamaño. Sin esto,
+            // la última posición quedaba congelada y las letras bajo ella se
+            // quedaban agrandadas ("appS").
+            onMouseLeave={() => mouseX.set(-9999)}
             onTouchMove={(e) => {
                 const touch = e.touches[0];
                 const rect = e.currentTarget.getBoundingClientRect();
