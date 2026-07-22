@@ -281,37 +281,76 @@ export default function AutomatizacionPage() {
                 </div>
             </section>
 
-            {/* ── IMPLEMENTACIÓN DE IA (captura la keyword hermana) ── */}
-            <section className="relative py-20 md:py-28 px-6 md:px-12 lg:px-24">
-                <div className="max-w-3xl mx-auto">
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="block w-10 h-px bg-[#1d1d1f]/40" />
-                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                            Implementación de IA
-                        </span>
+            {/* ── IMPLEMENTACIÓN DE IA (captura la keyword hermana) + caso Toogo/WhatsApp ── */}
+            <section className="relative py-20 md:py-28 px-6 md:px-12 lg:px-24 overflow-hidden">
+                <span
+                    aria-hidden
+                    className="pointer-events-none select-none absolute -top-16 right-[2%] text-[10rem] md:text-[16rem] text-[#1d1d1f]/[0.05] font-light leading-none animate-[spin_90s_linear_infinite] motion-reduce:animate-none"
+                >
+                    *
+                </span>
+                <div className="max-w-7xl mx-auto relative grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
+                    {/* Texto */}
+                    <div className="md:col-span-7">
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="block w-10 h-px bg-[#1d1d1f]/40" />
+                            <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
+                                Implementación de IA
+                            </span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-6 text-[#1d1d1f]">
+                            Implementación de IA en tu empresa:{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">por dónde empezar</span>
+                        </h2>
+                        <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed mb-5">
+                            La implementación de inteligencia artificial no empieza comprando herramientas:
+                            empieza identificando <strong className="font-semibold text-[#1d1d1f]">un proceso concreto</strong> donde
+                            la IA genere un resultado medible. Nuestro enfoque: empezar por{" "}
+                            <strong className="font-semibold text-[#1d1d1f]">el proceso que más duele</strong>, automatizarlo de
+                            punta a punta, medir el resultado, y de ahí escalar al siguiente.
+                        </p>
+                        <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed mb-5">
+                            Así lo hicimos en{" "}
+                            <strong className="font-semibold text-[#1d1d1f]">Toogo</strong>, nuestra plataforma de e-commerce:
+                            implementamos <strong className="font-semibold text-[#1d1d1f]">WhatsApp como asistente con IA</strong> —
+                            el canal donde los negocios de LATAM ya viven. Los vendedores operan su tienda{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">conversando</span>:
+                            el asistente los guía en el alta, responde dudas y los acompaña en la operación diaria,
+                            sin apps nuevas que aprender. Resultado: 100+ tiendas operando.
+                        </p>
+                        <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed">
+                            Como estudio que integra IA en el núcleo de sus productos, cuidamos lo que la
+                            mayoría descuida: que el agente acceda <em>solo</em> a lo que debe, supervisión
+                            humana donde importa, y todo conectado a tus sistemas reales. ¿Tu proyecto pide
+                            una plataforma completa? Eso vive en{" "}
+                            <a href="/desarrollo-de-software" className="font-semibold text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
+                                desarrollo de software a medida
+                            </a>.
+                        </p>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-6 text-[#1d1d1f]">
-                        Implementación de IA en tu empresa:{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">por dónde empezar</span>
-                    </h2>
-                    <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed mb-5">
-                        La implementación de inteligencia artificial no empieza comprando herramientas:
-                        empieza identificando <strong className="font-semibold text-[#1d1d1f]">un proceso concreto</strong> donde
-                        la IA genere un resultado medible — responder clientes más rápido, clasificar y dar
-                        seguimiento a pedidos, generar reportes que hoy toman días. Nuestro enfoque es empezar
-                        por <strong className="font-semibold text-[#1d1d1f]">el proceso que más duele</strong>, automatizarlo de
-                        punta a punta, medir el resultado, y de ahí escalar al siguiente.
-                    </p>
-                    <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed">
-                        Como estudio que integra IA en el núcleo de sus productos —no como complemento—,
-                        cuidamos lo que la mayoría descuida: que el agente tenga acceso <em>solo</em> a lo
-                        que debe, que haya supervisión humana donde importa, y que todo quede conectado a
-                        tus sistemas reales. Si tu proyecto necesita ir más allá —una plataforma o un
-                        sistema completo— eso vive en{" "}
-                        <a href="/desarrollo-de-software" className="font-semibold text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
-                            desarrollo de software a medida
-                        </a>.
-                    </p>
+
+                    {/* iPhone Toogo — WhatsApp como asistente */}
+                    <motion.div
+                        {...reveal}
+                        transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        className="md:col-span-5 relative flex justify-center"
+                    >
+                        <div className="relative w-[240px] md:w-[300px]">
+                            <div className="absolute -inset-x-6 -bottom-6 h-10 bg-[#1d1d1f]/15 blur-3xl rounded-full pointer-events-none" />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src="/soluciones/iphone-toogo.png"
+                                alt="Toogo · WhatsApp como asistente con IA para operar tiendas en línea"
+                                width={850}
+                                height={1750}
+                                className="relative w-full h-auto drop-shadow-2xl"
+                                draggable={false}
+                            />
+                            <div className="absolute top-6 -right-3 md:-right-6 bg-[#25D366] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
+                                WhatsApp · Asistente IA
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
