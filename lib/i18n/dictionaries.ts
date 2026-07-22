@@ -93,6 +93,15 @@ const es = {
         descTail:
             ". Fusionamos diseño editorial con SEO técnico y rendimiento para escalar tu negocio.",
     },
+    automationHome: {
+        eyebrow: "03 · Servicio",
+        title: "Automatización",
+        titleItalic: "con IA",
+        subtitle: "Procesos que se hacen solos",
+        description:
+            "Tu equipo pierde horas en tareas repetitivas. Automatizamos tus procesos con flujos, agentes de IA y asistentes en WhatsApp conectados a tus sistemas — para que la operación corra sola y tu gente se dedique a lo que necesita criterio humano.",
+        tags: ["Agentes", "Flujos", "WhatsApp"],
+    },
     digital: {
         eyebrow: "02 · Servicio",
         title: "Soluciones",
@@ -290,6 +299,15 @@ const en: typeof es = {
         descTags: ["e-commerce", "platforms", "landing pages"],
         descTail:
             ". We blend editorial design with technical SEO and performance to scale your business.",
+    },
+    automationHome: {
+        eyebrow: "03 · Service",
+        title: "Automation",
+        titleItalic: "with AI",
+        subtitle: "Processes that run themselves",
+        description:
+            "Your team loses hours to repetitive tasks. We automate your processes with workflows, AI agents and WhatsApp assistants connected to your systems — so operations run on their own and your people focus on what truly needs human judgment.",
+        tags: ["Agents", "Workflows", "WhatsApp"],
     },
     digital: {
         eyebrow: "02 · Service",

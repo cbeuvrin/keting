@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import { Hero } from "@/components/layout/hero";
 import { Services } from "@/components/layout/services";
 import { DigitalSolutions } from "@/components/layout/digital-solutions";
+import { AutomationHome } from "@/components/layout/automation-home";
 import { Toogo } from "@/components/layout/toogo";
 import { AboutUs } from "@/components/layout/about-us";
 import { Footer } from "@/components/layout/footer";
@@ -54,6 +55,7 @@ export default function Home() {
         <Hero />
         <Services />
         <DigitalSolutions />
+        <AutomationHome />
         <Toogo />
         <AboutUs />
         <BlogCarousel />
