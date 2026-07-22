@@ -28,20 +28,15 @@ function FraseImpactoIA() {
     // De oscuro → claro conforme avanza el scroll dentro de la sección.
     const fadeColor = useTransform(smooth, [0.1, 0.9], ["#1d1d1f", "#d8d8d4"]);
     const rotateAst = useTransform(smooth, [0, 1], [0, 420]);
+    const rotateAstInv = useTransform(rotateAst, (v) => -v);
 
     // Palabras "de relleno": comparten el color animado.
     const Dim = ({ children }: { children: React.ReactNode }) => (
         <motion.span style={{ color: fadeColor }}>{children}</motion.span>
     );
-    // Palabras clave: siempre oscuras.
-    const Key = ({ children, italic = false }: { children: React.ReactNode; italic?: boolean }) => (
-        <span className={italic ? "font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]" : "font-medium text-[#1d1d1f]"}>
-            {children}
-        </span>
-    );
 
     return (
-        <section ref={ref} className="relative bg-white py-28 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+        <section ref={ref} className="relative bg-white py-32 md:py-48 px-6 md:px-12 lg:px-24 overflow-hidden">
             <div
                 className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{
@@ -50,27 +45,77 @@ function FraseImpactoIA() {
                     backgroundSize: "80px 80px",
                 }}
             />
+            {/* Doble asterisco girando en direcciones opuestas */}
             <motion.span
                 style={{ rotate: rotateAst }}
-                className="absolute top-[8%] right-[4%] text-[8rem] md:text-[14rem] text-[#1d1d1f]/[0.06] select-none font-light leading-none inline-block origin-center pointer-events-none"
+                className="absolute -top-10 right-[3%] text-[10rem] md:text-[18rem] text-[#1d1d1f]/[0.06] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >
+                *
+            </motion.span>
+            <motion.span
+                style={{ rotate: rotateAstInv }}
+                className="absolute -bottom-14 left-[2%] text-[8rem] md:text-[14rem] text-[#1d1d1f]/[0.05] select-none font-light leading-none inline-block origin-center pointer-events-none"
             >
                 *
             </motion.span>
 
-            <div className="max-w-5xl mx-auto relative">
-                <p className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.25] text-[#1d1d1f]">
+            <div className="max-w-6xl mx-auto relative">
+                {/* Eyebrow editorial */}
+                <div className="flex items-center gap-3 mb-12 md:mb-16">
+                    <span className="block w-12 h-px bg-[#1d1d1f]/40" />
+                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
+                        El costo de no automatizar
+                    </span>
+                </div>
+
+                <p className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.15] text-[#1d1d1f]">
                     <Dim>Cada hora que tu equipo gasta en tareas repetitivas es </Dim>
-                    <Key>dinero</Key>
+                    {/* dinero — resaltado tipo marcador */}
+                    <span className="relative inline-block font-medium text-[#1d1d1f] whitespace-nowrap">
+                        dinero
+                        <span className="absolute inset-x-0 bottom-1 md:bottom-2 h-2.5 md:h-4 bg-[#1d1d1f]/10" aria-hidden />
+                    </span>
                     <Dim> que tu negocio pierde. La </Dim>
-                    <Key italic>IA</Key>
+                    {/* IA — acento Playfair */}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">IA</span>
                     <Dim> bien implementada te devuelve </Dim>
-                    <Key>tiempo</Key>
-                    <Dim>, elimina </Dim>
-                    <Key>errores</Key>
+                    {/* tiempo — Playfair */}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">tiempo</span>
+                    <Dim>, elimina los </Dim>
+                    {/* errores — tachado con intención */}
+                    <span className="font-medium text-[#1d1d1f] line-through decoration-2 md:decoration-[3px] decoration-[#1d1d1f]/60">errores</span>
                     <Dim> y convierte tu operación en tu </Dim>
-                    <Key italic>ventaja</Key>
+                    {/* ventaja — subrayado animado + asterisco */}
+                    <span className="relative inline-block font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f] whitespace-nowrap">
+                        ventaja
+                        <motion.span
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true, margin: "-20%" }}
+                            transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                            className="absolute -bottom-1 md:-bottom-2 left-0 right-0 h-[2px] md:h-[3px] bg-[#1d1d1f] origin-left"
+                            aria-hidden
+                        />
+                    </span>
+                    <motion.span
+                        initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
+                        whileInView={{ opacity: 1, rotate: 18, scale: 1 }}
+                        viewport={{ once: true, margin: "-20%" }}
+                        transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top text-[#1d1d1f]/40"
+                        aria-hidden
+                    >*</motion.span>
                     <Dim>.</Dim>
                 </p>
+
+                {/* Remate editorial */}
+                <div className="mt-12 md:mt-16 flex items-center gap-3">
+                    <span className="block w-8 h-px bg-[#1d1d1f]/30" />
+                    <span className="text-sm md:text-base text-[#1d1d1f]/50 font-[family-name:var(--font-playfair)] italic">
+                        Automatiza una vez, ahorra todos los días.
+                    </span>
+                    <span className="block flex-1 h-px bg-[#1d1d1f]/10" />
+                </div>
             </div>
         </section>
     );
