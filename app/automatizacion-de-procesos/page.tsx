@@ -18,6 +18,64 @@ const reveal = {
     viewport: { once: true, margin: "-12%" },
 } as const;
 
+// Statement gigante con scrub de scroll: las palabras clave se quedan oscuras
+// SIEMPRE; el resto del texto se aclara conforme bajas y vuelve a oscurecerse
+// al subir (ligado a scrollYProgress → totalmente reversible).
+function FraseImpactoIA() {
+    const ref = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.35"] });
+    const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
+    // De oscuro → claro conforme avanza el scroll dentro de la sección.
+    const fadeColor = useTransform(smooth, [0.1, 0.9], ["#1d1d1f", "#d8d8d4"]);
+    const rotateAst = useTransform(smooth, [0, 1], [0, 420]);
+
+    // Palabras "de relleno": comparten el color animado.
+    const Dim = ({ children }: { children: React.ReactNode }) => (
+        <motion.span style={{ color: fadeColor }}>{children}</motion.span>
+    );
+    // Palabras clave: siempre oscuras.
+    const Key = ({ children, italic = false }: { children: React.ReactNode; italic?: boolean }) => (
+        <span className={italic ? "font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]" : "font-medium text-[#1d1d1f]"}>
+            {children}
+        </span>
+    );
+
+    return (
+        <section ref={ref} className="relative bg-white py-28 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+            <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(0,0,0,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.8) 1px, transparent 1px)",
+                    backgroundSize: "80px 80px",
+                }}
+            />
+            <motion.span
+                style={{ rotate: rotateAst }}
+                className="absolute top-[8%] right-[4%] text-[8rem] md:text-[14rem] text-[#1d1d1f]/[0.06] select-none font-light leading-none inline-block origin-center pointer-events-none"
+            >
+                *
+            </motion.span>
+
+            <div className="max-w-5xl mx-auto relative">
+                <p className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.25] text-[#1d1d1f]">
+                    <Dim>Cada hora que tu equipo gasta en tareas repetitivas es </Dim>
+                    <Key>dinero</Key>
+                    <Dim> que tu negocio pierde. La </Dim>
+                    <Key italic>IA</Key>
+                    <Dim> bien implementada te devuelve </Dim>
+                    <Key>tiempo</Key>
+                    <Dim>, elimina </Dim>
+                    <Key>errores</Key>
+                    <Dim> y convierte tu operación en tu </Dim>
+                    <Key italic>ventaja</Key>
+                    <Dim>.</Dim>
+                </p>
+            </div>
+        </section>
+    );
+}
+
 // Reveal editorial por línea (mask desde abajo), igual que el hero de /portafolio.
 function RiseText({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
     return (
@@ -353,6 +411,9 @@ export default function AutomatizacionPage() {
                     </motion.div>
                 </div>
             </section>
+
+            {/* ── STATEMENT gigante con scrub de scroll ── */}
+            <FraseImpactoIA />
 
             {/* ── FAQ (con schema FAQPage) ── */}
             <FaqSection
