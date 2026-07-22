@@ -1910,7 +1910,11 @@ export function IntegracionSistemas() {
                 <p className="text-base md:text-lg text-[#1d1d1f]/60 font-light max-w-2xl leading-relaxed">
                     Conectamos tu ERP, tus herramientas y tus fuentes de datos en un solo flujo.
                     Integraciones a medida y APIs que eliminan el trabajo manual entre sistemas —
-                    para que tu operación funcione como una sola pieza.
+                    para que tu operación funcione como una sola pieza. ¿Buscas ir más allá y
+                    automatizar procesos completos con IA? Conoce nuestro servicio de{" "}
+                    <a href="/automatizacion-de-procesos" className="font-medium text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
+                        automatización de procesos
+                    </a>.
                 </p>
             </div>
         </section>

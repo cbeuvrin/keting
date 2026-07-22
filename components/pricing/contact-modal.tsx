@@ -44,7 +44,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
         };
     }, [isOpen]);
 
-    const interests = ["Diseño Web", "Precio", "Solución digital"];
+    const interests = ["Diseño Web", "Precio", "Solución digital", "Automatización IA"];
 
     const toggleInterest = (interest: string) => {
         setInterestError(false);

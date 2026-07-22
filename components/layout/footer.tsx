@@ -83,6 +83,7 @@ export function Footer() {
                         <ul className="space-y-3">
                             <li><Link href="/desarrollo-web" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
                             <li><Link href="/desarrollo-de-software" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
+                            <li><Link href="/automatizacion-de-procesos" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.automation}</Link></li>
                             <li><Link href="/precioweb" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.price}</Link></li>
                         </ul>
                     </div>
