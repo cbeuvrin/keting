@@ -158,7 +158,8 @@ export default function AutomatizacionPage() {
 
                     <RiseText delay={0.15}>
                         <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f]/75 font-light leading-relaxed max-w-2xl mt-10 md:mt-12">
-                            Tu equipo pierde horas cada semana en tareas repetitivas. Nosotros las{" "}
+                            <span className="font-medium text-[#1d1d1f]">Automatización de procesos e implementación de IA</span>{" "}
+                            para tu empresa: tu equipo pierde horas cada semana en tareas repetitivas y nosotros las{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">automatizamos</span>{" "}
                             —con flujos, agentes de IA y chatbots conectados a tus sistemas— para que
                             tu gente se dedique a lo que sí necesita criterio humano.
