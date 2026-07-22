@@ -24,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/desarrollo-de-software`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/automatizacion-de-procesos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
-        { url: `${SITE_URL}/precioweb`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
         { url: `${SITE_URL}/landing3d`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },

@@ -13,6 +13,11 @@ export const metadata: Metadata = {
         "presupuesto ecommerce",
     ],
     alternates: { canonical: "/precioweb" },
+    // Página retirada de buscadores a petición del usuario (jul 2026): la remoción
+    // en Search Console es temporal; el noindex la hace permanente. La página sigue
+    // accesible por URL directa. Para re-indexar: quitar este bloque + reagregar a
+    // sitemap/llms.txt/menú.
+    robots: { index: false, follow: false },
     openGraph: {
         title: "Precio Web · Keting Media",
         description: "Tarifas transparentes para diseño web, e-commerce y landing pages.",

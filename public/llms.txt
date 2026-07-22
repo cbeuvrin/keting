@@ -9,7 +9,6 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Desarrollo de software y aplicaciones móviles](https://ketingmedia.com/desarrollo-de-software): Apps, plataformas SaaS, sistemas internos e integración de sistemas con IA, hiper-personalizados para cada operación.
 - [Automatización de procesos con IA](https://ketingmedia.com/automatizacion-de-procesos): Flujos automatizados, agentes de IA y chatbots conectados a los sistemas de la empresa (ERP, CRM, WhatsApp) para eliminar trabajo manual repetitivo.
 - [Portafolio](https://ketingmedia.com/portafolio): Casos y proyectos seleccionados de marcas que cambian su industria.
-- [Precios](https://ketingmedia.com/precioweb): Cuánto cuesta una web, e-commerce, app o software a medida en México — inversión, alcance y tiempos.
 
 ## Blog
 - [Blog de Keting Media](https://ketingmedia.com/blog): Artículos y guías sobre desarrollo de software, web, apps, e-commerce e IA aplicada.
