@@ -13,13 +13,16 @@ export function JsonLd({ data }: { data: object | object[] }) {
 
 const SITE = "https://ketingmedia.com";
 
-/** BreadcrumbList: Inicio › <página actual>. */
+/** BreadcrumbList: Inicio/Home › <página actual> (según el idioma de `path`). */
 export function breadcrumb(name: string, path: string) {
+    const isEn = path.startsWith("/en");
+    const rootName = isEn ? "Home" : "Inicio";
+    const rootPath = isEn ? "/en" : "/";
     return {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Inicio", item: SITE },
+            { "@type": "ListItem", position: 1, name: rootName, item: `${SITE}${rootPath}` },
             { "@type": "ListItem", position: 2, name, item: `${SITE}${path}` },
         ],
     };

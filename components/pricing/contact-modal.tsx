@@ -7,14 +7,21 @@ import { cn } from "@/lib/utils";
 import { SOCIAL } from "@/lib/social";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useLang } from "@/lib/i18n/lang-context";
 
 interface ContactModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+// Intereses: `id` es el valor estable enviado al backend/email (independiente
+// del idioma de la página); `label` es lo que se muestra según el locale.
+const INTEREST_IDS = ["web", "price", "digital", "automation"] as const;
+type InterestId = (typeof INTEREST_IDS)[number];
+
 export function ContactModal({ isOpen, onClose }: ContactModalProps) {
-    const [selectedInterest, setSelectedInterest] = useState<string[]>([]);
+    const { t } = useLang();
+    const [selectedInterest, setSelectedInterest] = useState<InterestId[]>([]);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -44,9 +51,24 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
         };
     }, [isOpen]);
 
-    const interests = ["Diseño Web", "Precio", "Solución digital", "Automatización IA"];
+    // Valor ESTABLE enviado al backend/email — siempre en español, sin importar
+    // el idioma de la página, para no romper el correo interno del equipo.
+    const INTEREST_VALUES: Record<InterestId, string> = {
+        web: "Diseño Web",
+        price: "Precio",
+        digital: "Solución digital",
+        automation: "Automatización IA",
+    };
 
-    const toggleInterest = (interest: string) => {
+    // Etiqueta mostrada al usuario según el idioma actual.
+    const interests: { id: InterestId; label: string }[] = [
+        { id: "web", label: t.contactModal.chipWeb },
+        { id: "price", label: t.contactModal.chipPrice },
+        { id: "digital", label: t.contactModal.chipDigital },
+        { id: "automation", label: t.contactModal.chipAutomation },
+    ];
+
+    const toggleInterest = (interest: InterestId) => {
         setInterestError(false);
         if (selectedInterest.includes(interest)) {
             setSelectedInterest(selectedInterest.filter(i => i !== interest));
@@ -71,7 +93,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 body: JSON.stringify({
                     ...formData,
                     company, // honeypot
-                    interests: selectedInterest,
+                    interests: selectedInterest.map((id) => INTEREST_VALUES[id]),
                     source: "Modal Precios"
                 }),
             });
@@ -123,7 +145,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 {/* Mobile Close Button */}
                                 <button
                                     onClick={onClose}
-                                    aria-label="Cerrar"
+                                    aria-label={t.contactModal.close}
                                     className="absolute top-4 right-4 z-50 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white p-2 rounded-full md:hidden shadow-lg transition-transform active:scale-90"
                                 >
                                     <X className="w-5 h-5" />
@@ -131,7 +153,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                                 <div className="p-8 md:p-12 overflow-y-auto h-full">
                                     <h2 className="text-3xl md:text-4xl font-heading font-medium mb-6">
-                                        Conecta con el equipo
+                                        {t.contactModal.heading}
                                     </h2>
 
                                     <div className="border-t border-dashed border-gray-300 my-4 w-full" />
@@ -151,29 +173,29 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         {/* Interests */}
                                         <div className="space-y-3">
                                             <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">
-                                                ¿En qué podemos ayudarte?*
+                                                {t.contactModal.helpLabel}
                                             </label>
                                             <div className="flex flex-wrap gap-2">
                                                 {interests.map((interest) => (
                                                     <button
-                                                        key={interest}
+                                                        key={interest.id}
                                                         type="button"
-                                                        onClick={() => toggleInterest(interest)}
+                                                        onClick={() => toggleInterest(interest.id)}
                                                         className={cn(
                                                             "px-4 py-1.5 rounded-full border text-xs transition-all duration-200",
-                                                            selectedInterest.includes(interest)
+                                                            selectedInterest.includes(interest.id)
                                                                 ? "bg-transparent text-black border-black border-2 font-bold"
                                                                 : "bg-white text-gray-500 border-gray-300 hover:border-black hover:text-black",
                                                             interestError && "border-red-400"
                                                         )}
                                                     >
-                                                        {interest}
+                                                        {interest.label}
                                                     </button>
                                                 ))}
                                             </div>
                                             {interestError && (
                                                 <p className="text-xs text-red-600 font-medium">
-                                                    Selecciona al menos un servicio para continuar.
+                                                    {t.contactModal.selectError}
                                                 </p>
                                             )}
                                         </div>
@@ -181,35 +203,35 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         {/* Inputs Grid */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div className="space-y-1">
-                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Nombre*</label>
+                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">{t.contactModal.nameLabel}</label>
                                                 <input
                                                     type="text"
                                                     required
                                                     value={formData.name}
                                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                    placeholder="Tu nombre"
+                                                    placeholder={t.contactModal.namePlaceholder}
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Correo electrónico*</label>
+                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">{t.contactModal.emailLabel}</label>
                                                 <input
                                                     type="email"
                                                     required
                                                     value={formData.email}
                                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                                    placeholder="Correo electrónico"
+                                                    placeholder={t.contactModal.emailPlaceholder}
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Celular*</label>
+                                                <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">{t.contactModal.phoneLabel}</label>
                                                 <input
                                                     type="tel"
                                                     required
                                                     value={formData.phone}
                                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                                    placeholder="Tu número de celular"
+                                                    placeholder={t.contactModal.phonePlaceholder}
                                                     className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300"
                                                 />
                                             </div>
@@ -217,13 +239,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
                                         {/* Message */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">Mensaje*</label>
+                                            <label className="text-xs font-bold text-gray-900 block uppercase tracking-wider">{t.contactModal.messageLabel}</label>
                                             <textarea
                                                 rows={3}
                                                 required
                                                 value={formData.message}
                                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                                placeholder="Cuéntanos un poco sobre tu proyecto"
+                                                placeholder={t.contactModal.messagePlaceholder}
                                                 className="w-full border p-2 rounded-lg text-base focus:outline-none focus:border-black transition-colors bg-white placeholder:text-gray-300 resize-none"
                                             />
                                         </div>
@@ -239,10 +261,10 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                     status === "error" && "bg-red-600 hover:bg-red-700"
                                                 )}
                                             >
-                                                {status === "idle" && "Enviar Mensaje"}
-                                                {status === "sending" && "Enviando..."}
-                                                {status === "success" && "¡Enviado!"}
-                                                {status === "error" && "Error al enviar"}
+                                                {status === "idle" && t.contactModal.submitIdle}
+                                                {status === "sending" && t.contactModal.submitSending}
+                                                {status === "success" && t.contactModal.submitSent}
+                                                {status === "error" && t.contactModal.submitError}
                                             </button>
                                         </div>
                                     </form>
@@ -262,7 +284,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                     onClick={onClose}
                                     className="absolute -top-3 -right-3 md:-top-4 md:-right-4 z-50 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-transform hover:scale-105 shadow-lg"
                                 >
-                                    Cerrar <X className="w-4 h-4" />
+                                    {t.contactModal.close} <X className="w-4 h-4" />
                                 </button>
 
                                 <div>
@@ -271,11 +293,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                     </div>
 
                                     <h3 className="text-xs font-heading font-bold uppercase tracking-widest mb-1">
-                                        TRABAJANDO EN MÉXICO
+                                        {t.contactModal.panelHeading}
                                     </h3>
 
                                     <p className="text-gray-500 text-[10px] md:text-xs mb-6 leading-relaxed">
-                                        Keting es un equipo altamente capacitado que trabaja con clientes ambiciosos en diversas ubicaciones de México.
+                                        {t.contactModal.panelBody}
                                     </p>
 
                                     <div className="space-y-4">
@@ -290,7 +312,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                 </div>
 
                                 <div className="mt-6 pt-4 border-t border-gray-300 border-dashed">
-                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Contáctanos directamente</h4>
+                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">{t.contactModal.contactDirect}</h4>
                                     <div className="space-y-1 mb-4">
                                         <p className="text-xs font-medium">info@ketingmedia.com</p>
                                         <p className="text-xs font-medium">5543830150</p>
