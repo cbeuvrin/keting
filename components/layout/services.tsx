@@ -4,12 +4,16 @@ import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { Monitor, ShoppingBag, BarChart3 } from "lucide-react";
 import { useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CornerButton } from "@/components/ui/corner-button";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 export function Services() {
     const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -50,7 +54,7 @@ export function Services() {
                         transition={{ duration: 0.8 }}
                         className="flex flex-col justify-center items-start text-left w-full"
                     >
-                        <Link href="/desarrollo-web" className="block group cursor-pointer w-full">
+                        <Link href={enHref("/desarrollo-web", isEn)} className="block group cursor-pointer w-full">
                             {/* Eyebrow editorial */}
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
@@ -158,7 +162,7 @@ export function Services() {
 
                 </div>
             </div>
-            <CornerButton href="/desarrollo-web" iconColor="border-black md:border-white text-black md:text-white" />
+            <CornerButton href={enHref("/desarrollo-web", isEn)} iconColor="border-black md:border-white text-black md:text-white" />
             <ScrollArrow />
         </motion.section>
     );

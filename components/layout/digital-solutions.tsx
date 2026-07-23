@@ -2,12 +2,16 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { usePathname } from "next/navigation";
 import { CornerButton } from "@/components/ui/corner-button";
 import { Sparkles, TrendingUp, Smartphone, Zap } from "lucide-react";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 export function DigitalSolutions() {
     const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -141,7 +145,7 @@ export function DigitalSolutions() {
 
                 </div>
             </div>
-            <CornerButton href="/desarrollo-de-software" iconColor="border-black text-black" bareArrowOnMobile className="bottom-4 right-4 md:bottom-8 md:right-8" />
+            <CornerButton href={enHref("/desarrollo-de-software", isEn)} iconColor="border-black text-black" bareArrowOnMobile className="bottom-4 right-4 md:bottom-8 md:right-8" />
         </motion.section>
     );
 }

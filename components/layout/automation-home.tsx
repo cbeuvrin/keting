@@ -3,9 +3,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { CornerButton } from "@/components/ui/corner-button";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 // Sección de servicio "03 · Automatización con IA" en el home. Mismo lenguaje
 // que DigitalSolutions (encoge con el scroll, relleno del título al scrollear)
@@ -13,6 +15,8 @@ import { useLang } from "@/lib/i18n/lang-context";
 // asteriscos girando (marca de la casa; no usamos logos de terceros).
 export function AutomationHome() {
     const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -111,7 +115,7 @@ export function AutomationHome() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="relative flex flex-col items-center justify-center h-full w-full mt-8 md:mt-0"
                     >
-                        <Link href="/automatizacion-de-procesos" aria-label="Conocer el servicio de automatización con IA">
+                        <Link href={enHref("/automatizacion-de-procesos", isEn)} aria-label="Conocer el servicio de automatización con IA">
                             <motion.div
                                 animate={{ y: [0, -12, 0] }}
                                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
@@ -158,7 +162,7 @@ export function AutomationHome() {
                 </div>
             </div>
 
-            <CornerButton href="/automatizacion-de-procesos" iconColor="border-black text-black" bareArrowOnMobile className="bottom-4 right-4 md:bottom-8 md:right-8" />
+            <CornerButton href={enHref("/automatizacion-de-procesos", isEn)} iconColor="border-black text-black" bareArrowOnMobile className="bottom-4 right-4 md:bottom-8 md:right-8" />
         </motion.section>
     );
 }

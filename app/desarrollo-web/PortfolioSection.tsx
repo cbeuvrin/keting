@@ -4,8 +4,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 const projects = [
     { src: "/gravity-portfolio-1.jpg" },
@@ -25,6 +27,8 @@ const projects = [
 export default function PortfolioSection() {
     const { t } = useLang();
     const p = t.webPage.portfolio;
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -162,7 +166,7 @@ export default function PortfolioSection() {
                         </span>
                         <span className="block w-10 h-px bg-white/50" />
                     </motion.div>
-                    <Link href="/portafolio">
+                    <Link href={enHref("/portafolio", isEn)}>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

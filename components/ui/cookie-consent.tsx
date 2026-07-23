@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 const STORAGE_KEY = "keting_cookie_consent";
 
 export function CookieConsent() {
     const [visible, setVisible] = useState(false);
     const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
@@ -85,7 +89,7 @@ export function CookieConsent() {
                         <p className="text-sm leading-relaxed text-white/80 mb-5 pr-6">
                             {t.cookie.text}{" "}
                             <Link
-                                href="/aviso-de-privacidad"
+                                href={enHref("/aviso-de-privacidad", isEn)}
                                 className="font-[family-name:var(--font-playfair)] italic font-normal text-white underline underline-offset-4 decoration-white/40 hover:decoration-white"
                             >
                                 {t.cookie.moreInfo}
