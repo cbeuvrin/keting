@@ -4,8 +4,11 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-mot
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "light" | "dark") => void }) {
+    const { t } = useLang();
+    const h = t.softwarePage.hero;
     const targetRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: targetRef,
@@ -47,7 +50,7 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                 <motion.h1
                     className="text-[clamp(2.5rem,7vw,6rem)] font-heading font-medium leading-[0.95] tracking-tighter text-black text-center z-10 relative max-w-5xl px-6"
                 >
-                    Desarrollo de software y aplicaciones móviles
+                    {h.h1}
                 </motion.h1>
 
                 {/* Phone Image Container */}
@@ -85,11 +88,11 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
                                 {/* Main Title Group */}
                                 <div className="flex flex-col justify-center h-full mt-20 md:mt-0 md:ml-[15%] w-fit relative z-10">
                                     <h2 className="flex flex-col text-6xl md:text-[8vw] leading-[0.95] tracking-tight font-light !text-white text-left max-w-4xl gap-1 uppercase relative">
-                                        <span className="block whitespace-nowrap">Experiencias</span>
-                                        <span className="block whitespace-nowrap font-[family-name:var(--font-playfair)] italic font-normal normal-case text-[1.1em]">digitales</span>
-                                        <span className="block whitespace-nowrap font-medium">únicas</span>
+                                        <span className="block whitespace-nowrap">{h.h2Line1}</span>
+                                        <span className="block whitespace-nowrap font-[family-name:var(--font-playfair)] italic font-normal normal-case text-[1.1em]">{h.h2Line2}</span>
+                                        <span className="block whitespace-nowrap font-medium">{h.h2Line3}</span>
                                         <span className="block whitespace-nowrap relative">
-                                            e <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">innovadoras</span>
+                                            {h.h2Line4Pre} <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">{h.h2Line4Word}</span>
                                             <span className="inline-block ml-2 align-top text-[0.5em] rotate-12 text-white/40">*</span>
                                         </span>
 
@@ -113,7 +116,7 @@ export function SolucionesHero({ onThemeChange }: { onThemeChange?: (theme: "lig
 
                                 {/* Scroll Indicator */}
                                 <div className="absolute bottom-2 right-2 flex items-center gap-4 text-xs font-semibold tracking-[0.2em] uppercase text-gray-500">
-                                    <span>Scroll</span>
+                                    <span>{h.scroll}</span>
                                 </div>
                             </div>
                         </motion.div>

@@ -15,7 +15,14 @@ export const metadata: Metadata = {
         "automatización con ia",
         "agentes ia",
     ],
-    alternates: { canonical: "/desarrollo-de-software" },
+    alternates: {
+        canonical: "/desarrollo-de-software",
+        languages: {
+            "es-MX": "/desarrollo-de-software",
+            "en": "/en/desarrollo-de-software",
+            "x-default": "/desarrollo-de-software",
+        },
+    },
     openGraph: {
         title: "Desarrollo de apps y software a medida con IA · Keting Media",
         description:

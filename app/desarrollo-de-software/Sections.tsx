@@ -2,8 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight, ArrowRight, ArrowDown, Sparkles, Plus } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 /* ==========================================================================
    1. HERO BAJADA — Editorial gigante con mezcla de pesos, italics, deco
@@ -12,6 +15,8 @@ import { ContactModal } from "@/components/pricing/contact-modal";
    ========================================================================== */
 
 export function HeroBajada() {
+    const { t } = useLang();
+    const s = t.softwarePage.heroBajada;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -63,7 +68,7 @@ export function HeroBajada() {
                     >
                         <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                         <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                            Construimos
+                            {s.eyebrow}
                         </span>
                     </motion.div>
 
@@ -84,19 +89,19 @@ export function HeroBajada() {
                 <div className="mb-16 md:mb-24 max-w-5xl uppercase leading-[1]">
                     <RiseText delay={0}>
                         <span className="block text-4xl md:text-7xl lg:text-8xl font-light tracking-tight text-[#1d1d1f]">
-                            Construimos
+                            {s.h1a}
                         </span>
                     </RiseText>
                     <RiseText delay={0.12}>
                         <span className="block text-5xl md:text-8xl lg:text-[8.5rem] font-[family-name:var(--font-playfair)] italic font-normal normal-case tracking-tight text-[#1d1d1f]">
-                            el software
+                            {s.h1accent}
                         </span>
                     </RiseText>
                     <RiseText delay={0.24}>
                         <span className="block text-3xl md:text-5xl lg:text-6xl font-light mt-2 md:mt-4 tracking-tight text-[#1d1d1f]">
-                            que tu operación{" "}
+                            {s.h1bPre}{" "}
                             <span className="relative inline-block font-normal">
-                                necesita
+                                {s.h1bWord}
                                 <motion.span
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
@@ -113,35 +118,35 @@ export function HeroBajada() {
                 <div className="mb-16 md:mb-24 max-w-md ml-auto text-right leading-[1.15]">
                     <RiseText delay={0.1}>
                         <span className="block text-xl md:text-2xl lg:text-3xl font-light italic text-[#1d1d1f]">
-                            — del primer evento
+                            {s.sub1}
                         </span>
                     </RiseText>
                     <RiseText delay={0.2}>
                         <span className="block text-xl md:text-3xl lg:text-4xl font-medium mt-1 tracking-tight text-[#1d1d1f]">
-                            al{" "}
+                            {s.sub2Pre}{" "}
                             <span className="relative inline-block">
-                                <span className="relative z-10">sistema interno</span>
+                                <span className="relative z-10">{s.sub2Word}</span>
                                 <span className="absolute inset-x-0 bottom-0.5 md:bottom-1 h-2 md:h-2.5 bg-[#1d1d1f]/12 -z-0" />
                             </span>
                         </span>
                     </RiseText>
                     <RiseText delay={0.32}>
                         <span className="block text-lg md:text-2xl lg:text-3xl font-light italic mt-1 text-[#1d1d1f]/50">
-                            que la sostiene.
+                            {s.sub3}
                         </span>
                     </RiseText>
                 </div>
 
                 {/* iPad 3D — rota desde perspectiva hacia frente con el scroll */}
-                <Ipad3D />
+                <Ipad3D imgAlt={s.imgAlt} />
 
                 {/* BLOQUE 3 — vuelve a izquierda, mezcla */}
                 <div className="mb-16 md:mb-20 max-w-6xl leading-[1.05]">
                     <RiseText delay={0.05}>
                         <span className="block text-4xl md:text-6xl lg:text-7xl font-light uppercase tracking-tight text-[#1d1d1f]">
-                            Diseñamos cada plataforma{" "}
+                            {s.p1Pre}{" "}
                             <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">
-                                desde cero
+                                {s.p1Word}
                             </span>
                             <motion.span
                                 initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
@@ -156,17 +161,17 @@ export function HeroBajada() {
                     </RiseText>
                     <RiseText delay={0.18}>
                         <span className="block text-2xl md:text-4xl lg:text-5xl font-light italic mt-4 md:mt-6 text-[#1d1d1f]/70 max-w-4xl">
-                            pensada para resolver problemas reales
+                            {s.p2}
                         </span>
                     </RiseText>
                     <RiseText delay={0.3}>
                         <span className="block text-3xl md:text-5xl lg:text-6xl font-normal mt-2 md:mt-3 tracking-tight text-[#1d1d1f]">
-                            y{" "}
+                            {s.p3Pre}{" "}
                             <span className="relative inline-block">
-                                <span className="relative z-10 font-[family-name:var(--font-playfair)] italic">crecer</span>
+                                <span className="relative z-10 font-[family-name:var(--font-playfair)] italic">{s.p3Word}</span>
                                 <span className="absolute inset-x-0 bottom-1 md:bottom-2 h-3 md:h-4 bg-[#1d1d1f]/15 -z-0" />
                             </span>{" "}
-                            al ritmo de tu negocio.
+                            {s.p3End}
                         </span>
                     </RiseText>
                 </div>
@@ -190,9 +195,9 @@ export function HeroBajada() {
                     transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
                     className="grid grid-cols-3 gap-6 md:gap-10 max-w-2xl pt-10"
                 >
-                    <Stat number="100%" label="A medida" />
-                    <Stat number="0" label="Plantillas" />
-                    <Stat number="∞" label="Escalable" />
+                    <Stat number={s.stat1num} label={s.stat1label} />
+                    <Stat number={s.stat2num} label={s.stat2label} />
+                    <Stat number={s.stat3num} label={s.stat3label} />
                 </motion.div>
 
             </div>
@@ -226,7 +231,7 @@ function Stat({ number, label }: { number: string; label: string }) {
 }
 
 /* iPad 3D: arranca girado en perspectiva y se endereza al hacer scroll */
-function Ipad3D() {
+function Ipad3D({ imgAlt }: { imgAlt: string }) {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -281,7 +286,7 @@ function Ipad3D() {
                 />
                 <img
                     src="/soluciones/suzuki-ipad.png"
-                    alt="Suzuki · Plataforma a medida"
+                    alt={imgAlt}
                     className="relative w-full h-auto drop-shadow-2xl"
                     draggable={false}
                 />
@@ -297,6 +302,8 @@ function Ipad3D() {
    ========================================================================== */
 
 export function NuestroEnfoque() {
+    const { t } = useLang();
+    const s = t.softwarePage.nuestroEnfoque;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -355,7 +362,7 @@ export function NuestroEnfoque() {
                             >
                                 <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                                 <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                                    Nuestro enfoque
+                                    {s.eyebrow}
                                 </span>
                             </motion.div>
 
@@ -374,9 +381,9 @@ export function NuestroEnfoque() {
                         <div className="uppercase leading-[0.95] tracking-tight text-[#1d1d1f]">
                             <RiseText delay={0}>
                                 <span className="block text-4xl md:text-6xl lg:text-7xl font-light">
-                                    Primero{" "}
+                                    {s.h2aPre}{" "}
                                     <span className="relative inline-block font-normal">
-                                        entendemos
+                                        {s.h2aWord}
                                         <motion.span
                                             initial={{ scaleX: 0 }}
                                             whileInView={{ scaleX: 1 }}
@@ -389,8 +396,8 @@ export function NuestroEnfoque() {
                             </RiseText>
                             <RiseText delay={0.15}>
                                 <span className="block text-4xl md:text-6xl lg:text-7xl font-light mt-2 md:mt-4">
-                                    Después{" "}
-                                    <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">construimos</span>
+                                    {s.h2bPre}{" "}
+                                    <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">{s.h2bWord}</span>
                                     <motion.span
                                         initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
                                         whileInView={{ opacity: 1, rotate: 18, scale: 1 }}
@@ -424,31 +431,31 @@ export function NuestroEnfoque() {
 
                         <RichParagraph index={0} active={active}>
                             <p className="text-xl md:text-2xl lg:text-3xl font-light leading-[1.3] text-[#1d1d1f]">
-                                Cada proyecto inicia{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">entendiendo</span>{" "}
-                                cómo opera tu negocio{" "}
-                                <span className="font-normal">antes de escribir una sola línea de código</span>.
+                                {s.p1Pre1}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.p1Word1}</span>{" "}
+                                {s.p1Pre2}{" "}
+                                <span className="font-normal">{s.p1Bold}</span>.
                             </p>
                             <p className="text-base md:text-lg font-light leading-relaxed text-[#1d1d1f]/65 mt-5 max-w-md">
-                                Hablamos con tu equipo, mapeamos tus procesos y entendemos qué métricas realmente te importan. Solo entonces empezamos a diseñar.
+                                {s.p1sub}
                             </p>
                         </RichParagraph>
 
                         <RichParagraph index={1} active={active}>
                             <p className="text-xl md:text-2xl lg:text-3xl font-light leading-[1.3] text-[#1d1d1f]">
-                                El resultado es software que{" "}
+                                {s.p2Pre}{" "}
                                 <span className="relative inline-block font-normal">
-                                    <span className="relative z-10">refleja tu manera de trabajar</span>
+                                    <span className="relative z-10">{s.p2Highlight}</span>
                                     <span className="absolute inset-x-0 bottom-0 md:bottom-1 h-2 md:h-3 bg-[#1d1d1f]/12 -z-0" />
                                 </span>
-                                , no un{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic">molde reutilizado</span>.
+                                {s.p2Mid}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic">{s.p2Word}</span>.
                             </p>
                             <p className="text-base md:text-lg font-light leading-relaxed text-[#1d1d1f]/65 mt-5 max-w-md">
-                                Esa diferencia se nota en{" "}
-                                <span className="text-[#1d1d1f] font-normal">la adopción del equipo</span>, en{" "}
-                                <span className="text-[#1d1d1f] font-normal">la velocidad de implementación</span> y, sobre todo, en{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic text-[#1d1d1f]">los resultados</span>.
+                                {s.p2subPre}{" "}
+                                <span className="text-[#1d1d1f] font-normal">{s.p2subBold1}</span>{s.p2subMid1}{" "}
+                                <span className="text-[#1d1d1f] font-normal">{s.p2subBold2}</span> {s.p2subMid2}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic text-[#1d1d1f]">{s.p2subWord}</span>.
                             </p>
                         </RichParagraph>
 
@@ -492,93 +499,96 @@ type Vertical = {
     body: React.ReactNode;
 };
 
-const verticals: Vertical[] = [
-    {
-        title: "Eventos",
-        arrow: true,
-        body: (
-            <>
-                Plataformas de{" "}
-                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">registro y ticketing</span>,
-                apps de experiencia durante el evento, dashboards en vivo y herramientas post-evento.
-                Cada experiencia diseñada para que{" "}
-                <span className="relative inline-block font-normal text-[#1d1d1f]">
-                    <span className="relative z-10">el organizador tenga control total</span>
-                    <span className="absolute inset-x-0 bottom-0 h-2 bg-[#1d1d1f]/12 -z-0" />
-                </span>.
-            </>
-        ),
-    },
-    {
-        title: "Fuerza",
-        accent: "de venta",
-        dark: true,
-        body: (
-            <>
-                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">CRMs a medida</span>,
-                apps para vendedores en campo, pipeline en tiempo real, reportes ejecutivos automatizados.
-                Herramientas que el equipo comercial{" "}
-                <span className="underline decoration-2 underline-offset-4 decoration-white/60 font-normal text-white">realmente quiere usar</span>.
-            </>
-        ),
-    },
-    {
-        title: "Logística",
-        arrow: true,
-        body: (
-            <>
-                Inventario, tracking de envíos, gestión de rutas y dashboards operativos.{" "}
-                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">Visibilidad completa</span> sobre lo que se mueve,{" "}
-                <span className="font-normal text-[#1d1d1f]">dónde está</span> y{" "}
-                <span className="font-normal text-[#1d1d1f]">qué sigue</span>.
-            </>
-        ),
-    },
-    {
-        title: "Recursos",
-        accent: "Humanos",
-        body: (
-            <>
-                Gestión de personal,{" "}
-                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">onboarding digital</span>,
-                evaluaciones, asistencia y comunicación interna.
-                Procesos que dejan de depender de{" "}
-                <span className="line-through decoration-[#1d1d1f]/60 text-[#1d1d1f]/50">hojas de cálculo</span>.
-            </>
-        ),
-    },
-    {
-        title: "Administración",
-        arrow: true,
-        dark: true,
-        body: (
-            <>
-                Facturación interna, control de gastos, aprobaciones y reportes para dirección.
-                <span className="block mt-3 text-white font-normal">
-                    Menos correos.{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic">Menos PDFs.</span>{" "}
-                    <span className="relative inline-block">
-                        <span className="relative z-10">Más decisiones basadas en datos</span>
-                        <span className="absolute inset-x-0 bottom-0 h-2 bg-white/15 -z-0" />
-                    </span>.
-                </span>
-            </>
-        ),
-    },
-    {
-        title: "Compañías",
-        accent: "completas",
-        body: (
-            <>
-                Cuando una sola herramienta no basta, conectamos todas las áreas: ERPs ligeros, intranets, dashboards de dirección.{" "}
-                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">Una sola fuente de verdad</span>{" "}
-                para toda la organización.
-            </>
-        ),
-    },
-];
-
 export function DondeLoAplicamos() {
+    const { t } = useLang();
+    const s = t.softwarePage.dondeLoAplicamos;
+    const v = s.verticals;
+    const verticals: Vertical[] = [
+        {
+            title: v[0].title,
+            arrow: true,
+            body: (
+                <>
+                    {v[0].bodyPre}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[0].bodyAccent}</span>
+                    {v[0].bodyMid}
+                    {" "}
+                    <span className="relative inline-block font-normal text-[#1d1d1f]">
+                        <span className="relative z-10">{v[0].bodyHighlight}</span>
+                        <span className="absolute inset-x-0 bottom-0 h-2 bg-[#1d1d1f]/12 -z-0" />
+                    </span>.
+                </>
+            ),
+        },
+        {
+            title: v[1].title,
+            accent: v[1].accent,
+            dark: true,
+            body: (
+                <>
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{v[1].bodyAccent}</span>,
+                    {v[1].bodyMid}
+                    {" "}
+                    <span className="underline decoration-2 underline-offset-4 decoration-white/60 font-normal text-white">{v[1].bodyUnderline}</span>.
+                </>
+            ),
+        },
+        {
+            title: v[2].title,
+            arrow: true,
+            body: (
+                <>
+                    {v[2].bodyPre}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[2].bodyAccent}</span> {v[2].bodyMid}{" "}
+                    <span className="font-normal text-[#1d1d1f]">{v[2].bodyBold1}</span> {v[2].bodyMid2}{" "}
+                    <span className="font-normal text-[#1d1d1f]">{v[2].bodyBold2}</span>.
+                </>
+            ),
+        },
+        {
+            title: v[3].title,
+            accent: v[3].accent,
+            body: (
+                <>
+                    {v[3].bodyPre}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[3].bodyAccent}</span>,
+                    {v[3].bodyMid}
+                    {" "}
+                    <span className="line-through decoration-[#1d1d1f]/60 text-[#1d1d1f]/50">{v[3].bodyStrike}</span>.
+                </>
+            ),
+        },
+        {
+            title: v[4].title,
+            arrow: true,
+            dark: true,
+            body: (
+                <>
+                    {v[4].bodyPre}
+                    <span className="block mt-3 text-white font-normal">
+                        {v[4].bodyLine2Pre}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic">{v[4].bodyLine2Accent}</span>{" "}
+                        <span className="relative inline-block">
+                            <span className="relative z-10">{v[4].bodyLine2Highlight}</span>
+                            <span className="absolute inset-x-0 bottom-0 h-2 bg-white/15 -z-0" />
+                        </span>.
+                    </span>
+                </>
+            ),
+        },
+        {
+            title: v[5].title,
+            accent: v[5].accent,
+            body: (
+                <>
+                    {v[5].bodyPre}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[5].bodyAccent}</span>{" "}
+                    {v[5].bodyEnd}
+                </>
+            ),
+        },
+    ];
+
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -624,7 +634,7 @@ export function DondeLoAplicamos() {
                     >
                         <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                         <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                            Dónde lo aplicamos
+                            {s.eyebrow}
                         </span>
                     </motion.div>
 
@@ -643,15 +653,15 @@ export function DondeLoAplicamos() {
                 <div className="mb-6 md:mb-8 uppercase leading-[1] tracking-tight text-[#1d1d1f] max-w-6xl">
                     <RiseText delay={0}>
                         <span className="block text-4xl md:text-7xl lg:text-8xl font-light">
-                            Una{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">plataforma</span>
+                            {s.h2aPre}{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">{s.h2aWord}</span>
                         </span>
                     </RiseText>
                     <RiseText delay={0.12}>
                         <span className="block text-4xl md:text-7xl lg:text-8xl font-light mt-2 md:mt-3">
-                            para{" "}
+                            {s.h2bPre}{" "}
                             <span className="relative inline-block font-normal">
-                                cada parte
+                                {s.h2bWord}
                                 <motion.span
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
@@ -664,7 +674,7 @@ export function DondeLoAplicamos() {
                     </RiseText>
                     <RiseText delay={0.24}>
                         <span className="block text-3xl md:text-5xl lg:text-6xl font-light italic mt-3 md:mt-5 text-[#1d1d1f]/60">
-                            del negocio.
+                            {s.h2c}
                         </span>
                     </RiseText>
                 </div>
@@ -672,10 +682,10 @@ export function DondeLoAplicamos() {
                 {/* Bajada compacta */}
                 <RiseText delay={0.1}>
                     <p className="text-sm md:text-base text-[#1d1d1f]/70 font-light leading-relaxed max-w-3xl mb-4 md:mb-6">
-                        Trabajamos con empresas que necesitan{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">digitalizar procesos críticos</span>{" "}
-                        o construir herramientas que el mercado simplemente no ofrece. Desde apps que viven dentro de un evento hasta{" "}
-                        <span className="text-[#1d1d1f] font-normal">sistemas internos que sostienen una operación completa</span>.
+                        {s.bajadaPre}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{s.bajadaAccent}</span>{" "}
+                        {s.bajadaMid}{" "}
+                        <span className="text-[#1d1d1f] font-normal">{s.bajadaBold}</span>.
                     </p>
                 </RiseText>
 
@@ -756,6 +766,8 @@ function HoverLetters({ text }: { text: string }) {
    ========================================================================== */
 
 export function AppsHiperpersonalizadas() {
+    const { t } = useLang();
+    const s = t.softwarePage.appsHiperpersonalizadas;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -799,7 +811,7 @@ export function AppsHiperpersonalizadas() {
                     >
                         <span className="block w-12 h-px bg-white/40" />
                         <span className="text-xs uppercase tracking-[0.3em] text-white/60 font-sans">
-                            Nuestra firma
+                            {s.eyebrow}
                         </span>
                     </motion.div>
 
@@ -821,12 +833,12 @@ export function AppsHiperpersonalizadas() {
                         <div className="uppercase leading-[0.95] tracking-tight text-white">
                             <RiseText delay={0}>
                                 <span className="block text-5xl md:text-7xl lg:text-8xl font-light">
-                                    Apps
+                                    {s.h2a}
                                 </span>
                             </RiseText>
                             <RiseText delay={0.12}>
                                 <span className="block text-3xl md:text-5xl lg:text-6xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 md:mt-3 tracking-tight">
-                                    hiperpersonalizadas
+                                    {s.h2accent}
                                     <motion.span
                                         initial={{ opacity: 0, rotate: 0, scale: 0.6 }}
                                         whileInView={{ opacity: 1, rotate: 18, scale: 1 }}
@@ -840,33 +852,32 @@ export function AppsHiperpersonalizadas() {
 
                         <RiseText delay={0.1}>
                             <p className="text-base md:text-lg lg:text-xl text-white/75 font-light leading-relaxed max-w-xl mt-10 md:mt-12">
-                                Una app{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">a la medida</span>{" "}
-                                se construye desde tu{" "}
-                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">marca</span>, tu{" "}
-                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">flujo</span>{" "}
-                                y tu{" "}
-                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">lógica</span>{" "}
-                                de negocio. Cada pantalla, cada interacción y cada estado{" "}
-                                <span className="font-normal text-white">están pensados para tu equipo y tus usuarios</span>.
-                                Es{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic">tu app</span>,
-                                con tu manera de operar.
+                                {s.bodyPre1}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{s.bodyWord1}</span>{" "}
+                                {s.bodyPre2}{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyMarca}</span>{s.bodyMid1}{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyFlujo}</span>{" "}
+                                {s.bodyMid2}{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyLogica}</span>{" "}
+                                {s.bodyPre3}{" "}
+                                <span className="font-normal text-white">{s.bodyBold}</span>.
+                                {s.bodyPre4}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic">{s.bodyWord2}</span>{s.bodyEnd}
                             </p>
                         </RiseText>
 
                         <RiseText delay={0.25}>
                             <div className="flex flex-wrap items-center gap-3 mt-10 md:mt-12">
                                 <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-mono">
-                                    Cada app es:
+                                    {s.chipsLabel}
                                 </span>
-                                {["Tu operación", "Tu equipo", "Tu lógica", "Tu marca"].map((t, i) => (
+                                {[s.chip1, s.chip2, s.chip3, s.chip4].map((chip, i) => (
                                     <span
-                                        key={t}
+                                        key={chip}
                                         className="text-xs md:text-sm font-mono uppercase tracking-widest border border-white/20 px-3 py-1.5 rounded-full text-white/80"
                                         style={{ transitionDelay: `${i * 50}ms` }}
                                     >
-                                        {t}
+                                        {chip}
                                     </span>
                                 ))}
                             </div>
@@ -879,11 +890,11 @@ export function AppsHiperpersonalizadas() {
                             style={{ scale: phoneScale, opacity: phoneOpacity }}
                             className="relative"
                         >
-                            <Tilt3DPhone />
+                            <Tilt3DPhone imgAlt={s.imgAlt} />
 
                             {/* Tag flotante cliente */}
                             <div className="absolute -top-2 -right-4 bg-white text-[#1a1a1a] text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full z-20 pointer-events-none">
-                                Cliente · Toogo
+                                {s.floatTag}
                             </div>
 
                             {/* Dot indicador "diseño único" */}
@@ -894,7 +905,7 @@ export function AppsHiperpersonalizadas() {
                                     className="block w-2 h-2 rounded-full bg-emerald-400"
                                 />
                                 <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
-                                    Diseño único
+                                    {s.floatDot}
                                 </span>
                             </div>
                         </motion.div>
@@ -908,7 +919,7 @@ export function AppsHiperpersonalizadas() {
 /* iPhone con tilt 3D cursor-tracked: el teléfono rota en perspective según
    donde está el cursor sobre él. Spring suavizado para que el movimiento se
    sienta orgánico. Fallback: en mobile/touch, oscilación sutil continua. */
-function Tilt3DPhone() {
+function Tilt3DPhone({ imgAlt }: { imgAlt: string }) {
     const ref = useRef<HTMLDivElement>(null);
     const rotX = useMotionValue(0);
     const rotY = useMotionValue(0);
@@ -967,7 +978,7 @@ function Tilt3DPhone() {
                 />
                 <img
                     src="/soluciones/iphone-toogo.png"
-                    alt="Toogo · App hiperpersonalizada"
+                    alt={imgAlt}
                     className="relative w-full h-auto max-w-[240px] md:max-w-[280px] drop-shadow-2xl pointer-events-none"
                     draggable={false}
                 />
@@ -981,6 +992,8 @@ function Tilt3DPhone() {
    ========================================================================== */
 
 export function CasosDeExitoIntro() {
+    const { t } = useLang();
+    const s = t.softwarePage.casosDeExitoIntro;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1016,22 +1029,22 @@ export function CasosDeExitoIntro() {
                 >
                     <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                     <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                        Casos de éxito
+                        {s.eyebrow}
                     </span>
                 </motion.div>
 
                 <div className="uppercase leading-[1] tracking-tight text-[#1d1d1f]">
                     <RiseText delay={0}>
                         <span className="block text-4xl md:text-6xl lg:text-7xl font-light">
-                            Lo que hemos{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">construido</span>
+                            {s.h2aPre}{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case">{s.h2aWord}</span>
                         </span>
                     </RiseText>
                     <RiseText delay={0.12}>
                         <span className="block text-4xl md:text-6xl lg:text-7xl font-light mt-2 md:mt-3">
-                            para quienes{" "}
+                            {s.h2bPre}{" "}
                             <span className="relative inline-block font-normal">
-                                confían
+                                {s.h2bWord}
                                 <motion.span
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
@@ -1072,6 +1085,8 @@ export function CasosDeExitoIntro() {
    ========================================================================== */
 
 export function GoberniaShowcase() {
+    const { t } = useLang();
+    const s = t.softwarePage.goberniaShowcase;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1116,7 +1131,7 @@ export function GoberniaShowcase() {
                         <div className="flex items-center gap-3">
                             <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                             <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                                Un caso · Gobernia
+                                {s.eyebrow}
                             </span>
                         </div>
 
@@ -1135,22 +1150,22 @@ export function GoberniaShowcase() {
                             className="md:col-span-5 relative z-10"
                         >
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light leading-[1.1] tracking-tight text-[#1d1d1f] mb-6">
-                                Cuatro{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">agentes de IA</span>{" "}
-                                analizan tu negocio{" "}
+                                {s.h2Pre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.h2Accent}</span>{" "}
+                                {s.h2Mid}{" "}
                                 <span className="relative inline-block font-normal">
-                                    cada mes
+                                    {s.h2Highlight}
                                     <span className="absolute inset-x-0 bottom-0 md:bottom-1 h-2 md:h-2.5 bg-[#1d1d1f]/12 -z-0" />
                                 </span>.
                             </h2>
                             <p className="text-base md:text-lg text-[#1d1d1f]/70 font-light leading-relaxed max-w-md">
-                                Para{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">Gobernia</span>{" "}
-                                construimos una plataforma donde CFO, CSO, CRO y Auditor —todos IA— sesionan, debaten y entregan decisiones accionables. Sin contratar consultores.
+                                {s.bodyPre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{s.bodyAccent}</span>{" "}
+                                {s.bodyEnd}
                             </p>
                             <div className="mt-8 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/40 font-mono">
                                 <span className="block w-8 h-px bg-[#1d1d1f]/30" />
-                                Plataforma · IA · Decisiones
+                                {s.tag}
                             </div>
                         </motion.div>
 
@@ -1162,14 +1177,14 @@ export function GoberniaShowcase() {
                             <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/10 blur-3xl rounded-full pointer-events-none" />
                             <img
                                 src="/soluciones/gobernia-imac.png"
-                                alt="Gobernia · Plataforma de consejeros corporativos IA"
+                                alt={s.imgAlt}
                                 className="relative w-full h-auto drop-shadow-2xl"
                                 draggable={false}
                             />
 
                             {/* Etiqueta flotante */}
                             <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                                LIVE · v2.0
+                                {s.badge}
                             </div>
                         </motion.div>
                     </div>
@@ -1185,6 +1200,8 @@ export function GoberniaShowcase() {
    ========================================================================== */
 
 export function IvanShowcase() {
+    const { t } = useLang();
+    const s = t.softwarePage.ivanShowcase;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1223,7 +1240,7 @@ export function IvanShowcase() {
                         <div className="flex items-center gap-3">
                             <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                             <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                                Un caso · Ivan Ivanovich
+                                {s.eyebrow}
                             </span>
                         </div>
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center">
@@ -1247,20 +1264,20 @@ export function IvanShowcase() {
                                     <span className="block w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
                                     <span className="block w-2.5 h-2.5 rounded-full bg-[#28C840]" />
                                     <div className="flex-1 mx-2 md:mx-4 h-5 rounded bg-white/5 flex items-center px-3">
-                                        <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">ivanivanovich.com</span>
+                                        <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">{s.url}</span>
                                     </div>
                                 </div>
                                 <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                                     <img
                                         src="/portafolio/screenshots/ivanivanovich.jpg"
-                                        alt="Ivan Ivanovich Academy · LMS a medida"
+                                        alt={s.imgAlt}
                                         className="block w-full h-auto"
                                         draggable={false}
                                     />
                                 </div>
                             </div>
                             <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                                5,000+ alumnos
+                                {s.badge}
                             </div>
                         </motion.div>
 
@@ -1270,21 +1287,18 @@ export function IvanShowcase() {
                             className="md:col-span-5 relative z-10 order-1 md:order-2"
                         >
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light leading-[1.1] tracking-tight text-[#1d1d1f] mb-6">
-                                Una academia entera operando sobre un{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">LMS a medida</span>.
+                                {s.h2Pre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.h2Accent}</span>.
                             </h2>
                             <p className="text-base md:text-lg text-[#1d1d1f]/70 font-light leading-relaxed max-w-md">
-                                Para{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">Ivan Ivanovich Academy</span>{" "}
-                                —la academia de protección ejecutiva más reconocida de México— construimos un{" "}
-                                <strong className="font-semibold text-[#1d1d1f]">LMS</strong> (sistema de gestión de aprendizaje) a medida:
-                                cursos en vivo y grabados, inscripciones y cobros, área de alumnos,
-                                sistema de afiliados y soporte multi-idioma. Hoy opera con 5,000+ alumnos,
-                                40% internacionales.
+                                {s.bodyPre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{s.bodyAccent}</span>{" "}
+                                {s.bodyMid}{" "}
+                                <strong className="font-semibold text-[#1d1d1f]">{s.bodyStrong}</strong> {s.bodyEnd}
                             </p>
                             <div className="mt-8 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/40 font-mono">
                                 <span className="block w-8 h-px bg-[#1d1d1f]/30" />
-                                LMS · Cursos · Multi-idioma · E-commerce
+                                {s.tag}
                             </div>
                         </motion.div>
                     </div>
@@ -1301,6 +1315,8 @@ export function IvanShowcase() {
    ========================================================================== */
 
 export function DidisShowcase() {
+    const { t } = useLang();
+    const s = t.softwarePage.didisShowcase;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1350,7 +1366,7 @@ export function DidisShowcase() {
                         <div className="flex items-center gap-3">
                             <span className="block w-12 h-px bg-white/40" />
                             <span className="text-xs uppercase tracking-[0.3em] text-white/60 font-sans">
-                                Un caso · Los DiDis
+                                {s.eyebrow}
                             </span>
                         </div>
 
@@ -1369,18 +1385,18 @@ export function DidisShowcase() {
                             className="md:col-span-5 relative z-10"
                         >
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light leading-[1.1] tracking-tight text-white mb-6">
-                                Acceso{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">en vivo</span>,{" "}
+                                {s.h2Pre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.h2Accent}</span>{s.h2Mid}{" "}
                                 <span className="relative inline-block font-normal">
-                                    cada QR
+                                    {s.h2Highlight}
                                     <span className="absolute inset-x-0 bottom-0 md:bottom-1 h-2 md:h-2.5 bg-white/15 -z-0" />
                                 </span>{" "}
-                                contado.
+                                {s.h2End}
                             </h2>
                             <p className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-md mb-10">
-                                Para{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">Los DiDis</span>{" "}
-                                construimos un lector de QR + dashboard que monitorea en tiempo real quién accede al evento y quién todavía no — todo desde un iPad en la puerta.
+                                {s.bodyPre}{" "}
+                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{s.bodyAccent}</span>{" "}
+                                {s.bodyEnd}
                             </p>
 
                             {/* Contador LIVE */}
@@ -1392,7 +1408,7 @@ export function DidisShowcase() {
                                         className="block w-2 h-2 rounded-full bg-emerald-400"
                                     />
                                     <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
-                                        Live · accesos
+                                        {s.liveLabel}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-3">
@@ -1400,7 +1416,7 @@ export function DidisShowcase() {
                                         {count.toLocaleString()}
                                     </span>
                                     <span className="text-xs uppercase tracking-[0.3em] text-white/40 font-mono">
-                                        / 1,800 esperados
+                                        {s.counterSuffix}
                                     </span>
                                 </div>
                             </div>
@@ -1423,7 +1439,7 @@ export function DidisShowcase() {
                                     <div className="absolute -inset-x-6 -bottom-6 h-10 bg-black/40 blur-3xl rounded-full pointer-events-none" />
                                     <img
                                         src="/soluciones/ipad-didis-3.png"
-                                        alt="Los DiDis · Lector QR + dashboard en vivo"
+                                        alt={s.imgAlt}
                                         className="relative max-w-full max-h-full w-auto h-auto object-contain drop-shadow-[0_25px_60px_rgba(0,0,0,0.5)]"
                                         draggable={false}
                                     />
@@ -1432,7 +1448,7 @@ export function DidisShowcase() {
 
                             {/* Etiqueta flotante en la esquina */}
                             <div className="absolute top-4 left-4 bg-white text-[#1a1a1a] text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                                QR · EVENT MODE
+                                {s.badge}
                             </div>
                         </div>
                     </div>
@@ -1448,6 +1464,8 @@ export function DidisShowcase() {
    ========================================================================== */
 
 export function IaComoAliado() {
+    const { t } = useLang();
+    const s = t.softwarePage.iaComoAliado;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1494,7 +1512,7 @@ export function IaComoAliado() {
                     >
                         <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                         <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                            La IA como aliado
+                            {s.eyebrow}
                         </span>
                     </motion.div>
 
@@ -1513,19 +1531,19 @@ export function IaComoAliado() {
                 <div className="mb-10 md:mb-14 uppercase leading-[1] tracking-tight text-[#1d1d1f] max-w-6xl">
                     <RiseText delay={0}>
                         <span className="block text-4xl md:text-7xl lg:text-8xl font-light">
-                            Cada plataforma
+                            {s.h2a}
                         </span>
                     </RiseText>
                     <RiseText delay={0.12}>
                         <span className="block text-5xl md:text-8xl lg:text-9xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-1 md:mt-2">
-                            con IA
+                            {s.h2accent}
                         </span>
                     </RiseText>
                     <RiseText delay={0.24}>
                         <span className="block text-4xl md:text-7xl lg:text-8xl font-light mt-1 md:mt-2">
-                            ya viene{" "}
+                            {s.h2bPre}{" "}
                             <span className="relative inline-block font-normal">
-                                lista
+                                {s.h2bWord}
                                 <motion.span
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
@@ -1541,17 +1559,16 @@ export function IaComoAliado() {
                 {/* Bajada con riqueza */}
                 <RiseText delay={0.15}>
                     <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f]/75 font-light leading-relaxed max-w-3xl mb-4">
-                        La integramos donde{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">realmente suma</span> —
-                        no por moda.
-                        Cada desarrollo viene con una{" "}
-                        <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">versión potenciada</span>{" "}
-                        que tú decides activar.
+                        {s.bajadaPre}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{s.bajadaAccent}</span>{" "}
+                        {s.bajadaMid}{" "}
+                        <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">{s.bajadaHighlight}</span>{" "}
+                        {s.bajadaEnd}
                     </p>
                 </RiseText>
                 <RiseText delay={0.3}>
                     <p className="text-sm md:text-base text-[#1d1d1f]/60 font-light italic max-w-3xl mb-12 md:mb-16">
-                        — Mueve el toggle para ver la diferencia en una plataforma real.
+                        {s.toggleHint}
                     </p>
                 </RiseText>
 
@@ -1566,7 +1583,7 @@ export function IaComoAliado() {
                     <button
                         onClick={() => setWithAI(!withAI)}
                         className="relative bg-[#1a1a1a] rounded-full p-1.5 flex items-center w-72 md:w-80 cursor-pointer group"
-                        aria-label="Toggle versión estándar vs IA"
+                        aria-label={s.toggleAriaLabel}
                     >
                         <motion.div
                             layout
@@ -1574,11 +1591,11 @@ export function IaComoAliado() {
                             className={`absolute top-1.5 bottom-1.5 ${withAI ? "right-1.5 left-1/2" : "left-1.5 right-1/2"} bg-white rounded-full`}
                         />
                         <div className={`relative z-10 flex-1 text-center py-3 text-sm font-medium transition-colors duration-300 ${!withAI ? "text-[#1a1a1a]" : "text-white/60"}`}>
-                            Estándar
+                            {s.toggleStd}
                         </div>
                         <div className={`relative z-10 flex-1 text-center py-3 text-sm font-medium transition-colors duration-300 flex items-center justify-center gap-1.5 ${withAI ? "text-[#1a1a1a]" : "text-white/60"}`}>
                             <Sparkles className="w-3.5 h-3.5" />
-                            Versión IA
+                            {s.toggleAi}
                         </div>
                     </button>
                 </motion.div>
@@ -1598,7 +1615,7 @@ export function IaComoAliado() {
                         <div className="w-3 h-3 rounded-full bg-white/20" />
                         <div className="flex-1 mx-4 h-7 bg-white/5 rounded flex items-center px-3">
                             <span className="text-xs text-white/40 font-mono">
-                                {withAI ? "Buscar en lenguaje natural..." : "Buscar por ID o nombre..."}
+                                {withAI ? s.searchAi : s.searchStd}
                             </span>
                             {withAI && <Sparkles className="w-3 h-3 text-white/60 ml-auto" />}
                         </div>
@@ -1607,22 +1624,22 @@ export function IaComoAliado() {
                     {/* Contenido — cambia según el modo */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                         <MockCard
-                            label="Reporte mensual"
-                            value={withAI ? "↑ 23%" : "127 ventas"}
-                            badge={withAI ? "Predicho" : null}
-                            note={withAI ? "Tendencia positiva detectada" : "Total ventas Octubre"}
+                            label={s.card1label}
+                            value={withAI ? s.card1valAi : s.card1valStd}
+                            badge={withAI ? s.card1badge : null}
+                            note={withAI ? s.card1noteAi : s.card1noteStd}
                         />
                         <MockCard
-                            label={withAI ? "Insight automático" : "Pipeline"}
-                            value={withAI ? "Norte +18%" : "$ 2.4M"}
-                            badge={withAI ? "AI" : null}
-                            note={withAI ? "Zona norte está sobre desempeño esperado" : "Total en negociación"}
+                            label={withAI ? s.card2labelAi : s.card2labelStd}
+                            value={withAI ? s.card2valAi : s.card2valStd}
+                            badge={withAI ? s.card2badge : null}
+                            note={withAI ? s.card2noteAi : s.card2noteStd}
                         />
                         <MockCard
-                            label={withAI ? "Próxima acción" : "Tareas"}
-                            value={withAI ? "Llamar a 7 leads" : "12 pendientes"}
-                            badge={withAI ? "Sugerido" : null}
-                            note={withAI ? "Prioridad alta, score > 85" : "Vencidas esta semana"}
+                            label={withAI ? s.card3labelAi : s.card3labelStd}
+                            value={withAI ? s.card3valAi : s.card3valStd}
+                            badge={withAI ? s.card3badge : null}
+                            note={withAI ? s.card3noteAi : s.card3noteStd}
                         />
                     </div>
 
@@ -1635,12 +1652,10 @@ export function IaComoAliado() {
                             )}
                             <div className="flex-1">
                                 <p className="text-xs uppercase tracking-widest text-white/40 mb-1 font-mono">
-                                    {withAI ? "Asistente sugiere" : "Reportes recientes"}
+                                    {withAI ? s.panelLabelAi : s.panelLabelStd}
                                 </p>
                                 <p className="text-sm md:text-base font-light leading-relaxed">
-                                    {withAI
-                                        ? "Tres clientes inactivos en septiembre están listos para reactivación. ¿Genero campaña?"
-                                        : "Octubre.pdf · Septiembre.pdf · Agosto.pdf"}
+                                    {withAI ? s.panelBodyAi : s.panelBodyStd}
                                 </p>
                             </div>
                         </div>
@@ -1648,7 +1663,7 @@ export function IaComoAliado() {
 
                     {/* Etiqueta de modo */}
                     <div className="absolute top-6 right-6 text-xs font-mono uppercase tracking-widest text-white/30">
-                        {withAI ? "// IA-powered" : "// Estándar"}
+                        {withAI ? s.modeAi : s.modeStd}
                     </div>
                 </motion.div>
 
@@ -1663,10 +1678,9 @@ export function IaComoAliado() {
 
                 <RiseText delay={0}>
                     <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f] font-light leading-relaxed max-w-3xl">
-                        Te explicamos las dos versiones,{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">qué cambia entre una y otra</span>,{" "}
-                        y{" "}
-                        <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">elegimos juntos</span>.
+                        {s.closingPre}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.closingAccent}</span>{s.closingMid}{" "}
+                        <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">{s.closingHighlight}</span>.
                     </p>
                 </RiseText>
             </div>
@@ -1700,6 +1714,8 @@ function MockCard({ label, value, badge, note }: { label: string; value: string;
    ========================================================================== */
 
 export function Cierre() {
+    const { t } = useLang();
+    const s = t.softwarePage.cierre;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -1741,7 +1757,7 @@ export function Cierre() {
                     >
                         <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                         <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                            Empecemos
+                            {s.eyebrow}
                         </span>
                     </motion.div>
 
@@ -1778,7 +1794,7 @@ export function Cierre() {
                                     key={i}
                                     className="text-[16vw] md:text-[12vw] font-light uppercase tracking-tighter font-heading text-[#1d1d1f] inline-flex items-center"
                                 >
-                                    Hagamos algo
+                                    {s.marquee1}
                                     <span className="inline-block ml-3 text-[0.5em] rotate-12 text-[#1d1d1f]/40">*</span>
                                 </span>
                             ))}
@@ -1797,7 +1813,7 @@ export function Cierre() {
                                     key={i}
                                     className="text-[14vw] md:text-[10vw] font-[family-name:var(--font-playfair)] italic font-normal tracking-tight text-[#1d1d1f]/70 inline-block pr-2"
                                 >
-                                    extraordinario juntos —
+                                    {s.marquee2}
                                 </span>
                             ))}
                         </motion.div>
@@ -1810,15 +1826,15 @@ export function Cierre() {
                 <div className="md:col-span-6">
                     <RiseText delay={0}>
                         <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f] font-light leading-relaxed max-w-xl">
-                            Si tienes un{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">proceso que digitalizar</span>,
-                            una idea que aún no encuentra cómo construirse o un equipo que necesita mejores herramientas,{" "}
-                            <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">podemos ayudarte</span>.
+                            {s.pPre}{" "}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.pAccent}</span>,
+                            {s.pMid}{" "}
+                            <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">{s.pHighlight}</span>.
                         </p>
                     </RiseText>
                     <RiseText delay={0.15}>
                         <p className="text-sm md:text-base text-[#1d1d1f]/60 font-light italic max-w-xl mt-4">
-                            — Una llamada de 30 minutos es suficiente para entender si encajamos. Sin compromiso.
+                            {s.pSub}
                         </p>
                     </RiseText>
                 </div>
@@ -1843,6 +1859,7 @@ export function Cierre() {
 }
 
 function MagneticButton() {
+    const { t } = useLang();
     const ref = useRef<HTMLButtonElement>(null);
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [isContactOpen, setIsContactOpen] = useState(false);
@@ -1871,7 +1888,7 @@ function MagneticButton() {
                 transition={{ type: "spring", stiffness: 200, damping: 18 }}
                 className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-white px-10 py-6 rounded-full text-lg md:text-xl font-medium hover:bg-black transition-colors duration-300"
             >
-                Hablemos
+                {t.softwarePage.cierre.cta}
                 <Plus className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" />
             </motion.button>
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
@@ -1885,6 +1902,12 @@ function MagneticButton() {
    ========================================================================== */
 
 export function IntegracionSistemas() {
+    const { t } = useLang();
+    const s = t.softwarePage.integracionSistemas;
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
+    const href = enHref("/automatizacion-de-procesos", isEn);
+
     return (
         <section className="relative bg-[#FAFAFA] py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
             {/* Grid background sutil */}
@@ -1900,21 +1923,19 @@ export function IntegracionSistemas() {
                 <div className="flex items-center gap-3 mb-6">
                     <span className="block w-10 h-px bg-[#1d1d1f]/40" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                        Servicio · Integración
+                        {s.eyebrow}
                     </span>
                 </div>
                 <h3 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-5 text-[#1d1d1f]">
-                    Integración de sistemas y{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">APIs</span>
+                    {s.h2a}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.h2accent}</span>
                 </h3>
                 <p className="text-base md:text-lg text-[#1d1d1f]/60 font-light max-w-2xl leading-relaxed">
-                    Conectamos tu ERP, tus herramientas y tus fuentes de datos en un solo flujo.
-                    Integraciones a medida y APIs que eliminan el trabajo manual entre sistemas —
-                    para que tu operación funcione como una sola pieza. ¿Buscas ir más allá y
-                    automatizar procesos completos con IA? Conoce nuestro servicio de{" "}
-                    <a href="/automatizacion-de-procesos" className="font-medium text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
-                        automatización de procesos
-                    </a>.
+                    {s.bodyPre}{" "}
+                    <a href={href} className="font-medium text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
+                        {s.bodyLink}
+                    </a>
+                    {s.bodyEnd}
                 </p>
             </div>
         </section>
