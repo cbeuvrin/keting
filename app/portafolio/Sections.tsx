@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useLang } from "@/lib/i18n/lang-context";
 
 /* ==========================================================================
    Utilidades editoriales
@@ -276,6 +277,8 @@ type CaseProps = {
 function CaseCard({
     badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, bareImage = false, dark = false, effect = "slide",
 }: CaseProps) {
+    const { t } = useLang();
+    const card = t.portfolioPage.card;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
     const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
@@ -388,7 +391,7 @@ function CaseCard({
                             <div className={`grid grid-cols-2 gap-6 mt-8 pt-6 border-t ${dark ? "border-white/15" : "border-[#1d1d1f]/15"}`}>
                                 <div>
                                     <div className={`text-[10px] uppercase tracking-[0.3em] ${dark ? "text-white/40" : "text-[#1d1d1f]/40"} font-mono mb-3`}>
-                                        Paleta
+                                        {card.palette}
                                     </div>
                                     <div className="flex gap-2">
                                         {palette.map((c, i) => (
@@ -403,7 +406,7 @@ function CaseCard({
                                 </div>
                                 <div>
                                     <div className={`text-[10px] uppercase tracking-[0.3em] ${dark ? "text-white/40" : "text-[#1d1d1f]/40"} font-mono mb-3`}>
-                                        Tipografía
+                                        {card.typography}
                                     </div>
                                     <div
                                         className={`text-base md:text-lg ${dark ? "text-white" : "text-[#1d1d1f]"} ${fontStyle === "serif" ? "font-[family-name:var(--font-playfair)] italic" : fontStyle === "display" ? "font-heading font-medium" : "font-medium"} leading-none`}
@@ -434,7 +437,7 @@ function CaseCard({
                                         rel="noopener noreferrer"
                                         className={`group inline-flex items-center gap-2 text-sm font-medium ${dark ? "text-white hover:text-white/70" : "text-[#1d1d1f] hover:text-[#1d1d1f]/70"} transition-colors`}
                                     >
-                                        Ver en vivo
+                                        {card.viewLive}
                                         <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
                                     </a>
                                 )}
@@ -477,7 +480,7 @@ function CaseCard({
                                     {/* URL bar */}
                                     <div className="flex-1 mx-2 md:mx-4 h-6 rounded bg-white/5 flex items-center px-3">
                                         <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">
-                                            {url ? url.replace(/^https?:\/\//, "") : "App de evento · iPad"}
+                                            {url ? url.replace(/^https?:\/\//, "") : card.fallbackUrl}
                                         </span>
                                     </div>
                                     {/* LIVE indicator */}
@@ -534,43 +537,47 @@ function CaseCard({
    ========================================================================== */
 
 export function CaseIvanIvanovich() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.ivan;
     return (
         <CaseCard
             badge="09"
-            eyebrow="Caso · Protección Ejecutiva"
+            eyebrow={c.eyebrow}
             titleTop="Ivan"
             titleAccent="Ivanovich"
             titleBottom="Academy."
-            body={<>Plataforma para la academia de protección ejecutiva más reconocida de México. <span className="font-[family-name:var(--font-playfair)] italic font-normal">Cursos en vivo</span>, eventos, blog y un sistema de afiliados — todo bajo una identidad de autoridad y precisión.</>}
-            tags={["Web Design · Custom", "Multi-idioma", "E-Commerce", "Eventos"]}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#0A0A0A", "#C8102E", "#C5A572", "#F5F5F0"]}
             font="Montserrat"
             fontStyle="display"
-            metric={{ value: "↑ 4x", label: "Tráfico anual" }}
+            metric={{ value: "↑ 4x", label: c.metricLabel }}
             url="https://ivanivanovich.com/"
             image="/portafolio/screenshots/ivanivanovich.jpg"
-            imageAlt="Ivan Ivanovich · Academia de Protección Ejecutiva"
+            imageAlt={c.imageAlt}
             effect="tilt"
         />
     );
 }
 
 export function CaseIudex() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.iudex;
     return (
         <CaseCard
             badge="02"
-            eyebrow="Caso · Legal AI"
+            eyebrow={c.eyebrow}
             titleTop="Iudex"
             titleAccent="rest assured."
-            body={<>Plataforma para la primera IA jurídica de México con criterio jurídico real. Diseño <span className="font-[family-name:var(--font-playfair)] italic font-normal">brutalista premium</span> en blanco y negro — autoridad legal en cada pixel.</>}
-            tags={["Next.js", "IA Integration", "Dark mode", "Editorial"]}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#000000", "#FFFFFF", "#1A1A1A", "#9CA3AF"]}
             font="Inter"
             fontStyle="sans"
-            metric={{ value: "100k+", label: "Sesiones mes" }}
+            metric={{ value: "100k+", label: c.metricLabel }}
             url="https://www.iudex.mx/"
             image="/portafolio/screenshots/iudex.jpg"
-            imageAlt="Iudex · Legal AI"
+            imageAlt={c.imageAlt}
             dark
             effect="slide"
         />
@@ -578,44 +585,48 @@ export function CaseIudex() {
 }
 
 export function CaseGobernia() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.gobernia;
     return (
         <CaseCard
             badge="04"
-            eyebrow="Caso · Governance AI"
+            eyebrow={c.eyebrow}
             titleTop="Gobernia."
-            titleAccent="4 agentes."
-            titleBottom="1 consejo."
-            body={<>Plataforma SaaS de consejeros corporativos potenciados por IA: <span className="font-[family-name:var(--font-playfair)] italic font-normal">CFO, CSO, CRO y Auditor</span> sesionan cada mes y entregan decisiones accionables — sin contratar consultores.</>}
-            tags={["Next.js", "IA Agents", "SaaS", "Dashboard"]}
+            titleAccent={c.titleAccent}
+            titleBottom={c.titleBottom}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#1B2540", "#FFFFFF", "#3B82F6", "#F5F5F7"]}
             font="Inter"
             fontStyle="sans"
-            metric={{ value: "↑ 8x", label: "Conversión" }}
+            metric={{ value: "↑ 8x", label: c.metricLabel }}
             url="https://gobernia-liard.vercel.app/"
             image="/portafolio/screenshots/gobernia.jpg"
-            imageAlt="Gobernia · 4 agentes IA"
+            imageAlt={c.imageAlt}
             effect="rise"
         />
     );
 }
 
 export function CaseSmileBetter() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.smileBetter;
     return (
         <CaseCard
             badge="03"
-            eyebrow="Caso · Salud dental"
+            eyebrow={c.eyebrow}
             titleTop="Smile"
             titleAccent="Better"
             titleBottom="Clinics."
-            body={<>Clínica dental holística con enfoque integral. Diseñamos un sitio que comunica <span className="font-[family-name:var(--font-playfair)] italic font-normal">cercanía y tecnología</span> a partes iguales — agendar cita está a un solo tap.</>}
-            tags={["Headless CMS", "Booking", "Multi-clinic", "SEO local"]}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#0A0A0A", "#FFFFFF", "#22C55E", "#A78BFA"]}
             font="Inter"
             fontStyle="sans"
-            metric={{ value: "↑ 3x", label: "Citas mensuales" }}
+            metric={{ value: "↑ 3x", label: c.metricLabel }}
             url="https://smilebetterclinics.com/"
             image="/portafolio/screenshots/smilebetter.jpg"
-            imageAlt="Smile Better · Clínica dental"
+            imageAlt={c.imageAlt}
             dark
             effect="tilt"
         />
@@ -623,22 +634,24 @@ export function CaseSmileBetter() {
 }
 
 export function CaseBarmored() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.barmored;
     return (
         <CaseCard
             badge="06"
-            eyebrow="Caso · Blindaje automotriz"
+            eyebrow={c.eyebrow}
             titleTop="Barmored"
             titleAccent="Security."
-            titleBottom="Blindaje perfecto."
-            body={<>Sitio para una firma líder en <span className="font-[family-name:var(--font-playfair)] italic font-normal">blindaje automotriz</span> de alto perfil. Estética cinematográfica con video hero, certificaciones internacionales visibles y un flujo de cotización directo — porque cuando se trata de seguridad, no hay tiempo para fricciones.</>}
-            tags={["Web Design · Custom", "Video hero", "Cotización", "B2B"]}
+            titleBottom={c.titleBottom}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#0A0A0A", "#C8102E", "#A0A0A0", "#FFFFFF"]}
             font="Montserrat"
             fontStyle="display"
-            metric={{ value: "↑ 7x", label: "Cotizaciones" }}
+            metric={{ value: "↑ 7x", label: c.metricLabel }}
             url="https://www.barmoredsecurity.com/"
             image="/portafolio/screenshots/barmored.jpg"
-            imageAlt="Barmored Security · Blindaje automotriz"
+            imageAlt={c.imageAlt}
             dark
             effect="tilt"
         />
@@ -646,64 +659,70 @@ export function CaseBarmored() {
 }
 
 export function CaseToogo() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.toogo;
     return (
         <CaseCard
             badge="07"
-            eyebrow="Caso · SaaS E-commerce"
+            eyebrow={c.eyebrow}
             titleTop="Toogo."
-            titleAccent="Tu tienda,"
-            titleBottom="lista en minutos."
-            body={<>Plataforma <span className="font-[family-name:var(--font-playfair)] italic font-normal">SaaS multi-tenant</span> para que cualquier vendedor lance su tienda en línea en minutos — sin programador, sin diseñador. Onboarding asistido por IA, dashboard del comerciante, billing por suscripción y arquitectura aislada por inquilino.</>}
-            tags={["Next.js · Multi-tenant", "Stripe Billing", "AI Onboarding", "SaaS"]}
+            titleAccent={c.titleAccent}
+            titleBottom={c.titleBottom}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#8B5CF6", "#FFFFFF", "#1F2937", "#F3F4F6"]}
             font="Inter"
             fontStyle="sans"
-            metric={{ value: "100+", label: "Tiendas activas" }}
+            metric={{ value: "100+", label: c.metricLabel }}
             url="https://www.toogo.store/"
             image="/portafolio/screenshots/toogo.jpg"
-            imageAlt="Toogo · SaaS E-commerce multi-tenant"
+            imageAlt={c.imageAlt}
             effect="rise"
         />
     );
 }
 
 export function CaseRosymar() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.rosymar;
     return (
         <CaseCard
             badge="08"
-            eyebrow="Caso · Joyería"
+            eyebrow={c.eyebrow}
             titleTop="Rosymar"
             titleAccent="González."
-            body={<>E-commerce de joyería con baño en <span className="font-[family-name:var(--font-playfair)] italic font-normal">oro 18k y 24k</span>. Catálogo curado, manifiesto de marca y experiencia de compra cuidada al detalle — para que cada pieza llegue como debe llegar.</>}
-            tags={["E-Commerce", "Custom theme", "Manifiesto", "Tienda"]}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#1A1A1A", "#D4AF37", "#F5F0E8", "#FFFFFF"]}
             font="Cormorant Garamond"
             fontStyle="serif"
-            metric={{ value: "↑ 5x", label: "Ventas online" }}
+            metric={{ value: "↑ 5x", label: c.metricLabel }}
             url="https://rosymargonzalez.com/"
             image="/portafolio/screenshots/rosymargonzalez.jpg"
-            imageAlt="Rosymar González · Joyería"
+            imageAlt={c.imageAlt}
             effect="float"
         />
     );
 }
 
 export function CaseHapptek() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.happtek;
     return (
         <CaseCard
             badge="05"
-            eyebrow="Caso · Audio premium"
+            eyebrow={c.eyebrow}
             titleTop="Happtek."
-            titleAccent="La voz de la elegancia."
-            body={<>Showroom de equipos de audio de gama alta. Tipografía editorial, fotografía cinematográfica y una experiencia que se siente como un <span className="font-[family-name:var(--font-playfair)] italic font-normal">disco de vinilo</span> en silenciador analógico.</>}
-            tags={["Next.js", "WebGL", "Hi-end", "Multi-idioma"]}
+            titleAccent={c.titleAccent}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#1A1410", "#CD9851", "#E8D5A8", "#0A0805"]}
             font="Playfair Display"
             fontStyle="serif"
-            metric={{ value: "↑ 6x", label: "Tiempo en sitio" }}
+            metric={{ value: "↑ 6x", label: c.metricLabel }}
             url="https://audio-five-blue.vercel.app/"
             image="/portafolio/screenshots/audiofive.jpg"
-            imageAlt="Happtek · Audio premium"
+            imageAlt={c.imageAlt}
             dark
             effect="slide"
         />
@@ -711,21 +730,23 @@ export function CaseHapptek() {
 }
 
 export function CaseSuzuki() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.suzuki;
     return (
         <CaseCard
             badge="10"
-            eyebrow="Caso · Activación de evento"
+            eyebrow={c.eyebrow}
             titleTop="Suzuki."
-            titleAccent="¿Qué coche"
-            titleBottom="eres?"
-            body={<>App de <span className="font-[family-name:var(--font-playfair)] italic font-normal">quiz interactivo</span> para una activación de Suzuki en vivo. En un iPad, los asistentes respondían un test de personalidad y la app les sugería el modelo Suzuki ideal — una experiencia de marca memorable que más de 500 personas vivieron en el evento. En alianza con <span className="font-[family-name:var(--font-playfair)] italic font-normal">Enso Media</span>.</>}
-            tags={["App de evento", "Quiz interactivo", "iPad", "Activación de marca"]}
+            titleAccent={c.titleAccent}
+            titleBottom={c.titleBottom}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic1}</span>{c.bodyMid}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic2}</span>{c.bodyPost}</>}
+            tags={c.tags}
             palette={["#0A0A0A", "#E30613", "#003DA5", "#F5F5F0"]}
             font="Montserrat"
             fontStyle="display"
-            metric={{ value: "500+", label: "Quizzes en el evento" }}
+            metric={{ value: "500+", label: c.metricLabel }}
             image="/soluciones/suzuki-ipad.png"
-            imageAlt="Suzuki · App de quiz para evento, en alianza con Enso Media"
+            imageAlt={c.imageAlt}
             imageMaxClass="max-w-[82%] mx-auto"
             bareImage
             dark
@@ -739,6 +760,8 @@ export function CaseSuzuki() {
    ========================================================================== */
 
 export function PortafolioCierre() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cierre;
     const [isContactOpen, setIsContactOpen] = useState(false);
     return (
         <section className="bg-[#F5F5F7] relative py-32 md:py-44 overflow-clip">
@@ -755,7 +778,7 @@ export function PortafolioCierre() {
                             key={i}
                             className="text-[16vw] md:text-[12vw] font-light uppercase tracking-tighter font-heading text-[#1d1d1f] inline-flex items-center pb-1"
                         >
-                            ¿Listo para ser el siguiente?
+                            {c.marquee}
                             <span className="inline-block ml-3 text-[0.5em] rotate-12 text-[#1d1d1f]/40">*</span>
                         </span>
                     ))}
@@ -775,10 +798,7 @@ export function PortafolioCierre() {
                             >
                                 *
                             </motion.span>
-                            Si tu marca necesita una web que esté{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">a la altura</span> —{" "}
-                            <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">hablemos</span>.
-                            Un café de 30 minutos es suficiente para entender si encajamos. Sin compromiso.
+                            {c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyMid}<span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">{c.ctaPill}</span>{c.bodyPost}
                         </p>
                     </RiseText>
                 </div>
@@ -792,7 +812,7 @@ export function PortafolioCierre() {
                         onClick={() => setIsContactOpen(true)}
                         className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-white px-10 py-6 rounded-full text-lg md:text-xl font-medium hover:bg-black transition-colors duration-300"
                     >
-                        Hablemos
+                        {c.cta}
                         <Plus className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" />
                     </motion.button>
                     <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
@@ -819,6 +839,7 @@ export function PortafolioCierre() {
    ========================================================================== */
 
 export function PortafolioHeroV2() {
+    const { t } = useLang();
     return (
         <section className="relative min-h-screen bg-[#0a0a0a] text-white overflow-hidden flex flex-col justify-center pt-32 pb-16 px-6 md:px-12 lg:px-24">
 
@@ -890,7 +911,7 @@ export function PortafolioHeroV2() {
                     className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-12 md:mt-16"
                 >
                     <p className="md:col-span-6 md:col-start-7 text-base md:text-lg text-white/70 font-light leading-relaxed max-w-lg">
-                        Marcas premium. Industrias distintas. Una misma firma. Cada proyecto se construyó desde cero — diseño, código y estrategia bajo un mismo techo.
+                        {t.portfolioPage.heroSubhead}
                     </p>
                 </motion.div>
 

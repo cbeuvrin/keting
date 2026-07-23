@@ -14,7 +14,14 @@ export const metadata: Metadata = {
         "toogo",
         "barmored",
     ],
-    alternates: { canonical: "/portafolio" },
+    alternates: {
+        canonical: "/portafolio",
+        languages: {
+            "es-MX": "/portafolio",
+            "en": "/en/portafolio",
+            "x-default": "/portafolio",
+        },
+    },
     openGraph: {
         title: "Portafolio · Keting Media",
         description:
