@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Custom software, web & app development in Mexico · Keting Media",
+    title: { absolute: "Custom software, web & app development in Mexico · Keting Media" },
     description:
         "Nearshore custom software, web and mobile app development from Mexico City. Design, engineering and applied AI in one team. Same timezone as the US, senior work, 80%+ referral-driven.",
     keywords: [
