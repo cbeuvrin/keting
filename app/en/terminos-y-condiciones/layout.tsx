@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Términos y Condiciones",
-    description: "Términos y condiciones de uso de los servicios de Keting Media.",
+    title: "Terms and Conditions",
+    description: "Terms and conditions for the use of Keting Media's services.",
     alternates: {
-        canonical: "/terminos-y-condiciones",
+        canonical: "/en/terminos-y-condiciones",
         languages: {
             "es-MX": "/terminos-y-condiciones",
             "en": "/en/terminos-y-condiciones",

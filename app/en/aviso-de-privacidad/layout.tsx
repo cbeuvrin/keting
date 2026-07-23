@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Aviso de Privacidad",
-    description: "Aviso de privacidad de Keting Media. Cómo recolectamos, usamos y protegemos tus datos.",
+    title: "Privacy Notice",
+    description: "Privacy notice of Keting Media. How we collect, use, and protect your data.",
     alternates: {
-        canonical: "/aviso-de-privacidad",
+        canonical: "/en/aviso-de-privacidad",
         languages: {
             "es-MX": "/aviso-de-privacidad",
             "en": "/en/aviso-de-privacidad",
