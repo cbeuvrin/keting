@@ -82,16 +82,16 @@ const nextConfig = {
       { source: '/community-manager-2-minimal', destination: '/', permanent: true },
       { source: '/blog-2', destination: '/blog', permanent: true },
       { source: '/blogger', destination: '/blog', permanent: true },
-      // Versión en inglés (ya no existe): específicas primero, luego catch-all
+      // Versión en inglés antigua de WordPress: redirects ESPECÍFICOS (no
+      // catch-all, para no atrapar las rutas espejo reales /en/desarrollo-web…).
       { source: '/en/blog/:path*', destination: '/blog', permanent: true },
-      { source: '/en/web', destination: '/desarrollo-web', permanent: true },
-      { source: '/en/portafolio-web', destination: '/portafolio', permanent: true },
-      { source: '/en/google-ads', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/en/meta-ads', destination: '/desarrollo-de-software', permanent: true },
+      { source: '/en/blog', destination: '/blog', permanent: true },
+      { source: '/en/web', destination: '/en/desarrollo-web', permanent: true },
+      { source: '/en/portafolio-web', destination: '/en/portafolio', permanent: true },
+      { source: '/en/google-ads', destination: '/en/desarrollo-de-software', permanent: true },
+      { source: '/en/meta-ads', destination: '/en/desarrollo-de-software', permanent: true },
       { source: '/en/blogger', destination: '/blog', permanent: true },
-      // OJO: /en ahora es una página REAL (landing en inglés). El catch-all solo
-      // captura SUBrutas viejas de WordPress (/en/algo), NO /en a secas.
-      { source: '/en/:path+', destination: '/', permanent: true },
+      { source: '/en/nosotros', destination: '/en', permanent: true },
     ];
   },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).
