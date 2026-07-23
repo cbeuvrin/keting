@@ -14,7 +14,14 @@ export const metadata: Metadata = {
         "automatizar procesos",
         "integración de sistemas",
     ],
-    alternates: { canonical: "/automatizacion-de-procesos" },
+    alternates: {
+        canonical: "/automatizacion-de-procesos",
+        languages: {
+            "es-MX": "/automatizacion-de-procesos",
+            "en": "/en/automatizacion-de-procesos",
+            "x-default": "/automatizacion-de-procesos",
+        },
+    },
     openGraph: {
         title: "Automatización de procesos con IA · Keting Media",
         description:

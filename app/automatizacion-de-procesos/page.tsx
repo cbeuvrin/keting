@@ -1,12 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { FaqSection } from "@/components/seo/faq-section";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 
 // Página de servicio: Automatización de procesos con IA.
 // Client component importado normal (NO ssr:false) → todo el texto va en el
@@ -22,6 +25,8 @@ const reveal = {
 // SIEMPRE; el resto del texto se aclara conforme bajas y vuelve a oscurecerse
 // al subir (ligado a scrollYProgress → totalmente reversible).
 function FraseImpactoIA() {
+    const { t } = useLang();
+    const f = t.automationPage.fraseImpacto;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.35"] });
     const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
@@ -64,30 +69,30 @@ function FraseImpactoIA() {
                 <div className="flex items-center gap-3 mb-12 md:mb-16">
                     <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                        El costo de no automatizar
+                        {f.eyebrow}
                     </span>
                 </div>
 
                 <p className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.15] text-[#1d1d1f]">
-                    <Dim>Cada hora que tu equipo gasta en tareas repetitivas es </Dim>
+                    <Dim>{f.d1}</Dim>
                     {/* dinero — resaltado tipo marcador */}
                     <span className="relative inline-block font-medium text-[#1d1d1f] whitespace-nowrap">
-                        dinero
+                        {f.k1}
                         <span className="absolute inset-x-0 bottom-1 md:bottom-2 h-2.5 md:h-4 bg-[#1d1d1f]/10" aria-hidden />
                     </span>
-                    <Dim> que tu negocio pierde. La </Dim>
+                    <Dim>{f.d2}</Dim>
                     {/* IA — acento Playfair */}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">IA</span>
-                    <Dim> bien implementada te devuelve </Dim>
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{f.k2}</span>
+                    <Dim>{f.d3}</Dim>
                     {/* tiempo — Playfair */}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">tiempo</span>
-                    <Dim>, elimina los </Dim>
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{f.k3}</span>
+                    <Dim>{f.d4}</Dim>
                     {/* errores — tachado con intención */}
-                    <span className="font-medium text-[#1d1d1f] line-through decoration-2 md:decoration-[3px] decoration-[#1d1d1f]/60">errores</span>
-                    <Dim> y convierte tu operación en tu </Dim>
+                    <span className="font-medium text-[#1d1d1f] line-through decoration-2 md:decoration-[3px] decoration-[#1d1d1f]/60">{f.k4}</span>
+                    <Dim>{f.d5}</Dim>
                     {/* ventaja — subrayado animado + asterisco */}
                     <span className="relative inline-block font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f] whitespace-nowrap">
-                        ventaja
+                        {f.k5}
                         <motion.span
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
@@ -105,14 +110,14 @@ function FraseImpactoIA() {
                         className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top text-[#1d1d1f]/40"
                         aria-hidden
                     >*</motion.span>
-                    <Dim>.</Dim>
+                    <Dim>{f.d6}</Dim>
                 </p>
 
                 {/* Remate editorial */}
                 <div className="mt-12 md:mt-16 flex items-center gap-3">
                     <span className="block w-8 h-px bg-[#1d1d1f]/30" />
                     <span className="text-sm md:text-base text-[#1d1d1f]/50 font-[family-name:var(--font-playfair)] italic">
-                        Automatiza una vez, ahorra todos los días.
+                        {f.remate}
                     </span>
                     <span className="block flex-1 h-px bg-[#1d1d1f]/10" />
                 </div>
@@ -137,39 +142,15 @@ function RiseText({ children, delay = 0 }: { children: React.ReactNode; delay?: 
     );
 }
 
-const PASOS = [
-    {
-        n: "01",
-        t: "Diagnóstico de procesos",
-        d: "Mapeamos tu operación y encontramos dónde se va el tiempo: capturas dobles, copiar-pegar entre sistemas, reportes a mano, seguimientos que se olvidan.",
-    },
-    {
-        n: "02",
-        t: "Automatización de flujos",
-        d: "Conectamos tus herramientas para que la información fluya sola: lo que hoy hace una persona en horas, pasa a ejecutarse en segundos y sin errores.",
-    },
-    {
-        n: "03",
-        t: "Agentes de IA",
-        d: "Donde el proceso requiere criterio —entender un mensaje, clasificar, redactar, decidir— entra la IA: agentes y chatbots que trabajan 24/7 con supervisión humana.",
-    },
-    {
-        n: "04",
-        t: "Integración y medición",
-        d: "Todo conectado a tus sistemas reales (ERP, CRM, WhatsApp, hojas de cálculo) y con resultados medibles: horas recuperadas, errores eliminados, respuesta más rápida.",
-    },
-];
-
-const PROCESOS = [
-    "Ventas y cotizaciones",
-    "Atención a clientes",
-    "Facturación y administración",
-    "Reportes y tableros",
-    "Inventarios y pedidos",
-    "Onboarding y RH",
-];
+// Los números de paso (01, 02...) son fijos independientemente del idioma.
+const PASOS_N = ["01", "02", "03", "04"];
 
 export default function AutomatizacionPage() {
+    const { t } = useLang();
+    const a = t.automationPage;
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
+    const softwareHref = enHref("/desarrollo-de-software", isEn);
     const [isContactOpen, setIsContactOpen] = useState(false);
     const heroRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
@@ -207,7 +188,7 @@ export default function AutomatizacionPage() {
                         >
                             <span className="block w-12 h-px bg-[#1d1d1f]/40" />
                             <span className="text-xs uppercase tracking-[0.3em] text-[#1d1d1f]/60 font-sans">
-                                Servicio · Automatización
+                                {a.hero.eyebrow}
                             </span>
                         </motion.div>
 
@@ -218,7 +199,7 @@ export default function AutomatizacionPage() {
                             transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                             className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#1d1d1f] flex items-center justify-center"
                         >
-                            <span className="font-serif italic text-2xl md:text-3xl text-white">IA</span>
+                            <span className="font-serif italic text-2xl md:text-3xl text-white">{a.hero.badge}</span>
                         </motion.div>
                     </div>
 
@@ -226,19 +207,19 @@ export default function AutomatizacionPage() {
                     <h1 className="uppercase leading-[0.95] tracking-tight text-[#1d1d1f] max-w-6xl">
                         <RiseText delay={0}>
                             <span className="block text-5xl md:text-8xl lg:text-9xl font-light">
-                                Automatiza
+                                {a.hero.h1a}
                             </span>
                         </RiseText>
                         <RiseText delay={0.12}>
                             <span className="block text-5xl md:text-8xl lg:text-9xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 md:mt-3 tracking-tight">
-                                tus procesos
+                                {a.hero.h1b}
                             </span>
                         </RiseText>
                         <RiseText delay={0.24}>
                             <span className="block text-4xl md:text-7xl lg:text-8xl font-light mt-2 md:mt-3">
-                                con{" "}
+                                {a.hero.h1c}
                                 <span className="relative inline-block font-normal">
-                                    IA
+                                    {a.hero.h1accent}
                                     <motion.span
                                         initial={{ scaleX: 0 }}
                                         whileInView={{ scaleX: 1 }}
@@ -254,18 +235,17 @@ export default function AutomatizacionPage() {
                                     transition={{ duration: 1.2, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
                                     className="inline-block ml-2 text-3xl md:text-5xl align-top text-[#1d1d1f]/40"
                                 >*</motion.span>
-                                <span>.</span>
+                                <span>{a.hero.h1dot}</span>
                             </span>
                         </RiseText>
                     </h1>
 
                     <RiseText delay={0.15}>
                         <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f]/75 font-light leading-relaxed max-w-2xl mt-10 md:mt-12">
-                            <span className="font-medium text-[#1d1d1f]">Automatización de procesos e implementación de IA</span>{" "}
-                            para tu empresa: tu equipo pierde horas cada semana en tareas repetitivas y nosotros las{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">automatizamos</span>{" "}
-                            —con flujos, agentes de IA y chatbots conectados a tus sistemas— para que
-                            tu gente se dedique a lo que sí necesita criterio humano.
+                            <span className="font-medium text-[#1d1d1f]">{a.hero.subBold}</span>
+                            {a.hero.subMid1}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{a.hero.subItalic}</span>
+                            {a.hero.subMid2}
                         </p>
                     </RiseText>
 
@@ -280,7 +260,7 @@ export default function AutomatizacionPage() {
                             onClick={() => setIsContactOpen(true)}
                             className="group inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-zinc-800 transition-colors"
                         >
-                            Cotiza tu automatización
+                            {a.hero.ctaLabel}
                             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </button>
                     </motion.div>
@@ -293,20 +273,20 @@ export default function AutomatizacionPage() {
                     <motion.div {...reveal} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="flex items-center gap-3 mb-12 md:mb-16">
                         <span className="block w-10 h-px bg-[#1d1d1f]/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                            Qué incluye
+                            {a.pasos.eyebrow}
                         </span>
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-12">
-                        {PASOS.map((p, i) => (
+                        {a.pasos.items.map((p, i) => (
                             <motion.div
-                                key={p.n}
+                                key={p.t}
                                 {...reveal}
                                 transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                                 className="border-t border-[#1d1d1f]/12 pt-6"
                             >
                                 <div className="flex items-baseline gap-4 mb-3">
-                                    <span className="font-serif italic text-2xl md:text-3xl text-[#1d1d1f]/30">{p.n}</span>
+                                    <span className="font-serif italic text-2xl md:text-3xl text-[#1d1d1f]/30">{PASOS_N[i]}</span>
                                     <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#1d1d1f]">{p.t}</h2>
                                 </div>
                                 <p className="text-base text-[#1d1d1f]/60 font-light leading-relaxed">{p.d}</p>
@@ -338,27 +318,27 @@ export default function AutomatizacionPage() {
                         <div className="flex items-center gap-3 mb-6">
                             <span className="block w-10 h-px bg-white/40" />
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/50">
-                                Dónde aplica
+                                {a.darkSection.eyebrow}
                             </span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-5 text-white">
-                            Procesos que ya{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">automatizamos</span>
+                            {a.darkSection.h2pre}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">{a.darkSection.h2accent}</span>
                         </h2>
                         <p className="text-base md:text-lg text-white/60 font-light leading-relaxed max-w-md mb-7">
-                            Para{" "}
-                            <strong className="font-semibold text-white">Gobernia</strong> construimos agentes de IA
-                            que analizan un negocio y entregan decisiones accionables cada mes; en{" "}
-                            <strong className="font-semibold text-white">Toogo</strong>, un onboarding asistido por IA
-                            da de alta tiendas completas sin intervención humana. La misma ingeniería, aplicada a tu operación.
+                            {a.darkSection.paraPre}
+                            <strong className="font-semibold text-white">{a.darkSection.paraBold1}</strong>
+                            {a.darkSection.paraMid}
+                            <strong className="font-semibold text-white">{a.darkSection.paraBold2}</strong>
+                            {a.darkSection.paraEnd}
                         </p>
                         <div className="flex flex-wrap gap-2">
-                            {PROCESOS.map((t) => (
+                            {a.darkSection.procesos.map((tag) => (
                                 <span
-                                    key={t}
+                                    key={tag}
                                     className="text-[11px] md:text-xs font-medium tracking-wide text-white/70 border border-white/15 rounded-full px-3 py-1.5"
                                 >
-                                    {t}
+                                    {tag}
                                 </span>
                             ))}
                         </div>
@@ -373,12 +353,12 @@ export default function AutomatizacionPage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="/soluciones/gobernia-imac.png"
-                            alt="Gobernia · Agentes de IA automatizando el análisis de negocio"
+                            alt={a.darkSection.imgAlt}
                             className="relative w-full h-auto drop-shadow-2xl"
                             draggable={false}
                         />
                         <div className="absolute top-4 right-4 bg-white text-black text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                            Agentes IA en producción
+                            {a.darkSection.badge}
                         </div>
                     </motion.div>
                 </div>
@@ -398,37 +378,37 @@ export default function AutomatizacionPage() {
                         <div className="flex items-center gap-3 mb-6">
                             <span className="block w-10 h-px bg-[#1d1d1f]/40" />
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                                Implementación de IA
+                                {a.implementacion.eyebrow}
                             </span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-6 text-[#1d1d1f]">
-                            Implementación de IA en tu empresa:{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">por dónde empezar</span>
+                            {a.implementacion.h2pre}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">{a.implementacion.h2accent}</span>
                         </h2>
                         <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed mb-5">
-                            La implementación de inteligencia artificial no empieza comprando herramientas:
-                            empieza identificando <strong className="font-semibold text-[#1d1d1f]">un proceso concreto</strong> donde
-                            la IA genere un resultado medible. Nuestro enfoque: empezar por{" "}
-                            <strong className="font-semibold text-[#1d1d1f]">el proceso que más duele</strong>, automatizarlo de
-                            punta a punta, medir el resultado, y de ahí escalar al siguiente.
+                            {a.implementacion.p1Pre}
+                            <strong className="font-semibold text-[#1d1d1f]">{a.implementacion.p1Bold}</strong>
+                            {a.implementacion.p1Mid}
+                            <strong className="font-semibold text-[#1d1d1f]">{a.implementacion.p1Bold2}</strong>
+                            {a.implementacion.p1End}
                         </p>
                         <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed mb-5">
-                            Así lo hicimos en{" "}
-                            <strong className="font-semibold text-[#1d1d1f]">Toogo</strong>, nuestra plataforma de e-commerce:
-                            implementamos <strong className="font-semibold text-[#1d1d1f]">WhatsApp como asistente con IA</strong> —
-                            el canal donde los negocios de LATAM ya viven. Los vendedores operan su tienda{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">conversando</span>:
-                            el asistente los guía en el alta, responde dudas y los acompaña en la operación diaria,
-                            sin apps nuevas que aprender. Resultado: 100+ tiendas operando.
+                            {a.implementacion.p2Pre}
+                            <strong className="font-semibold text-[#1d1d1f]">{a.implementacion.p2Bold1}</strong>
+                            {a.implementacion.p2Mid1}
+                            <strong className="font-semibold text-[#1d1d1f]">{a.implementacion.p2Bold2}</strong>
+                            {a.implementacion.p2Mid2}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{a.implementacion.p2Italic}</span>
+                            {a.implementacion.p2End}
                         </p>
                         <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed">
-                            Como estudio que integra IA en el núcleo de sus productos, cuidamos lo que la
-                            mayoría descuida: que el agente acceda <em>solo</em> a lo que debe, supervisión
-                            humana donde importa, y todo conectado a tus sistemas reales. ¿Tu proyecto pide
-                            una plataforma completa? Eso vive en{" "}
-                            <a href="/desarrollo-de-software" className="font-semibold text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
-                                desarrollo de software a medida
-                            </a>.
+                            {a.implementacion.p3Pre}
+                            <em>{a.implementacion.p3Italic}</em>
+                            {a.implementacion.p3Mid}
+                            <a href={softwareHref} className="font-semibold text-[#1d1d1f] underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity">
+                                {a.implementacion.p3LinkText}
+                            </a>
+                            {a.implementacion.p3End}
                         </p>
                     </div>
 
@@ -443,14 +423,14 @@ export default function AutomatizacionPage() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="/soluciones/iphone-toogo.png"
-                                alt="Toogo · WhatsApp como asistente con IA para operar tiendas en línea"
+                                alt={a.implementacion.imgAlt}
                                 width={850}
                                 height={1750}
                                 className="relative w-full h-auto drop-shadow-2xl"
                                 draggable={false}
                             />
                             <div className="absolute top-6 -right-3 md:-right-6 bg-[#25D366] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
-                                WhatsApp · Asistente IA
+                                {a.implementacion.badge}
                             </div>
                         </div>
                     </motion.div>
@@ -462,14 +442,10 @@ export default function AutomatizacionPage() {
 
             {/* ── FAQ (con schema FAQPage) ── */}
             <FaqSection
-                items={[
-                    { q: "¿Qué procesos de mi empresa se pueden automatizar?", a: "Los más comunes: ventas y cotizaciones, atención a clientes (WhatsApp/correo), facturación y tareas administrativas, generación de reportes, inventarios y pedidos, y onboarding de clientes o personal. La regla práctica: si es repetitivo y sigue pasos definidos, casi seguro se puede automatizar." },
-                    { q: "¿Automatización con IA o sin IA? ¿Cuál necesito?", a: "Si el proceso sigue reglas fijas (cuando pasa A, haz B), basta un flujo automatizado tradicional. Si requiere criterio —entender un mensaje, clasificar, redactar una respuesta, decidir— entra la IA con agentes. En la práctica, la mayoría de los proyectos combinan ambos, y en el diagnóstico te decimos honestamente qué necesita cada proceso." },
-                    { q: "¿Qué es la implementación de IA en una empresa?", a: "Es integrar inteligencia artificial a la operación real del negocio: agentes que atienden y clasifican, análisis automático de información y generación de documentos o reportes — conectados a tus sistemas y con supervisión humana. No es comprar una herramienta: es rediseñar un proceso para que la IA trabaje dentro de él." },
-                    { q: "¿Cuánto cuesta automatizar un proceso?", a: "Depende del proceso y las integraciones. Como referencia, automatizar un proceso concreto es una inversión considerablemente menor que un desarrollo completo (un sistema interno a medida arranca desde $100,000 MXN). Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas." },
-                    { q: "¿Se integra con los sistemas que ya uso?", a: "Sí — ese es el punto. Conectamos con tu ERP, CRM, WhatsApp Business, correo, hojas de cálculo y sistemas internos vía APIs. La automatización trabaja sobre tus herramientas actuales, no te obliga a cambiarlas." },
-                    { q: "¿Cuánto tarda en estar funcionando?", a: "Un proceso acotado suele automatizarse en semanas, no meses. Trabajamos por fases: primero el proceso de mayor impacto, medimos el resultado, y de ahí escalamos al siguiente." },
-                ]}
+                items={a.faq}
+                eyebrow={a.faqEyebrow}
+                titleLead={a.faqTitleLead}
+                titleAccent={a.faqTitleAccent}
             />
 
             <Footer />
