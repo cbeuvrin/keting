@@ -11,9 +11,16 @@ type Faq = { q: string; a: string };
 export function FaqSection({
     items,
     dark = false,
+    eyebrow = "FAQ",
+    titleLead = "Preguntas",
+    titleAccent = "frecuentes",
 }: {
     items: Faq[];
     dark?: boolean;
+    // Encabezado opcional (para reusar la sección en inglés).
+    eyebrow?: string;
+    titleLead?: string;
+    titleAccent?: string;
 }) {
     const schema = {
         "@context": "https://schema.org",
@@ -55,13 +62,13 @@ export function FaqSection({
                 <div className="flex items-center gap-3 mb-6">
                     <span className="block w-10 h-px" style={{ background: `rgba(${fg},0.4)` }} />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase" style={{ color: `rgba(${fg},0.5)` }}>
-                        FAQ
+                        {eyebrow}
                     </span>
                 </div>
 
                 <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-12 md:mb-16">
-                    Preguntas{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">frecuentes</span>
+                    {titleLead}{" "}
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">{titleAccent}</span>
                 </h2>
 
                 {/* Acordeón */}

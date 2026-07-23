@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-react";
 import { useRef } from "react";
@@ -8,7 +9,10 @@ import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
 
 export function Footer() {
-    const { lang, setLang, t } = useLang();
+    const { setLang, t } = useLang();
+    const router = useRouter();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -156,18 +160,18 @@ export function Footer() {
                             <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-2">{t.nav.idiom}</span>
                             <div className="flex items-center gap-0.5">
                                 <button
-                                    onClick={() => setLang("es")}
+                                    onClick={() => { setLang("es"); router.push("/"); }}
                                     className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
-                                        lang === "es" ? "bg-white text-black" : "text-white/50 hover:text-white"
+                                        !isEn ? "bg-white text-black" : "text-white/50 hover:text-white"
                                     }`}
                                 >
                                     ES
                                 </button>
                                 <span className="text-white/20">·</span>
                                 <button
-                                    onClick={() => setLang("en")}
+                                    onClick={() => { setLang("en"); router.push("/en"); }}
                                     className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
-                                        lang === "en" ? "bg-white text-black" : "text-white/50 hover:text-white"
+                                        isEn ? "bg-white text-black" : "text-white/50 hover:text-white"
                                     }`}
                                 >
                                     EN

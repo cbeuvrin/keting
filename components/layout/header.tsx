@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,10 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastY, setLastY] = useState(0);
-    const { lang, setLang, t } = useLang();
+    const { setLang, t } = useLang();
+    const router = useRouter();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
 
     // styles: estilo editorial por palabra → "italic" (cursiva Playfair),
     // "bold" (mayúscula + subrayado), "italicUnderline" (cursiva + subrayado).
@@ -282,9 +286,9 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     <span className="block w-8 h-px bg-black/20" />
                                     <div className="flex items-center gap-1">
                                         <button
-                                            onClick={() => setLang("es")}
+                                            onClick={() => { setLang("es"); router.push("/"); }}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
-                                                lang === "es"
+                                                !isEn
                                                     ? "bg-black text-white rounded-md"
                                                     : "text-black/50 hover:text-black"
                                             }`}
@@ -293,9 +297,9 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         </button>
                                         <span className="text-black/20">·</span>
                                         <button
-                                            onClick={() => setLang("en")}
+                                            onClick={() => { setLang("en"); router.push("/en"); }}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
-                                                lang === "en"
+                                                isEn
                                                     ? "bg-black text-white rounded-md"
                                                     : "text-black/50 hover:text-black"
                                             }`}

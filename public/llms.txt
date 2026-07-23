@@ -18,6 +18,9 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [¿Puedo crear mi app o web solo con IA? (vibe coding)](https://ketingmedia.com/blog/puedo-crear-mi-app-o-web-solo-con-ia-vibe-coding): Qué sí funciona, dónde se rompe y cuándo necesitas ingeniería.
 - [Lovable: qué es, cuánto cuesta y hasta dónde llega](https://ketingmedia.com/blog/lovable-que-es-cuanto-cuesta-y-hasta-donde-llega): Guía honesta 2026 — precios, techo real y cuándo pasar a ingeniería.
 
+## English
+- [Nearshore software development in Mexico](https://ketingmedia.com/en): English landing page — custom software, web and app development plus AI automation, built from Mexico City for companies in the US and LATAM. Same timezone, senior team.
+
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.
 - [Aviso de privacidad](https://ketingmedia.com/aviso-de-privacidad)

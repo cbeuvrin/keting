@@ -89,7 +89,9 @@ const nextConfig = {
       { source: '/en/google-ads', destination: '/desarrollo-de-software', permanent: true },
       { source: '/en/meta-ads', destination: '/desarrollo-de-software', permanent: true },
       { source: '/en/blogger', destination: '/blog', permanent: true },
-      { source: '/en/:path*', destination: '/', permanent: true },
+      // OJO: /en ahora es una página REAL (landing en inglés). El catch-all solo
+      // captura SUBrutas viejas de WordPress (/en/algo), NO /en a secas.
+      { source: '/en/:path+', destination: '/', permanent: true },
     ];
   },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).

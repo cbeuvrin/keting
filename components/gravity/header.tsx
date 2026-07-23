@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { Header } from "@/components/layout/header";
@@ -17,7 +18,10 @@ export function GravityHeader({
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
-    const { lang, setLang, t } = useLang();
+    const { setLang, t } = useLang();
+    const router = useRouter();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
 
     const { scrollY } = useScroll();
 
@@ -86,18 +90,18 @@ export function GravityHeader({
                         {/* Toggle ES/EN */}
                         <div className="flex items-center gap-0.5 ml-3">
                             <button
-                                onClick={() => setLang("es")}
+                                onClick={() => { setLang("es"); router.push("/"); }}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
-                                    lang === "es" ? "bg-black text-white" : "text-zinc-500 hover:text-black"
+                                    !isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
                                 aria-label="Cambiar a español"
                             >
                                 ES
                             </button>
                             <button
-                                onClick={() => setLang("en")}
+                                onClick={() => { setLang("en"); router.push("/en"); }}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
-                                    lang === "en" ? "bg-black text-white" : "text-zinc-500 hover:text-black"
+                                    isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
                                 aria-label="Switch to English"
                             >

@@ -49,7 +49,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
-    languages: { "es-MX": "/" },
+    // hreflang recíproco: la versión ES vive en "/" y la EN (nearshore) en "/en".
+    // x-default apunta a ES (mercado principal México).
+    languages: {
+      "es-MX": "/",
+      "en": "/en",
+      "x-default": "/",
+    },
   },
   openGraph: {
     title: "Keting Media · Desarrollo de software, web y apps en México",
