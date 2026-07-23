@@ -3,8 +3,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { CornerButton } from "@/components/ui/corner-button";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function Toogo() {
+    const { t } = useLang();
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -57,7 +59,7 @@ export function Toogo() {
                         >
                             <span className="block w-10 h-px bg-[#1a2332]/40" />
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1a2332]/60 font-sans">
-                                Caso · Toogo
+                                {t.toogo.eyebrow}
                             </span>
                         </motion.div>
                         <motion.h2
@@ -86,7 +88,7 @@ export function Toogo() {
                             }}
                             className="leading-relaxed font-light text-left w-full text-gray-700"
                         >
-                            Olvídate de depender de programadores o de luchar con códigos complejos. <strong className="font-bold text-[#1a2332]">Toogo</strong> es la plataforma todo en uno que democratiza el comercio electrónico. Diseña tu marca, gestiona tu inventario y cobra de forma segura en un solo lugar.
+                            {t.toogo.bodyPre}<strong className="font-bold text-[#1a2332]">Toogo</strong>{t.toogo.bodyPost}
                         </p>
                     </motion.div>
 

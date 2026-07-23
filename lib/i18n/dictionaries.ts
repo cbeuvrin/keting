@@ -112,6 +112,10 @@ const es = {
     },
     toogo: {
         eyebrow: "Caso · Toogo",
+        bodyPre:
+            "Olvídate de depender de programadores o de luchar con códigos complejos. ",
+        bodyPost:
+            " es la plataforma todo en uno que democratiza el comercio electrónico. Diseña tu marca, gestiona tu inventario y cobra de forma segura en un solo lugar.",
     },
     about: {
         eyebrow: "Nosotros",
@@ -128,6 +132,29 @@ const es = {
         quote:
             "Me enfoco en trabajar con marcas que buscan escalar su negocio mediante soluciones innovadoras y un diseño que realmente conecta con sus clientes.",
         quoteAuthor: "— Carlos Beuvrin",
+    },
+    aboutUs: {
+        eyebrow: "Nosotros",
+        titlePre: "Creando el futuro ",
+        titleAccent: "digital",
+        titlePost: "",
+        subPre: "en ",
+        subCountry: "México",
+        subMid: " desde ",
+        subYear: "2019",
+        subMid2: ". Diseño e innovación impulsada por ",
+        subPill: "IA",
+        subEnd: " para proyectos que rompen el molde.",
+        quoteEyebrow: "Manifiesto",
+        quotePre: "Me enfoco en trabajar con ",
+        quoteBrands: "marcas",
+        quoteMid1: " que buscan escalar su ",
+        quoteBusiness: "negocio",
+        quoteMid2: " mediante soluciones innovadoras y un ",
+        quoteDesign: "diseño",
+        quoteEnd: " que realmente conecta con sus clientes.",
+        imageAlt:
+            "Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México",
     },
     blog: {
         eyebrow: "Blog & Recursos",
@@ -1058,6 +1085,10 @@ const en: typeof es = {
     },
     toogo: {
         eyebrow: "Case · Toogo",
+        bodyPre:
+            "Forget depending on developers or wrestling with complex code. ",
+        bodyPost:
+            " is the all-in-one platform that democratizes e-commerce. Design your brand, manage your inventory and get paid securely — all in one place.",
     },
     about: {
         eyebrow: "About",
@@ -1074,6 +1105,29 @@ const en: typeof es = {
         quote:
             "I focus on working with brands that want to scale their business through innovative solutions and design that truly connects with their customers.",
         quoteAuthor: "— Carlos Beuvrin",
+    },
+    aboutUs: {
+        eyebrow: "About us",
+        titlePre: "Creating the ",
+        titleAccent: "digital",
+        titlePost: " future",
+        subPre: "in ",
+        subCountry: "Mexico",
+        subMid: " since ",
+        subYear: "2019",
+        subMid2: ". Design and innovation powered by ",
+        subPill: "AI",
+        subEnd: " for projects that break the mold.",
+        quoteEyebrow: "Manifesto",
+        quotePre: "I focus on working with ",
+        quoteBrands: "brands",
+        quoteMid1: " looking to scale their ",
+        quoteBusiness: "business",
+        quoteMid2: " through innovative solutions and ",
+        quoteDesign: "design",
+        quoteEnd: " that truly connects with their customers.",
+        imageAlt:
+            "Carlos Beuvrin - Director of Keting Media · Custom software, web and app design and development in Mexico",
     },
     blog: {
         eyebrow: "Blog & Resources",

@@ -2,8 +2,10 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export function AboutUs() {
+    const { t } = useLang();
     const sectionRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -54,7 +56,7 @@ export function AboutUs() {
                             >
                                 <span className="block w-10 h-px bg-black/40" />
                                 <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                                    Nosotros
+                                    {t.aboutUs.eyebrow}
                                 </span>
                             </motion.div>
                             <motion.h2
@@ -63,7 +65,7 @@ export function AboutUs() {
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="text-4xl md:text-7xl font-bold mb-2 tracking-tight text-[#1a1a1a]"
                             >
-                                Creando el futuro <span className="font-[family-name:var(--font-playfair)] italic font-normal">digital</span>
+                                {t.aboutUs.titlePre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{t.aboutUs.titleAccent}</span>{t.aboutUs.titlePost}
                                 <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-black/30">*</span>
                             </motion.h2>
 
@@ -73,16 +75,10 @@ export function AboutUs() {
                                 transition={{ duration: 0.8, delay: 0.3 }}
                                 className="text-xl md:text-2xl text-gray-600 font-normal leading-snug max-w-3xl"
                             >
-                                en{" "}
-                                <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">México</span>{" "}
-                                desde{" "}
-                                <span className="relative inline-block text-black font-medium">
-                                    2019
+                                {t.aboutUs.subPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{t.aboutUs.subCountry}</span>{t.aboutUs.subMid}<span className="relative inline-block text-black font-medium">
+                                    {t.aboutUs.subYear}
                                     <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/70" />
-                                </span>
-                                . Diseño e innovación impulsada por{" "}
-                                <span className="bg-black text-white px-2 py-0.5 font-medium">IA</span>{" "}
-                                para proyectos que rompen el molde.
+                                </span>{t.aboutUs.subMid2}<span className="bg-black text-white px-2 py-0.5 font-medium">{t.aboutUs.subPill}</span>{t.aboutUs.subEnd}
                             </motion.p>
                         </div>
 
@@ -96,7 +92,7 @@ export function AboutUs() {
                             >
                                 <span className="block w-8 h-px bg-black/40" />
                                 <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                                    Manifiesto
+                                    {t.aboutUs.quoteEyebrow}
                                 </span>
                             </motion.div>
                             <motion.p
@@ -106,13 +102,7 @@ export function AboutUs() {
                                 className="text-base md:text-lg lg:text-xl text-gray-500 leading-relaxed font-light max-w-2xl font-[family-name:var(--font-playfair)] italic"
                             >
                                 <span className="text-3xl md:text-4xl text-black/40 leading-none align-top mr-1">&ldquo;</span>
-                                Me enfoco en trabajar con{" "}
-                                <span className="not-italic font-sans font-medium text-black">marcas</span>{" "}
-                                que buscan escalar su{" "}
-                                <span className="not-italic font-sans font-medium text-black underline decoration-2 underline-offset-4 decoration-black/40">negocio</span>{" "}
-                                mediante soluciones innovadoras y un{" "}
-                                <span className="not-italic font-sans font-medium text-black">diseño</span>{" "}
-                                que realmente conecta con sus clientes.
+                                {t.aboutUs.quotePre}<span className="not-italic font-sans font-medium text-black">{t.aboutUs.quoteBrands}</span>{t.aboutUs.quoteMid1}<span className="not-italic font-sans font-medium text-black underline decoration-2 underline-offset-4 decoration-black/40">{t.aboutUs.quoteBusiness}</span>{t.aboutUs.quoteMid2}<span className="not-italic font-sans font-medium text-black">{t.aboutUs.quoteDesign}</span>{t.aboutUs.quoteEnd}
                                 <span className="text-3xl md:text-4xl text-black/40 leading-none align-top ml-1">&rdquo;</span>
                             </motion.p>
 
@@ -139,7 +129,7 @@ export function AboutUs() {
                         >
                             <img
                                 src="/carlos-beuvrin.png"
-                                alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
+                                alt={t.aboutUs.imageAlt}
                                 className="w-full h-full object-cover"
                                 style={{ objectPosition: "center 5%" }}
                                 loading="lazy"
