@@ -526,7 +526,7 @@ export function DondeLoAplicamos() {
             dark: true,
             body: (
                 <>
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{v[1].bodyAccent}</span>,
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{v[1].bodyAccent}</span>
                     {v[1].bodyMid}
                     {" "}
                     <span className="underline decoration-2 underline-offset-4 decoration-white/60 font-normal text-white">{v[1].bodyUnderline}</span>.
@@ -551,7 +551,7 @@ export function DondeLoAplicamos() {
             body: (
                 <>
                     {v[3].bodyPre}{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[3].bodyAccent}</span>,
+                    <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]">{v[3].bodyAccent}</span>
                     {v[3].bodyMid}
                     {" "}
                     <span className="line-through decoration-[#1d1d1f]/60 text-[#1d1d1f]/50">{v[3].bodyStrike}</span>.
@@ -858,9 +858,9 @@ export function AppsHiperpersonalizadas() {
                                 <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyMarca}</span>{s.bodyMid1}{" "}
                                 <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyFlujo}</span>{" "}
                                 {s.bodyMid2}{" "}
-                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyLogica}</span>{" "}
+                                <span className="bg-white text-[#1a1a1a] px-2 py-0.5 font-normal">{s.bodyLogica}</span>
                                 {s.bodyPre3}{" "}
-                                <span className="font-normal text-white">{s.bodyBold}</span>.
+                                <span className="font-normal text-white">{s.bodyBold}</span>.{" "}
                                 {s.bodyPre4}{" "}
                                 <span className="font-[family-name:var(--font-playfair)] italic">{s.bodyWord2}</span>{s.bodyEnd}
                             </p>
@@ -1827,7 +1827,7 @@ export function Cierre() {
                     <RiseText delay={0}>
                         <p className="text-base md:text-lg lg:text-xl text-[#1d1d1f] font-light leading-relaxed max-w-xl">
                             {s.pPre}{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.pAccent}</span>,
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.pAccent}</span>
                             {s.pMid}{" "}
                             <span className="bg-[#1d1d1f] text-white px-2 py-0.5 font-normal">{s.pHighlight}</span>.
                         </p>

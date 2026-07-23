@@ -458,7 +458,7 @@ const es = {
                     title: "Fuerza",
                     accent: "de venta",
                     bodyAccent: "CRMs a medida",
-                    bodyMid: "apps para vendedores en campo, pipeline en tiempo real, reportes ejecutivos automatizados. Herramientas que el equipo comercial",
+                    bodyMid: ", apps para vendedores en campo, pipeline en tiempo real, reportes ejecutivos automatizados. Herramientas que el equipo comercial",
                     bodyUnderline: "realmente quiere usar",
                 },
                 {
@@ -475,7 +475,7 @@ const es = {
                     accent: "Humanos",
                     bodyPre: "Gestión de personal,",
                     bodyAccent: "onboarding digital",
-                    bodyMid: "evaluaciones, asistencia y comunicación interna. Procesos que dejan de depender de",
+                    bodyMid: ", evaluaciones, asistencia y comunicación interna. Procesos que dejan de depender de",
                     bodyStrike: "hojas de cálculo",
                 },
                 {
@@ -514,7 +514,7 @@ const es = {
             bodyFlujo: "flujo",
             bodyMid2: "y tu",
             bodyLogica: "lógica",
-            bodyPre3: "de negocio. Cada pantalla, cada interacción y cada estado",
+            bodyPre3: " de negocio. Cada pantalla, cada interacción y cada estado",
             bodyBold: "están pensados para tu equipo y tus usuarios",
             bodyPre4: "Es",
             bodyWord2: "tu app",
@@ -1136,7 +1136,7 @@ const en: typeof es = {
                     title: "Sales",
                     accent: "force",
                     bodyAccent: "Custom CRMs",
-                    bodyMid: "field-sales apps, real-time pipeline, automated executive reports. Tools the sales team",
+                    bodyMid: ", field-sales apps, real-time pipeline, automated executive reports. Tools the sales team",
                     bodyUnderline: "actually wants to use",
                 },
                 {
@@ -1153,7 +1153,7 @@ const en: typeof es = {
                     accent: "Resources",
                     bodyPre: "Personnel management,",
                     bodyAccent: "digital onboarding",
-                    bodyMid: "evaluations, attendance and internal communication. Processes that stop depending on",
+                    bodyMid: ", evaluations, attendance and internal communication. Processes that stop depending on",
                     bodyStrike: "spreadsheets",
                 },
                 {
