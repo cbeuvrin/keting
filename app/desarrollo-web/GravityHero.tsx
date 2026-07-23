@@ -5,8 +5,11 @@ import Matter from "matter-js";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ScrambleText from "./ScrambleText";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export default function GravityHero() {
+    const { t } = useLang();
+    const hero = t.webPage.hero;
     const sceneRef = useRef<HTMLDivElement>(null);
     const engineRef = useRef<Matter.Engine | null>(null);
     const runnerRef = useRef<Matter.Runner | null>(null);
@@ -152,7 +155,7 @@ export default function GravityHero() {
 
             {/* H1 semántico para SEO — el hero es visual (letras de física), así que
                 el encabezado va accesible (sr-only) con la keyword ancla de la página. */}
-            <h1 className="sr-only">Diseño y desarrollo web a medida en México</h1>
+            <h1 className="sr-only">{hero.h1}</h1>
 
             {/* Asteriscos decorativos gigantes (detrás de las letras) */}
             <motion.span
@@ -181,11 +184,11 @@ export default function GravityHero() {
                     <div className="flex items-center gap-2">
                         <span className="block w-8 h-px bg-white/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
-                            World Wide Web
+                            {hero.badge}
                         </span>
                     </div>
                     <span className="text-white/40 text-[10px] md:text-xs font-[family-name:var(--font-playfair)] italic ml-10">
-                        arrástralas
+                        {hero.drag}
                     </span>
                 </div>
             </div>
@@ -197,12 +200,12 @@ export default function GravityHero() {
                 <div className="flex items-center gap-3">
                     <span className="block w-12 md:w-16 h-px bg-white/30" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.4em] uppercase text-white/50 font-sans">
-                        Diseño <span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case tracking-normal text-white/70">web</span> · 2026
+                        {hero.cornerPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal normal-case tracking-normal text-white/70">{hero.cornerItalic}</span>{hero.cornerSuffix}
                     </span>
                     <span className="block w-12 md:w-16 h-px bg-white/30" />
                 </div>
                 <span className="text-white/30 text-[10px] md:text-xs tracking-[0.2em] uppercase">
-                    Scroll
+                    {hero.scroll}
                 </span>
                 </div>
               </div>
@@ -235,21 +238,21 @@ export default function GravityHero() {
                         {/* Eyebrow editorial */}
                         <div className="flex items-center gap-3 mb-4">
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
-                                Manifiesto
+                                {hero.eyebrow}
                             </span>
                             <span className="block w-10 h-px bg-white/40" />
                         </div>
                         <p className="text-sm md:text-base text-white/80 text-justify md:text-right leading-relaxed font-light">
-                            Como <ScrambleText text="AI Engineer" className="font-bold text-white" />, diseño y estructuro{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">soluciones digitales</span>{" "}
-                            precisas, desde tiendas en línea hasta plataformas de cursos. Me especializo en{" "}
+                            {hero.manifestoPre}<ScrambleText text={hero.manifestoRole} className="font-bold text-white" />{hero.manifestoMid}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{hero.manifestoSolutions}</span>
+                            {hero.manifestoMid2}
                             <span className="relative inline-block text-white font-medium">
-                                desarrollo web
+                                {hero.manifestoSpecialty}
                                 <span className="absolute -bottom-0.5 left-0 right-0 h-[1px] bg-white/70" />
                             </span>
-                            , SEO y optimización de velocidad, construyendo sitios sólidos y eficientes que impulsan el{" "}
-                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">crecimiento real</span>{" "}
-                            de tu negocio.
+                            {hero.manifestoMid3}
+                            <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">{hero.manifestoGrowth}</span>
+                            {hero.manifestoEnd}
                         </p>
                       </div>
                     </div>
@@ -257,10 +260,10 @@ export default function GravityHero() {
                     <div className="flex items-center justify-end gap-4 mt-8 pointer-events-auto">
                         <div className="text-right">
                             <p className="text-sm md:text-base text-white font-medium tracking-tight">
-                                Carlos Beuvrin
+                                {hero.signatureName}
                             </p>
                             <p className="text-xs md:text-sm text-white/50 font-light italic">
-                                AI Engineer · Fundador
+                                {hero.signatureTitle}
                             </p>
                         </div>
                         <div
@@ -271,7 +274,7 @@ export default function GravityHero() {
                             <div className="w-full h-full rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-xl flex items-center justify-center cursor-pointer">
                                 <img
                                     src="/carlos-beuvrin.png"
-                                    alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
+                                    alt={hero.avatarAlt}
                                     className="w-full h-full object-cover grayscale brightness-110 scale-125"
                                 />
                             </div>
@@ -287,7 +290,7 @@ export default function GravityHero() {
                                     >
                                         <img
                                             src="/carlos-beuvrin.png"
-                                            alt="Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México"
+                                            alt={hero.avatarAlt}
                                             className="w-full h-full object-cover"
                                         />
                                     </motion.div>

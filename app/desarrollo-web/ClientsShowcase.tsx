@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 // PNG = silueta negra (default), JPG = color original (hover, con mix-blend multiply para ocultar el fondo blanco)
 const clients = [
@@ -72,6 +73,8 @@ function ClientCard({ png, jpg, name, index }: { png: string; jpg: string; name:
 }
 
 export default function ClientsShowcase() {
+    const { t } = useLang();
+    const c = t.webPage.clients;
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scrollBy = (direction: 1 | -1) => {
@@ -128,7 +131,7 @@ export default function ClientsShowcase() {
                         04 / 05
                     </span>
                     <span className="text-black/40 text-[10px] md:text-xs font-[family-name:var(--font-playfair)] italic">
-                        Una década de colaboraciones selectas
+                        {c.smallLabel}
                     </span>
                 </motion.div>
 
@@ -142,7 +145,7 @@ export default function ClientsShowcase() {
                         className="flex items-center justify-end gap-3 mb-4 md:mb-6"
                     >
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                            Clientes
+                            {c.eyebrow}
                         </span>
                         <span className="block w-10 h-px bg-black/40" />
                     </motion.div>
@@ -153,9 +156,9 @@ export default function ClientsShowcase() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                         className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
                     >
-                        Marcas que{" "}
+                        {c.h2Pre}
                         <span className="relative inline-block font-[family-name:var(--font-playfair)] italic font-normal">
-                            confían
+                            {c.h2Accent}
                             <motion.span
                                 initial={{ scaleX: 0 }}
                                 whileInView={{ scaleX: 1 }}
@@ -163,8 +166,8 @@ export default function ClientsShowcase() {
                                 transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                                 className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black origin-left"
                             />
-                        </span>{" "}
-                        en nosotros
+                        </span>
+                        {c.h2End}
                         <span className="inline-block ml-2 text-xl md:text-3xl align-top rotate-12 text-black/30">*</span>
                     </motion.h2>
                     <motion.p
@@ -174,15 +177,15 @@ export default function ClientsShowcase() {
                         transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         className="text-gray-500 text-lg md:text-xl font-light mb-6"
                     >
-                        Cada{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">colaboración</span>, una historia que escala.
+                        {c.paragraphPre}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{c.paragraphAccent}</span>{c.paragraphEnd}
                     </motion.p>
 
                     {/* Flechas navegación */}
                     <div className="flex justify-end gap-3">
                         <button
                             onClick={() => scrollBy(-1)}
-                            aria-label="Anterior"
+                            aria-label={c.prev}
                             className="w-12 h-12 rounded-full border border-black/15 flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all duration-300"
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -192,7 +195,7 @@ export default function ClientsShowcase() {
                         </button>
                         <button
                             onClick={() => scrollBy(1)}
-                            aria-label="Siguiente"
+                            aria-label={c.next}
                             className="w-12 h-12 rounded-full border border-black/15 flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all duration-300"
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 // Sección de Landing pages para /desarrollo-web (versión oscura, hace juego con
 // Iudex). Importada normalmente (NO ssr:false) → texto en el HTML; solo anima al entrar.
@@ -12,7 +13,9 @@ const reveal = {
 } as const;
 
 export function LandingSection() {
-    const tags = ["Mensaje claro", "Carga veloz", "Orientada a conversión", "SEO técnico"];
+    const { t } = useLang();
+    const c = t.webPage.landing;
+    const tags = c.tags;
 
     return (
         <section className="relative bg-[#0A0A0A] text-white py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
@@ -57,14 +60,14 @@ export function LandingSection() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="/portafolio/screenshots/iudex.jpg"
-                                alt="Iudex · Landing de alto impacto (Legal AI)"
+                                alt={c.imageAlt}
                                 className="block w-full h-auto"
                                 draggable={false}
                             />
                         </div>
                     </div>
                     <div className="absolute top-4 right-4 bg-white text-black text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                        100k+ sesiones/mes
+                        {c.badge}
                     </div>
                 </motion.div>
 
@@ -77,18 +80,15 @@ export function LandingSection() {
                     <div className="flex items-center gap-3 mb-6">
                         <span className="block w-10 h-px bg-white/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/50">
-                            Servicio · Landing pages
+                            {c.eyebrow}
                         </span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-5 text-white">
-                        Landing pages que{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">convierten</span>
+                        {c.h2Pre}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.h2Accent}</span>
                     </h2>
                     <p className="text-base md:text-lg text-white/60 font-light leading-relaxed max-w-md mb-7">
-                        Una landing tiene un solo trabajo: convertir la visita en cliente. Diseñamos
-                        páginas con <strong className="font-semibold text-white">mensaje claro</strong>,
-                        carga casi instantánea y una estructura persuasiva —probada y medible— para que
-                        tu inversión en anuncios y tráfico no se desperdicie.
+                        {c.paragraphPre}<strong className="font-semibold text-white">{c.paragraphStrong}</strong>{c.paragraphEnd}
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {tags.map((t) => (

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 interface ServiceItemProps {
   title: string;
@@ -58,51 +59,10 @@ const ServiceItem = ({ title, description, delay }: ServiceItemProps) => {
 };
 
 export function WebDesignServices() {
-  const designServices = [
-    {
-      title: "Diseño UX/UI",
-      description: "Interfaces claras y funcionales, optimizadas para convertir y deleitar al usuario en cada interacción.",
-    },
-    {
-      title: "Diseño de movimiento",
-      description: "Animaciones precisas que dan vida al producto y guían la atención sin distraer.",
-    },
-    {
-      title: "Sistema de diseño",
-      description: "Componentes y reglas reutilizables para escalar el producto con consistencia y velocidad.",
-    },
-    {
-      title: "Estrategia de contenido",
-      description: "Mensajes con jerarquía y propósito que conectan con su audiencia en cada touchpoint.",
-    },
-    {
-      title: "Pruebas de usabilidad",
-      description: "Validamos decisiones con usuarios reales para reducir riesgos antes del lanzamiento.",
-    },
-  ];
-
-  const developmentServices = [
-    {
-      title: "Desarrollo Front-end/back-end",
-      description: "Stack moderno y arquitectura sólida para productos rápidos, estables y escalables.",
-    },
-    {
-      title: "E-Commerce personalizado",
-      description: "Tiendas en línea diseñadas para vender: UX impecable, performance excepcional y conversión arriba.",
-    },
-    {
-      title: "Desarrollo web creativo",
-      description: "Experiencias web con identidad: WebGL, scroll narrativo e interacciones que distinguen su marca.",
-    },
-    {
-      title: "Gamificación",
-      description: "Mecánicas de juego que aumentan engagement, retención y lealtad sin sentirse forzadas.",
-    },
-    {
-      title: "SEO",
-      description: "Optimización técnica y de contenido para que Google entienda su propuesta y la posicione arriba.",
-    },
-  ];
+  const { t } = useLang();
+  const s = t.webPage.services;
+  const designServices = s.designServices;
+  const developmentServices = s.developmentServices;
 
   return (
     <section className="relative bg-[#F5F5F7] text-[#1d1d1f] py-32 md:py-48 lg:py-56 px-6 sm:px-10 md:px-16 lg:px-24 overflow-hidden">
@@ -126,7 +86,7 @@ export function WebDesignServices() {
         >
           <span className="block w-12 h-px bg-black/40" />
           <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-            Lo que hacemos
+            {s.eyebrow}
           </span>
         </motion.div>
 
@@ -141,7 +101,7 @@ export function WebDesignServices() {
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
             >
-              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">D</span>iseño
+              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">{s.colDesign[0]}</span>{s.colDesign.slice(1)}
               <span className="inline-block ml-2 md:ml-3 text-3xl md:text-5xl align-top rotate-12 text-black/30 font-sans">*</span>
             </motion.h2>
             <div className="relative border-b border-black/10">
@@ -165,7 +125,7 @@ export function WebDesignServices() {
               transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="text-6xl md:text-7xl lg:text-[100px] font-normal tracking-tight mb-16 md:mb-24 text-[#1d1d1f] font-sulphur"
             >
-              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">D</span>esarrollo
+              <span className="font-[family-name:var(--font-playfair)] italic font-normal mr-1">{s.colDev[0]}</span>{s.colDev.slice(1)}
               <span className="inline-block ml-2 md:ml-3 text-3xl md:text-5xl align-top rotate-12 text-black/30 font-sans">*</span>
             </motion.h2>
             <div className="relative border-b border-black/10">

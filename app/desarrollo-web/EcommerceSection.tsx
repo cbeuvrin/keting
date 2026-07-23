@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 // Sección de E-commerce para /desarrollo-web.
 // Client component pero importado normalmente (NO ssr:false) → el texto sí
@@ -13,7 +14,9 @@ const reveal = {
 } as const;
 
 export function EcommerceSection() {
-    const tags = ["Catálogo curado", "Pagos en línea", "Inventario", "SEO técnico"];
+    const { t } = useLang();
+    const c = t.webPage.ecommerce;
+    const tags = c.tags;
 
     return (
         <section className="relative bg-white text-[#1d1d1f] py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
@@ -44,18 +47,15 @@ export function EcommerceSection() {
                     <div className="flex items-center gap-3 mb-6">
                         <span className="block w-10 h-px bg-[#1d1d1f]/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-[#1d1d1f]/50">
-                            Servicio · E-commerce
+                            {c.eyebrow}
                         </span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-5 text-[#1d1d1f]">
-                        Tiendas en línea que{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">venden</span>
+                        {c.h2Pre}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.h2Accent}</span>
                     </h2>
                     <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed max-w-md mb-7">
-                        Desarrollamos <strong className="font-semibold text-[#1d1d1f]">e-commerce a medida</strong> —catálogo,
-                        carrito, pagos en línea e inventario— con un diseño que convierte y una base rápida y escalable
-                        (Next.js / React). Sin comisiones por venta ni plantillas que te limiten. También migramos
-                        tiendas existentes a una base más sólida.
+                        {c.paragraphPre}<strong className="font-semibold text-[#1d1d1f]">{c.paragraphStrong}</strong>{c.paragraphEnd}
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {tags.map((t) => (
@@ -94,14 +94,14 @@ export function EcommerceSection() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="/portafolio/screenshots/rosymargonzalez.jpg"
-                                alt="Rosymar González · E-commerce de joyería a medida"
+                                alt={c.imageAlt}
                                 className="block w-full h-auto"
                                 draggable={false}
                             />
                         </div>
                     </div>
                     <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
-                        ↑ 5x ventas
+                        {c.badge}
                     </div>
                 </motion.div>
             </div>

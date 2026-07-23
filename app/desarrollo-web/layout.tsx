@@ -14,7 +14,14 @@ export const metadata: Metadata = {
         "seo técnico",
         "next.js",
     ],
-    alternates: { canonical: "/desarrollo-web" },
+    alternates: {
+        canonical: "/desarrollo-web",
+        languages: {
+            "es-MX": "/desarrollo-web",
+            "en": "/en/desarrollo-web",
+            "x-default": "/desarrollo-web",
+        },
+    },
     openGraph: {
         title: "Diseño y desarrollo web a medida · Keting Media",
         description:

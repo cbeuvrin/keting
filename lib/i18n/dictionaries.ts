@@ -187,6 +187,198 @@ const es = {
         servicesTitleDesign: "Diseño",
         servicesTitleDev: "Desarrollo",
     },
+    webPage: {
+        hero: {
+            h1: "Diseño y desarrollo web a medida en México",
+            badge: "World Wide Web",
+            drag: "arrástralas",
+            cornerPre: "Diseño ",
+            cornerItalic: "web",
+            cornerSuffix: " · 2026",
+            scroll: "Scroll",
+            eyebrow: "Manifiesto",
+            manifestoPre: "Como ",
+            manifestoRole: "AI Engineer",
+            manifestoMid: ", diseño y estructuro ",
+            manifestoSolutions: "soluciones digitales",
+            manifestoMid2:
+                " precisas, desde tiendas en línea hasta plataformas de cursos. Me especializo en ",
+            manifestoSpecialty: "desarrollo web",
+            manifestoMid3:
+                ", SEO y optimización de velocidad, construyendo sitios sólidos y eficientes que impulsan el ",
+            manifestoGrowth: "crecimiento real",
+            manifestoEnd: " de tu negocio.",
+            signatureName: "Carlos Beuvrin",
+            signatureTitle: "AI Engineer · Fundador",
+            avatarAlt:
+                "Carlos Beuvrin - Director de Keting Media · Diseño y desarrollo de software, web y apps a medida en México",
+        },
+        textSection: {
+            eyebrow: "Manifiesto",
+            part1Pre: "Como ",
+            expertsWord: "expertos",
+            part1Mid: " en creación de sitios web,",
+            part2: "Keting le ofrece servicios a medida para potenciar su presencia online.",
+            part3Pre: "Combinamos ",
+            creativityWord: "creatividad",
+            part3Mid: ", pensamiento estratégico y ",
+            technologyWord: "tecnología",
+            part3End: " para crear soluciones personalizadas que contribuirán a su éxito.",
+        },
+        ecommerce: {
+            tags: ["Catálogo curado", "Pagos en línea", "Inventario", "SEO técnico"],
+            eyebrow: "Servicio · E-commerce",
+            h2Pre: "Tiendas en línea que ",
+            h2Accent: "venden",
+            paragraphPre: "Desarrollamos ",
+            paragraphStrong: "e-commerce a medida",
+            paragraphEnd:
+                " —catálogo, carrito, pagos en línea e inventario— con un diseño que convierte y una base rápida y escalable (Next.js / React). Sin comisiones por venta ni plantillas que te limiten. También migramos tiendas existentes a una base más sólida.",
+            badge: "↑ 5x ventas",
+            imageAlt: "Rosymar González · E-commerce de joyería a medida",
+        },
+        landing: {
+            tags: ["Mensaje claro", "Carga veloz", "Orientada a conversión", "SEO técnico"],
+            eyebrow: "Servicio · Landing pages",
+            h2Pre: "Landing pages que ",
+            h2Accent: "convierten",
+            paragraphPre:
+                "Una landing tiene un solo trabajo: convertir la visita en cliente. Diseñamos páginas con ",
+            paragraphStrong: "mensaje claro",
+            paragraphEnd:
+                ", carga casi instantánea y una estructura persuasiva —probada y medible— para que tu inversión en anuncios y tráfico no se desperdicie.",
+            badge: "100k+ sesiones/mes",
+            imageAlt: "Iudex · Landing de alto impacto (Legal AI)",
+        },
+        zoom: {
+            eyebrow: "Producto entregado",
+            badge: "LIVE · v1.0",
+            caption: "Web responsive · Producción 2026",
+            altMobile: "Diseño web móvil — Keting",
+            altDesktop: "Diseño web — Keting",
+        },
+        portfolio: {
+            eyebrow: "Trabajo selecto",
+            ctaPre: "Ver ",
+            ctaAccent: "portafolio",
+        },
+        clients: {
+            smallLabel: "Una década de colaboraciones selectas",
+            eyebrow: "Clientes",
+            h2Pre: "Marcas que ",
+            h2Accent: "confían",
+            h2End: " en nosotros",
+            paragraphPre: "Cada ",
+            paragraphAccent: "colaboración",
+            paragraphEnd: ", una historia que escala.",
+            prev: "Anterior",
+            next: "Siguiente",
+        },
+        services: {
+            eyebrow: "Lo que hacemos",
+            colDesign: "Diseño",
+            colDev: "Desarrollo",
+            designServices: [
+                {
+                    title: "Diseño UX/UI",
+                    description:
+                        "Interfaces claras y funcionales, optimizadas para convertir y deleitar al usuario en cada interacción.",
+                },
+                {
+                    title: "Diseño de movimiento",
+                    description:
+                        "Animaciones precisas que dan vida al producto y guían la atención sin distraer.",
+                },
+                {
+                    title: "Sistema de diseño",
+                    description:
+                        "Componentes y reglas reutilizables para escalar el producto con consistencia y velocidad.",
+                },
+                {
+                    title: "Estrategia de contenido",
+                    description:
+                        "Mensajes con jerarquía y propósito que conectan con su audiencia en cada touchpoint.",
+                },
+                {
+                    title: "Pruebas de usabilidad",
+                    description:
+                        "Validamos decisiones con usuarios reales para reducir riesgos antes del lanzamiento.",
+                },
+            ],
+            developmentServices: [
+                {
+                    title: "Desarrollo Front-end/back-end",
+                    description:
+                        "Stack moderno y arquitectura sólida para productos rápidos, estables y escalables.",
+                },
+                {
+                    title: "E-Commerce personalizado",
+                    description:
+                        "Tiendas en línea diseñadas para vender: UX impecable, performance excepcional y conversión arriba.",
+                },
+                {
+                    title: "Desarrollo web creativo",
+                    description:
+                        "Experiencias web con identidad: WebGL, scroll narrativo e interacciones que distinguen su marca.",
+                },
+                {
+                    title: "Gamificación",
+                    description:
+                        "Mecánicas de juego que aumentan engagement, retención y lealtad sin sentirse forzadas.",
+                },
+                {
+                    title: "SEO",
+                    description:
+                        "Optimización técnica y de contenido para que Google entienda su propuesta y la posicione arriba.",
+                },
+            ],
+        },
+        faqEyebrow: "FAQ",
+        faqTitleLead: "Preguntas",
+        faqTitleAccent: "frecuentes",
+        faq: [
+            {
+                q: "¿Cuánto cuesta una página web a medida en México?",
+                a: "En 2026, una landing a medida arranca desde $12,500 MXN y un sitio corporativo con gestor de contenido va de $25,000 a $70,000 MXN. El precio depende del alcance, las integraciones y el nivel de diseño e ingeniería.",
+            },
+            {
+                q: "¿Cuánto tarda en desarrollarse?",
+                a: "Una landing puede estar lista en 1 a 2 semanas y un sitio corporativo en 3 a 6 semanas, según el alcance y la rapidez con la que se aprueban contenidos.",
+            },
+            {
+                q: "¿Hacen el diseño desde cero o usan plantillas?",
+                a: "Trabajamos a medida, sin plantillas: diseñamos la experiencia (UX/UI) desde cero para que tu marca se diferencie y el sitio convierta mejor.",
+            },
+            {
+                q: "¿El sitio incluye SEO?",
+                a: "Sí. Cada proyecto incluye SEO técnico, estructura semántica y optimización de velocidad (Core Web Vitals) para que el sitio realmente atraiga clientes.",
+            },
+            {
+                q: "¿Con qué tecnología desarrollan?",
+                a: "Usamos tecnología moderna como Next.js y React, con renderizado en servidor para máxima velocidad, seguridad y posicionamiento.",
+            },
+            {
+                q: "¿Desarrollan tiendas en línea (e-commerce)?",
+                a: "Sí. Construimos e-commerce a medida —catálogo, carrito, pagos en línea e inventario— integrado con tu operación. También migramos tiendas existentes a una base más rápida y escalable.",
+            },
+            {
+                q: "¿Puedo actualizar el contenido yo mismo?",
+                a: "Sí. Entregamos el sitio con un gestor de contenido (CMS) para que edites textos, imágenes, blog y productos sin depender de un programador.",
+            },
+            {
+                q: "¿El sitio funciona bien en celular?",
+                a: "Siempre. Diseñamos mobile-first y optimizamos el rendimiento en móvil (Core Web Vitals), donde ocurre la mayoría del tráfico y las conversiones en México.",
+            },
+            {
+                q: "¿Qué incluye después del lanzamiento?",
+                a: "Ofrecemos mantenimiento, monitoreo de rendimiento, respaldos y mejoras continuas desde $2,500 MXN al mes, para que tu sitio siga rápido, seguro y actualizado.",
+            },
+            {
+                q: "¿También desarrollan aplicaciones web a medida?",
+                a: "Sí. Más allá de sitios, desarrollamos aplicaciones web y plataformas a medida —paneles, portales y SaaS— con la misma base de ingeniería: Next.js, React y APIs propias.",
+            },
+        ],
+    },
     footer: {
         es: "Español",
         en: "English",
@@ -393,6 +585,198 @@ const en: typeof es = {
         testimonialsSubtitle2: ".",
         servicesTitleDesign: "Design",
         servicesTitleDev: "Engineering",
+    },
+    webPage: {
+        hero: {
+            h1: "Custom web design and development in Mexico",
+            badge: "World Wide Web",
+            drag: "drag them",
+            cornerPre: "Web ",
+            cornerItalic: "design",
+            cornerSuffix: " · 2026",
+            scroll: "Scroll",
+            eyebrow: "Manifesto",
+            manifestoPre: "As an ",
+            manifestoRole: "AI Engineer",
+            manifestoMid: ", I design and structure ",
+            manifestoSolutions: "precise digital solutions",
+            manifestoMid2:
+                ", from online stores to course platforms. I specialize in ",
+            manifestoSpecialty: "web development",
+            manifestoMid3:
+                ", SEO and speed optimization, building solid, efficient sites that drive ",
+            manifestoGrowth: "real growth",
+            manifestoEnd: " for your business.",
+            signatureName: "Carlos Beuvrin",
+            signatureTitle: "AI Engineer · Founder",
+            avatarAlt:
+                "Carlos Beuvrin - Director of Keting Media · Custom software, web and app design and development in Mexico",
+        },
+        textSection: {
+            eyebrow: "Manifesto",
+            part1Pre: "As ",
+            expertsWord: "experts",
+            part1Mid: " in building websites,",
+            part2: "Keting offers tailor-made services to strengthen your online presence.",
+            part3Pre: "We combine ",
+            creativityWord: "creativity",
+            part3Mid: ", strategic thinking and ",
+            technologyWord: "technology",
+            part3End: " to craft custom solutions that drive your success.",
+        },
+        ecommerce: {
+            tags: ["Curated catalog", "Online payments", "Inventory", "Technical SEO"],
+            eyebrow: "Service · E-commerce",
+            h2Pre: "Online stores that ",
+            h2Accent: "sell",
+            paragraphPre: "We build ",
+            paragraphStrong: "custom e-commerce",
+            paragraphEnd:
+                " — catalog, cart, online payments and inventory — with a design that converts and a fast, scalable foundation (Next.js / React). No per-sale fees, no templates holding you back. We also migrate existing stores to a stronger foundation.",
+            badge: "↑ 5x sales",
+            imageAlt: "Rosymar González · Custom jewelry e-commerce",
+        },
+        landing: {
+            tags: ["Clear message", "Fast load", "Conversion-focused", "Technical SEO"],
+            eyebrow: "Service · Landing pages",
+            h2Pre: "Landing pages that ",
+            h2Accent: "convert",
+            paragraphPre:
+                "A landing page has one job: turn the visitor into a customer. We design pages with ",
+            paragraphStrong: "a clear message",
+            paragraphEnd:
+                ", near-instant load and a persuasive structure — proven and measurable — so your investment in ads and traffic doesn't go to waste.",
+            badge: "100k+ sessions/mo",
+            imageAlt: "Iudex · High-impact landing page (Legal AI)",
+        },
+        zoom: {
+            eyebrow: "Delivered product",
+            badge: "LIVE · v1.0",
+            caption: "Responsive web · Shipped 2026",
+            altMobile: "Mobile web design — Keting",
+            altDesktop: "Web design — Keting",
+        },
+        portfolio: {
+            eyebrow: "Selected work",
+            ctaPre: "View ",
+            ctaAccent: "portfolio",
+        },
+        clients: {
+            smallLabel: "A decade of selected collaborations",
+            eyebrow: "Clients",
+            h2Pre: "Brands that ",
+            h2Accent: "trust",
+            h2End: " us",
+            paragraphPre: "Every ",
+            paragraphAccent: "collaboration",
+            paragraphEnd: ", a story that scales.",
+            prev: "Previous",
+            next: "Next",
+        },
+        services: {
+            eyebrow: "What we do",
+            colDesign: "Design",
+            colDev: "Development",
+            designServices: [
+                {
+                    title: "UX/UI Design",
+                    description:
+                        "Clear, functional interfaces, optimized to convert and delight the user at every interaction.",
+                },
+                {
+                    title: "Motion design",
+                    description:
+                        "Precise animations that bring the product to life and guide attention without distracting.",
+                },
+                {
+                    title: "Design system",
+                    description:
+                        "Reusable components and rules to scale the product with consistency and speed.",
+                },
+                {
+                    title: "Content strategy",
+                    description:
+                        "Messaging with hierarchy and purpose that connects with your audience at every touchpoint.",
+                },
+                {
+                    title: "Usability testing",
+                    description:
+                        "We validate decisions with real users to reduce risk before launch.",
+                },
+            ],
+            developmentServices: [
+                {
+                    title: "Front-end / back-end development",
+                    description:
+                        "Modern stack and solid architecture for fast, stable, scalable products.",
+                },
+                {
+                    title: "Custom e-commerce",
+                    description:
+                        "Online stores designed to sell: flawless UX, exceptional performance and higher conversion.",
+                },
+                {
+                    title: "Creative web development",
+                    description:
+                        "Web experiences with identity: WebGL, narrative scroll and interactions that set your brand apart.",
+                },
+                {
+                    title: "Gamification",
+                    description:
+                        "Game mechanics that boost engagement, retention and loyalty without feeling forced.",
+                },
+                {
+                    title: "SEO",
+                    description:
+                        "Technical and content optimization so Google understands your offering and ranks it higher.",
+                },
+            ],
+        },
+        faqEyebrow: "FAQ",
+        faqTitleLead: "Frequently asked",
+        faqTitleAccent: "questions",
+        faq: [
+            {
+                q: "How much does a custom website cost in Mexico?",
+                a: "In 2026, a custom landing page starts at around $700 USD and a corporate site with a content manager ranges from $1,400 to $4,000 USD. The price depends on scope, integrations and the level of design and engineering.",
+            },
+            {
+                q: "How long does it take to build?",
+                a: "A landing page can be ready in 1 to 2 weeks and a corporate site in 3 to 6 weeks, depending on scope and how quickly content is approved.",
+            },
+            {
+                q: "Do you design from scratch or use templates?",
+                a: "We work fully custom, no templates: we design the experience (UX/UI) from scratch so your brand stands out and the site converts better.",
+            },
+            {
+                q: "Does the site include SEO?",
+                a: "Yes. Every project includes technical SEO, semantic structure and speed optimization (Core Web Vitals) so the site truly attracts customers.",
+            },
+            {
+                q: "What technology do you build with?",
+                a: "We use modern technology like Next.js and React, with server-side rendering for maximum speed, security and ranking.",
+            },
+            {
+                q: "Do you build online stores (e-commerce)?",
+                a: "Yes. We build custom e-commerce — catalog, cart, online payments and inventory — integrated with your operation. We also migrate existing stores to a faster, more scalable foundation.",
+            },
+            {
+                q: "Can I update the content myself?",
+                a: "Yes. We deliver the site with a content management system (CMS) so you can edit text, images, blog and products without depending on a developer.",
+            },
+            {
+                q: "Does the site work well on mobile?",
+                a: "Always. We design mobile-first and optimize mobile performance (Core Web Vitals), where most traffic and conversions happen.",
+            },
+            {
+                q: "What's included after launch?",
+                a: "We offer maintenance, performance monitoring, backups and continuous improvements from around $140 USD per month, so your site stays fast, secure and up to date.",
+            },
+            {
+                q: "Do you also build custom web applications?",
+                a: "Yes. Beyond websites, we build custom web applications and platforms — dashboards, portals and SaaS — on the same engineering foundation: Next.js, React and custom APIs.",
+            },
+        ],
     },
     footer: {
         es: "Spanish",

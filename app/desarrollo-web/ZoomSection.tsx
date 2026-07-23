@@ -2,8 +2,11 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export default function ZoomSection() {
+    const { t } = useLang();
+    const z = t.webPage.zoom;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -53,7 +56,7 @@ export default function ZoomSection() {
                 >
                     <span className="block w-12 h-px bg-black/40" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                        Producto entregado
+                        {z.eyebrow}
                     </span>
                 </motion.div>
 
@@ -68,7 +71,7 @@ export default function ZoomSection() {
                     {/* Mobile: iPhone */}
                     <img
                         src="/iphone-web.png"
-                        alt="Diseño web móvil — Keting"
+                        alt={z.altMobile}
                         className="md:hidden relative w-auto max-w-[70%] h-auto drop-shadow-2xl"
                         draggable={false}
                     />
@@ -76,14 +79,14 @@ export default function ZoomSection() {
                     {/* Desktop: Pantalla */}
                     <img
                         src="/pantalla-web.png"
-                        alt="Diseño web — Keting"
+                        alt={z.altDesktop}
                         className="hidden md:block relative w-full max-w-5xl h-auto drop-shadow-2xl"
                         draggable={false}
                     />
 
                     {/* Etiqueta LIVE flotante */}
                     <div className="absolute top-2 right-2 md:top-6 md:right-6 bg-black text-white text-[9px] md:text-xs font-mono uppercase tracking-widest px-2 md:px-3 py-1 md:py-1.5 rounded-full">
-                        LIVE · v1.0
+                        {z.badge}
                     </div>
                 </motion.div>
 
@@ -96,7 +99,7 @@ export default function ZoomSection() {
                     className="mt-10 md:mt-16 flex items-center justify-center gap-3 text-[10px] md:text-xs uppercase tracking-[0.3em] text-black/50 font-mono"
                 >
                     <span className="block w-8 h-px bg-black/30" />
-                    Web responsive · Producción 2026
+                    {z.caption}
                     <span className="block w-8 h-px bg-black/30" />
                 </motion.div>
             </div>

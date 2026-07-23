@@ -2,8 +2,11 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 export default function TextSection() {
+    const { t } = useLang();
+    const s = t.webPage.textSection;
     const sectionRef = useRef<HTMLElement>(null);
 
     // Scroll-linked parallax: la sección reacciona durante TODO su paso por el viewport.
@@ -51,7 +54,7 @@ export default function TextSection() {
                 >
                     <span className="block w-12 h-px bg-black/40" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                        Manifiesto
+                        {s.eyebrow}
                     </span>
                 </motion.div>
                 <motion.h2
@@ -59,11 +62,11 @@ export default function TextSection() {
                     className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.15] tracking-tight text-[#1d1d1f] font-heading text-justify md:text-left"
                 >
                     <motion.span style={{ color: sideColor }}>
-                        Como <span className="font-[family-name:var(--font-playfair)] italic font-normal">expertos</span> en creación de sitios web,
+                        {s.part1Pre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.expertsWord}</span>{s.part1Mid}
                     </motion.span>{" "}
-                    <span className="font-normal">Keting le ofrece servicios a medida para potenciar su presencia online.</span>{" "}
+                    <span className="font-normal">{s.part2}</span>{" "}
                     <motion.span style={{ color: sideColor }}>
-                        Combinamos <span className="font-[family-name:var(--font-playfair)] italic font-normal">creatividad</span>, pensamiento estratégico y <span className="font-[family-name:var(--font-playfair)] italic font-normal">tecnología</span> para crear soluciones personalizadas que contribuirán a su éxito.
+                        {s.part3Pre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.creativityWord}</span>{s.part3Mid}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{s.technologyWord}</span>{s.part3End}
                     </motion.span>
                 </motion.h2>
             </div>

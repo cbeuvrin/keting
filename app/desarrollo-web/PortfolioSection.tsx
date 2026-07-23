@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/lib/i18n/lang-context";
 
 const projects = [
     { src: "/gravity-portfolio-1.jpg" },
@@ -22,6 +23,8 @@ const projects = [
 ];
 
 export default function PortfolioSection() {
+    const { t } = useLang();
+    const p = t.webPage.portfolio;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -155,7 +158,7 @@ export default function PortfolioSection() {
                     >
                         <span className="block w-10 h-px bg-white/50" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/70 font-sans">
-                            Trabajo selecto
+                            {p.eyebrow}
                         </span>
                         <span className="block w-10 h-px bg-white/50" />
                     </motion.div>
@@ -165,7 +168,7 @@ export default function PortfolioSection() {
                             whileTap={{ scale: 0.95 }}
                             className="group flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full text-xl font-medium tracking-tight hover:shadow-2xl hover:shadow-white/20 transition-all"
                         >
-                            Ver <span className="font-[family-name:var(--font-playfair)] italic font-normal">portafolio</span>
+                            {p.ctaPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{p.ctaAccent}</span>
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                     </Link>
