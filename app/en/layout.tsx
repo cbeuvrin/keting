@@ -2,17 +2,24 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: { absolute: "Custom software, web & app development in Mexico · Keting Media" },
+    title: { absolute: "Custom Software, Web & App Development in Mexico · Keting Media" },
     description:
-        "Nearshore custom software, web and mobile app development from Mexico City. Design, engineering and applied AI in one team. Same timezone as the US, senior work, 80%+ referral-driven.",
+        "Mexican software development company: custom software, web and mobile apps. From your website to the internal system that runs your business. Design, engineering and AI in one team.",
     keywords: [
-        "nearshore software development mexico",
-        "custom software development mexico",
-        "software development company mexico",
+        "software development",
+        "software development company",
+        "custom software development",
         "web development mexico",
-        "mobile app development mexico",
-        "ai automation",
-        "nearshore development",
+        "mobile app development",
+        "app development",
+        "web applications",
+        "custom e-commerce",
+        "saas platforms",
+        "next.js web development",
+        "custom software",
+        "ai-powered digital solutions",
+        "keting media",
+        "carlos beuvrin",
     ],
     alternates: {
         canonical: "/en",
@@ -23,9 +30,9 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: "Keting Media · Custom software, web & app development in Mexico",
+        title: "Keting Media · Custom Software, Web & App Development in Mexico",
         description:
-            "Nearshore custom software, web and app development from Mexico City. Design, engineering & AI in one team.",
+            "Custom software, web and mobile app development in Mexico. Design, engineering and applied AI in one team.",
         url: "/en",
         siteName: "Keting Media",
         locale: "en_US",
@@ -33,8 +40,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Custom software, web & app development in Mexico · Keting Media",
-        description: "Nearshore development from Mexico City — design, engineering & AI in one team.",
+        title: "Software, Web & Apps Development · Mexico · AI",
+        description: "Custom software, e-commerce, platforms and apps powered by AI for ambitious businesses.",
     },
 };
 
