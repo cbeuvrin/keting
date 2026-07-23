@@ -1,9 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { dictionaries, type Dictionary, type Lang } from "./dictionaries";
-
-const STORAGE_KEY = "keting_lang";
 
 type LangContextValue = {
     lang: Lang;
@@ -18,40 +17,24 @@ const LangContext = createContext<LangContextValue>({
 });
 
 export function LangProvider({ children }: { children: React.ReactNode }) {
-    const [lang, setLangState] = useState<Lang>("es");
-    const [hydrated, setHydrated] = useState(false);
+    const pathname = usePathname();
+    // El idioma lo manda la URL: /en o /en/... => inglés; el resto => español.
+    const lang: Lang = pathname === "/en" || pathname?.startsWith("/en/") ? "en" : "es";
 
+    // Mantener el atributo lang del <html> sincronizado (a11y + SEO).
     useEffect(() => {
-        try {
-            const stored = window.localStorage.getItem(STORAGE_KEY);
-            if (stored === "en" || stored === "es") {
-                setLangState(stored);
-                document.documentElement.lang = stored === "en" ? "en" : "es-MX";
-            }
-        } catch {
-            /* noop */
-        }
-        setHydrated(true);
-    }, []);
+        document.documentElement.lang = lang === "en" ? "en" : "es-MX";
+    }, [lang]);
 
-    const setLang = useCallback((newLang: Lang) => {
-        setLangState(newLang);
-        try {
-            window.localStorage.setItem(STORAGE_KEY, newLang);
-            document.documentElement.lang = newLang === "en" ? "en" : "es-MX";
-        } catch {
-            /* noop */
-        }
-    }, []);
+    // setLang se conserva como no-op de estado (la navegación cambia el idioma);
+    // los navs siguen llamándolo antes de router.push sin efecto adverso.
+    const value: LangContextValue = {
+        lang,
+        setLang: () => {},
+        t: dictionaries[lang],
+    };
 
-    // Para evitar mismatch de hidratación, hasta que monte usamos el ES inicial
-    const t = hydrated ? dictionaries[lang] : dictionaries.es;
-
-    return (
-        <LangContext.Provider value={{ lang, setLang, t }}>
-            {children}
-        </LangContext.Provider>
-    );
+    return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 }
 
 export function useLang(): LangContextValue {
