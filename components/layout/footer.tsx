@@ -7,9 +7,10 @@ import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-rea
 import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
+import { enHref, toEn, toEs } from "@/lib/i18n/routes";
 
 export function Footer() {
-    const { setLang, t } = useLang();
+    const { t } = useLang();
     const router = useRouter();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
@@ -85,9 +86,9 @@ export function Footer() {
                             {t.footer.servicesTitle}
                         </div>
                         <ul className="space-y-3">
-                            <li><Link href="/desarrollo-web" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
-                            <li><Link href="/desarrollo-de-software" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
-                            <li><Link href="/automatizacion-de-procesos" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.automation}</Link></li>
+                            <li><Link href={enHref("/desarrollo-web", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
+                            <li><Link href={enHref("/desarrollo-de-software", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
+                            <li><Link href={enHref("/automatizacion-de-procesos", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.automation}</Link></li>
                         </ul>
                     </div>
 
@@ -97,9 +98,11 @@ export function Footer() {
                             {t.footer.resourcesTitle}
                         </div>
                         <ul className="space-y-3">
-                            <li><Link href="/portafolio" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
-                            <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
-                            <li><Link href="/" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
+                            <li><Link href={enHref("/portafolio", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
+                            {!isEn && (
+                                <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
+                            )}
+                            <li><Link href={enHref("/", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
                         </ul>
                     </div>
 
@@ -160,7 +163,7 @@ export function Footer() {
                             <span className="block text-white/40 text-[10px] uppercase tracking-wider mb-2">{t.nav.idiom}</span>
                             <div className="flex items-center gap-0.5">
                                 <button
-                                    onClick={() => { setLang("es"); router.push("/"); }}
+                                    onClick={() => router.push(toEs(pathname ?? "/"))}
                                     className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                         !isEn ? "bg-white text-black" : "text-white/50 hover:text-white"
                                     }`}
@@ -169,7 +172,7 @@ export function Footer() {
                                 </button>
                                 <span className="text-white/20">·</span>
                                 <button
-                                    onClick={() => { setLang("en"); router.push("/en"); }}
+                                    onClick={() => router.push(toEn(pathname ?? "/"))}
                                     className={`px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                         isEn ? "bg-white text-black" : "text-white/50 hover:text-white"
                                     }`}
@@ -188,8 +191,8 @@ export function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-xs text-white/40 font-mono uppercase tracking-[0.15em]">
                     <p>&copy; {new Date().getFullYear()} Keting Media · {t.footer.rights}</p>
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                        <Link href="/aviso-de-privacidad" className="hover:text-white transition-colors">{t.footer.privacy}</Link>
-                        <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors">{t.footer.terms}</Link>
+                        <Link href={enHref("/aviso-de-privacidad", isEn)} className="hover:text-white transition-colors">{t.footer.privacy}</Link>
+                        <Link href={enHref("/terminos-y-condiciones", isEn)} className="hover:text-white transition-colors">{t.footer.terms}</Link>
                         <button
                             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                             className="inline-flex items-center gap-2 hover:text-white transition-colors"

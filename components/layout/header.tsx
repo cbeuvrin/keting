@@ -9,6 +9,7 @@ import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
+import { enHref, toEn, toEs } from "@/lib/i18n/routes";
 
 
 // Items se generan en el render usando el dictionary
@@ -20,7 +21,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastY, setLastY] = useState(0);
-    const { setLang, t } = useLang();
+    const { t } = useLang();
     const router = useRouter();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
@@ -28,12 +29,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     // styles: estilo editorial por palabra → "italic" (cursiva Playfair),
     // "bold" (mayúscula + subrayado), "italicUnderline" (cursiva + subrayado).
     const menuItems = [
-        { label: t.nav.home, href: "/#home", styles: ["italic"] },
-        { label: t.nav.webdesign, href: "/desarrollo-web", styles: ["italic"] },
-        { label: t.nav.digital, href: "/desarrollo-de-software", styles: ["italic"] },
-        { label: t.nav.automation, href: "/automatizacion-de-procesos", styles: ["italic"] },
-        { label: t.nav.portfolio, href: "/portafolio", styles: ["italic"] },
-        { label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] },
+        { label: t.nav.home, href: enHref("/#home", isEn), styles: ["italic"] },
+        { label: t.nav.webdesign, href: enHref("/desarrollo-web", isEn), styles: ["italic"] },
+        { label: t.nav.digital, href: enHref("/desarrollo-de-software", isEn), styles: ["italic"] },
+        { label: t.nav.automation, href: enHref("/automatizacion-de-procesos", isEn), styles: ["italic"] },
+        { label: t.nav.portfolio, href: enHref("/portafolio", isEn), styles: ["italic"] },
+        ...(isEn ? [] : [{ label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] }]),
     ];
 
     const underline = "underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80";
@@ -128,7 +129,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                         {/* Toggle ES/EN — visible en la barra (escritorio) */}
                         <div className="hidden md:flex items-center gap-0.5">
                             <button
-                                onClick={() => { setLang("es"); router.push("/"); }}
+                                onClick={() => router.push(toEs(pathname ?? "/"))}
                                 className={cn(
                                     "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
                                     !isEn
@@ -140,7 +141,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 ES
                             </button>
                             <button
-                                onClick={() => { setLang("en"); router.push("/en"); }}
+                                onClick={() => router.push(toEn(pathname ?? "/"))}
                                 className={cn(
                                     "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
                                     isEn
@@ -314,7 +315,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     <span className="block w-8 h-px bg-black/20" />
                                     <div className="flex items-center gap-1">
                                         <button
-                                            onClick={() => { setLang("es"); router.push("/"); }}
+                                            onClick={() => router.push(toEs(pathname ?? "/"))}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 !isEn
                                                     ? "bg-black text-white rounded-md"
@@ -325,7 +326,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         </button>
                                         <span className="text-black/20">·</span>
                                         <button
-                                            onClick={() => { setLang("en"); router.push("/en"); }}
+                                            onClick={() => router.push(toEn(pathname ?? "/"))}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 isEn
                                                     ? "bg-black text-white rounded-md"

@@ -7,6 +7,7 @@ import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { Header } from "@/components/layout/header";
 import { useLang } from "@/lib/i18n/lang-context";
+import { enHref, toEn, toEs } from "@/lib/i18n/routes";
 
 export function GravityHeader({
     position = "right",
@@ -18,7 +19,7 @@ export function GravityHeader({
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
-    const { setLang, t } = useLang();
+    const { t } = useLang();
     const router = useRouter();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
@@ -81,16 +82,16 @@ export function GravityHeader({
                             />
                         </Link>
                         <nav className="flex items-center gap-5 px-2">
-                            <Link href="/" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.home}</Link>
-                            <Link href="/desarrollo-web" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.webdesignShort}</Link>
-                            <Link href="/desarrollo-de-software" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
-                            <Link href="/automatizacion-de-procesos" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.automationShort}</Link>
-                            <Link href="/portafolio" className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
+                            <Link href={enHref("/", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.home}</Link>
+                            <Link href={enHref("/desarrollo-web", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.webdesignShort}</Link>
+                            <Link href={enHref("/desarrollo-de-software", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
+                            <Link href={enHref("/automatizacion-de-procesos", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.automationShort}</Link>
+                            <Link href={enHref("/portafolio", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
                         </nav>
                         {/* Toggle ES/EN */}
                         <div className="flex items-center gap-0.5 ml-3">
                             <button
-                                onClick={() => { setLang("es"); router.push("/"); }}
+                                onClick={() => router.push(toEs(pathname ?? "/"))}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     !isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
@@ -99,7 +100,7 @@ export function GravityHeader({
                                 ES
                             </button>
                             <button
-                                onClick={() => { setLang("en"); router.push("/en"); }}
+                                onClick={() => router.push(toEn(pathname ?? "/"))}
                                 className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
