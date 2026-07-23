@@ -125,6 +125,34 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     </div>
 
                     <div className="flex items-center gap-4 relative">
+                        {/* Toggle ES/EN — visible en la barra (escritorio) */}
+                        <div className="hidden md:flex items-center gap-0.5">
+                            <button
+                                onClick={() => { setLang("es"); router.push("/"); }}
+                                className={cn(
+                                    "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
+                                    !isEn
+                                        ? (isDark ? "bg-white text-black" : "bg-black text-white")
+                                        : (isDark ? "text-white/60 hover:text-white" : "text-zinc-500 hover:text-black")
+                                )}
+                                aria-label="Cambiar a español"
+                            >
+                                ES
+                            </button>
+                            <button
+                                onClick={() => { setLang("en"); router.push("/en"); }}
+                                className={cn(
+                                    "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
+                                    isEn
+                                        ? (isDark ? "bg-white text-black" : "bg-black text-white")
+                                        : (isDark ? "text-white/60 hover:text-white" : "text-zinc-500 hover:text-black")
+                                )}
+                                aria-label="Switch to English"
+                            >
+                                EN
+                            </button>
+                        </div>
+
                         <button
                             onClick={() => setIsContactOpen(true)}
                             className={cn(
