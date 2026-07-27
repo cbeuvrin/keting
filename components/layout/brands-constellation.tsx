@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useLang } from "@/lib/i18n/lang-context";
 
 const logos = [
     { src: "/logos-clientes/2.png", alt: "Nike Strength" },
@@ -22,6 +23,7 @@ const rowB = [...logos.slice(3), ...logos.slice(0, 3), ...logos.slice(3), ...log
 const rowC = [...logos.slice(6), ...logos.slice(0, 6), ...logos.slice(6), ...logos.slice(0, 6)];
 
 export function BrandsConstellation() {
+    const { t } = useLang();
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -70,7 +72,7 @@ export function BrandsConstellation() {
                 >
                     <span className="block w-12 h-px bg-white/40" />
                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/60 font-sans">
-                        Algunos de los nuestros
+                        {t.brands.eyebrow}
                     </span>
                 </motion.div>
 
@@ -83,8 +85,8 @@ export function BrandsConstellation() {
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                         className="block"
                     >
-                        Construido para{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">marcas</span>
+                        {t.brands.title1}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">{t.brands.titleItalic}</span>
                     </motion.span>
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
@@ -93,9 +95,9 @@ export function BrandsConstellation() {
                         transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
                         className="block"
                     >
-                        que cambian su{" "}
+                        {t.brands.title2Pre}{" "}
                         <span className="relative inline-block">
-                            industria
+                            {t.brands.title2Underlined}
                             <motion.span
                                 initial={{ scaleX: 0 }}
                                 whileInView={{ scaleX: 1 }}
@@ -130,9 +132,9 @@ export function BrandsConstellation() {
                     className="h-px bg-white/20 w-full origin-left mb-6"
                 />
                 <div className="flex items-center justify-between text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/40 font-mono">
-                    <span>10+ marcas</span>
-                    <span>8 industrias</span>
-                    <span>2020 — 2026</span>
+                    <span>{t.brands.stat1}</span>
+                    <span>{t.brands.stat2}</span>
+                    <span>{t.brands.stat3}</span>
                 </div>
             </div>
         </section>
