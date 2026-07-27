@@ -2,6 +2,8 @@
 
 import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { useRef, type ReactNode } from "react";
+import { useLang } from "@/lib/i18n/lang-context";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 // Helpers para resaltar texto en las citas
 const Chip = ({ children }: { children: ReactNode }) => (
@@ -26,60 +28,67 @@ type Testimonial = {
     quote: ReactNode;
     name: string;
     role: string;
-    tags: string[];
+    tags: readonly string[];
 };
 
-const testimonials: Testimonial[] = [
-    {
-        stat: "4x",
-        subtitle: "CRECIMIENTO INTERANUAL",
-        quote: (
-            <>
-                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
-                El <Under>salto de calidad</Under> con la web 3D fue el <Italic>catalizador</Italic> que necesitábamos. El reconocimiento de la marca se ha disparado; no solo vimos un aumento del <Chip>+600%</Chip> en el engagement de redes sociales, sino que logramos entrar en los <Bold>estantes de los principales distribuidores nacionales</Bold> en tiempo récord. La web se ve increíble y proyecta una solidez tal que, en las reuniones de ventas, los <Italic>compradores ya vienen convencidos</Italic>. No podríamos estar más emocionados con el resultado.
-                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
-            </>
-        ),
-        name: "CARLOS R.",
-        role: "Co-Fundador & Presidente, NuRange Coffee",
-        tags: ["Diseño Web"]
-    },
-    {
-        stat: "7x",
-        subtitle: "EXPANSIÓN DE PRODUCTO",
-        quote: (
-            <>
-                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
-                Nuestro concepto ha tenido una adopción masiva, impulsada por una experiencia web <Italic>inmersiva, audaz y llamativa</Italic> que nos hizo <Bold>reconocibles al instante</Bold> en un <Under>mercado saturado</Under>. Más allá de lo visual, el sistema de marca integrado nos ha permitido <Chip>escalar con agilidad</Chip> hacia nuevas audiencias. La navegación es tan fluida que el usuario se sumerge en nuestra propuesta de valor <Italic>sin fricciones</Italic>. Estamos extremadamente contentos con el resultado.
-                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
-            </>
-        ),
-        name: "RAQUEL S.",
-        role: "Fundadora & Propietaria, Escapely",
-        tags: ["UX/UI", "Diseño Web"]
-    },
-    {
-        stat: "10x",
-        subtitle: "LEADS CUALIFICADOS",
-        quote: (
-            <>
-                <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
-                El lanzamiento de nuestra nueva landing page marcó un <Italic>antes y un después</Italic> en nuestra estrategia comercial. Pasamos de tener visitas pasivas a generar <Chip>leads de alta calidad</Chip> de forma constante. No se trata solo de que el diseño sea impactante y moderno, es que la estructura está tan bien optimizada que la <Under>conversión de nuevos clientes se duplicó</Under> en el <Bold>primer mes</Bold>. Ha sido la herramienta clave para que el mercado entienda nuestro valor real y el <Italic>crecimiento ha sido inmediato</Italic>.
-                <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
-            </>
-        ),
-        name: "ESTEBAN C.",
-        role: "Socio & Director, Butcher Bird",
-        tags: ["Landing", "Web e Interactivo", "Estrategia"]
-    }
-];
+function buildTestimonials(t: Dictionary): Testimonial[] {
+    const { item1, item2, item3 } = t.testimonials;
+
+    return [
+        {
+            stat: item1.stat,
+            subtitle: item1.subtitle,
+            quote: (
+                <>
+                    <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                    {item1.quotePre}<Under>{item1.quoteUnder1}</Under>{item1.quoteMid1}<Italic>{item1.quoteItalic1}</Italic>{item1.quoteMid2}<Chip>{item1.quoteChip1}</Chip>{item1.quoteMid3}<Bold>{item1.quoteBold1}</Bold>{item1.quoteMid4}<Italic>{item1.quoteItalic2}</Italic>{item1.quotePost}
+                    <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+                </>
+            ),
+            name: item1.name,
+            role: item1.role,
+            tags: item1.tags
+        },
+        {
+            stat: item2.stat,
+            subtitle: item2.subtitle,
+            quote: (
+                <>
+                    <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                    {item2.quotePre}<Italic>{item2.quoteItalic1}</Italic>{item2.quoteMid1}<Bold>{item2.quoteBold1}</Bold>{item2.quoteMid2}<Under>{item2.quoteUnder1}</Under>{item2.quoteMid3}<Chip>{item2.quoteChip1}</Chip>{item2.quoteMid4}<Italic>{item2.quoteItalic2}</Italic>{item2.quotePost}
+                    <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+                </>
+            ),
+            name: item2.name,
+            role: item2.role,
+            tags: item2.tags
+        },
+        {
+            stat: item3.stat,
+            subtitle: item3.subtitle,
+            quote: (
+                <>
+                    <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                    {item3.quotePre}<Italic>{item3.quoteItalic1}</Italic>{item3.quoteMid1}<Chip>{item3.quoteChip1}</Chip>{item3.quoteMid2}<Under>{item3.quoteUnder1}</Under>{item3.quoteMid3}<Bold>{item3.quoteBold1}</Bold>{item3.quoteMid4}<Italic>{item3.quoteItalic2}</Italic>{item3.quotePost}
+                    <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+                </>
+            ),
+            name: item3.name,
+            role: item3.role,
+            tags: item3.tags
+        }
+    ];
+}
 
 export function Testimonials() {
+    const { t } = useLang();
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
     });
+
+    const testimonials = buildTestimonials(t);
 
     return (
         <section ref={containerRef} className="relative z-20 py-32 bg-[#FAFAFA] text-[#111111] overflow-hidden">
@@ -95,7 +104,7 @@ export function Testimonials() {
                     >
                         <span className="block w-10 h-px bg-black/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                            Testimonios
+                            {t.common.testimonials}
                         </span>
                     </motion.div>
                     <motion.h2
@@ -105,9 +114,9 @@ export function Testimonials() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                         className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
                     >
-                        ¿Y qué{" "}
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">dicen</span>{" "}
-                        nuestros clientes?
+                        {t.webdesign.testimonialsTitle1}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">{t.webdesign.testimonialsItalic}</span>{" "}
+                        {t.webdesign.testimonialsTitle2}
                         <span className="inline-block ml-2 text-xl md:text-3xl align-top rotate-12 text-black/30">*</span>
                     </motion.h2>
                     <motion.p
@@ -117,13 +126,12 @@ export function Testimonials() {
                         transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         className="text-gray-500 text-lg md:text-xl font-light"
                     >
-                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">Resultados</span>{" "}
-                        reales para{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal text-black">{t.webdesign.testimonialsSubtitleResults}</span>{" "}
+                        {t.webdesign.testimonialsSubtitle1}{" "}
                         <span className="relative inline-block text-black font-medium">
-                            marcas
+                            {t.webdesign.testimonialsSubtitleBrands}
                             <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-black/70" />
-                        </span>{" "}
-                        reales.
+                        </span>{t.webdesign.testimonialsSubtitle2}
                     </motion.p>
                 </div>
 
@@ -195,4 +203,3 @@ export function Testimonials() {
         </section>
     );
 }
-
