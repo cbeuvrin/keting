@@ -27,7 +27,7 @@ export function Toogo() {
                 width: typeof window !== 'undefined' && window.innerWidth < 768 ? mobileWidth : width, 
                 borderRadius: typeof window !== 'undefined' && window.innerWidth < 768 ? "0rem" : borderRadius 
             }}
-            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-40 w-full overflow-x-hidden"
+            className="relative z-20 mx-auto min-h-[60vh] md:h-[51vh] py-16 md:py-0 bg-[#E8E8E0] text-[#1a2332] md:shadow-2xl font-heading flex flex-col md:flex-row items-center justify-center mb-20 md:mb-40 w-full overflow-x-hidden"
         >
             {/* Grid background sutil */}
             <div
