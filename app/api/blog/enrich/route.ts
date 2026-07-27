@@ -4,15 +4,25 @@ import { createClient } from '@supabase/supabase-js';
 import { enrichArticle } from '@/lib/blog-enrichment';
 import { isAuthorizedAdmin } from '@/lib/admin-auth';
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export async function POST(request: Request) {
     // Auth: solo admin (evita abuso de IA y escrituras no autorizadas).
     if (!isAuthorizedAdmin(request)) {
         return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
+
+    // El cliente se crea AQUÍ, no al importar el módulo: createClient lanza si
+    // faltan las env vars, y Next importa la ruta al recolectar datos en el
+    // build → tumbaba el build entero ("supabaseUrl is required").
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+        return NextResponse.json({ error: "Supabase env missing" }, { status: 500 });
+    }
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     try {
         // 1. Fetch articles that need enrichment (those with default images or missing YouTube IDs)
