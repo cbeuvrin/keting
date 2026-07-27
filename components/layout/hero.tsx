@@ -265,7 +265,7 @@ export function Hero() {
                     *
                 </motion.span>
 
-                <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-end h-full pb-44 md:pb-24 lg:pb-14">
+                <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col justify-center md:justify-end h-full pb-0 md:pb-24 lg:pb-14">
                     {/* Desktop Subtext (Hidden on mobile/tablet, visible on large screens) */}
                     {/* Visible desde el primer paint (sin gate de opacidad) — es el elemento LCP.
                         Conserva el parallax/fade al hacer scroll vía `style`. */}
