@@ -19,7 +19,7 @@ export function AboutUs() {
     return (
         <section
             ref={sectionRef}
-            className="relative z-20 w-full pt-16 pb-12 md:pt-48 md:pb-20 bg-white text-black font-heading overflow-hidden"
+            className="relative z-20 w-full pt-6 pb-12 md:pt-48 md:pb-20 bg-white text-black font-heading overflow-hidden"
         >
             {/* Grid background sutil */}
             <div
