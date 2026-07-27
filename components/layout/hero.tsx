@@ -27,6 +27,8 @@ export function Hero() {
     // [0.8, 0, 1, 1] is a customized ease-in curve. Focuses heavily on the start delay.
     const easeInCurve = cubicBezier(0.8, 0, 1, 1);
     const subtextY = useTransform(scrollYProgress, [0, 1], [0, -800], { ease: easeInCurve });
+    const asteriskX = useTransform(scrollYProgress, [0, 1], [-300, 300]);
+    const asteriskRotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
 
     const container: Variants = {
         hidden: { opacity: 0 },
@@ -254,6 +256,15 @@ export function Hero() {
             }}
             className="relative h-screen snap-start"
         >
+            {/* Asterisco gigante de fondo que se mueve con scroll */}
+            <motion.span
+                style={{ x: asteriskX, rotate: asteriskRotate }}
+                suppressHydrationWarning
+                className="absolute bottom-[8%] left-1/2 -translate-x-1/2 text-[30rem] sm:text-[40rem] md:text-[50rem] lg:text-[60rem] text-black/[0.02] select-none font-light leading-none pointer-events-none z-0"
+            >
+                *
+            </motion.span>
+
             <div className="sticky top-0 h-screen flex flex-col justify-center relative">
 
                 {/* Asterisco decorativo gigante girando con el scroll */}
