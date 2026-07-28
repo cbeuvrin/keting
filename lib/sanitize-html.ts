@@ -22,6 +22,12 @@ export function sanitizeHtml(dirty: string | null | undefined): string {
         allowedAttributes: {
             a: ["href", "name", "target", "rel"],
             img: ["src", "alt", "title", "width", "height", "loading"],
+            // `class` es inerte (no ejecuta nada) y hace falta para envolver las
+            // tablas en un contenedor con scroll propio: sin él, una tabla ancha
+            // desborda la página entera en móvil.
+            div: ["class"],
+            table: ["class"],
+            span: ["class"],
         },
         allowedSchemes: ["http", "https", "mailto"],
         // Fuerza rel seguro en enlaces que abren en nueva pestaña.
