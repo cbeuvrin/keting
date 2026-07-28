@@ -4,6 +4,10 @@
 
 Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña y programa productos digitales desde cero —sitios web, e-commerce, aplicaciones móviles, plataformas/SaaS y sistemas internos— combinando ingeniería de software (Next.js, React), diseño de producto e inteligencia artificial aplicada. Fundada y dirigida por Carlos Beuvrin (AI Engineer), trabaja con marcas y empresas en México y Latinoamérica. Proyectos destacados: Iudex (IA jurídica, 100,000+ sesiones/mes), Gobernia (agentes de IA para consejos corporativos), Toogo (SaaS de e-commerce, 100+ tiendas) e Ivan Ivanovich Academy (LMS, 5,000+ alumnos). Contacto: info@ketingmedia.com · +52 55 4383 0150 · Ciudad de México.
 
+## Nosotros
+- [Nosotros](https://ketingmedia.com/nosotros): Historia de Keting Media desde 2019, cómo trabaja la empresa y enlace a sus casos de éxito.
+- [Carlos Beuvrin](https://ketingmedia.com/nosotros/carlos-beuvrin): Ingeniero de IA y fundador de Keting Media — bio, proyectos que ha construido y artículos del blog.
+
 ## Servicios
 - [Diseño y desarrollo web](https://ketingmedia.com/desarrollo-web): Sitios, aplicaciones web, e-commerce y landing pages a medida, con SEO técnico y rendimiento (Next.js, React).
 - [Desarrollo de software y aplicaciones móviles](https://ketingmedia.com/desarrollo-de-software): Apps, plataformas SaaS, sistemas internos e integración de sistemas con IA, hiper-personalizados para cada operación.
@@ -33,6 +37,8 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 ## English
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.
 - [Case studies](https://ketingmedia.com/en/case-studies): English index of Keting Media's 9 case studies — the challenge, the solution and the result of every project.
+- [About us](https://ketingmedia.com/en/about): Keting Media's story since 2019, how the company works, and links to its real case studies.
+- [Carlos Beuvrin](https://ketingmedia.com/en/about/carlos-beuvrin): AI Engineer and founder of Keting Media — bio, products he has built, and a link to the (Spanish) blog he writes.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.

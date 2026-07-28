@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Linkedin } from "lucide-react";
 import { AUTHOR } from "@/lib/author";
 
@@ -25,15 +26,23 @@ export function AuthorBio() {
 
             <p className="text-sm text-gray-600 leading-relaxed font-light">{AUTHOR.bio}</p>
 
-            <a
-                href={AUTHOR.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-black hover:text-gray-600 transition-colors"
-            >
-                <Linkedin className="w-4 h-4" />
-                LinkedIn
-            </a>
+            <div className="flex flex-wrap items-center gap-4 mt-4">
+                <a
+                    href={AUTHOR.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-black hover:text-gray-600 transition-colors"
+                >
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
+                </a>
+                <Link
+                    href="/nosotros/carlos-beuvrin"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-black hover:text-gray-600 transition-colors"
+                >
+                    Ver perfil completo
+                </Link>
+            </div>
         </aside>
     );
 }

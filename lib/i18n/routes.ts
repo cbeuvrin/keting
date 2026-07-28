@@ -46,13 +46,42 @@ export function caseStudyHref(slug: string, isEn: boolean): string {
     return isEn ? `${CASE_STUDIES_EN_ROOT}/${slug}` : `${CASE_STUDIES_ES_ROOT}/${slug}`;
 }
 
+// Nosotros/About: mismo caso que casos de éxito — la raíz cambia de nombre
+// (ES "/nosotros" vs EN "/en/about"), pero el sub-slug del autor es idéntico
+// ("/carlos-beuvrin") en ambos idiomas.
+const ABOUT_ES_ROOT = "/nosotros";
+const ABOUT_EN_ROOT = "/en/about";
+
+function isAboutEsPath(pathname: string): boolean {
+    return pathname === ABOUT_ES_ROOT || pathname.startsWith(`${ABOUT_ES_ROOT}/`);
+}
+
+function isAboutEnPath(pathname: string): boolean {
+    return pathname === ABOUT_EN_ROOT || pathname.startsWith(`${ABOUT_EN_ROOT}/`);
+}
+
+// Ruta de la página "Nosotros"/"About" según idioma.
+export function aboutHref(isEn: boolean): string {
+    return isEn ? ABOUT_EN_ROOT : ABOUT_ES_ROOT;
+}
+
+// Ruta de la página de autor (Carlos Beuvrin) según idioma.
+export function authorHref(isEn: boolean): string {
+    return isEn ? `${ABOUT_EN_ROOT}/carlos-beuvrin` : `${ABOUT_ES_ROOT}/carlos-beuvrin`;
+}
+
 // Ruta actual -> su equivalente en inglés (o /en si no hay gemela).
 export function toEn(pathname: string): string {
-    if (isCaseStudyEnPath(pathname)) return pathname; // ya está en inglés
+    if (isCaseStudyEnPath(pathname) || isAboutEnPath(pathname)) return pathname; // ya está en inglés
     if (isCaseStudyEsPath(pathname)) {
         return pathname === CASE_STUDIES_ES_ROOT
             ? CASE_STUDIES_EN_ROOT
             : `${CASE_STUDIES_EN_ROOT}${pathname.slice(CASE_STUDIES_ES_ROOT.length)}`;
+    }
+    if (isAboutEsPath(pathname)) {
+        return pathname === ABOUT_ES_ROOT
+            ? ABOUT_EN_ROOT
+            : `${ABOUT_EN_ROOT}${pathname.slice(ABOUT_ES_ROOT.length)}`;
     }
     const es = normalizeEs(pathname);
     if (!hasMirror(es)) return "/en";
@@ -61,11 +90,16 @@ export function toEn(pathname: string): string {
 
 // Ruta actual -> su equivalente en español (o / si no hay gemela).
 export function toEs(pathname: string): string {
-    if (isCaseStudyEsPath(pathname)) return pathname; // ya está en español
+    if (isCaseStudyEsPath(pathname) || isAboutEsPath(pathname)) return pathname; // ya está en español
     if (isCaseStudyEnPath(pathname)) {
         return pathname === CASE_STUDIES_EN_ROOT
             ? CASE_STUDIES_ES_ROOT
             : `${CASE_STUDIES_ES_ROOT}${pathname.slice(CASE_STUDIES_EN_ROOT.length)}`;
+    }
+    if (isAboutEnPath(pathname)) {
+        return pathname === ABOUT_EN_ROOT
+            ? ABOUT_ES_ROOT
+            : `${ABOUT_ES_ROOT}${pathname.slice(ABOUT_EN_ROOT.length)}`;
     }
     const es = normalizeEs(pathname);
     if (!hasMirror(es)) return "/";

@@ -84,7 +84,8 @@ const nextConfig = {
       { source: '/precio', destination: '/precioweb', permanent: true },
       { source: '/precios', destination: '/precioweb', permanent: true },
       { source: '/contacto', destination: '/', permanent: true },
-      { source: '/nosotros', destination: '/', permanent: true },
+      // '/nosotros' ya NO redirige: ahora es una página real (plan GEO 4.2) con
+      // la historia de la empresa y enlace al perfil del fundador.
       { source: '/inicio-3', destination: '/', permanent: true },
       { source: '/community-manager-2-minimal', destination: '/', permanent: true },
       { source: '/blog-2', destination: '/blog', permanent: true },

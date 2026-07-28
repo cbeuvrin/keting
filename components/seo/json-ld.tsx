@@ -42,6 +42,33 @@ export function breadcrumbTrail(items: { name: string; path: string }[]) {
     };
 }
 
+/** Person: usado en la página de autor (/nosotros/carlos-beuvrin, /en/about/carlos-beuvrin). */
+export function person(opts: {
+    name: string;
+    jobTitle: string;
+    description?: string;
+    image: string;
+    /** Ruta (no absoluta) de la página de autor — se usa como url/@id de la persona. */
+    path: string;
+    sameAs: string[];
+}) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: opts.name,
+        jobTitle: opts.jobTitle,
+        ...(opts.description ? { description: opts.description } : {}),
+        image: `${SITE}${opts.image}`,
+        url: `${SITE}${opts.path}`,
+        sameAs: opts.sameAs,
+        worksFor: {
+            "@type": "Organization",
+            name: "Keting Media",
+            url: SITE,
+        },
+    };
+}
+
 /** Service ofrecido por Keting Media. */
 export function service(opts: {
     name: string;

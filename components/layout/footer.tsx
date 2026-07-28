@@ -7,7 +7,7 @@ import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-rea
 import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
-import { enHref, toEn, toEs } from "@/lib/i18n/routes";
+import { enHref, toEn, toEs, aboutHref } from "@/lib/i18n/routes";
 
 export function Footer() {
     const { t } = useLang();
@@ -102,6 +102,7 @@ export function Footer() {
                             {!isEn && (
                                 <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
                             )}
+                            <li><Link href={aboutHref(isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.about}</Link></li>
                             <li><Link href={enHref("/", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
                         </ul>
                     </div>
