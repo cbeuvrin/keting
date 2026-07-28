@@ -40,7 +40,9 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   applicationName: SITE_NAME,
-  category: "Diseño y desarrollo de software, web y apps",
+  // `category` se retira: no es un meta estándar (ningún buscador lo usa) y, al
+  // vivir en el layout raíz, inyectaba una cadena en español en todas las
+  // páginas /en/*. El tema de la entidad ya lo describe knowsAbout del schema.
   formatDetection: {
     email: false,
     address: false,
@@ -98,6 +100,9 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/keting-logo.png`,
   description: "Empresa de desarrollo de software, web y apps a medida en México: sitios, e-commerce, plataformas/SaaS e IA aplicada. Ingeniería, diseño de producto e inteligencia artificial en un mismo equipo.",
+  // Bilingüe a propósito: este schema se sirve en TODAS las rutas, también en
+  // /en/*. Con los términos solo en español, la única descripción temática de la
+  // entidad que veía un motor en la versión inglesa estaba en otro idioma.
   knowsAbout: [
     "Diseño y desarrollo web",
     "Desarrollo de software a medida",
@@ -105,6 +110,12 @@ const organizationJsonLd = {
     "E-commerce",
     "Plataformas SaaS",
     "Inteligencia artificial aplicada",
+    "Web design and development",
+    "Custom software development",
+    "Mobile and cross-platform apps",
+    "SaaS platforms",
+    "Applied artificial intelligence",
+    "Nearshore software development",
   ],
   // Este layout es la raíz de TODO el sitio (también de /en/*) y no conoce el
   // idioma de la ruta, así que aquí va solo lo que no depende del idioma: el
