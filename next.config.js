@@ -61,8 +61,11 @@ const nextConfig = {
       { source: '/blog/desbloqueando-la-excelencia-agentes-de-ia-autonomos-como-motor-de-transformacion-en-el-servicio-al-cliente', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
       // Slug renombrado: /webdesing → /desarrollo-web (keyword + corrige typo)
       { source: '/webdesing', destination: '/desarrollo-web', permanent: true },
-      // Slug renombrado: /soluciones-digitales → /desarrollo-de-software (keyword money;
-      // :path* cubre también subrutas como /animated-title)
+      // Slug renombrado: /soluciones-digitales → /desarrollo-de-software (keyword money).
+      // La regla exacta va PRIMERO: con solo :path*, la ruta sin subruta generaba
+      // "/desarrollo-de-software/" (barra final) y encadenaba un segundo salto al
+      // normalizarla. Así se resuelve en un único 301.
+      { source: '/soluciones-digitales', destination: '/desarrollo-de-software', permanent: true },
       { source: '/soluciones-digitales/:path*', destination: '/desarrollo-de-software/:path*', permanent: true },
       // Páginas de servicios antiguas (apuntan directo al slug nuevo, sin encadenar)
       { source: '/web', destination: '/desarrollo-web', permanent: true },
@@ -77,6 +80,10 @@ const nextConfig = {
       { source: '/marketing-digital', destination: '/desarrollo-de-software', permanent: true },
       { source: '/cotizar', destination: '/precioweb', permanent: true },
       { source: '/asesorias', destination: '/precioweb', permanent: true },
+      // Rutas que se enlazaban desde fuera y daban 404 (auditoría GEO 2026-07).
+      { source: '/precio', destination: '/precioweb', permanent: true },
+      { source: '/precios', destination: '/precioweb', permanent: true },
+      { source: '/contacto', destination: '/', permanent: true },
       { source: '/nosotros', destination: '/', permanent: true },
       { source: '/inicio-3', destination: '/', permanent: true },
       { source: '/community-manager-2-minimal', destination: '/', permanent: true },
@@ -92,6 +99,18 @@ const nextConfig = {
       { source: '/en/meta-ads', destination: '/en/desarrollo-de-software', permanent: true },
       { source: '/en/blogger', destination: '/blog', permanent: true },
       { source: '/en/nosotros', destination: '/en', permanent: true },
+      // Huérfanas del WordPress inglés detectadas en la auditoría GEO (2026-07).
+      // Los crawlers de IA siguen enlaces viejos con mucha más avidez que Googlebot
+      // (~34% de 404 frente a ~8%), así que estos 404 sí cuestan citaciones.
+      { source: '/en/web-informativa-landing-page', destination: '/en/desarrollo-web', permanent: true },
+      { source: '/en/plataforma-de-cursos', destination: '/en/desarrollo-de-software', permanent: true },
+      { source: '/en/product/:path*', destination: '/en/desarrollo-web', permanent: true },
+      { source: '/en/precio', destination: '/precioweb', permanent: true },
+      { source: '/en/precios', destination: '/precioweb', permanent: true },
+      { source: '/en/contacto', destination: '/en', permanent: true },
+      // Posts con permalink por fecha del WordPress inglés (el blog es solo ES).
+      { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*', destination: '/blog', permanent: true },
+      { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})', destination: '/blog', permanent: true },
     ];
   },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).
