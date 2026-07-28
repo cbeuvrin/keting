@@ -800,7 +800,7 @@ const es = {
             },
             {
                 q: "¿Cuánto cuesta automatizar un proceso?",
-                a: "Depende del proceso y las integraciones. Como referencia, automatizar un proceso concreto es una inversión considerablemente menor que un desarrollo completo (un sistema interno a medida arranca desde $100,000 MXN). Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas.",
+                a: "Automatizar un proceso arranca desde $40,000 MXN. El precio final depende de cuántos procesos automatices, de las integraciones con los sistemas que ya usas (ERP, CRM, WhatsApp) y del volumen de operaciones. Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas.",
             },
             {
                 q: "¿Se integra con los sistemas que ya uso?",
@@ -1841,7 +1841,7 @@ const en: typeof es = {
             },
             {
                 q: "How much does it cost to automate a process?",
-                a: "It depends on the process and the integrations. As a reference, automating a specific process is a considerably smaller investment than a full build (a custom internal system starts at around $5,500 USD). After a short diagnosis we give you scope and a fixed price, no surprises.",
+                a: "Automating a process starts at around $2,200 USD. The final price depends on how many processes you automate, the integrations with the systems you already use (ERP, CRM, WhatsApp) and your operating volume. After a short diagnosis we give you scope and a fixed price, no surprises.",
             },
             {
                 q: "Does it integrate with the systems I already use?",
