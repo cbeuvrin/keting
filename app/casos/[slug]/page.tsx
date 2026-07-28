@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE, getCaseStudy } from "@/lib/case-studies";
+import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE, getCaseStudy, splitCaseStudy } from "@/lib/case-studies";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { JsonLd, breadcrumbTrail } from "@/components/seo/json-ld";
 import { AUTHOR } from "@/lib/author";
@@ -85,7 +85,7 @@ export default async function CasoPage({ params }: { params: Promise<{ slug: str
                     ]),
                 ]}
             />
-            <CaseStudyPage study={study} lang="es" />
+            <CaseStudyPage {...splitCaseStudy(study, "es")} lang="es" />
         </>
     );
 }

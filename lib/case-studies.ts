@@ -57,6 +57,27 @@ export type CaseStudy = {
     duration?: string;
 };
 
+/**
+ * El caso SIN los bloques de idioma. Es lo que se pasa al componente de
+ * presentación (que es "use client"): si le pasáramos el CaseStudy entero,
+ * Next serializaría AMBOS idiomas en el payload RSC del HTML, dejando prosa
+ * española dentro de la página inglesa (y viceversa) — señal mezclada para los
+ * rastreadores de IA, que leen el HTML crudo, y peso duplicado en 18 páginas.
+ */
+export type CaseStudyBase = Omit<CaseStudy, "es" | "en">;
+
+/**
+ * Separa el caso en su parte común y el contenido del idioma pedido.
+ * Pensado para hacer spread directo: <CaseStudyPage {...splitCaseStudy(x,"en")} lang="en" />
+ */
+export function splitCaseStudy(study: CaseStudy, lang: "es" | "en"): {
+    study: CaseStudyBase;
+    copy: CaseStudyLangContent;
+} {
+    const { es, en, ...base } = study;
+    return { study: base, copy: lang === "en" ? en : es };
+}
+
 export const CASE_STUDIES: CaseStudy[] = [
     {
         slug: "iudex",

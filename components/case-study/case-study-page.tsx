@@ -12,7 +12,7 @@ import { ArrowUpRight, ArrowLeft, Plus } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ContactModal } from "@/components/pricing/contact-modal";
-import type { CaseStudy } from "@/lib/case-studies";
+import type { CaseStudyBase, CaseStudyLangContent } from "@/lib/case-studies";
 import { CASE_STUDIES_PUBLISHED_DATE } from "@/lib/case-studies";
 
 type Lang = "es" | "en";
@@ -102,8 +102,10 @@ function EditorialTitle({ title }: { title: string }) {
     );
 }
 
-export function CaseStudyPage({ study, lang }: { study: CaseStudy; lang: Lang }) {
-    const c = study[lang];
+// Recibe SOLO el contenido del idioma que se renderiza (ver splitCaseStudy):
+// pasar el caso completo metería el otro idioma en el payload RSC del HTML.
+export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; copy: CaseStudyLangContent; lang: Lang }) {
+    const c = copy;
     const l = LABELS[lang];
     const isEn = lang === "en";
     const [isContactOpen, setIsContactOpen] = useState(false);
