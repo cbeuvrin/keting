@@ -34,7 +34,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         { label: t.nav.digital, href: enHref("/desarrollo-de-software", isEn), styles: ["italic"] },
         { label: t.nav.automation, href: enHref("/automatizacion-de-procesos", isEn), styles: ["italic"] },
         { label: t.nav.portfolio, href: enHref("/portafolio", isEn), styles: ["italic"] },
-        ...(isEn ? [] : [{ label: t.nav.blog, href: "/blog", styles: ["italicUnderline"] }]),
+        { label: t.nav.blog, href: enHref("/blog", isEn), styles: ["italicUnderline"] },
     ];
 
     const underline = "underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80";

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { useLang } from "@/lib/i18n/lang-context";
 
 // Líneas de la cuadrícula (mismas que el resto del sitio, en blanco para fondo oscuro).
 const GRID_LINES =
@@ -14,6 +15,7 @@ const GRID_LINES =
  * título del artículo. Estilo editorial oscuro para contrastar con el contenido.
  */
 export function ArticleCTA({ title }: { title?: string }) {
+    const { t } = useLang();
     const [open, setOpen] = useState(false);
     const cardRef = useRef<HTMLElement>(null);
 
@@ -29,8 +31,8 @@ export function ArticleCTA({ title }: { title?: string }) {
 
     const waMessage = encodeURIComponent(
         title
-            ? `Hola Keting 👋 Leí su artículo "${title}" y me gustaría cotizar un proyecto.`
-            : "Hola Keting 👋 Me gustaría cotizar un proyecto."
+            ? t.blogArticle.waWithTitle.replace("{title}", title)
+            : t.blogArticle.waNoTitle
     );
     const waHref = `https://wa.me/525543830150?text=${waMessage}`;
 
@@ -81,21 +83,20 @@ export function ArticleCTA({ title }: { title?: string }) {
                     <div className="flex items-center gap-3 mb-5">
                         <span className="block w-10 h-px bg-white/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-white/50">
-                            ¿Tienes un proyecto?
+                            {t.blogArticle.ctaEyebrow}
                         </span>
                     </div>
 
                     <h3 className="text-white text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-4">
-                        Hagamos que{" "}
+                        {t.blogArticle.ctaTitlePre}{" "}
                         <span className="font-[family-name:var(--font-playfair)] italic font-normal text-white">
-                            suceda
+                            {t.blogArticle.ctaTitleItalic}
                         </span>
                         .
                     </h3>
 
                     <p className="text-base md:text-lg text-white/60 font-light mb-8 max-w-xl">
-                        Diseñamos y desarrollamos software, webs y apps a medida. Cuéntanos tu
-                        idea y te damos una propuesta sin compromiso.
+                        {t.blogArticle.ctaParagraph}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -103,7 +104,7 @@ export function ArticleCTA({ title }: { title?: string }) {
                             onClick={() => setOpen(true)}
                             className="group inline-flex items-center justify-center gap-2 px-7 py-4 bg-white text-black rounded-full text-sm font-bold hover:bg-white/90 transition-colors"
                         >
-                            Cotiza tu proyecto
+                            {t.blogArticle.ctaButton}
                             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </button>
                         <a

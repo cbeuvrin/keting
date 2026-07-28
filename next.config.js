@@ -92,8 +92,9 @@ const nextConfig = {
       { source: '/blogger', destination: '/blog', permanent: true },
       // Versión en inglés antigua de WordPress: redirects ESPECÍFICOS (no
       // catch-all, para no atrapar las rutas espejo reales /en/desarrollo-web…).
-      { source: '/en/blog/:path*', destination: '/blog', permanent: true },
-      { source: '/en/blog', destination: '/blog', permanent: true },
+      // OJO: /en/blog y /en/blog/:path* YA NO redirigen a /blog — desde el
+      // plan GEO 4.5 el blog EN existe de verdad (lib/blog-en/, app/en/blog).
+      // /en/blogger sigue siendo basura de WordPress y sí redirige.
       { source: '/en/web', destination: '/en/desarrollo-web', permanent: true },
       { source: '/en/portafolio-web', destination: '/en/portafolio', permanent: true },
       { source: '/en/google-ads', destination: '/en/desarrollo-de-software', permanent: true },
@@ -109,7 +110,9 @@ const nextConfig = {
       { source: '/en/precio', destination: '/precioweb', permanent: true },
       { source: '/en/precios', destination: '/precioweb', permanent: true },
       { source: '/en/contacto', destination: '/en', permanent: true },
-      // Posts con permalink por fecha del WordPress inglés (el blog es solo ES).
+      // Posts con permalink por fecha del WordPress inglés antiguo: no tienen
+      // equivalente en el blog EN nuevo (curado, slugs propios), así que van
+      // al índice ES como el resto de permalinks huérfanos de esa migración.
       { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*', destination: '/blog', permanent: true },
       { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})', destination: '/blog', permanent: true },
     ];

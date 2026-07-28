@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { articles as staticArticles } from '@/lib/blog-data';
 import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE } from '@/lib/case-studies';
+import { EN_ARTICLE_SLUGS } from '@/lib/blog-en';
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -37,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/nosotros/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${SITE_URL}/en/about/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+        { url: `${SITE_URL}/en/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
         { url: `${SITE_URL}/landing3d`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
         { url: `${SITE_URL}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
@@ -76,6 +78,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
     }));
 
+    // 6. Blog EN — subconjunto curado que vive en el repo (lib/blog-en/), no en Supabase.
+    const blogEnRoutes: MetadataRoute.Sitemap = EN_ARTICLE_SLUGS.map((slug) => ({
+        url: `${SITE_URL}/en/blog/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.65,
+    }));
+
     // Retonar unión de todas las rutas
-    return [...staticRoutes, ...caseStudyRoutes, ...blogStaticRoutes, ...blogDbRoutes];
+    return [...staticRoutes, ...caseStudyRoutes, ...blogStaticRoutes, ...blogDbRoutes, ...blogEnRoutes];
 }

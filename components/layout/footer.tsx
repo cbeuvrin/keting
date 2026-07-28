@@ -99,9 +99,7 @@ export function Footer() {
                         </div>
                         <ul className="space-y-3">
                             <li><Link href={enHref("/portafolio", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
-                            {!isEn && (
-                                <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
-                            )}
+                            <li><Link href={enHref("/blog", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
                             <li><Link href={aboutHref(isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.about}</Link></li>
                             <li><Link href={enHref("/", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
                         </ul>

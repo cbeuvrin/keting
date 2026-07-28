@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { BlogClient } from "./BlogClient";
 
@@ -6,6 +7,18 @@ import { BlogClient } from "./BlogClient";
 // Google y agentes de IA. La interactividad (filtros, animaciones) vive en
 // BlogClient. Revalida cada hora (igual que la página de artículo).
 export const revalidate = 3600;
+
+// hreflang recíproco con /en/blog (índice del blog en inglés, plan GEO 4.5).
+export const metadata: Metadata = {
+    alternates: {
+        canonical: "/blog",
+        languages: {
+            "es-MX": "/blog",
+            en: "/en/blog",
+            "x-default": "/blog",
+        },
+    },
+};
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;

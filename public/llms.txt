@@ -38,7 +38,12 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.
 - [Case studies](https://ketingmedia.com/en/case-studies): English index of Keting Media's 9 case studies — the challenge, the solution and the result of every project.
 - [About us](https://ketingmedia.com/en/about): Keting Media's story since 2019, how the company works, and links to its real case studies.
-- [Carlos Beuvrin](https://ketingmedia.com/en/about/carlos-beuvrin): AI Engineer and founder of Keting Media — bio, products he has built, and a link to the (Spanish) blog he writes.
+- [Carlos Beuvrin](https://ketingmedia.com/en/about/carlos-beuvrin): AI Engineer and founder of Keting Media — bio, products he has built, and a link to the blog he writes.
+- [Blog](https://ketingmedia.com/en/blog): English-language guides on custom software development, web and app pricing, and e-commerce — written for US companies evaluating nearshore development in Mexico.
+- [Custom Software Development in Mexico City: Costs, How to Choose, and What to Expect (2026)](https://ketingmedia.com/en/blog/custom-software-development-mexico-city-costs): Real USD price ranges and a vendor checklist for hiring a nearshore team.
+- [How Much Does a Custom Web or App Cost in Mexico?](https://ketingmedia.com/en/blog/how-much-does-a-custom-web-or-app-cost-in-mexico): Real USD pricing by project type — landing pages, corporate sites, e-commerce, apps and SaaS.
+- [Next.js vs WordPress for Business](https://ketingmedia.com/en/blog/nextjs-vs-wordpress-for-business): Which one to choose in 2026, criterion by criterion.
+- [Custom Online Store vs. Shopify](https://ketingmedia.com/en/blog/custom-online-store-vs-shopify): Which one fits your business depending on stage, budget and ambition.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.

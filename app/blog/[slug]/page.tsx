@@ -9,7 +9,9 @@ import { ViewTracker } from "@/components/blog/view-tracker";
 import { AuthorBio } from "@/components/blog/author-bio";
 import { ArticleCTA } from "@/components/blog/article-cta";
 import { ShareButton } from "@/components/blog/share-button";
+import { BlogContentStyles } from "@/components/blog/blog-content-styles";
 import { AUTHOR } from "@/lib/author";
+import { getEnBlogSlug } from "@/lib/i18n/routes";
 
 // Revalida cada hora: los artículos de la DB (altas, ediciones, bajas) se
 // reflejan sin necesidad de un redeploy. Antes la página quedaba cacheada
@@ -54,10 +56,25 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
     const description = rawDesc.replace(/[{}[\]"]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
     const image = article.image && article.image.startsWith('http') ? article.image : undefined;
 
+    // hreflang recíproco: solo si este artículo ya tiene traducción en el
+    // blog EN (lib/blog-en/) — evita apuntar el alternate a un artículo
+    // distinto o al índice cuando no existe una traducción real.
+    const enSlug = getEnBlogSlug(slug);
+
     return {
         title: `${article.title} - Blog de Keting Media`,
         description,
-        alternates: { canonical: `/blog/${slug}` },
+        alternates: {
+            canonical: `/blog/${slug}`,
+            ...(enSlug
+                ? {
+                      languages: {
+                          "es-MX": `/blog/${slug}`,
+                          en: `/en/blog/${enSlug}`,
+                      },
+                  }
+                : {}),
+        },
         openGraph: {
             title: article.title,
             description,
@@ -183,45 +200,7 @@ export default async function ArticlePage({ params }: { params: any }) {
             <article className="pt-32 pb-20 relative">
                 {/* Decorative background element */}
                 <div className="absolute top-0 right-0 w-1/3 h-[500px] bg-gradient-to-bl from-gray-100 to-transparent -z-10 blur-3xl opacity-50" />
-                <style dangerouslySetInnerHTML={{ __html: `
-                    .blog-content h2 { font-size: 2.5rem; font-weight: 700; margin-top: 4rem; margin-bottom: 2rem; letter-spacing: -0.05em; border-left: 4px solid #000; padding-left: 1.5rem; line-height: 1; }
-                    .blog-content { overflow-wrap: break-word; }
-                    .blog-content p { font-size: 1.25rem; line-height: 2; color: #374151; margin-bottom: 2.5rem; font-weight: 300; }
-                    .blog-content img { width: 100%; border-radius: 2.5rem; margin: 4rem 0; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-                    .blog-content img:hover { transform: scale(1.02); }
-                    .blog-content strong { color: #000; font-weight: 700; }
-                    .blog-content a { color: #000; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: opacity 0.2s ease; }
-                    .blog-content a:hover { opacity: 0.6; }
-                    .blog-content ul { margin-bottom: 3rem; space-y: 4; }
-                    .blog-content li { font-size: 1.125rem; margin-bottom: 1rem; color: #4B5563; position: relative; padding-left: 1.5rem; }
-                    .blog-content li::before { content: "—"; position: absolute; left: 0; color: #9CA3AF; font-weight: bold; }
-                    .blog-content h3 { font-size: 1.6rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1.25rem; letter-spacing: -0.03em; line-height: 1.15; }
-                    .blog-content ol { margin-bottom: 3rem; padding-left: 0; counter-reset: item; list-style: none; }
-                    .blog-content ol > li { counter-increment: item; }
-                    .blog-content ol > li::before { content: counter(item) "."; color: #9CA3AF; font-weight: 700; }
-                    .blog-content em { font-family: var(--font-playfair), Georgia, serif; font-style: italic; }
-                    .blog-content blockquote { margin: 3rem 0; padding: 0.25rem 0 0.25rem 1.75rem; border-left: 3px solid #000; font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-size: 1.35rem; line-height: 1.7; color: #1a1a1a; }
-                    .blog-content blockquote p { font-size: inherit; font-style: inherit; margin-bottom: 0; }
-                    /* Tablas: scroll horizontal propio en móvil para que la página nunca se desborde. */
-                    .blog-content .table-wrap { overflow-x: auto; margin: 3rem 0; -webkit-overflow-scrolling: touch; }
-                    /* min-width baja a propósito: una tabla de 2 columnas debe caber
-                       entera en móvil. Si obligamos a un ancho grande, la columna de
-                       datos queda fuera de pantalla tras el scroll y el lector solo ve
-                       las etiquetas — justo lo contrario de lo que la tabla comunica.
-                       El contenedor con scroll sigue ahí para tablas realmente anchas. */
-                    .blog-content table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 17rem; }
-                    .blog-content th { text-align: left; font-weight: 700; color: #000; border-bottom: 2px solid #000; padding: 0.7rem 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
-                    .blog-content td { padding: 0.7rem 0.5rem; border-bottom: 1px solid #E5E7EB; color: #374151; font-weight: 300; }
-                    .blog-content th:last-child, .blog-content td:last-child { text-align: right; white-space: nowrap; }
-                    @media (min-width: 768px) {
-                        .blog-content table { font-size: 1rem; }
-                        .blog-content th, .blog-content td { padding: 0.85rem 1rem; }
-                    }
-                    .blog-content tbody tr:last-child td { border-bottom: none; }
-                    .blog-content td strong { font-weight: 700; }
-                    .blog-hero-img { transition: transform 0.8s ease; }
-                    .blog-hero-img:hover { transform: scale(1.05); }
-                `}} />
+                <BlogContentStyles />
 
                 <div className="container mx-auto px-6 md:px-12">
                     <Link 

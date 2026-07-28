@@ -165,6 +165,23 @@ const es = {
         hintMid: "o",
         hintRight: "usa las flechas",
     },
+    // Textos compartidos por los componentes de la página de artículo
+    // (AuthorBio, ArticleCTA, ShareButton) — se usan tanto en /blog/[slug]
+    // como en /en/blog/[slug]. El idioma lo decide useLang() vía la URL.
+    blogArticle: {
+        writtenBy: "Escrito por",
+        viewProfile: "Ver perfil completo",
+        ctaEyebrow: "¿Tienes un proyecto?",
+        ctaTitlePre: "Hagamos que",
+        ctaTitleItalic: "suceda",
+        ctaParagraph: "Diseñamos y desarrollamos software, webs y apps a medida. Cuéntanos tu idea y te damos una propuesta sin compromiso.",
+        ctaButton: "Cotiza tu proyecto",
+        waWithTitle: 'Hola Keting 👋 Leí su artículo "{title}" y me gustaría cotizar un proyecto.',
+        waNoTitle: "Hola Keting 👋 Me gustaría cotizar un proyecto.",
+        shareAriaLabel: "Compartir artículo",
+        shareLabel: "Compartir",
+        shareCopied: "¡Enlace copiado!",
+    },
     brands: {
         eyebrow: "Algunos de los nuestros",
         title1: "Construido para",
@@ -1207,6 +1224,20 @@ const en: typeof es = {
         hintLeft: "Drag",
         hintMid: "or",
         hintRight: "use the arrows",
+    },
+    blogArticle: {
+        writtenBy: "Written by",
+        viewProfile: "View full profile",
+        ctaEyebrow: "Got a project?",
+        ctaTitlePre: "Let's make it",
+        ctaTitleItalic: "happen",
+        ctaParagraph: "We design and build custom software, websites and apps. Tell us your idea and we'll give you a no-obligation proposal.",
+        ctaButton: "Get a quote",
+        waWithTitle: 'Hi Keting 👋 I read your article "{title}" and I\'d like to get a quote for a project.',
+        waNoTitle: "Hi Keting 👋 I'd like to get a quote for a project.",
+        shareAriaLabel: "Share article",
+        shareLabel: "Share",
+        shareCopied: "Link copied!",
     },
     brands: {
         eyebrow: "A few of ours",
