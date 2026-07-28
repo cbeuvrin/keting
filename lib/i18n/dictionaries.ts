@@ -870,6 +870,7 @@ const es = {
             palette: "Paleta",
             typography: "Tipografía",
             fallbackUrl: "App de evento · iPad",
+            readCase: "Ver caso completo",
         },
         cases: {
             iudex: {
@@ -1911,6 +1912,7 @@ const en: typeof es = {
             palette: "Palette",
             typography: "Typography",
             fallbackUrl: "Event app · iPad",
+            readCase: "Read full case study",
         },
         cases: {
             iudex: {

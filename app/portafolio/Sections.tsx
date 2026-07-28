@@ -3,8 +3,11 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Plus } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
+import { caseStudyHref } from "@/lib/i18n/routes";
 
 /* ==========================================================================
    Utilidades editoriales
@@ -272,13 +275,17 @@ type CaseProps = {
     bareImage?: boolean;      // muestra la imagen sin marco de navegador (ej. render de iPad)
     dark?: boolean;
     effect?: "tilt" | "slide" | "rise" | "float";
+    /** Slug en lib/case-studies.ts — enlaza la tarjeta a su página de caso propia. */
+    caseSlug: string;
 };
 
 function CaseCard({
-    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, bareImage = false, dark = false, effect = "slide",
+    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, bareImage = false, dark = false, effect = "slide", caseSlug,
 }: CaseProps) {
     const { t } = useLang();
     const card = t.portfolioPage.card;
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
     const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
@@ -443,6 +450,17 @@ function CaseCard({
                                 )}
                             </div>
                         </RiseText>
+
+                        {/* Enlace a la página de caso propia (/casos/[slug] o /en/case-studies/[slug]) */}
+                        <RiseText delay={0.4}>
+                            <Link
+                                href={caseStudyHref(caseSlug, isEn)}
+                                className={`group inline-flex items-center gap-2 text-sm font-medium mt-4 ${dark ? "text-white/70 hover:text-white" : "text-[#1d1d1f]/70 hover:text-[#1d1d1f]"} transition-colors underline decoration-1 underline-offset-4`}
+                            >
+                                {card.readCase}
+                                <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                            </Link>
+                        </RiseText>
                     </div>
 
                     {/* Imagen — marco tipo browser + KETING signature debajo */}
@@ -542,6 +560,7 @@ export function CaseIvanIvanovich() {
     return (
         <CaseCard
             badge="09"
+            caseSlug="ivan-ivanovich-academy"
             eyebrow={c.eyebrow}
             titleTop="Ivan"
             titleAccent="Ivanovich"
@@ -566,6 +585,7 @@ export function CaseIudex() {
     return (
         <CaseCard
             badge="02"
+            caseSlug="iudex"
             eyebrow={c.eyebrow}
             titleTop="Iudex"
             titleAccent="rest assured."
@@ -590,6 +610,7 @@ export function CaseGobernia() {
     return (
         <CaseCard
             badge="04"
+            caseSlug="gobernia"
             eyebrow={c.eyebrow}
             titleTop="Gobernia."
             titleAccent={c.titleAccent}
@@ -614,6 +635,7 @@ export function CaseSmileBetter() {
     return (
         <CaseCard
             badge="03"
+            caseSlug="smile-better-clinics"
             eyebrow={c.eyebrow}
             titleTop="Smile"
             titleAccent="Better"
@@ -639,6 +661,7 @@ export function CaseBarmored() {
     return (
         <CaseCard
             badge="06"
+            caseSlug="barmored"
             eyebrow={c.eyebrow}
             titleTop="Barmored"
             titleAccent="Security."
@@ -664,6 +687,7 @@ export function CaseToogo() {
     return (
         <CaseCard
             badge="07"
+            caseSlug="toogo"
             eyebrow={c.eyebrow}
             titleTop="Toogo."
             titleAccent={c.titleAccent}
@@ -688,6 +712,7 @@ export function CaseRosymar() {
     return (
         <CaseCard
             badge="08"
+            caseSlug="rosymar-gonzalez"
             eyebrow={c.eyebrow}
             titleTop="Rosymar"
             titleAccent="González."
@@ -711,6 +736,7 @@ export function CaseHapptek() {
     return (
         <CaseCard
             badge="05"
+            caseSlug="happtek"
             eyebrow={c.eyebrow}
             titleTop="Happtek."
             titleAccent={c.titleAccent}
@@ -735,6 +761,7 @@ export function CaseSuzuki() {
     return (
         <CaseCard
             badge="10"
+            caseSlug="suzuki"
             eyebrow={c.eyebrow}
             titleTop="Suzuki."
             titleAccent={c.titleAccent}

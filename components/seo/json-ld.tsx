@@ -28,6 +28,20 @@ export function breadcrumb(name: string, path: string) {
     };
 }
 
+/** BreadcrumbList con más de 2 niveles (ej. Inicio › Casos de éxito › Caso). */
+export function breadcrumbTrail(items: { name: string; path: string }[]) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: items.map((item, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: item.name,
+            item: `${SITE}${item.path}`,
+        })),
+    };
+}
+
 /** Service ofrecido por Keting Media. */
 export function service(opts: {
     name: string;

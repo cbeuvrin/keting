@@ -10,6 +10,18 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Automatización de procesos con IA](https://ketingmedia.com/automatizacion-de-procesos): Flujos automatizados, agentes de IA y chatbots conectados a los sistemas de la empresa (ERP, CRM, WhatsApp) para eliminar trabajo manual repetitivo.
 - [Portafolio](https://ketingmedia.com/portafolio): Casos y proyectos seleccionados de marcas que cambian su industria.
 
+## Casos de éxito
+- [Casos de éxito](https://ketingmedia.com/casos): Índice de los 9 casos de éxito de Keting Media, con el reto, la solución y el resultado de cada proyecto.
+- [Iudex — la primera IA jurídica de México](https://ketingmedia.com/casos/iudex): Plataforma legal-tech con IA y diseño brutalista premium — 100,000+ sesiones al mes.
+- [Smile Better Clinics — cercanía y tecnología](https://ketingmedia.com/casos/smile-better-clinics): Sitio multi-clínica con reservas a un tap y SEO local — ↑3x citas mensuales.
+- [Gobernia — un consejo de 4 agentes de IA](https://ketingmedia.com/casos/gobernia): SaaS con 4 agentes de IA (CFO, CSO, CRO, Auditor) — ↑8x conversión.
+- [Happtek — la voz de la elegancia](https://ketingmedia.com/casos/happtek): Showroom digital de audio premium — ↑6x tiempo en sitio.
+- [Barmored Security — blindaje perfecto](https://ketingmedia.com/casos/barmored): Sitio para blindaje automotriz de alto perfil — ↑7x cotizaciones.
+- [Toogo — tu tienda, lista en minutos](https://ketingmedia.com/casos/toogo): SaaS multi-tenant de e-commerce con onboarding por IA — 100+ tiendas activas.
+- [Suzuki — ¿qué coche eres?](https://ketingmedia.com/casos/suzuki): App de quiz interactivo para iPad en activación de evento, con Enso Media — 500+ quizzes.
+- [Rosymar González — joyería con manifiesto](https://ketingmedia.com/casos/rosymar-gonzalez): E-commerce de joyería en oro 18k y 24k — ↑5x ventas online.
+- [Ivan Ivanovich Academy — autoridad y precisión](https://ketingmedia.com/casos/ivan-ivanovich-academy): Plataforma multi-idioma con cursos en vivo y e-commerce — ↑4x tráfico anual.
+
 ## Blog
 - [Blog de Keting Media](https://ketingmedia.com/blog): Artículos y guías sobre desarrollo de software, web, apps, e-commerce e IA aplicada.
 - [Desarrollo de software a la medida en CDMX: costos y cómo elegir (2026)](https://ketingmedia.com/blog/desarrollo-de-software-a-la-medida-cdmx-costos-2026): Guía con rangos de precio reales y checklist para contratar.
@@ -20,6 +32,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 
 ## English
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.
+- [Case studies](https://ketingmedia.com/en/case-studies): English index of Keting Media's 9 case studies — the challenge, the solution and the result of every project.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.

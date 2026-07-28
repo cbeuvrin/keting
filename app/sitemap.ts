@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { articles as staticArticles } from '@/lib/blog-data';
+import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE } from '@/lib/case-studies';
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -29,6 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/automatizacion-de-procesos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
         { url: `${SITE_URL}/en/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+        { url: `${SITE_URL}/casos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+        { url: `${SITE_URL}/en/case-studies`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
         { url: `${SITE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
         { url: `${SITE_URL}/landing3d`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
@@ -37,7 +40,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
     ];
 
-    // 3. Procesar artículos estáticos (lib/blog-data.ts)
+    // 3. Casos de éxito — 9 en ES (/casos/[slug]) + 9 en EN (/en/case-studies/[slug]).
+    const caseStudyRoutes: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.flatMap((slug) => [
+        {
+            url: `${SITE_URL}/casos/${slug}`,
+            lastModified: new Date(CASE_STUDIES_PUBLISHED_DATE),
+            changeFrequency: 'yearly' as const,
+            priority: 0.8,
+        },
+        {
+            url: `${SITE_URL}/en/case-studies/${slug}`,
+            lastModified: new Date(CASE_STUDIES_PUBLISHED_DATE),
+            changeFrequency: 'yearly' as const,
+            priority: 0.7,
+        },
+    ]);
+
+    // 4. Procesar artículos estáticos (lib/blog-data.ts)
     const blogStaticRoutes: MetadataRoute.Sitemap = staticArticles.map((article) => ({
         url: `${SITE_URL}/blog/${article.slug}`,
         lastModified: new Date(), // O podrías parsear article.date si tuviera formato ISO
@@ -45,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
     }));
 
-    // 4. Procesar artículos de la Base de Datos
+    // 5. Procesar artículos de la Base de Datos
     const blogDbRoutes: MetadataRoute.Sitemap = (dbArticles || []).map((article) => ({
         url: `${SITE_URL}/blog/${article.slug}`,
         lastModified: new Date(),
@@ -54,5 +73,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Retonar unión de todas las rutas
-    return [...staticRoutes, ...blogStaticRoutes, ...blogDbRoutes];
+    return [...staticRoutes, ...caseStudyRoutes, ...blogStaticRoutes, ...blogDbRoutes];
 }
