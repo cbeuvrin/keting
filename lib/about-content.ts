@@ -48,7 +48,7 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         storyEyebrow: "Desde 2019",
         storyTitle: "Nuestra historia",
         storyParagraphs: [
-            "Keting Media nace en 2019 como un estudio de diseño y desarrollo de software en Ciudad de México. Desde entonces construimos productos digitales de extremo a extremo —sitios web, e-commerce, aplicaciones móviles, plataformas SaaS y sistemas internos— para marcas y empresas en México y Latinoamérica.",
+            "Keting Media nace en 2019 en Ciudad de México como empresa de desarrollo de software, web y apps a medida. Desde entonces construimos productos digitales de extremo a extremo —sitios web, e-commerce, aplicaciones móviles, plataformas SaaS y sistemas internos— para marcas y empresas en México y Latinoamérica.",
             "Trabajamos con marcas que buscan escalar su negocio mediante soluciones innovadoras y un diseño que realmente conecta con sus clientes. No subcontratamos piezas sueltas del proyecto: ingeniería, diseño de producto e inteligencia artificial aplicada viven bajo un mismo techo.",
             "Más del 80% de nuestros proyectos llegan por referido: el resultado de un trabajo anterior habla antes que cualquier propuesta.",
         ],
@@ -71,7 +71,7 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         founderEyebrow: "Fundador",
         founderTitle: "Dirigido por Carlos Beuvrin",
         founderBody:
-            "Keting Media fue fundada por Carlos Beuvrin, Ingeniero de IA, quien dirige el desarrollo de cada proyecto a nivel de arquitectura. No hay un equipo inventado detrás de este sitio: lo que ves en cada caso de éxito es su trabajo.",
+            "Keting Media fue fundada por Carlos Beuvrin, Ingeniero de IA, quien dirige el desarrollo de cada proyecto a nivel de arquitectura. Cada caso de éxito que aparece en este sitio se construyó bajo esa dirección.",
         founderCta: "Conoce a Carlos Beuvrin",
         founderImageAlt: "Carlos Beuvrin — Ingeniero de IA y Fundador de Keting Media",
         workEyebrow: "Trabajo real",
@@ -92,7 +92,7 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         storyEyebrow: "Since 2019",
         storyTitle: "Our story",
         storyParagraphs: [
-            "Keting Media was founded in 2019 as a design and software development studio in Mexico City. Since then we've built end-to-end digital products —websites, e-commerce, mobile apps, SaaS platforms, and internal systems— for brands and companies across Mexico and Latin America.",
+            "Keting Media was founded in 2019 in Mexico City as a custom software, web and app development company. Since then we've built end-to-end digital products —websites, e-commerce, mobile apps, SaaS platforms, and internal systems— for brands and companies across Mexico and Latin America.",
             "We work with brands looking to scale their business through innovative solutions and design that truly connects with their customers. We don't outsource pieces of a project: engineering, product design, and applied AI live under one roof.",
             "More than 80% of our projects come from referrals: the result of a previous project speaks before any pitch does.",
         ],
@@ -115,7 +115,7 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         founderEyebrow: "Founder",
         founderTitle: "Led by Carlos Beuvrin",
         founderBody:
-            "Keting Media was founded by Carlos Beuvrin, an AI Engineer who leads the development of every project at the architecture level. There's no invented team behind this site: what you see in every case study is his work.",
+            "Keting Media was founded by Carlos Beuvrin, an AI Engineer who leads the development of every project at the architecture level. Every case study on this site was built under that direction.",
         founderCta: "Meet Carlos Beuvrin",
         founderImageAlt: "Carlos Beuvrin — AI Engineer and Founder of Keting Media",
         workEyebrow: "Real work",

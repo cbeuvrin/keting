@@ -4,6 +4,7 @@ import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE, getCaseStudy, splitCaseS
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { JsonLd, breadcrumbTrail } from "@/components/seo/json-ld";
 import { AUTHOR } from "@/lib/author";
+import { AUTHOR_ABOUT } from "@/lib/about-content";
 
 const SITE_URL = "https://ketingmedia.com";
 
@@ -62,7 +63,9 @@ export default async function EnCaseStudyPage({ params }: { params: Promise<{ sl
         author: {
             "@type": "Person",
             name: AUTHOR.name,
-            jobTitle: AUTHOR.jobTitle,
+            // El cargo en inglés: AUTHOR.jobTitle está en español y se colaba en
+            // el schema de las páginas inglesas.
+            jobTitle: AUTHOR_ABOUT.en.roleLabel,
             url: AUTHOR.linkedin,
         },
         publisher: {
