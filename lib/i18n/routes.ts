@@ -90,6 +90,7 @@ const BLOG_SLUG_PAIRS: readonly { es: string; en: string }[] = [
     { es: "puedo-crear-mi-app-o-web-solo-con-ia-vibe-coding", en: "can-i-build-my-app-or-website-with-ai-alone-vibe-coding" },
     { es: "lovable-que-es-cuanto-cuesta-y-hasta-donde-llega", en: "lovable-what-it-is-what-it-costs-and-where-it-falls-short" },
     { es: "que-es-toogo-y-para-que-sirve", en: "what-is-toogo-and-what-is-it-for" },
+    { es: "el-impacto-de-flutter-y-react-native-en-el-despliegue-multiplataforma-eficiente", en: "flutter-vs-react-native-for-cross-platform-apps" },
 ];
 
 function isBlogEsPath(pathname: string): boolean {

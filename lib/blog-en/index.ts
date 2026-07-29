@@ -13,9 +13,7 @@ import whyNobodyCanGuaranteeAiSearchRankings from "./why-nobody-can-guarantee-ai
 import canIBuildMyAppOrWebsiteWithAiAloneVibeCoding from "./can-i-build-my-app-or-website-with-ai-alone-vibe-coding";
 import lovableWhatItIsWhatItCostsAndWhereItFallsShort from "./lovable-what-it-is-what-it-costs-and-where-it-falls-short";
 import whatIsToogoAndWhatIsItFor from "./what-is-toogo-and-what-is-it-for";
-
-// --- Pendiente de traducir (existe como archivo con TODO, NO importado aún) ---
-// import flutterVsReactNativeForCrossPlatformApps from "./flutter-vs-react-native-for-cross-platform-apps";
+import flutterVsReactNativeForCrossPlatformApps from "./flutter-vs-react-native-for-cross-platform-apps";
 
 // El orden es el de aparición en /en/blog y en el carrusel del home inglés:
 // primero los de mayor intención comercial para el mercado nearshore.
@@ -25,6 +23,7 @@ export const EN_ARTICLES: EnArticle[] = [
     whyNobodyCanGuaranteeAiSearchRankings,
     canIBuildMyAppOrWebsiteWithAiAloneVibeCoding,
     nextjsVsWordpressForBusiness,
+    flutterVsReactNativeForCrossPlatformApps,
     lovableWhatItIsWhatItCostsAndWhereItFallsShort,
     customOnlineStoreVsShopify,
     whatIsToogoAndWhatIsItFor,

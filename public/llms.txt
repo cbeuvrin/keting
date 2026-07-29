@@ -48,6 +48,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Can I Build My App or Website With AI Alone? (Vibe Coding)](https://ketingmedia.com/en/blog/can-i-build-my-app-or-website-with-ai-alone-vibe-coding): What AI builders actually do well, where they break, and when you need engineers.
 - [Lovable: What It Is, What It Costs, and Where It Falls Short](https://ketingmedia.com/en/blog/lovable-what-it-is-what-it-costs-and-where-it-falls-short): Honest 2026 guide — real pricing, the hidden cost of credits, and the ceiling nobody mentions.
 - [What Is Toogo and What Is It For?](https://ketingmedia.com/en/blog/what-is-toogo-and-what-is-it-for): The multi-tenant e-commerce SaaS built by Keting Media — 100+ active stores.
+- [Flutter vs. React Native: Which One Should You Build Your App With?](https://ketingmedia.com/en/blog/flutter-vs-react-native-for-cross-platform-apps): A decision checklist for cross-platform mobile development — when each framework fits and when to go native.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.
