@@ -7,7 +7,7 @@ import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { Header } from "@/components/layout/header";
 import { useLang } from "@/lib/i18n/lang-context";
-import { enHref, toEn, toEs } from "@/lib/i18n/routes";
+import { enHref, toEn, toEs, aboutHref } from "@/lib/i18n/routes";
 
 export function GravityHeader({
     position = "right",
@@ -87,6 +87,7 @@ export function GravityHeader({
                             <Link href={enHref("/desarrollo-de-software", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.digitalShort}</Link>
                             <Link href={enHref("/automatizacion-de-procesos", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.automationShort}</Link>
                             <Link href={enHref("/portafolio", isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.portfolio}</Link>
+                            <Link href={aboutHref(isEn)} className="text-sm font-light text-zinc-600 hover:text-black transition-colors">{t.nav.about}</Link>
                         </nav>
                         {/* Toggle ES/EN */}
                         <div className="flex items-center gap-0.5 ml-3">

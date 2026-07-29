@@ -11,7 +11,7 @@ import { ArticleCTA } from "@/components/blog/article-cta";
 import { ShareButton } from "@/components/blog/share-button";
 import { BlogContentStyles } from "@/components/blog/blog-content-styles";
 import { AUTHOR } from "@/lib/author";
-import { getEnBlogSlug } from "@/lib/i18n/routes";
+import { getEnBlogSlug, authorHref } from "@/lib/i18n/routes";
 
 // Revalida cada hora: los artículos de la DB (altas, ediciones, bajas) se
 // reflejan sin necesidad de un redeploy. Antes la página quedaba cacheada
@@ -173,7 +173,8 @@ export default async function ArticlePage({ params }: { params: any }) {
             "@type": "Person",
             name: AUTHOR.name,
             jobTitle: AUTHOR.jobTitle,
-            url: AUTHOR.linkedin,
+            url: `https://ketingmedia.com/nosotros/carlos-beuvrin`,
+            sameAs: [AUTHOR.linkedin],
         },
         publisher: {
             "@type": "Organization",
@@ -237,15 +238,17 @@ export default async function ArticlePage({ params }: { params: any }) {
                     </h1>
 
                     <div className="flex flex-wrap items-center gap-8 py-8 border-y border-gray-100 mb-16">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500">
+                        {/* Enlaza al perfil del autor: su nombre aparece en cada
+                            artículo y es una vía natural a /nosotros/carlos-beuvrin. */}
+                        <Link href={authorHref(false)} className="flex items-center gap-3 group">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500 transition-colors group-hover:bg-black group-hover:text-white">
                                 {article.author[0]}
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Autor</p>
-                                <p className="text-sm font-medium">{article.author}</p>
+                                <p className="text-sm font-medium group-hover:underline underline-offset-4 decoration-1">{article.author}</p>
                             </div>
-                        </div>
+                        </Link>
                         <div className="flex items-center gap-3">
                             <Calendar className="text-gray-400" size={20} />
                             <div>

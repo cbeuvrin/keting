@@ -13,7 +13,7 @@ import { AUTHOR } from "@/lib/author";
 import { AUTHOR_ABOUT } from "@/lib/about-content";
 import { getCategoryImage } from "@/lib/blog-utils";
 import { sanitizeHtml } from "@/lib/sanitize-html";
-import { getEsBlogSlug } from "@/lib/i18n/routes";
+import { getEsBlogSlug, authorHref } from "@/lib/i18n/routes";
 
 // Página de artículo del blog EN — mismo diseño que /blog/[slug] (ES) pero
 // leyendo de lib/blog-en/ (repo, no Supabase). No hay ViewTracker: esos
@@ -96,7 +96,8 @@ export default async function EnArticlePage({ params }: { params: any }) {
             "@type": "Person",
             name: AUTHOR.name,
             jobTitle: AUTHOR_ABOUT.en.roleLabel,
-            url: AUTHOR.linkedin,
+            url: `https://ketingmedia.com/en/about/carlos-beuvrin`,
+            sameAs: [AUTHOR.linkedin],
         },
         publisher: {
             "@type": "Organization",
@@ -156,15 +157,17 @@ export default async function EnArticlePage({ params }: { params: any }) {
                     </h1>
 
                     <div className="flex flex-wrap items-center gap-8 py-8 border-y border-gray-100 mb-16">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500">
+                        {/* Enlaza al perfil del autor: su nombre aparece en cada
+                            artículo y es una vía natural a /nosotros/carlos-beuvrin. */}
+                        <Link href={authorHref(true)} className="flex items-center gap-3 group">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500 transition-colors group-hover:bg-black group-hover:text-white">
                                 {article.author[0]}
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Author</p>
-                                <p className="text-sm font-medium">{article.author}</p>
+                                <p className="text-sm font-medium group-hover:underline underline-offset-4 decoration-1">{article.author}</p>
                             </div>
-                        </div>
+                        </Link>
                         <div className="flex items-center gap-3">
                             <Calendar className="text-gray-400" size={20} />
                             <div>

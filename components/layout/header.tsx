@@ -9,7 +9,7 @@ import { Menu as MenuIcon, ArrowUpRight, X, Facebook, Linkedin, Instagram } from
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
-import { enHref, toEn, toEs } from "@/lib/i18n/routes";
+import { enHref, toEn, toEs, aboutHref } from "@/lib/i18n/routes";
 
 
 // Items se generan en el render usando el dictionary
@@ -126,6 +126,21 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     </div>
 
                     <div className="flex items-center gap-4 relative">
+                        {/* Enlace discreto a Nosotros: a la derecha y pequeño, en la misma
+                            línea tipográfica que el toggle de idioma — no compite con el
+                            menú principal ni con el botón de contacto. */}
+                        <Link
+                            href={aboutHref(isEn)}
+                            className={cn(
+                                // md:block (no md:inline-block): esa variante no se genera en
+                                // este proyecto y el enlace quedaba en display:none.
+                                "hidden md:block text-[11px] font-medium tracking-[0.2em] uppercase transition-colors duration-300 whitespace-nowrap",
+                                isDark ? "text-white/50 hover:text-white" : "text-zinc-400 hover:text-black"
+                            )}
+                        >
+                            {t.nav.about}
+                        </Link>
+
                         {/* Toggle ES/EN — visible en la barra (escritorio) */}
                         <div className="hidden md:flex items-center gap-0.5">
                             <button
@@ -302,12 +317,32 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     </motion.div>
                                 </nav>
 
+                                {/* Nosotros: enlace secundario, pequeño y alineado a la
+                                    derecha — fuera de la lista grande en cursiva a propósito.
+                                    Es la única vía a /nosotros en móvil, donde no existe la
+                                    barra de escritorio. */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.35 }}
+                                    className="mt-8 md:mt-12 flex items-center justify-end gap-4"
+                                >
+                                    <span className="block w-8 h-px bg-black/20" />
+                                    <Link
+                                        href={aboutHref(isEn)}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors duration-300"
+                                    >
+                                        {t.nav.about}
+                                    </Link>
+                                </motion.div>
+
                                 {/* Toggle de idioma */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 }}
-                                    className="mt-6 md:mt-10 flex items-center justify-end gap-4"
+                                    className="mt-4 md:mt-6 flex items-center justify-end gap-4"
                                 >
                                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
                                         {t.nav.idiom}

@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
+import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ScrambleText from "./ScrambleText";
 import { useLang } from "@/lib/i18n/lang-context";
+import { authorHref } from "@/lib/i18n/routes";
 
 export default function GravityHero() {
-    const { t } = useLang();
+    const { t, lang } = useLang();
+    const isEn = lang === "en";
     const hero = t.webPage.hero;
     const sceneRef = useRef<HTMLDivElement>(null);
     const engineRef = useRef<Matter.Engine | null>(null);
@@ -271,13 +274,17 @@ export default function GravityHero() {
                             onMouseEnter={() => setAvatarHover(true)}
                             onMouseLeave={() => setAvatarHover(false)}
                         >
-                            <div className="w-full h-full rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-xl flex items-center justify-center cursor-pointer">
+                            <Link
+                                href={authorHref(isEn)}
+                                className="block w-full h-full rounded-full overflow-hidden bg-[#1a1a1a] border border-white/10 shadow-xl cursor-pointer"
+                                aria-label={hero.avatarAlt}
+                            >
                                 <img
                                     src="/carlos-beuvrin.png"
                                     alt={hero.avatarAlt}
                                     className="w-full h-full object-cover grayscale brightness-110 scale-125"
                                 />
-                            </div>
+                            </Link>
 
                             <AnimatePresence>
                                 {avatarHover && (

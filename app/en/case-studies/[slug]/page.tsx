@@ -66,7 +66,8 @@ export default async function EnCaseStudyPage({ params }: { params: Promise<{ sl
             // El cargo en inglés: AUTHOR.jobTitle está en español y se colaba en
             // el schema de las páginas inglesas.
             jobTitle: AUTHOR_ABOUT.en.roleLabel,
-            url: AUTHOR.linkedin,
+            url: `https://ketingmedia.com/en/about/carlos-beuvrin`,
+            sameAs: [AUTHOR.linkedin],
         },
         publisher: {
             "@type": "Organization",

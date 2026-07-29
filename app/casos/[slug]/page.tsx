@@ -63,7 +63,8 @@ export default async function CasoPage({ params }: { params: Promise<{ slug: str
             "@type": "Person",
             name: AUTHOR.name,
             jobTitle: AUTHOR.jobTitle,
-            url: AUTHOR.linkedin,
+            url: `https://ketingmedia.com/nosotros/carlos-beuvrin`,
+            sameAs: [AUTHOR.linkedin],
         },
         publisher: {
             "@type": "Organization",

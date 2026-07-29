@@ -23,23 +23,26 @@ export function AuthorBio() {
 
     return (
         <aside className="not-prose mt-16 mb-4 rounded-3xl border border-gray-200 bg-[#FAFAFA] p-6 md:p-8">
-            {/* Encabezado: foto circular pequeña + nombre/rol */}
-            <div className="flex items-center gap-4 mb-5">
+            {/* Encabezado: foto circular pequeña + nombre/rol. Todo el bloque enlaza
+                al perfil — la foto y el nombre son lo primero que se busca pulsar. */}
+            <Link href={authorHref(isEn)} className="flex items-center gap-4 mb-5 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={AUTHOR.photo}
                     alt={`${AUTHOR.name} — ${jobTitle}`}
-                    className="w-14 h-14 rounded-full object-cover flex-shrink-0 ring-1 ring-gray-200"
+                    className="w-14 h-14 rounded-full object-cover flex-shrink-0 ring-1 ring-gray-200 transition-all duration-300 group-hover:ring-black/40 group-hover:scale-105"
                     loading="lazy"
                 />
                 <div className="min-w-0">
                     <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400 mb-0.5">
                         {t.blogArticle.writtenBy}
                     </p>
-                    <h3 className="text-lg font-bold text-black leading-tight">{AUTHOR.name}</h3>
+                    <h3 className="text-lg font-bold text-black leading-tight group-hover:underline underline-offset-4 decoration-1">
+                        {AUTHOR.name}
+                    </h3>
                     <p className="text-sm text-gray-500">{jobTitle} · Keting Media</p>
                 </div>
-            </div>
+            </Link>
 
             <p className="text-sm text-gray-600 leading-relaxed font-light">{bio}</p>
 

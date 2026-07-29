@@ -1,11 +1,16 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { authorHref } from "@/lib/i18n/routes";
 import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
 
 export function AboutUs() {
     const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
     const sectionRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -112,9 +117,12 @@ export function AboutUs() {
                                 transition={{ duration: 0.8, delay: 0.6 }}
                                 className="flex justify-end pr-4 md:pr-12"
                             >
-                                <span className="text-lg md:text-xl font-medium text-[#1a1a1a] tracking-tight italic">
+                                <Link
+                                    href={authorHref(isEn)}
+                                    className="text-lg md:text-xl font-medium text-[#1a1a1a] tracking-tight italic hover:underline underline-offset-4 decoration-1 transition-all"
+                                >
                                     — Carlos Beuvrin
-                                </span>
+                                </Link>
                             </motion.div>
                         </div>
                     </div>
@@ -127,13 +135,16 @@ export function AboutUs() {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="relative w-full aspect-[3/4] max-w-[320px] bg-black rounded-3xl overflow-hidden shadow-2xl flex-shrink-0"
                         >
-                            <img
-                                src="/carlos-beuvrin.png"
-                                alt={t.aboutUs.imageAlt}
-                                className="w-full h-full object-cover"
-                                style={{ objectPosition: "center 5%" }}
-                                loading="lazy"
-                            />
+                            {/* La foto lleva al perfil: es el elemento que más invita a pulsar. */}
+                            <Link href={authorHref(isEn)} className="block w-full h-full group">
+                                <img
+                                    src="/carlos-beuvrin.png"
+                                    alt={t.aboutUs.imageAlt}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    style={{ objectPosition: "center 5%" }}
+                                    loading="lazy"
+                                />
+                            </Link>
                         </motion.div>
                     </div>
 
