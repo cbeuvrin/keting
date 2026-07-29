@@ -4,27 +4,46 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, useAnimationFrame } from "framer-motion";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { articles } from "@/lib/blog-data";
 import { optimizeImageUrl } from "@/lib/blog-utils";
+import { useLang } from "@/lib/i18n/lang-context";
+import { EN_ARTICLES } from "@/lib/blog-en";
 
 // Deterministic tilt per card index
 const TILTS = articles.map((_, i) => ((i * 137 + 31) % 29) - 14);
+
+// Paleta para las tarjetas del blog EN (sus artículos viven en el repo y no
+// guardan color/accent, a diferencia de los de Supabase). Alterna claras y
+// oscuras como en el blog ES.
+const EN_CARD_PALETTE = [
+    { color: "#0D0D0D", accent: "#FFFFFF" },
+    { color: "#F5F0EB", accent: "#1a2332" },
+    { color: "#EEF2FF", accent: "#1a2332" },
+    { color: "#1C1C1C", accent: "#FFFFFF" },
+    { color: "#E8F4F0", accent: "#1a2332" },
+    { color: "#0F111A", accent: "#FFFFFF" },
+    { color: "#FFF8E8", accent: "#1a2332" },
+    { color: "#F9F5FF", accent: "#1a2332" },
+];
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 function BlogCard({
     article,
     tilt,
     velocity,
+    basePath,
 }: {
     article: (typeof articles)[0];
     tilt: number;
     velocity: number;
+    basePath: string;
 }) {
     // Extra tilt based on movement velocity
     const liveRotation = tilt + velocity * 0.08;
 
     return (
-        <Link href={`/blog/${article.slug}`} className="block relative z-30">
+        <Link href={`${basePath}/${article.slug}`} className="block relative z-30">
             <motion.article
                 whileTap={{ scale: 0.98 }}
                 style={{
@@ -104,11 +123,28 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export function BlogCarousel() {
-    const [allArticles, setAllArticles] = useState(articles);
+    const { t } = useLang();
+    const pathname = usePathname();
+    const isEn = pathname?.startsWith("/en") ?? false;
+    // El blog inglés es un conjunto curado que vive en el repo (lib/blog-en),
+    // no en Supabase: en /en se usa directamente y no se hace fetch. `EnArticle`
+    // no trae `id`, `color` ni `accent` (los usa la tarjeta para su estilo), así
+    // que se completan aquí con la misma paleta editorial del blog ES.
+    const enCards = EN_ARTICLES.map((a, i) => ({
+        ...a,
+        id: i + 1,
+        color: EN_CARD_PALETTE[i % EN_CARD_PALETTE.length].color,
+        accent: EN_CARD_PALETTE[i % EN_CARD_PALETTE.length].accent,
+    })) as unknown as typeof articles;
+    const initial = isEn ? enCards : articles;
+    const basePath = isEn ? "/en/blog" : "/blog";
+
+    const [allArticles, setAllArticles] = useState(initial);
     const CARD_WIDTH = 340; // card width + gap
-    const [totalWidth, setTotalWidth] = useState(CARD_WIDTH * articles.length);
+    const [totalWidth, setTotalWidth] = useState(CARD_WIDTH * initial.length);
 
     useEffect(() => {
+        if (isEn) return; // los artículos EN ya están cargados desde el repo
         const fetchDynamicArticles = async () => {
             const { data, error } = await supabase
                 .from('articles')
@@ -127,7 +163,7 @@ export function BlogCarousel() {
             }
         };
         fetchDynamicArticles();
-    }, []);
+    }, [isEn]);
 
     // Deterministic tilt per card index
     const tilts = allArticles.map((_, i) => ((i * 137 + 31) % 29) - 14);
@@ -256,7 +292,7 @@ export function BlogCarousel() {
                         <div className="flex items-center gap-3 mb-4 md:mb-6">
                             <span className="block w-10 h-px bg-black/40" />
                             <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                                Blog & Recursos
+                                {t.blog.eyebrow}
                             </span>
                         </div>
                         <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-[#1a1a1a] leading-none">
@@ -340,6 +376,7 @@ export function BlogCarousel() {
                             article={article}
                             tilt={tilts[i % allArticles.length]}
                             velocity={velocity}
+                            basePath={basePath}
                         />
                     ))}
                 </div>
@@ -348,11 +385,11 @@ export function BlogCarousel() {
             {/* ── Footer link ── */}
             <div className="container mx-auto px-6 md:px-12 mt-12 flex justify-center lg:justify-end relative z-10">
                 <Link
-                    href="/blog"
+                    href={basePath}
                     className="group inline-flex items-center gap-3 text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-sans"
                 >
                     <span className="block w-8 h-px bg-black/40 transition-all duration-300 group-hover:w-12 group-hover:bg-black" />
-                    Ver todos los artículos
+                    {t.blog.viewAll}
                     <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </Link>
             </div>

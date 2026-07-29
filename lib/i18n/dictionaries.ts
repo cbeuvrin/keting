@@ -165,6 +165,7 @@ const es = {
         hintLeft: "Arrastra",
         hintMid: "o",
         hintRight: "usa las flechas",
+        viewAll: "Ver todos los artículos",
     },
     // Textos compartidos por los componentes de la página de artículo
     // (AuthorBio, ArticleCTA, ShareButton) — se usan tanto en /blog/[slug]
@@ -1226,6 +1227,7 @@ const en: typeof es = {
         hintLeft: "Drag",
         hintMid: "or",
         hintRight: "use the arrows",
+        viewAll: "View all articles",
     },
     blogArticle: {
         writtenBy: "Written by",

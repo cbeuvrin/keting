@@ -44,6 +44,10 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [How Much Does a Custom Web or App Cost in Mexico?](https://ketingmedia.com/en/blog/how-much-does-a-custom-web-or-app-cost-in-mexico): Real USD pricing by project type — landing pages, corporate sites, e-commerce, apps and SaaS.
 - [Next.js vs WordPress for Business](https://ketingmedia.com/en/blog/nextjs-vs-wordpress-for-business): Which one to choose in 2026, criterion by criterion.
 - [Custom Online Store vs. Shopify](https://ketingmedia.com/en/blog/custom-online-store-vs-shopify): Which one fits your business depending on stage, budget and ambition.
+- [Nobody Can Guarantee You GEO Results](https://ketingmedia.com/en/blog/why-nobody-can-guarantee-ai-search-rankings): Why AI search rankings can't be guaranteed — evidence from 3,000 controlled runs, a 12,933-response variance decomposition and a critical survey of the GEO literature, plus how to read a GEO proposal.
+- [Can I Build My App or Website With AI Alone? (Vibe Coding)](https://ketingmedia.com/en/blog/can-i-build-my-app-or-website-with-ai-alone-vibe-coding): What AI builders actually do well, where they break, and when you need engineers.
+- [Lovable: What It Is, What It Costs, and Where It Falls Short](https://ketingmedia.com/en/blog/lovable-what-it-is-what-it-costs-and-where-it-falls-short): Honest 2026 guide — real pricing, the hidden cost of credits, and the ceiling nobody mentions.
+- [What Is Toogo and What Is It For?](https://ketingmedia.com/en/blog/what-is-toogo-and-what-is-it-for): The multi-tenant e-commerce SaaS built by Keting Media — 100+ active stores.
 
 ## Optional
 - [Inicio](https://ketingmedia.com): Página principal de Keting Media.

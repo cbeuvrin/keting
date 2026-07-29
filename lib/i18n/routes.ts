@@ -86,6 +86,10 @@ const BLOG_SLUG_PAIRS: readonly { es: string; en: string }[] = [
     { es: "cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026", en: "how-much-does-a-custom-web-or-app-cost-in-mexico" },
     { es: "next-js-vs-wordpress-para-empresas", en: "nextjs-vs-wordpress-for-business" },
     { es: "tienda-en-linea-a-medida-vs-shopify", en: "custom-online-store-vs-shopify" },
+    { es: "posicionamiento-en-chatgpt-por-que-nadie-puede-garantizarlo", en: "why-nobody-can-guarantee-ai-search-rankings" },
+    { es: "puedo-crear-mi-app-o-web-solo-con-ia-vibe-coding", en: "can-i-build-my-app-or-website-with-ai-alone-vibe-coding" },
+    { es: "lovable-que-es-cuanto-cuesta-y-hasta-donde-llega", en: "lovable-what-it-is-what-it-costs-and-where-it-falls-short" },
+    { es: "que-es-toogo-y-para-que-sirve", en: "what-is-toogo-and-what-is-it-for" },
 ];
 
 function isBlogEsPath(pathname: string): boolean {

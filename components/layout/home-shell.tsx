@@ -11,7 +11,6 @@ import { Footer } from "@/components/layout/footer";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
 
 // Below-the-fold y sin valor SEO crítico (decorativa / contenido ya en /blog) →
 // se cargan diferidas, fuera del JS inicial, para bajar TBT y "JS sin usar".
@@ -23,9 +22,6 @@ export function HomeShell() {
   const [showLogo] = useState(true);
   const [headerTheme, setHeaderTheme] = useState<"light" | "dark">("light");
   const pageRef = useRef(null);
-  const pathname = usePathname();
-  // El blog es solo en español: se oculta en las rutas /en.
-  const isEn = pathname?.startsWith("/en") ?? false;
 
   const { scrollYProgress } = useScroll({
     target: pageRef,
@@ -62,7 +58,7 @@ export function HomeShell() {
         <AutomationHome />
         <Toogo />
         <AboutUs />
-        {!isEn && <BlogCarousel />}
+        <BlogCarousel />
         <BrandsConstellation />
         <Footer />
       </motion.main>
