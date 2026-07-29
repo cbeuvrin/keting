@@ -35,6 +35,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         { label: t.nav.automation, href: enHref("/automatizacion-de-procesos", isEn), styles: ["italic"] },
         { label: t.nav.portfolio, href: enHref("/portafolio", isEn), styles: ["italic"] },
         { label: t.nav.blog, href: enHref("/blog", isEn), styles: ["italicUnderline"] },
+        { label: t.nav.about, href: aboutHref(isEn), styles: ["italic"] },
     ];
 
     const underline = "underline decoration-2 md:decoration-[3px] underline-offset-[0.12em] decoration-black/80";
@@ -126,21 +127,6 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     </div>
 
                     <div className="flex items-center gap-4 relative">
-                        {/* Enlace discreto a Nosotros: a la derecha y pequeño, en la misma
-                            línea tipográfica que el toggle de idioma — no compite con el
-                            menú principal ni con el botón de contacto. */}
-                        <Link
-                            href={aboutHref(isEn)}
-                            className={cn(
-                                // md:block (no md:inline-block): esa variante no se genera en
-                                // este proyecto y el enlace quedaba en display:none.
-                                "hidden md:block text-[11px] font-medium tracking-[0.2em] uppercase transition-colors duration-300 whitespace-nowrap",
-                                isDark ? "text-white/50 hover:text-white" : "text-zinc-400 hover:text-black"
-                            )}
-                        >
-                            {t.nav.about}
-                        </Link>
-
                         {/* Toggle ES/EN — visible en la barra (escritorio) */}
                         <div className="hidden md:flex items-center gap-0.5">
                             <button
@@ -282,7 +268,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 <Link
                                                     href={item.href}
                                                     onClick={() => setIsMenuOpen(false)}
-                                                    className="inline-block text-4xl md:text-7xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
+                                                    className="inline-block text-3xl md:text-6xl py-0.5 md:py-1 transition-all duration-300 hover:-translate-x-2 hover:text-black/55"
                                                 >
                                                     {words.map((word, wi) => (
                                                         <span
@@ -310,39 +296,19 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                                 setIsMenuOpen(false);
                                                 setIsContactOpen(true);
                                             }}
-                                            className="inline-block text-4xl md:text-7xl py-1 md:py-2 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                            className="inline-block text-3xl md:text-6xl py-0.5 md:py-1 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
                                         >
                                             {t.nav.contact}
                                         </button>
                                     </motion.div>
                                 </nav>
 
-                                {/* Nosotros: enlace secundario, pequeño y alineado a la
-                                    derecha — fuera de la lista grande en cursiva a propósito.
-                                    Es la única vía a /nosotros en móvil, donde no existe la
-                                    barra de escritorio. */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.35 }}
-                                    className="mt-8 md:mt-12 flex items-center justify-end gap-4"
-                                >
-                                    <span className="block w-8 h-px bg-black/20" />
-                                    <Link
-                                        href={aboutHref(isEn)}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors duration-300"
-                                    >
-                                        {t.nav.about}
-                                    </Link>
-                                </motion.div>
-
                                 {/* Toggle de idioma */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 }}
-                                    className="mt-4 md:mt-6 flex items-center justify-end gap-4"
+                                    className="mt-6 md:mt-10 flex items-center justify-end gap-4"
                                 >
                                     <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40">
                                         {t.nav.idiom}
