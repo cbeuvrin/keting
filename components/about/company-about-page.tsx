@@ -257,7 +257,31 @@ export function CompanyAboutPage({
             <section className="relative bg-[#1a1a1a] text-white py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-clip">
                 <GridBg />
                 <div className="max-w-4xl mx-auto relative text-center">
-                    <h2 className="text-3xl md:text-5xl font-light tracking-tight mb-6">{c.ctaHeading}</h2>
+                    {/* Mismo lenguaje que los títulos grandes del sitio: peso alto,
+                        acento en Playfair cursiva y subrayado que se dibuja al entrar. */}
+                    <motion.h2
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        // text-white explícito: globals.css fuerza color en h1-h4 (@layer base), y el
+                        // text-white de la sección NO lo vence porque la regla apunta al elemento.
+                        // Sin esto el título sale negro sobre el fondo #1a1a1a.
+                        className="text-4xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-8 text-white"
+                    >
+                        {c.ctaHeading}{" "}
+                        <span className="relative inline-block font-[family-name:var(--font-playfair)] italic font-normal">
+                            {c.ctaHeadingAccent}
+                            <motion.span
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true, margin: "-10%" }}
+                                transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                                className="absolute -bottom-1 left-0 right-0 h-[2px] md:h-[3px] bg-white origin-left"
+                            />
+                        </span>
+                        <span className="inline-block ml-2 md:ml-3 text-2xl md:text-4xl align-top rotate-12 text-white/30">*</span>
+                    </motion.h2>
                     <p className="text-white/70 font-light text-base md:text-lg max-w-xl mx-auto mb-10">{c.ctaBody}</p>
                     <button
                         onClick={() => setIsContactOpen(true)}

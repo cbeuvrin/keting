@@ -34,6 +34,7 @@ export type AboutLangContent = {
     workBody: string;
     workCta: string;
     ctaHeading: string;
+    ctaHeadingAccent: string;
     ctaBody: string;
     ctaButton: string;
 };
@@ -79,7 +80,8 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         workBody:
             "Legal-tech, gobierno corporativo, salud dental, blindaje automotriz, e-commerce, SaaS y más. Cada caso documenta el reto, la solución y el resultado — con métricas reales, sin relleno.",
         workCta: "Ver los 9 casos de éxito",
-        ctaHeading: "¿Tu marca necesita algo así?",
+        ctaHeading: "¿Tu marca necesita",
+        ctaHeadingAccent: "algo así?",
         ctaBody: "Un café de 30 minutos es suficiente para entender si encajamos. Sin compromiso.",
         ctaButton: "Hablemos",
     },
@@ -123,7 +125,8 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
         workBody:
             "Legal tech, corporate governance, dental health, vehicle armoring, e-commerce, SaaS, and more. Every case documents the challenge, the solution, and the result — real metrics, no filler.",
         workCta: "See the 9 case studies",
-        ctaHeading: "Does your brand need something like this?",
+        ctaHeading: "Does your brand need",
+        ctaHeadingAccent: "something like this?",
         ctaBody: "A 30-minute coffee is enough to see if we're a fit. No commitment.",
         ctaButton: "Let's talk",
     },
@@ -149,6 +152,7 @@ export type AuthorAboutLangContent = {
     blogBody: string;
     blogCta: string;
     ctaHeading: string;
+    ctaHeadingAccent: string;
     ctaBody: string;
     ctaButton: string;
 };
@@ -189,7 +193,8 @@ export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangCont
         blogHeading: "Artículos de Carlos",
         blogBody: "Todos los artículos del blog de Keting Media están escritos por Carlos Beuvrin.",
         blogCta: "Ver todos los artículos",
-        ctaHeading: "¿Tu marca necesita algo así?",
+        ctaHeading: "¿Tu marca necesita",
+        ctaHeadingAccent: "algo así?",
         ctaBody: "Un café de 30 minutos es suficiente para entender si encajamos. Sin compromiso.",
         ctaButton: "Hablemos",
     },
@@ -224,7 +229,8 @@ export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangCont
         blogHeading: "Carlos's articles",
         blogBody: "Every article on the Keting Media blog is written by Carlos Beuvrin.",
         blogCta: "See all articles",
-        ctaHeading: "Does your brand need something like this?",
+        ctaHeading: "Does your brand need",
+        ctaHeadingAccent: "something like this?",
         ctaBody: "A 30-minute coffee is enough to see if we're a fit. No commitment.",
         ctaButton: "Let's talk",
     },
