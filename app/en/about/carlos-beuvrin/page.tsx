@@ -3,6 +3,9 @@ import { JsonLd, breadcrumbTrail, person } from "@/components/seo/json-ld";
 import { AuthorAboutPage } from "@/components/about/author-about-page";
 import { AUTHOR_ABOUT } from "@/lib/about-content";
 import { AUTHOR } from "@/lib/author";
+import { CASE_STUDIES } from "@/lib/case-studies";
+import { caseStudyHref } from "@/lib/i18n/routes";
+import { EN_ARTICLES } from "@/lib/blog-en";
 
 const COMPANY_GITHUB = "https://github.com/KetingMedia";
 
@@ -26,7 +29,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "Carlos Beuvrin · AI Engineer & Founder · Keting Media",
-        description: AUTHOR_ABOUT.en.bioParagraphs[0],
+        description: AUTHOR_ABOUT.en.bioSections[0].body,
         url: "/en/about/carlos-beuvrin",
         type: "profile",
         images: [{ url: "/carlos-beuvrin.png" }],
@@ -39,6 +42,26 @@ export const metadata: Metadata = {
     },
 };
 
+// Casos de éxito, resueltos SOLO al inglés antes de pasarlos al componente
+// cliente (ver nota en author-about-page.tsx) — nada de pasar el objeto
+// CASE_STUDIES completo (bilingüe) como prop.
+const caseStudies = CASE_STUDIES.map((cs) => ({
+    slug: cs.slug,
+    title: cs.en.title,
+    industry: cs.en.industry,
+    metricValue: cs.metricValue,
+    metricLabel: cs.en.metricLabel,
+    href: caseStudyHref(cs.slug, true),
+}));
+
+// Artículos reales del blog EN (subconjunto curado en el repo — lib/blog-en/).
+const articles = EN_ARTICLES.slice(0, 6).map((a) => ({
+    slug: a.slug,
+    title: a.title,
+    href: `/en/blog/${a.slug}`,
+    category: a.category,
+}));
+
 export default function CarlosBeuvrinPageEn() {
     return (
         <>
@@ -47,7 +70,7 @@ export default function CarlosBeuvrinPageEn() {
                     person({
                         name: AUTHOR.name,
                         jobTitle: AUTHOR_ABOUT.en.roleLabel,
-                        description: AUTHOR_ABOUT.en.bioParagraphs[0],
+                        description: AUTHOR_ABOUT.en.bioSections[0].body,
                         image: "/carlos-beuvrin.png",
                         path: "/en/about/carlos-beuvrin",
                         sameAs: [AUTHOR.linkedin, COMPANY_GITHUB],
@@ -59,7 +82,7 @@ export default function CarlosBeuvrinPageEn() {
                     ]),
                 ]}
             />
-            <AuthorAboutPage copy={AUTHOR_ABOUT.en} lang="en" />
+            <AuthorAboutPage copy={AUTHOR_ABOUT.en} lang="en" caseStudies={caseStudies} articles={articles} />
         </>
     );
 }

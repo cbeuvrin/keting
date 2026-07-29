@@ -132,10 +132,19 @@ export const COMPANY_ABOUT: { es: AboutLangContent; en: AboutLangContent } = {
 export type AuthorAboutLangContent = {
     eyebrow: string;
     roleLabel: string;
-    bioParagraphs: string[];
+    /** Frase de posicionamiento, tipografía grande — no un párrafo más. */
+    positioning: string;
+    /** Bio partida en bloques con subtítulo — reorganiza AUTHOR.bio, no la reescribe. */
+    bioSections: { title: string; body: string }[];
     linkedinLabel: string;
     githubLabel: string;
     companyLabel: string;
+    metricsEyebrow: string;
+    metricsTitle: string;
+    projectsEyebrow: string;
+    projectsTitle: string;
+    projectsBody: string;
+    blogEyebrow: string;
     blogHeading: string;
     blogBody: string;
     blogCta: string;
@@ -144,24 +153,42 @@ export type AuthorAboutLangContent = {
     ctaButton: string;
 };
 
-// La primera oración de `bioParagraphs` reutiliza AUTHOR.bio (lib/author.ts)
-// tal cual — no se reescribe la bio ya aprobada, solo se amplía con hechos
-// verificables (proyectos reales, que escribe el blog, año de fundación).
+// La bio reorganiza AUTHOR.bio (lib/author.ts) y los hechos ya aprobados en
+// la versión anterior de este archivo — no se inventa nada nuevo. Las cifras
+// (100k+, ↑8x, 100+, ↑4x) salen de lib/case-studies.ts → metricValue, no de
+// aquí: el componente arma la franja de métricas a partir de esa fuente.
 export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangContent } = {
     es: {
         eyebrow: "Fundador · Keting Media",
         roleLabel: "Ingeniero de IA y Fundador",
-        bioParagraphs: [
-            "Ingeniero IA y fundador, especializado en el diseño y desarrollo de productos digitales de extremo a extremo: aplicaciones web, plataformas SaaS y soluciones de comercio. Construyo software que llega a producción, integrando modelos de IA en el núcleo del producto y dirigiendo el desarrollo a nivel de arquitectura. Mi trabajo abarca desde plataformas de comercio nativas en WhatsApp para PyMEs de LATAM hasta SaaS B2B con sistemas multi-agente para consejos corporativos.",
-            "Es el fundador de Keting Media (2019) y lidera el desarrollo de sus proyectos más destacados: Iudex (IA jurídica, 100,000+ sesiones al mes), Gobernia (agentes de IA para consejos corporativos), Toogo (SaaS de e-commerce con 100+ tiendas activas) e Ivan Ivanovich Academy (plataforma de cursos multi-idioma).",
-            "También escribe los artículos del blog de Keting Media sobre desarrollo de software, web, apps e IA aplicada.",
+        positioning:
+            "Construyo software que llega a producción — no maquetas ni prototipos que se quedan ahí.",
+        bioSections: [
+            {
+                title: "Qué hago",
+                body: "Ingeniero IA y fundador, especializado en el diseño y desarrollo de productos digitales de extremo a extremo: aplicaciones web, plataformas SaaS y soluciones de comercio. Integro modelos de IA en el núcleo del producto y dirijo el desarrollo a nivel de arquitectura — desde plataformas de comercio nativas en WhatsApp para PyMEs de LATAM hasta SaaS B2B con sistemas multi-agente para consejos corporativos.",
+            },
+            {
+                title: "Los proyectos que dirijo",
+                body: "Fundé Keting Media en 2019 y lidero el desarrollo de sus proyectos más destacados: Iudex (IA jurídica), Gobernia (agentes de IA para consejos corporativos), Toogo (SaaS de e-commerce) e Ivan Ivanovich Academy (plataforma de cursos multi-idioma). Las cifras, abajo.",
+            },
+            {
+                title: "También escribo",
+                body: "Todos los artículos del blog de Keting Media sobre desarrollo de software, web, apps e IA aplicada los escribo yo.",
+            },
         ],
         linkedinLabel: "LinkedIn",
         githubLabel: "GitHub",
         companyLabel: "Keting Media",
+        metricsEyebrow: "En números",
+        metricsTitle: "Resultados, no promesas",
+        projectsEyebrow: "Portafolio",
+        projectsTitle: "9 marcas, 9 retos distintos",
+        projectsBody: "Legal-tech, gobierno corporativo, SaaS, e-commerce y más — cada proyecto, dirigido de principio a fin.",
+        blogEyebrow: "Blog",
         blogHeading: "Artículos de Carlos",
         blogBody: "Todos los artículos del blog de Keting Media están escritos por Carlos Beuvrin.",
-        blogCta: "Ver artículos del blog",
+        blogCta: "Ver todos los artículos",
         ctaHeading: "¿Tu marca necesita algo así?",
         ctaBody: "Un café de 30 minutos es suficiente para entender si encajamos. Sin compromiso.",
         ctaButton: "Hablemos",
@@ -169,17 +196,34 @@ export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangCont
     en: {
         eyebrow: "Founder · Keting Media",
         roleLabel: "AI Engineer and Founder",
-        bioParagraphs: [
-            "AI Engineer and founder, specialized in designing and building end-to-end digital products: web applications, SaaS platforms, and commerce solutions. I build software that reaches production, integrating AI models into the core of the product and leading development at the architecture level. My work ranges from WhatsApp-native commerce platforms for LATAM SMBs to B2B SaaS with multi-agent systems for corporate boards.",
-            "He is the founder of Keting Media (2019) and leads the development of its most notable projects: Iudex (legal AI, 100,000+ sessions/month), Gobernia (AI agents for corporate boards), Toogo (e-commerce SaaS with 100+ active stores), and Ivan Ivanovich Academy (multilingual course platform).",
-            "He also writes the articles on the Keting Media blog about software, web and app development, and applied AI.",
+        positioning:
+            "I build software that reaches production — not mockups or prototypes that stay there.",
+        bioSections: [
+            {
+                title: "What I do",
+                body: "AI Engineer and founder, specialized in designing and building end-to-end digital products: web applications, SaaS platforms, and commerce solutions. I integrate AI models into the core of the product and lead development at the architecture level — from WhatsApp-native commerce platforms for LATAM SMBs to B2B SaaS with multi-agent systems for corporate boards.",
+            },
+            {
+                title: "The projects I lead",
+                body: "I founded Keting Media in 2019 and I lead the development of its most notable projects: Iudex (legal AI), Gobernia (AI agents for corporate boards), Toogo (e-commerce SaaS), and Ivan Ivanovich Academy (multilingual course platform). The numbers, below.",
+            },
+            {
+                title: "I also write",
+                body: "Every article on the Keting Media blog about software, web and app development, and applied AI is written by me.",
+            },
         ],
         linkedinLabel: "LinkedIn",
         githubLabel: "GitHub",
         companyLabel: "Keting Media",
+        metricsEyebrow: "By the numbers",
+        metricsTitle: "Results, not promises",
+        projectsEyebrow: "Portfolio",
+        projectsTitle: "9 brands, 9 different challenges",
+        projectsBody: "Legal tech, corporate governance, SaaS, e-commerce, and more — every project, led start to finish.",
+        blogEyebrow: "Blog",
         blogHeading: "Carlos's articles",
-        blogBody: "Every article on the Keting Media blog is written by Carlos Beuvrin. The blog is published in Spanish.",
-        blogCta: "Read the blog (Spanish)",
+        blogBody: "Every article on the Keting Media blog is written by Carlos Beuvrin.",
+        blogCta: "See all articles",
         ctaHeading: "Does your brand need something like this?",
         ctaBody: "A 30-minute coffee is enough to see if we're a fit. No commitment.",
         ctaButton: "Let's talk",

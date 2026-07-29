@@ -19,7 +19,7 @@ export function AuthorBio() {
     // fuente que usa la página /en/about/carlos-beuvrin) — así no se filtra
     // texto en español al HTML de las páginas EN.
     const jobTitle = isEn ? AUTHOR_ABOUT.en.roleLabel : AUTHOR.jobTitle;
-    const bio = isEn ? AUTHOR_ABOUT.en.bioParagraphs[0] : AUTHOR.bio;
+    const bio = isEn ? AUTHOR_ABOUT.en.bioSections[0].body : AUTHOR.bio;
 
     return (
         <aside className="not-prose mt-16 mb-4 rounded-3xl border border-gray-200 bg-[#FAFAFA] p-6 md:p-8">
