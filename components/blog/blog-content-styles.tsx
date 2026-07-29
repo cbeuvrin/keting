@@ -40,6 +40,15 @@ export function BlogContentStyles() {
                     .blog-content blockquote { margin: 3rem 0; padding: 0.25rem 0 0.25rem 1.75rem; border-left: 3px solid #000; font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-size: 1.35rem; line-height: 1.7; color: #1a1a1a; }
                     .blog-content blockquote p { font-size: inherit; font-style: inherit; margin-bottom: 0; }
                     .blog-content .table-wrap { overflow-x: auto; margin: 3rem 0; -webkit-overflow-scrolling: touch; }
+                    /* Bloques de código: para los artículos técnicos. Fondo oscuro
+                       editorial, scroll horizontal propio (una línea larga NO debe
+                       desbordar la página) y tamaño legible en móvil. */
+                    .blog-content pre { background: #0f0f0f; color: #e8e8e8; border-radius: 1rem; padding: 1.25rem 1.35rem; margin: 2.5rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.83rem; line-height: 1.75; }
+                    .blog-content pre code { background: none; color: inherit; padding: 0; font-size: inherit; white-space: pre; }
+                    .blog-content code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #F0F0EE; color: #1a1a1a; padding: 0.12em 0.4em; border-radius: 0.35rem; font-size: 0.88em; }
+                    @media (min-width: 768px) {
+                        .blog-content pre { font-size: 0.92rem; padding: 1.5rem 1.75rem; }
+                    }
                     .blog-content table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 17rem; }
                     .blog-content th { text-align: left; font-weight: 700; color: #000; border-bottom: 2px solid #000; padding: 0.7rem 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
                     .blog-content td { padding: 0.7rem 0.5rem; border-bottom: 1px solid #E5E7EB; color: #374151; font-weight: 300; }
