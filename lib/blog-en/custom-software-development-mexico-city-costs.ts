@@ -32,12 +32,13 @@ const article: EnArticle = {
 <h2>How much does custom software development cost in Mexico City? (2026, in USD)</h2>
 <p>Pricing varies with scope, integrations, and the vendor's maturity. These are <strong>real market ranges</strong> for a custom project, converted to USD:</p>
 <ul>
-<li><strong>Custom landing page:</strong> from $700 USD.</li>
-<li><strong>Corporate site with a content management system:</strong> $1,400 to $3,800 USD.</li>
-<li><strong>Custom e-commerce:</strong> $2,500 to $8,200 USD.</li>
-<li><strong>Mobile app or SaaS platform:</strong> from $6,500 USD.</li>
-<li><strong>Custom internal software / management system:</strong> from $5,500 USD.</li>
-<li><strong>Monthly maintenance:</strong> $150 to $650 USD.</li>
+<li><strong>Custom landing page:</strong> from $300 USD.</li>
+<li><strong>Corporate site with a content management system:</strong> $1,400 to $4,000 USD.</li>
+<li><strong>Custom e-commerce:</strong> $1,400 to $4,000 USD.</li>
+<li><strong>LMS / course platform:</strong> from $2,500 USD.</li>
+<li><strong>Mobile app or SaaS platform:</strong> from $3,500 USD.</li>
+<li><strong>Custom internal software / management system:</strong> from $2,500 USD.</li>
+<li><strong>Monthly maintenance:</strong> from $240 USD.</li>
 </ul>
 <p>As an hourly reference, <strong>boutique studios</strong> in Mexico City run around $30–60 USD/hour, and <strong>enterprise consultancies</strong> around $60–120+ USD/hour — well below typical US agency or in-house rates, while keeping the time-zone overlap you'd expect from a domestic team. A good studio quotes by project and by phase, not just by the hour, so you pay for outcomes, not time logged.</p>
 
@@ -68,7 +69,7 @@ const article: EnArticle = {
 <p>At <strong>Keting Media</strong> we're a design and custom software, web, and app development studio based in Mexico City. We don't use templates: we design and build every product from scratch, combining <strong>design, engineering, and applied AI</strong>. Some of our products in production: <strong>Iudex</strong> (legal AI, 100,000+ sessions/month), <strong>Gobernia</strong> (AI-agent platform), <strong>Toogo</strong> (e-commerce SaaS), and <strong>Ivan Ivanovich Academy</strong> (an LMS with 5,000+ students). <strong>More than 80% of our projects come from referrals</strong>, you own the code, and we work in phases with direct communication in your time zone. If you need software built exactly for your business, <a href="/en/desarrollo-de-software">let's talk</a>.</p>
 
 <h2>Frequently asked questions</h2>
-<p><strong>How much does the most basic custom software cost?</strong> A custom landing page starts at around $700 USD; an internal system starts at around $5,500 USD. The range depends on scope and integrations.</p>
+<p><strong>How much does the most basic custom software cost?</strong> A custom landing page starts at around $300 USD; an internal system starts at around $2,500 USD. The range depends on scope and integrations.</p>
 <p><strong>How long does it take to build?</strong> A landing page takes 1–2 weeks; a corporate site, 3–6 weeks; an app, platform, or system, 2 to 4 months, delivered in phases.</p>
 <p><strong>Is the code actually mine?</strong> It should be. With a serious vendor, intellectual property over the code is assigned to you by contract.</p>
 <p><strong>Is a boutique studio or a large consultancy the better fit?</strong> For startups, SMBs, MVPs, and custom digital products, a boutique studio gives you agility and closer collaboration. Enterprise consultancies make more sense for large corporations and regulated, mission-critical systems.</p>

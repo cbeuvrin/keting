@@ -388,7 +388,7 @@ const es = {
         faq: [
             {
                 q: "¿Cuánto cuesta una página web a medida en México?",
-                a: "En 2026, una landing a medida arranca desde $12,500 MXN y un sitio corporativo con gestor de contenido va de $25,000 a $70,000 MXN. El precio depende del alcance, las integraciones y el nivel de diseño e ingeniería.",
+                a: "En 2026, una landing a medida arranca desde $5,500 MXN y un sitio corporativo con gestor de contenido va de $25,000 a $70,000 MXN. El precio depende del alcance, las integraciones y el nivel de diseño e ingeniería.",
             },
             {
                 q: "¿Cuánto tarda en desarrollarse?",
@@ -420,7 +420,7 @@ const es = {
             },
             {
                 q: "¿Qué incluye después del lanzamiento?",
-                a: "Ofrecemos mantenimiento, monitoreo de rendimiento, respaldos y mejoras continuas desde $2,500 MXN al mes, para que tu sitio siga rápido, seguro y actualizado.",
+                a: "Ofrecemos mantenimiento, monitoreo de rendimiento, respaldos y mejoras continuas desde $4,500 MXN al mes, para que tu sitio siga rápido, seguro y actualizado.",
             },
             {
                 q: "¿También desarrollan aplicaciones web a medida?",
@@ -695,7 +695,7 @@ const es = {
             },
             {
                 q: "¿Cuánto cuesta una app o plataforma a medida en México?",
-                a: "Una app móvil o plataforma SaaS a medida arranca desde $120,000 MXN, y un sistema interno desde $100,000 MXN. El precio final depende del alcance, las integraciones y la complejidad.",
+                a: "Una app móvil o plataforma SaaS a medida arranca desde $63,000 MXN, y un sistema interno desde $45,000 MXN. El precio final depende del alcance, las integraciones y la complejidad.",
             },
             {
                 q: "¿Integran inteligencia artificial?",
@@ -820,7 +820,7 @@ const es = {
             },
             {
                 q: "¿Cuánto cuesta automatizar un proceso?",
-                a: "Automatizar un proceso arranca desde $40,000 MXN. El precio final depende de cuántos procesos automatices, de las integraciones con los sistemas que ya usas (ERP, CRM, WhatsApp) y del volumen de operaciones. Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas.",
+                a: "Automatizar un proceso arranca desde $11,000 MXN. El precio final depende de cuántos procesos automatices, de las integraciones con los sistemas que ya usas (ERP, CRM, WhatsApp) y del volumen de operaciones. Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas.",
             },
             {
                 q: "¿Se integra con los sistemas que ya uso?",
@@ -1447,7 +1447,7 @@ const en: typeof es = {
         faq: [
             {
                 q: "How much does a custom website cost in Mexico?",
-                a: "In 2026, a custom landing page starts at around $700 USD and a corporate site with a content manager ranges from $1,400 to $4,000 USD. The price depends on scope, integrations and the level of design and engineering.",
+                a: "In 2026, a custom landing page starts at around $300 USD and a corporate site with a content manager ranges from $1,400 to $4,000 USD. The price depends on scope, integrations and the level of design and engineering.",
             },
             {
                 q: "How long does it take to build?",
@@ -1479,7 +1479,7 @@ const en: typeof es = {
             },
             {
                 q: "What's included after launch?",
-                a: "We offer maintenance, performance monitoring, backups and continuous improvements from around $140 USD per month, so your site stays fast, secure and up to date.",
+                a: "We offer maintenance, performance monitoring, backups and continuous improvements from around $240 USD per month, so your site stays fast, secure and up to date.",
             },
             {
                 q: "Do you also build custom web applications?",
@@ -1754,7 +1754,7 @@ const en: typeof es = {
             },
             {
                 q: "How much does a custom app or platform cost in Mexico?",
-                a: "A custom mobile app or SaaS platform starts at around $6,500 USD, and an internal system from around $5,500 USD. The final price depends on scope, integrations and complexity.",
+                a: "A custom mobile app or SaaS platform starts at around $3,500 USD, and an internal system from around $2,500 USD. The final price depends on scope, integrations and complexity.",
             },
             {
                 q: "Do you integrate artificial intelligence?",
@@ -1879,7 +1879,7 @@ const en: typeof es = {
             },
             {
                 q: "How much does it cost to automate a process?",
-                a: "Automating a process starts at around $2,200 USD. The final price depends on how many processes you automate, the integrations with the systems you already use (ERP, CRM, WhatsApp) and your operating volume. After a short diagnosis we give you scope and a fixed price, no surprises.",
+                a: "Automating a process starts at around $600 USD. The final price depends on how many processes you automate, the integrations with the systems you already use (ERP, CRM, WhatsApp) and your operating volume. After a short diagnosis we give you scope and a fixed price, no surprises.",
             },
             {
                 q: "Does it integrate with the systems I already use?",

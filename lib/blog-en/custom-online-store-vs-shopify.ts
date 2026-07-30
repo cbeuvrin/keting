@@ -47,10 +47,10 @@ const article: EnArticle = {
 <li><strong>You're already selling and the platform is holding you back:</strong> migrate to a custom store. That friction is the clearest signal.</li>
 <li><strong>Your business is your differentiator (experience, brand, process):</strong> go custom from day one.</li>
 </ul>
-<p>A good studio will tell you the truth: if Shopify is enough for you, they'll say so. Be wary of anyone trying to sell you an $8,000+ custom build to move ten products a month.</p>
+<p>A good studio will tell you the truth: if Shopify is enough for you, they'll say so. Be wary of anyone trying to sell you a $4,500+ custom build to move ten products a month.</p>
 
 <h2>What does each option actually cost?</h2>
-<p>Shopify runs about <strong>$40–$110 USD a month</strong> (about $700–$2,000 MXN, plus commissions and apps). A <strong>custom store</strong> built by a Mexico-based team typically runs <strong>$2,500 to $8,200 USD</strong> (about $45,000–$150,000 MXN) as a one-time build, depending on the catalog, payment gateways, and integrations. The math shifts with volume: at a certain point, what you're paying in rent and commissions would fund your own platform instead.</p>
+<p>Shopify runs about <strong>$40–$110 USD a month</strong> (about $700–$2,000 MXN, plus commissions and apps). A <strong>custom store</strong> built by a Mexico-based team typically runs <strong>$1,400 to $4,000 USD</strong> (about $25,000–$70,000 MXN) as a one-time build, depending on the catalog, payment gateways, and integrations. The math shifts with volume: at a certain point, what you're paying in rent and commissions would fund your own platform instead.</p>
 
 <h2>Our take</h2>
 <p>At <strong>Keting Media</strong> we build custom e-commerce — and we also built <strong>Toogo</strong>, a SaaS platform that lets any seller launch a store without a developer — so we know both worlds well. Our recommendation is an honest one: <strong>start simple, move to custom when the business demands it.</strong> If you're already at that point and want a store that's fast, yours, and ready to scale, we can help — and working with a Mexico City-based team means real-time collaboration in your own business hours.</p>
