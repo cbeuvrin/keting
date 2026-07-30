@@ -180,6 +180,10 @@ export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangCont
                 title: "También escribo",
                 body: "Todos los artículos del blog de Keting Media sobre desarrollo de software, web, apps e IA aplicada los escribo yo.",
             },
+            {
+                title: "Formación",
+                body: "Licenciado en Administración con mención en Gerencia y T.S.U. en Organización Empresarial. Formación en marketing digital por Neetwork Business School y en mercadeo y negocios por la Universidad Metropolitana. La ingeniería la aprendí construyendo: hoy desarrollo con Claude, de Anthropic, integrado en todo el proceso — de la arquitectura al código que llega a producción.",
+            },
         ],
         linkedinLabel: "LinkedIn",
         githubLabel: "GitHub",
@@ -215,6 +219,10 @@ export const AUTHOR_ABOUT: { es: AuthorAboutLangContent; en: AuthorAboutLangCont
             {
                 title: "I also write",
                 body: "Every article on the Keting Media blog about software, web and app development, and applied AI is written by me.",
+            },
+            {
+                title: "Education",
+                body: "Bachelor's degree in Business Administration (Management) and an advanced technical degree in Business Organization. Trained in digital marketing at Neetwork Business School and in marketing and business at Universidad Metropolitana. I learned engineering by building: today I develop with Claude, by Anthropic, integrated across the entire process — from architecture to the code that ships.",
             },
         ],
         linkedinLabel: "LinkedIn",

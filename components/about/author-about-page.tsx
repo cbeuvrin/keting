@@ -201,7 +201,9 @@ export function AuthorAboutPage({
 
             {/* ============ BIO ============ */}
             <section className="relative bg-[#F5F5F7] py-24 md:py-32 px-6 md:px-12 lg:px-24">
-                <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10 border-t border-[#1d1d1f]/10 pt-14">
+                {/* 2 columnas en tablet y 4 en escritorio: con `md:grid-cols-3` fijo,
+                    el cuarto bloque (Formación) caía solo en una segunda fila. */}
+                <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-10 border-t border-[#1d1d1f]/10 pt-14">
                     {c.bioSections.map((section, i) => (
                         <motion.div
                             key={section.title}
