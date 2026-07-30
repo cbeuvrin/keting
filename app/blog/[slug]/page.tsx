@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
 }
 
 import { createClient } from '@supabase/supabase-js';
-import { getCategoryImage } from "@/lib/blog-utils";
+import { getCategoryImage, toIsoDate } from "@/lib/blog-utils";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -198,13 +198,27 @@ export default async function ArticlePage({ params }: { params: any }) {
 
     // Schema Article: ayuda a Google y a las IA a entender autoría, fecha e imagen
     // del artículo (mejora indexación y citabilidad).
+    //
+    // ⚠️ Las fechas DEBEN pasar por toIsoDate(). El campo `date` del artículo es
+    // texto legible ("jun 2026") porque es lo que se pinta en la página, y aquí
+    // se emitía tal cual: schema.org exige ISO 8601, así que Google descartaba la
+    // fecha de los 28 artículos y ninguno tenía señal de antigüedad. Si toIsoDate
+    // no reconoce el formato devuelve undefined y el campo se omite — preferimos
+    // un artículo sin fecha a uno con una fecha que el validador rechaza.
+    const publishedIso = toIsoDate(article.date) ?? toIsoDate((article as { created_at?: string }).created_at);
+    // `updated_at` solo existe en los artículos de Supabase que se han editado
+    // después de crearse; si no lo hay, no se emite dateModified (inventarlo sería
+    // declararle a Google una actualización que nunca ocurrió).
+    const modifiedIso = toIsoDate((article as { updated_at?: string }).updated_at);
+
     const articleJsonLd = {
         "@context": "https://schema.org",
         "@type": "Article",
         headline: article.title,
         description: article.excerpt,
         image: article.image ? [article.image] : undefined,
-        datePublished: article.date,
+        ...(publishedIso ? { datePublished: publishedIso } : {}),
+        ...(modifiedIso && modifiedIso !== publishedIso ? { dateModified: modifiedIso } : {}),
         author: {
             "@type": "Person",
             name: AUTHOR.name,

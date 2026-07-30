@@ -8,6 +8,46 @@ export function getHash(str: string) {
     return Math.abs(hash);
 }
 
+// Español e inglés en el mismo mapa: el blog ES guarda "jun 2026" y el blog EN
+// (lib/blog-en/) guarda "Jun 2026". Coinciden en casi todos los meses, pero NO en
+// ene/jan, abr/apr, ago/aug ni dic/dec — con solo los españoles, cuatro meses de
+// los artículos ingleses se quedaban sin fecha.
+const MESES: Record<string, string> = {
+    ene: "01", feb: "02", mar: "03", abr: "04", may: "05", jun: "06",
+    jul: "07", ago: "08", sep: "09", oct: "10", nov: "11", dic: "12",
+    jan: "01", apr: "04", aug: "08", dec: "12",
+};
+
+/**
+ * Pasa la fecha legible de un artículo ("jun 2026", "Jul 2026") a ISO 8601.
+ *
+ * Los artículos guardan la fecha en formato humano porque es lo que se pinta en
+ * la página, pero schema.org exige ISO en `datePublished`/`dateModified`. Se
+ * emitía el texto tal cual, así que Google descartaba la fecha de los 28
+ * artículos y ninguno tenía señal de antigüedad ni de actualización.
+ *
+ * Devuelve `undefined` si no reconoce el formato: mejor un artículo sin fecha
+ * que uno con una fecha que el validador rechaza. Nunca inventa un valor.
+ */
+export function toIsoDate(raw?: string | null): string | undefined {
+    if (!raw) return undefined;
+    const s = String(raw).trim();
+
+    // Ya es ISO (p. ej. el created_at de Supabase): nos quedamos con el día.
+    const yaIso = s.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (yaIso) return yaIso[1];
+
+    // "jun 2026", "Jul 2026", "Sep. 2024" -> primer día de ese mes. El día exacto
+    // no está guardado en ninguna parte, y schema.org acepta la fecha sola.
+    const mesAno = s.match(/^([a-záéíóú]{3})[a-záéíóú]*\.?\s+(\d{4})$/i);
+    if (mesAno) {
+        const mes = MESES[mesAno[1].toLowerCase()];
+        if (mes) return `${mesAno[2]}-${mes}-01`;
+    }
+
+    return undefined;
+}
+
 /**
  * Optimiza imágenes de Supabase Storage usando su endpoint de transformación
  * (redimensiona + comprime al vuelo, sin re-subir). Reduce ~87% el peso.

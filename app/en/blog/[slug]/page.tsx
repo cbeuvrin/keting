@@ -11,7 +11,7 @@ import { ShareButton } from "@/components/blog/share-button";
 import { BlogContentStyles } from "@/components/blog/blog-content-styles";
 import { AUTHOR } from "@/lib/author";
 import { AUTHOR_ABOUT } from "@/lib/about-content";
-import { getCategoryImage } from "@/lib/blog-utils";
+import { getCategoryImage, toIsoDate } from "@/lib/blog-utils";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { getEsBlogSlug, authorHref } from "@/lib/i18n/routes";
 
@@ -91,7 +91,9 @@ export default async function EnArticlePage({ params }: { params: any }) {
         headline: article.title,
         description: article.excerpt,
         image: article.image ? [article.image] : undefined,
-        datePublished: article.date,
+        // Mismo motivo que en el blog ES: `date` es texto legible ("Jun 2026") y
+        // schema.org exige ISO 8601. Ver toIsoDate en lib/blog-utils.ts.
+        ...(toIsoDate(article.date) ? { datePublished: toIsoDate(article.date) } : {}),
         author: {
             "@type": "Person",
             name: AUTHOR.name,
