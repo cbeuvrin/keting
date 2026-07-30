@@ -92,13 +92,36 @@ export const metadata: Metadata = {
   },
 };
 
-// JSON-LD: Organization + LocalBusiness para señalar a Google
+// JSON-LD de la entidad Keting Media.
+//
+// Doble tipo a propósito: `ProfessionalService` desciende de LocalBusiness, así
+// que aporta la señal de negocio local, y `Organization` mantiene todo lo que ya
+// dependía de ese tipo. Van en UN SOLO nodo con un `@id` compartido; si se
+// partieran en dos bloques JSON-LD, Google podría leerlos como dos negocios
+// distintos en la misma dirección y la señal se diluye en vez de sumar.
+//
+// ⚠️ El domicilio de Roma Norte que aparece en el aviso de privacidad es
+// FISCAL, no una oficina visitable (confirmado por Carlos el 2026-07-30). Por
+// eso `address` lleva localidad, estado y país pero NO `streetAddress`: declarar
+// una calle equivale a decirle a Google que un cliente puede presentarse allí, y
+// cuando eso no se sostiene el desajuste con el perfil de Google Business
+// perjudica en lugar de ayudar. Si algún día hay oficina de verdad, se añade
+// `streetAddress`, `postalCode`, `geo` y `openingHoursSpecification` — y deben
+// coincidir EXACTAMENTE con lo que muestre el perfil de Google Business.
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "ProfessionalService"],
+  "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/keting-logo.png`,
+  // LocalBusiness espera `image`; sin ella Google descarta parte del bloque.
+  image: `${SITE_URL}/keting-logo.png`,
+  telephone: "+52-55-4383-0150",
+  email: "info@ketingmedia.com",
+  // Texto libre. Los importes concretos viven en la guía de precios; aquí basta
+  // la banda para que un motor sepa en qué rango se mueve el servicio.
+  priceRange: "$$",
   description: "Empresa de desarrollo de software, web y apps a medida en México: sitios, e-commerce, plataformas/SaaS e IA aplicada. Ingeniería, diseño de producto e inteligencia artificial en un mismo equipo.",
   // Bilingüe a propósito: este schema se sirve en TODAS las rutas, también en
   // /en/*. Con los términos solo en español, la única descripción temática de la
@@ -137,14 +160,26 @@ const organizationJsonLd = {
     "@type": "PostalAddress",
     addressCountry: "MX",
     addressLocality: "Ciudad de México",
+    addressRegion: "CDMX",
   },
+  // Negocio con área de servicio, no con local: el trabajo es remoto y el precio
+  // no cambia por la ciudad del cliente (así se dice también en la guía de
+  // precios). México es el mercado principal; EE. UU. está aquí porque el
+  // posicionamiento nearshore de /en apunta ahí y sin esto la versión inglesa no
+  // declaraba ningún mercado.
+  areaServed: [
+    { "@type": "Country", name: "México" },
+    { "@type": "Country", name: "United States" },
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+52-55-4383-0150",
     email: "info@ketingmedia.com",
     contactType: "Sales",
-    areaServed: "MX",
-    availableLanguage: ["es"],
+    areaServed: ["MX", "US"],
+    // El sitio es bilingüe desde julio de 2026 (/en indexable). Antes decía solo
+    // "es" y contradecía a las propias páginas inglesas.
+    availableLanguage: ["es", "en"],
   },
   sameAs: [
     "https://www.linkedin.com/company/ketingmedia",
