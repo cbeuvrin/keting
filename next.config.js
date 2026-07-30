@@ -78,11 +78,18 @@ const nextConfig = {
       { source: '/soluciones-de-marketing', destination: '/desarrollo-de-software', permanent: true },
       { source: '/marketing', destination: '/desarrollo-de-software', permanent: true },
       { source: '/marketing-digital', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/cotizar', destination: '/precioweb', permanent: true },
-      { source: '/asesorias', destination: '/precioweb', permanent: true },
+      { source: '/cotizar', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
+      { source: '/asesorias', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
+      // /precioweb se retira: una página de precios aislada rinde peor que la
+      // guía (el post es ahora el único hub) y su URL ya estaba indexada.
+      { source: '/precioweb', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
+      // /landing3d se retira: era un experimento de landing 3D que estaba
+      // indexado y en el sitemap, pero no se enlazaba desde ninguna parte del
+      // sitio ni corresponde a un servicio real.
+      { source: '/landing3d', destination: '/desarrollo-web', permanent: true },
       // Rutas que se enlazaban desde fuera y daban 404 (auditoría GEO 2026-07).
-      { source: '/precio', destination: '/precioweb', permanent: true },
-      { source: '/precios', destination: '/precioweb', permanent: true },
+      { source: '/precio', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
+      { source: '/precios', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
       { source: '/contacto', destination: '/', permanent: true },
       // '/nosotros' ya NO redirige: ahora es una página real (plan GEO 4.2) con
       // la historia de la empresa y enlace al perfil del fundador.
@@ -107,8 +114,8 @@ const nextConfig = {
       { source: '/en/web-informativa-landing-page', destination: '/en/desarrollo-web', permanent: true },
       { source: '/en/plataforma-de-cursos', destination: '/en/desarrollo-de-software', permanent: true },
       { source: '/en/product/:path*', destination: '/en/desarrollo-web', permanent: true },
-      { source: '/en/precio', destination: '/precioweb', permanent: true },
-      { source: '/en/precios', destination: '/precioweb', permanent: true },
+      { source: '/en/precio', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
+      { source: '/en/precios', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
       { source: '/en/contacto', destination: '/en', permanent: true },
       // Posts con permalink por fecha del WordPress inglés antiguo: no tienen
       // equivalente en el blog EN nuevo (curado, slugs propios), así que van
