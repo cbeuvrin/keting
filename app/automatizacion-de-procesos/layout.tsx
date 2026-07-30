@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Automatización de procesos con IA para empresas",
+    title: "Automatización de procesos con IA en México",
     description:
         "Automatización de procesos con IA en México: flujos, agentes y chatbots conectados a tus sistemas (ERP, CRM, WhatsApp). Recupera horas de trabajo manual y reduce errores.",
     keywords: [

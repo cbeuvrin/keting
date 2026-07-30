@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Desarrollo de aplicaciones móviles y software a medida",
+    title: "Desarrollo de software a la medida en México",
     description:
         "Desarrollo de aplicaciones móviles, plataformas y software a medida con IA para empresas mexicanas. Producto digital end-to-end: estrategia, diseño, ingeniería y crecimiento.",
     keywords: [
