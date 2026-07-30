@@ -154,35 +154,35 @@ export const articles = [
     },
     {
         id: 3,
-        slug: "checklist-lanzar-sitio-web-2025",
+        slug: "checklist-lanzar-sitio-web-2026",
         category: "Desarrollo Web",
-        title: "El checklist definitivo antes de lanzar tu sitio web en 2025",
-        excerpt: "Velocidad, SEO, mobile-first y seguridad. Los 12 puntos que toda web debe cumplir antes de salir al aire.",
+        title: "El checklist definitivo antes de lanzar tu sitio web en 2026",
+        excerpt: "Velocidad, mobile-first, SEO técnico, seguridad, analítica y pruebas: los 6 puntos que toda web debe cumplir antes de salir al aire.",
         author: "Carlos Beuvrin",
-        date: "Ene 2025",
+        date: "Jul 2026",
         color: "#E8F4F0",
         accent: "#0D4A3A",
         image: "/images/blog/checklist.png",
         content: `
-            <p>Lanzar un sitio web puede ser una de las experiencias más estresantes para un empresario, pero tener una hoja de ruta técnica clara cambia las reglas del juego por completo. En 2025, los estándares impuestos por los algoritmos de Google y las crecientes expectativas de inmediatez de los usuarios son más altos que nunca en la historia de internet. Ya no es suficiente con que el sitio "se vea bien"; debe funcionar como una pieza de ingeniería de precisión bajo cualquier condición de conexión y dispositivo.</p>
+            <p>Lanzar un sitio web puede ser una de las experiencias más estresantes para un empresario, pero tener una hoja de ruta técnica clara cambia las reglas del juego por completo. En 2026, los estándares impuestos por los algoritmos de Google y las crecientes expectativas de inmediatez de los usuarios son más altos que nunca en la historia de internet. Ya no es suficiente con que el sitio "se vea bien"; debe funcionar como una pieza de ingeniería de precisión bajo cualquier condición de conexión y dispositivo.</p>
             
             <h2>1. Rendimiento y Velocidad de Carga Extrema</h2>
             <p>Tu sitio web debe ser interactivo en menos de 1.5 segundos. En la era de la gratificación instantánea, la paciencia del usuario ha desaparecido. Usar formatos de imagen de próxima generación como WebP o AVIF, comprimir cada recurso sin pérdida de calidad y utilizar redes de entrega de contenido (CDN) globales es absolutamente obligatorio. Si no lo haces, una parte de tus visitantes se va antes de que la página termine de aparecer. El rendimiento técnico es, hoy en día, la característica de diseño más importante.</p>
             
-            <img src="/images/blog/checklist.png" alt="Checklist técnico web 2025" />
+            <img src="/images/blog/checklist.png" alt="Checklist técnico web 2026" />
 
             <h2>2. Optimización Mobile-First Real (No solo responsiva)</h2>
-            <p>Ya no es suficiente con que la web simplemente "quepa" en una pantalla pequeña. En 2025, el diseño debe ser <i>Mobile-First</i> desde su concepción. La navegación debe estar diseñada ergonómicamente para el pulgar, no para el puntero preciso del mouse. Las interacciones táctiles, el tamaño generoso de los botones (mínimo de 44x44 píxeles para evitar clics accidentales) y la disposición inteligente de los menús deben ser impecables. Si tu menú hamburguesa es difícil de accionar o tus enlaces están demasiado juntos, Google penalizará tu ranking y tus usuarios abandonarán por pura frustración.</p>
+            <p>Ya no es suficiente con que la web simplemente "quepa" en una pantalla pequeña. En 2026, el diseño debe ser <i>Mobile-First</i> desde su concepción. La navegación debe estar diseñada ergonómicamente para el pulgar, no para el puntero preciso del mouse. Las interacciones táctiles, el tamaño generoso de los botones (mínimo de 44x44 píxeles para evitar clics accidentales) y la disposición inteligente de los menús deben ser impecables. Si tu menú hamburguesa es difícil de accionar o tus enlaces están demasiado juntos, Google penalizará tu ranking y tus usuarios abandonarán por pura frustración.</p>
 
             <h2>3. SEO Técnico, Semántica y Search Intent</h2>
-            <p>Meta etiquetas optimizadas con ayuda de IA, atributos alt-text descriptivos en cada imagen para accesibilidad y una estructura de encabezados (H1, H2, H3) lógica y jerárquica son solo la base mínima. En 2025, los algoritmos de búsqueda priorizan el contenido que realmente responde a la <i>intención de búsqueda</i> del usuario de forma directa, útil y honesta. La arquitectura de la información debe ser transparente tanto para los consumidores humanos como para los nuevos rastreadores basados en modelos de lenguaje (LLM).</p>
+            <p>Meta etiquetas optimizadas con ayuda de IA, atributos alt-text descriptivos en cada imagen para accesibilidad y una estructura de encabezados (H1, H2, H3) lógica y jerárquica son solo la base mínima. En 2026, los algoritmos de búsqueda priorizan el contenido que realmente responde a la <i>intención de búsqueda</i> del usuario de forma directa, útil y honesta. La arquitectura de la información debe ser transparente tanto para los consumidores humanos como para los nuevos rastreadores basados en modelos de lenguaje (LLM).</p>
             
             <h2>4. Protocolos de Seguridad y Privacidad</h2>
-            <p>La seguridad no es una opción; es la base de la confianza digital. Implementar un certificado SSL (HTTPS) robusto, proteger los formularios contra ataques de inyección y cumplir estrictamente con las normativas globales de privacidad de datos (como RGPD) es esencial. Un sitio marcado como "No seguro" por el navegador es un sitio que no generará ni una sola venta. Además, en 2025, la transparencia en el uso de cookies y datos es un valor de marca que los usuarios aprecian y recompensan con su lealtad.</p>
+            <p>La seguridad no es una opción; es la base de la confianza digital. Implementar un certificado SSL (HTTPS) robusto, proteger los formularios contra ataques de inyección y cumplir estrictamente con las normativas globales de privacidad de datos (como RGPD) es esencial. Un sitio marcado como "No seguro" por el navegador es un sitio que no generará ni una sola venta. Además, en 2026, la transparencia en el uso de cookies y datos es un valor de marca que los usuarios aprecian y recompensan con su lealtad.</p>
             <ul>
                 <li><strong>Sitemap XML dinámico:</strong> Siempre actualizado para que los buscadores encuentren tu contenido nuevo al instante.</li>
                 <li><strong>Monitorización de Uptime:</strong> Herramientas que te avisen al móvil si el sitio cae un solo minuto.</li>
-                <li><strong>Core Web Vitals:</strong> Todas las métricas (LCP, FID, CLS) deben estar en el rango óptimo (color verde).</li>
+                <li><strong>Core Web Vitals:</strong> Todas las métricas (LCP, INP, CLS) deben estar en el rango óptimo (color verde).</li>
             </ul>
 
             <img src="/images/blog/checklist.png" alt="Optimización técnica de landing pages" />
