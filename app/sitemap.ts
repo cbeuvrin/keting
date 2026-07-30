@@ -61,21 +61,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ]);
 
-    // 4. Procesar artículos estáticos (lib/blog-data.ts)
-    const blogStaticRoutes: MetadataRoute.Sitemap = staticArticles.map((article) => ({
-        url: `${SITE_URL}/blog/${article.slug}`,
-        lastModified: new Date(), // O podrías parsear article.date si tuviera formato ISO
-        changeFrequency: 'monthly',
-        priority: 0.7,
-    }));
+    // 4 y 5. Blog ES: artículos estáticos (lib/blog-data.ts) + artículos de
+    // Supabase, en un solo recorrido y DEDUPLICADOS por slug.
+    //
+    // Ambas fuentes sirven la misma ruta /blog/[slug], así que un slug presente
+    // en las dos se emitía dos veces en el sitemap. Hoy los conjuntos son
+    // disjuntos y no se nota, pero en cuanto se migre un artículo estático a la
+    // DB (o el cron genere un slug que ya existe en el repo) Google recibe URLs
+    // duplicadas. Los estáticos van primero: si hay colisión, gana el repo.
+    const seenEsBlogSlugs = new Set<string>();
+    const blogEsRoutes: MetadataRoute.Sitemap = [];
 
-    // 5. Procesar artículos de la Base de Datos
-    const blogDbRoutes: MetadataRoute.Sitemap = (dbArticles || []).map((article) => ({
-        url: `${SITE_URL}/blog/${article.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.7,
-    }));
+    for (const slug of [
+        ...staticArticles.map((article) => article.slug),
+        ...(dbArticles || []).map((article) => article.slug),
+    ]) {
+        if (!slug || seenEsBlogSlugs.has(slug)) continue;
+        seenEsBlogSlugs.add(slug);
+        blogEsRoutes.push({
+            url: `${SITE_URL}/blog/${slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        });
+    }
 
     // 6. Blog EN — subconjunto curado que vive en el repo (lib/blog-en/), no en Supabase.
     const blogEnRoutes: MetadataRoute.Sitemap = EN_ARTICLE_SLUGS.map((slug) => ({
@@ -86,5 +95,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Retonar unión de todas las rutas
-    return [...staticRoutes, ...caseStudyRoutes, ...blogStaticRoutes, ...blogDbRoutes, ...blogEnRoutes];
+    return [...staticRoutes, ...caseStudyRoutes, ...blogEsRoutes, ...blogEnRoutes];
 }

@@ -1,4 +1,8 @@
 const path = require('path');
+const {
+  LEGACY_EXACT_REDIRECTS,
+  LEGACY_PREFIX_REDIRECTS,
+} = require('./lib/legacy-redirects');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -39,90 +43,48 @@ const nextConfig = {
       },
     ];
   },
-  // Redirecciones 301 de URLs del sitio WordPress anterior (evitan 404 en Google
-  // y conservan el SEO). Las rutas basura (/wp-*.php, /wp-content/...) se dejan en
-  // 404 a propósito: son escaneos de bots, no vale la pena redirigirlas.
+  // Desactiva la normalización automática de barra final para que la haga
+  // proxy.ts. No es cosmético: esa normalización se aplica ANTES del
+  // proxy, así que /category/algo/ hacía 308 a /category/algo y solo
+  // entonces recibía el 410 — dos respuestas para decir "esto no existe".
+  // Igual con /webdesing/: 308 de normalización + 308 de redirect.
+  //
+  // Con esto en true el proxy ve la URL tal cual llega, resuelve 410 y
+  // redirecciones heredadas en UN salto, y reproduce él mismo la normalización
+  // para todo lo demás (ver el paso 3 de proxy.ts). Si algún día quitas
+  // esta línea, hay que quitar también ese paso 3 o las barras finales dejan
+  // de normalizarse.
+  skipTrailingSlashRedirect: true,
+  // Redirecciones 308 de URLs del sitio WordPress anterior (evitan 404 en Google
+  // y conservan el SEO). Las rutas basura (/wp-admin/, /wp-includes/,
+  // /wp-content/, /wp-*.php) las corta el firewall de Vercel con 403 en el edge.
+  //
+  // La tabla vive en lib/legacy-redirects.js porque proxy.ts la necesita
+  // también, para resolver en UN solo salto las URLs que llegan con barra final
+  // (WordPress las publicaba así, y la normalización de Next añadía un 308
+  // extra antes de llegar a estas reglas).
+  //
+  // Los archivos de WordPress (fechas /AAAA/MM/DD/, /category/, /feed/) YA NO
+  // están aquí: devuelven 410 Gone en proxy.ts. Redirigirlos en masa a
+  // /blog hacía que Google los leyese como soft 404 y siguiera rastreándolos.
+  // Si vuelves a añadirlos aquí ganarán por precedencia y se romperá el 410.
   async redirects() {
-    return [
-      // Posts antiguos con permalink por fecha (/AAAA/MM/DD/...) → blog
-      { source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*', destination: '/blog', permanent: true },
-      { source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})', destination: '/blog', permanent: true },
-      // Categorías y feeds de WordPress
-      { source: '/category/:path*', destination: '/blog', permanent: true },
-      // Paginación antigua del blog
-      { source: '/blog/page/:n*', destination: '/blog', permanent: true },
-      // Artículos IA duplicados (generados por el cron con dedup roto, borrados
-      // 2026-07-02) → consolidados en el artículo canónico del tema
-      { source: '/blog/redefiniendo-el-contacto-la-estrategia-definitiva-de-agentes-de-ia-autonoma-para-una-experiencia-cliente-superior', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      { source: '/blog/la-nueva-frontera-del-servicio-agentes-de-ia-autonomos-para-la-excelencia-operativa-y-la-conexion-hiper-personalizada', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      { source: '/blog/la-arquitectura-invisible-desplegando-agentes-de-ia-autonomos-para-una-experiencia-de-cliente-transformadora', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      { source: '/blog/la-arquitectura-invisible-desplegando-agentes-autonomos-de-ia-para-redefinir-la-experiencia-del-cliente-premium', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      { source: '/blog/la-vanguardia-del-servicio-como-los-agentes-autonomos-de-ia-redefinen-la-experiencia-del-cliente-en-la-era-digital', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      { source: '/blog/desbloqueando-la-excelencia-agentes-de-ia-autonomos-como-motor-de-transformacion-en-el-servicio-al-cliente', destination: '/blog/mas-alla-del-chatbot-la-revolucion-de-los-agentes-de-ia-autonomos-en-el-servicio-al-cliente', permanent: true },
-      // Slug renombrado: /webdesing → /desarrollo-web (keyword + corrige typo)
-      { source: '/webdesing', destination: '/desarrollo-web', permanent: true },
-      // Slug renombrado: /soluciones-digitales → /desarrollo-de-software (keyword money).
-      // La regla exacta va PRIMERO: con solo :path*, la ruta sin subruta generaba
-      // "/desarrollo-de-software/" (barra final) y encadenaba un segundo salto al
-      // normalizarla. Así se resuelve en un único 301.
-      { source: '/soluciones-digitales', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/soluciones-digitales/:path*', destination: '/desarrollo-de-software/:path*', permanent: true },
-      // Páginas de servicios antiguas (apuntan directo al slug nuevo, sin encadenar)
-      { source: '/web', destination: '/desarrollo-web', permanent: true },
-      { source: '/diseno-web-2', destination: '/desarrollo-web', permanent: true },
-      { source: '/web-informativa-landing-page', destination: '/desarrollo-web', permanent: true },
-      { source: '/portafolio-web', destination: '/portafolio', permanent: true },
-      { source: '/plataforma-de-cursos', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/google-ads', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/meta-ads', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/soluciones-de-marketing', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/marketing', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/marketing-digital', destination: '/desarrollo-de-software', permanent: true },
-      { source: '/cotizar', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      { source: '/asesorias', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      // /precioweb se retira: una página de precios aislada rinde peor que la
-      // guía (el post es ahora el único hub) y su URL ya estaba indexada.
-      { source: '/precioweb', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      // /landing3d se retira: era un experimento de landing 3D que estaba
-      // indexado y en el sitemap, pero no se enlazaba desde ninguna parte del
-      // sitio ni corresponde a un servicio real.
-      { source: '/landing3d', destination: '/desarrollo-web', permanent: true },
-      // Rutas que se enlazaban desde fuera y daban 404 (auditoría GEO 2026-07).
-      { source: '/precio', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      { source: '/precios', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      { source: '/contacto', destination: '/', permanent: true },
-      // '/nosotros' ya NO redirige: ahora es una página real (plan GEO 4.2) con
-      // la historia de la empresa y enlace al perfil del fundador.
-      { source: '/inicio-3', destination: '/', permanent: true },
-      { source: '/community-manager-2-minimal', destination: '/', permanent: true },
-      { source: '/blog-2', destination: '/blog', permanent: true },
-      { source: '/blogger', destination: '/blog', permanent: true },
-      // Versión en inglés antigua de WordPress: redirects ESPECÍFICOS (no
-      // catch-all, para no atrapar las rutas espejo reales /en/desarrollo-web…).
-      // OJO: /en/blog y /en/blog/:path* YA NO redirigen a /blog — desde el
-      // plan GEO 4.5 el blog EN existe de verdad (lib/blog-en/, app/en/blog).
-      // /en/blogger sigue siendo basura de WordPress y sí redirige.
-      { source: '/en/web', destination: '/en/desarrollo-web', permanent: true },
-      { source: '/en/portafolio-web', destination: '/en/portafolio', permanent: true },
-      { source: '/en/google-ads', destination: '/en/desarrollo-de-software', permanent: true },
-      { source: '/en/meta-ads', destination: '/en/desarrollo-de-software', permanent: true },
-      { source: '/en/blogger', destination: '/blog', permanent: true },
-      { source: '/en/nosotros', destination: '/en', permanent: true },
-      // Huérfanas del WordPress inglés detectadas en la auditoría GEO (2026-07).
-      // Los crawlers de IA siguen enlaces viejos con mucha más avidez que Googlebot
-      // (~34% de 404 frente a ~8%), así que estos 404 sí cuestan citaciones.
-      { source: '/en/web-informativa-landing-page', destination: '/en/desarrollo-web', permanent: true },
-      { source: '/en/plataforma-de-cursos', destination: '/en/desarrollo-de-software', permanent: true },
-      { source: '/en/product/:path*', destination: '/en/desarrollo-web', permanent: true },
-      { source: '/en/precio', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      { source: '/en/precios', destination: '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026', permanent: true },
-      { source: '/en/contacto', destination: '/en', permanent: true },
-      // Posts con permalink por fecha del WordPress inglés antiguo: no tienen
-      // equivalente en el blog EN nuevo (curado, slugs propios), así que van
-      // al índice ES como el resto de permalinks huérfanos de esa migración.
-      { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*', destination: '/blog', permanent: true },
-      { source: '/en/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})', destination: '/blog', permanent: true },
-    ];
+    const exact = Object.entries(LEGACY_EXACT_REDIRECTS).map(([source, destination]) => ({
+      source,
+      destination,
+      permanent: true,
+    }));
+
+    // Las reglas de prefijo van DESPUÉS de las exactas: '/soluciones-digitales'
+    // a secas debe resolverse con la entrada exacta, porque con solo :path* el
+    // destino salía con barra final y encadenaba un segundo salto.
+    const prefixed = LEGACY_PREFIX_REDIRECTS.map(({ prefix, destination, preservePath }) => ({
+      source: `${prefix}/:path*`,
+      destination: preservePath ? `${destination}/:path*` : destination,
+      permanent: true,
+    }));
+
+    return [...exact, ...prefixed];
   },
   // Ancla el file-tracing a este proyecto (evita arrastrar node_modules vecinos).
   outputFileTracingRoot: path.join(__dirname),
