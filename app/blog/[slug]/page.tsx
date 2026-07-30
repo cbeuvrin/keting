@@ -152,13 +152,49 @@ export default async function ArticlePage({ params }: { params: any }) {
         notFound();
     }
 
-    // "Siguiente lectura": el artículo puede venir solo de la DB (no está en la
-    // lista estática), así que buscamos por slug y caemos al primero distinto.
-    const idx = articles.findIndex(a => a.slug.trim() === article!.slug.trim());
-    const nextArticle =
-        idx === -1
-            ? (articles.find(a => a.slug.trim() !== article!.slug.trim()) ?? articles[0])
-            : articles[(idx + 1) % articles.length];
+    // Pool de enlazado interno: los 9 artículos estáticos MÁS los de Supabase.
+    //
+    // Antes tanto "Artículos relacionados" como "Siguiente lectura" se calculaban
+    // solo sobre `articles` (la lista estática), y el bloque de relacionados era
+    // literalmente `articles.filter(...).slice(0, 3)`: devolvía SIEMPRE los tres
+    // primeros de esa lista. Resultado: las 28 páginas del blog enlazaban a los
+    // mismos tres artículos y los otros 25 no recibían ni un enlace interno del
+    // sitio ("Página de referencia: no se ha detectado ninguna" en Search
+    // Console). Si vuelves a tocar esto, la regla es que el pool incluya ambas
+    // fuentes y que la selección dependa del artículo actual.
+    type RelatedItem = { slug: string; title: string; category: string };
+    const { data: dbIndex } = await supabase
+        .from('articles')
+        .select('slug, title, category')
+        .order('created_at', { ascending: false });
+
+    const seen = new Set<string>([article.slug.trim()]);
+    const pool: RelatedItem[] = [];
+    for (const a of [...articles, ...((dbIndex ?? []) as RelatedItem[])]) {
+        const s = a.slug.trim();
+        if (seen.has(s)) continue;           // el actual, y los estáticos espejados en la DB
+        seen.add(s);
+        pool.push({ slug: s, title: a.title, category: a.category });
+    }
+
+    // Rotamos el punto de arranque según el slug actual: artículos distintos
+    // enlazan a artículos distintos, así los enlaces internos se reparten en vez
+    // de acumularse en los primeros de la lista. Es determinista (mismo artículo
+    // → mismos enlaces), no aleatorio, para que la caché ISR sirva siempre lo mismo.
+    const offset = article.slug.split("").reduce((n, c) => n + c.charCodeAt(0), 0);
+    const rotate = (arr: RelatedItem[], n: number, taken: Set<string>) => {
+        const free = arr.filter(a => !taken.has(a.slug));
+        return Array.from({ length: Math.min(n, free.length) },
+            (_, i) => free[(offset + i) % free.length]);
+    };
+
+    const taken = new Set<string>();
+    // Hasta 2 de la misma categoría (relevancia real), el resto del pool general.
+    const related = rotate(pool.filter(a => a.category === article!.category), 2, taken);
+    related.forEach(a => taken.add(a.slug));
+    related.push(...rotate(pool, 3 - related.length, taken));
+
+    const nextArticle = pool[offset % Math.max(pool.length, 1)] ?? articles[0];
 
     // Schema Article: ayuda a Google y a las IA a entender autoría, fecha e imagen
     // del artículo (mejora indexación y citabilidad).
@@ -303,11 +339,11 @@ export default async function ArticlePage({ params }: { params: any }) {
                             <div>
                                 <h4 className="text-lg font-bold mb-6">Artículos relacionados</h4>
                                 <div className="space-y-6">
-                                    {articles.filter(a => a.id !== article.id).slice(0, 3).map(related => (
-                                        <Link key={related.id} href={`/blog/${related.slug}`} className="group block">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{related.category}</p>
+                                    {related.map(item => (
+                                        <Link key={item.slug} href={`/blog/${item.slug}`} className="group block">
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{item.category}</p>
                                             <h5 className="text-sm font-bold group-hover:text-gray-600 transition-colors leading-tight">
-                                                {related.title}
+                                                {item.title}
                                             </h5>
                                         </Link>
                                     ))}
