@@ -284,22 +284,41 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                         );
                                     })}
 
-                                    {/* Contacto: ítem del menú en tablet/desktop (en móvil se usa el botón "Hablemos") */}
+                                    {/* Contacto: ítem del menú en tablet/desktop (en móvil se usa el botón "Hablemos").
+                                        En español NAVEGA a /contacto, como Nosotros: es lo que espera
+                                        quien pulsa algo llamado Contacto, y le da a esa página un
+                                        enlace desde la cabecera, o sea desde todo el sitio. El modal
+                                        se mantiene en los CTA ("Hablemos" y los de cada sección),
+                                        que es donde el visitante ya quiere escribir y una carga de
+                                        página de por medio solo resta.
+                                        En inglés sigue abriendo el modal porque /en/contacto todavía
+                                        no existe: enlazar ahí a la página española mandaría al
+                                        visitante a otro idioma. */}
                                     <motion.div
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: menuItems.length * 0.05 }}
                                         className="hidden md:block text-right"
                                     >
-                                        <button
-                                            onClick={() => {
-                                                setIsMenuOpen(false);
-                                                setIsContactOpen(true);
-                                            }}
-                                            className="inline-block text-3xl md:text-6xl py-0.5 md:py-1 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
-                                        >
-                                            {t.nav.contact}
-                                        </button>
+                                        {isEn ? (
+                                            <button
+                                                onClick={() => {
+                                                    setIsMenuOpen(false);
+                                                    setIsContactOpen(true);
+                                                }}
+                                                className="inline-block text-3xl md:text-6xl py-0.5 md:py-1 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                            >
+                                                {t.nav.contact}
+                                            </button>
+                                        ) : (
+                                            <Link
+                                                href="/contacto"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="inline-block text-3xl md:text-6xl py-0.5 md:py-1 transition-all duration-300 hover:-translate-x-2 hover:text-black/55 font-[family-name:var(--font-playfair)] italic font-normal tracking-tight"
+                                            >
+                                                {t.nav.contact}
+                                            </Link>
+                                        )}
                                     </motion.div>
                                 </nav>
 

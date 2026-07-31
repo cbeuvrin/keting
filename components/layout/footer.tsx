@@ -101,6 +101,13 @@ export function Footer() {
                             <li><Link href={enHref("/portafolio", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
                             <li><Link href={enHref("/blog", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
                             <li><Link href={aboutHref(isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.about}</Link></li>
+                            {/* Solo en español: /en/contacto todavía no existe y sigue
+                                redirigiendo a /en. En el móvil este es el único camino
+                                hasta la página de contacto, porque ahí el botón
+                                "Hablemos" abre el modal en vez de navegar. */}
+                            {!isEn && (
+                                <li><Link href="/contacto" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.contact}</Link></li>
+                            )}
                             <li><Link href={enHref("/", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
                         </ul>
                     </div>

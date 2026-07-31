@@ -117,7 +117,10 @@ const COLLAPSE = [
     ['/blog/page/2/', '/blog'],
     ['/en/product/algo/', '/en/desarrollo-web'],
     ['/en/nosotros/', '/en'],
-    ['/contacto/', '/'],
+    // '/contacto/' ya no está aquí: desde que app/contacto es una página real, su
+    // barra final la resuelve la normalización (308 a /contacto), no la tabla de
+    // heredadas. '/en/contacto/' sí sigue en la tabla porque no hay página EN.
+    ['/en/contacto/', '/en'],
 ];
 
 for (const [from, to] of COLLAPSE) {
