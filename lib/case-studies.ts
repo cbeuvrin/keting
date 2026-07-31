@@ -112,6 +112,19 @@ export const CASE_STUDIES: CaseStudy[] = [
             imageAlt: "Iudex · Legal AI",
             metricLabel: "Sessions/mo",
         },
+        // Recibido por /testimonio el 2026-07-30, con la casilla de autorización
+        // marcada. El texto va literal, sin tocar una coma.
+        //
+        // En el formulario escribió "Sebastián" como nombre y "Moncayo" como
+        // empresa, pero su correo es moncayo@iudex.mx: puso el apellido en la
+        // casilla equivocada. Carlos, que lo conoce, confirmó el 2026-07-30 que
+        // es Sebastián Moncayo, CEO de Iudex. Se publica así.
+        quote: {
+            text: "Un cambio necesario para nuestra imagen de marca. Nuestra página web cubrió exactamente lo que necesitábamos.",
+            name: "Sebastián Moncayo",
+            role: "CEO",
+            company: "Iudex",
+        },
     },
     {
         slug: "smile-better-clinics",
@@ -315,6 +328,17 @@ export const CASE_STUDIES: CaseStudy[] = [
             stack: ["Event app", "Interactive quiz", "iPad", "Brand activation"],
             imageAlt: "Suzuki · Event quiz app, in partnership with Enso Media",
             metricLabel: "Quizzes at the event",
+        },
+        // Recibido por /testimonio el 2026-07-30, con la casilla de autorización
+        // marcada. Del original solo se corrigieron dos erratas evidentes
+        // ("siemore" -> "siempre", "como" -> "cómo") y el punto final; ni una
+        // palabra más. Va sin traducir en la página inglesa a propósito: son las
+        // palabras de una persona real, no copy nuestro.
+        quote: {
+            text: "Todo perfecto, los cambios y las propuestas de cómo hacer las cosas siempre fueron en pro del evento y de hacerlo mejor.",
+            name: "Rodrigo Juárez",
+            role: "Productor",
+            company: "Enso Media",
         },
     },
     {
