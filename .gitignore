@@ -44,3 +44,7 @@ next-env.d.ts
 /scratch/
 /KETINGfavicom*.png
 /favicom*.png
+
+# Maqueta local de la landing de Toogo — NO forma parte del sitio de Keting
+# ni debe desplegarse con él. Se abre directamente en el navegador.
+toogo-landing/
