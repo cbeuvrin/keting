@@ -3,20 +3,15 @@ import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
-import { ContactoForm } from "./ContactoForm";
+import { ContactForm } from "./ContactForm";
 
-// Hasta julio de 2026 esta ruta era un 308 al home y el único modo de escribir
-// era un modal. Quien buscaba "keting media contacto" aterrizaba en la portada
-// sin nada evidente que pulsar, y ninguna IA tenía una URL que citar al
-// responder "cómo contacto con ellos". Por eso es una página real e indexable.
+// Gemela inglesa de /contacto. hreflang recíproco declarado en ambas.
 export const metadata: Metadata = {
-    title: "Contacto",
+    title: { absolute: "Contact · Keting Media" },
     description:
-        "Cuéntanos tu proyecto de web, app, software a medida o automatización con IA. Te damos alcance y precio fijo. Escríbenos por formulario, correo o WhatsApp.",
+        "Tell us about your web, app, custom software or AI automation project. Nearshore team in Mexico City working with clients across Mexico and the United States.",
     alternates: {
-        canonical: "https://ketingmedia.com/contacto",
-        // Recíproco con /en/contact. Ambas se declaran mutuamente: un hreflang
-        // que no devuelve el favor lo ignora Google.
+        canonical: "https://ketingmedia.com/en/contact",
         languages: {
             "es-MX": "https://ketingmedia.com/contacto",
             en: "https://ketingmedia.com/en/contact",
@@ -24,35 +19,31 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: "Contacto · Keting Media",
-        description:
-            "Cuéntanos tu proyecto y te damos alcance y precio fijo, sin sorpresas.",
-        url: "https://ketingmedia.com/contacto",
+        title: "Contact · Keting Media",
+        description: "Tell us about your project. You get a fixed scope and a fixed price.",
+        url: "https://ketingmedia.com/en/contact",
         type: "website",
     },
 };
 
-const TELEFONO = "+52 55 4383 0150";
-const TELEFONO_E164 = "+525543830150";
+const PHONE = "+52 55 4383 0150";
+const PHONE_E164 = "+525543830150";
 const EMAIL = "info@ketingmedia.com";
 const WHATSAPP = "https://wa.me/525543830150";
 
-// ContactPage con el ContactPoint dentro: le da a Google y a los modelos una
-// dirección, un teléfono y un correo asociados a una URL concreta. El @id apunta
-// al nodo Organization del layout raíz para que se lea como la misma entidad y
-// no como un negocio nuevo.
 const contactJsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contacto · Keting Media",
-    url: "https://ketingmedia.com/contacto",
+    name: "Contact · Keting Media",
+    url: "https://ketingmedia.com/en/contact",
+    inLanguage: "en",
     mainEntity: {
         "@id": "https://ketingmedia.com/#organization",
         name: "Keting Media",
         contactPoint: {
             "@type": "ContactPoint",
             contactType: "Sales",
-            telephone: TELEFONO_E164,
+            telephone: PHONE_E164,
             email: EMAIL,
             areaServed: ["MX", "US"],
             availableLanguage: ["es", "en"],
@@ -60,16 +51,16 @@ const contactJsonLd = {
     },
 };
 
-const CANALES = [
-    { etiqueta: "Correo", valor: EMAIL, href: `mailto:${EMAIL}` },
-    { etiqueta: "Teléfono", valor: TELEFONO, href: `tel:${TELEFONO_E164}` },
-    { etiqueta: "WhatsApp", valor: "Escribir por WhatsApp", href: WHATSAPP },
+const CHANNELS = [
+    { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
+    { label: "Phone", value: PHONE, href: `tel:${PHONE_E164}` },
+    { label: "WhatsApp", value: "Message us on WhatsApp", href: WHATSAPP },
 ];
 
-export default function ContactoPage() {
+export default function ContactPage() {
     return (
         <main className="min-h-screen bg-[#FAFAFA] text-black font-heading overflow-hidden">
-            <JsonLd data={[contactJsonLd, breadcrumb("Contacto", "/contacto")]} />
+            <JsonLd data={[contactJsonLd, breadcrumb("Contact", "/en/contact")]} />
             <Header />
 
             <section className="relative pt-36 pb-24 md:pt-48 md:pb-32 px-6 md:px-12 lg:px-20">
@@ -89,45 +80,41 @@ export default function ContactoPage() {
                     <div className="flex items-center gap-3 mb-6">
                         <span className="block w-10 h-px bg-black/40" />
                         <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                            Contacto
+                            Contact
                         </span>
                     </div>
 
                     <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-8 text-black">
-                        Cuéntanos qué quieres{" "}
+                        Tell us what you want to{" "}
                         <span className="font-[family-name:var(--font-playfair)] italic font-normal">
-                            construir
+                            build
                         </span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed max-w-2xl mb-4">
-                        Escríbenos con lo que tengas, aunque sea una idea a medio formar. Lo primero
-                        que hacemos es entender el problema; el presupuesto viene después.
+                        Write with whatever you have, even a half-formed idea. The first thing we do
+                        is understand the problem; the budget comes after.
                     </p>
                     <p className="text-base text-gray-500 font-light leading-relaxed max-w-2xl mb-16">
-                        Si nuestros{" "}
-                        <Link href="/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026" className="underline underline-offset-4 hover:text-black transition-colors">
-                            rangos de precio
+                        If our{" "}
+                        <Link href="/en/blog/how-much-does-a-custom-web-or-app-cost-in-mexico" className="underline underline-offset-4 hover:text-black transition-colors">
+                            price ranges
                         </Link>{" "}
-                        no encajan con lo tuyo, te lo decimos en la primera llamada en vez de
-                        hacerte perder el tiempo.
+                        don&rsquo;t fit what you need, we&rsquo;ll say so on the first call instead of
+                        wasting your time.
                     </p>
 
-                    <ContactoForm />
+                    <ContactForm />
 
-                    {/* Un formulario no le sirve a todo el mundo: hay quien prefiere
-                        escribir directamente, y una IA necesita datos literales que
-                        citar. Por eso los canales van en texto plano, no dentro del
-                        formulario. */}
                     <div className="mt-24 pt-12 border-t border-black/10">
                         <p className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase text-black/50 font-sans mb-8">
-                            O directamente
+                            Or directly
                         </p>
                         <div className="grid sm:grid-cols-3 gap-8">
-                            {CANALES.map((c) => (
-                                <div key={c.etiqueta}>
+                            {CHANNELS.map((c) => (
+                                <div key={c.label}>
                                     <p className="text-[10px] font-semibold tracking-[0.25em] uppercase text-black/40 mb-2 font-sans">
-                                        {c.etiqueta}
+                                        {c.label}
                                     </p>
                                     <a
                                         href={c.href}
@@ -136,14 +123,15 @@ export default function ContactoPage() {
                                             : {})}
                                         className="text-base md:text-lg text-black hover:text-black/60 transition-colors break-words"
                                     >
-                                        {c.valor}
+                                        {c.value}
                                     </a>
                                 </div>
                             ))}
                         </div>
                         <p className="mt-10 text-sm text-black/45 font-light leading-relaxed max-w-xl">
-                            Trabajamos en remoto desde Ciudad de México, con clientes en México y
-                            Estados Unidos. El precio no cambia por la ciudad en la que estés.
+                            We work remotely from Mexico City, with clients across Mexico and the
+                            United States. Same time zones as most of the US, and the price
+                            doesn&rsquo;t change with your city.
                         </p>
                     </div>
                 </div>

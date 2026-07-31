@@ -70,6 +70,16 @@ export function authorHref(isEn: boolean): string {
     return isEn ? `${ABOUT_EN_ROOT}/carlos-beuvrin` : `${ABOUT_ES_ROOT}/carlos-beuvrin`;
 }
 
+// Contacto: par con slug traducido, como about y case-studies. NO sigue el
+// patrón genérico "/en" + ruta española, así que necesita su propia entrada en
+// toEn/toEs o el selector de idioma mandaría a /en en vez de a la gemela.
+const CONTACT_ES = "/contacto";
+const CONTACT_EN = "/en/contact";
+
+export function contactHref(isEn: boolean): string {
+    return isEn ? CONTACT_EN : CONTACT_ES;
+}
+
 // Blog: el índice sigue el patrón genérico ("/blog" <-> "/en/blog"), pero los
 // ARTÍCULOS no — el blog EN vive en el repo (lib/blog-en/) como subconjunto
 // curado y traducido con slugs propios en inglés, distintos del slug ES en
@@ -124,6 +134,8 @@ export function getEsBlogSlug(enSlug: string): string | undefined {
 
 // Ruta actual -> su equivalente en inglés (o /en si no hay gemela).
 export function toEn(pathname: string): string {
+    if (pathname === CONTACT_EN) return pathname;
+    if (pathname === CONTACT_ES) return CONTACT_EN;
     if (isCaseStudyEnPath(pathname) || isAboutEnPath(pathname) || isBlogEnPath(pathname)) return pathname; // ya está en inglés
     if (isCaseStudyEsPath(pathname)) {
         return pathname === CASE_STUDIES_ES_ROOT
@@ -147,6 +159,8 @@ export function toEn(pathname: string): string {
 
 // Ruta actual -> su equivalente en español (o / si no hay gemela).
 export function toEs(pathname: string): string {
+    if (pathname === CONTACT_ES) return pathname;
+    if (pathname === CONTACT_EN) return CONTACT_ES;
     if (isCaseStudyEsPath(pathname) || isAboutEsPath(pathname) || isBlogEsPath(pathname)) return pathname; // ya está en español
     if (isCaseStudyEnPath(pathname)) {
         return pathname === CASE_STUDIES_EN_ROOT

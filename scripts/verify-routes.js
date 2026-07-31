@@ -42,7 +42,7 @@ const REAL = [
     '/aviso-de-privacidad', '/terminos-y-condiciones',
     '/en', '/en/blog', '/en/about', '/en/about/carlos-beuvrin', '/en/portafolio',
     '/en/case-studies', '/en/desarrollo-web', '/en/desarrollo-de-software',
-    '/en/automatizacion-de-procesos', '/en/aviso-de-privacidad', '/en/terminos-y-condiciones',
+    '/en/automatizacion-de-procesos', '/en/aviso-de-privacidad', '/en/terminos-y-condiciones', '/contacto', '/en/contact',
     // Slugs reales de contenido
     '/blog/desarrollo-de-software-a-la-medida-cdmx-costos-2026',
     '/blog/cuanto-cuesta-una-web-o-app-a-medida-en-mexico-2026',
@@ -117,10 +117,10 @@ const COLLAPSE = [
     ['/blog/page/2/', '/blog'],
     ['/en/product/algo/', '/en/desarrollo-web'],
     ['/en/nosotros/', '/en'],
-    // '/contacto/' ya no está aquí: desde que app/contacto es una página real, su
-    // barra final la resuelve la normalización (308 a /contacto), no la tabla de
-    // heredadas. '/en/contacto/' sí sigue en la tabla porque no hay página EN.
-    ['/en/contacto/', '/en'],
+    // '/contacto/' y '/en/contact/' NO están aquí: ambas son páginas reales, así
+    // que su barra final la resuelve la normalización, no la tabla de heredadas.
+    // '/en/contacto/' (el slug español bajo /en) sí sigue siendo heredada.
+    ['/en/contacto/', '/en/contact'],
 ];
 
 for (const [from, to] of COLLAPSE) {

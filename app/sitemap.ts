@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/nosotros/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${SITE_URL}/en/about/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/contacto`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.75 },
+        { url: `${SITE_URL}/en/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.65 },
         { url: `${SITE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
         { url: `${SITE_URL}/en/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
         { url: `${SITE_URL}/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },

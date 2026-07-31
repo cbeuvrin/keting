@@ -7,7 +7,7 @@ import { ArrowUpRight, ArrowUp, Facebook, Instagram, Linkedin } from "lucide-rea
 import { useRef } from "react";
 import { useLang } from "@/lib/i18n/lang-context";
 import { SOCIAL } from "@/lib/social";
-import { enHref, toEn, toEs, aboutHref } from "@/lib/i18n/routes";
+import { enHref, toEn, toEs, aboutHref, contactHref } from "@/lib/i18n/routes";
 
 export function Footer() {
     const { t } = useLang();
@@ -101,13 +101,12 @@ export function Footer() {
                             <li><Link href={enHref("/portafolio", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.portfolio}</Link></li>
                             <li><Link href={enHref("/blog", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.blog}</Link></li>
                             <li><Link href={aboutHref(isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.about}</Link></li>
-                            {/* Solo en español: /en/contacto todavía no existe y sigue
-                                redirigiendo a /en. En el móvil este es el único camino
-                                hasta la página de contacto, porque ahí el botón
-                                "Hablemos" abre el modal en vez de navegar. */}
-                            {!isEn && (
-                                <li><Link href="/contacto" className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.contact}</Link></li>
-                            )}
+                            {/* En el móvil este es el único camino hasta la página de
+                                contacto, porque ahí el botón "Hablemos" abre el modal en
+                                vez de navegar. Y es el único enlace a ella que ve un
+                                rastreador: el menú deslizante no existe en el HTML hasta
+                                que alguien lo abre. */}
+                            <li><Link href={contactHref(isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.contact}</Link></li>
                             <li><Link href={enHref("/", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.home}</Link></li>
                         </ul>
                     </div>
