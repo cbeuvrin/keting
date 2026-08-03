@@ -374,6 +374,15 @@ export const CASE_STUDIES: CaseStudy[] = [
             imageAlt: "Rosymar González · Jewelry",
             metricLabel: "Online sales",
         },
+        // Recibido por /testimonio el 2026-07-31, con la casilla de autorización
+        // marcada. Del original solo se añadió el punto final; el resto va literal,
+        // incluida la frase que arranca con "Y" — es su forma de hablar, no una errata.
+        quote: {
+            text: "No teníamos un sitio web para comercializar nuestros productos en línea. Y el equipo de Keting Media nos asesoró y nos apoyó en la construcción del sitio, de manera profesional y rápida. Luego también nos ofreció su soporte de mantenimiento. Muy contentos.",
+            name: "Andrés Bustillos",
+            role: "Director comercial",
+            company: "Rosymar González Joyas",
+        },
     },
     {
         slug: "ivan-ivanovich-academy",
