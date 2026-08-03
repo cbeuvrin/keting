@@ -117,8 +117,15 @@ export function Services() {
                     <motion.div
                         className="hidden md:flex relative justify-center items-center h-full"
                     >
-                        {/* Desktop: Premium iPhone Mockup with Video */}
-                        <div className="relative w-[300px] h-[610px] -my-[110px] rotate-6 hover:rotate-0 transition-transform duration-500 group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[3.5rem] overflow-hidden">
+                        {/* Desktop: Premium iPhone Mockup with Video.
+                            Ya se enderezaba al pasar el ratón, así que parecía interactivo
+                            — pero no llevaba a ninguna parte: el único enlace de la sección
+                            era el botón "click" de la esquina. Ahora el móvil entero es el
+                            enlace, que es lo que uno intenta pulsar. */}
+                        <Link
+                            href={enHref("/desarrollo-web", isEn)}
+                            aria-label="Ver el servicio de diseño y desarrollo web"
+                            className="relative block w-[300px] h-[610px] -my-[110px] rotate-6 hover:rotate-0 hover:-translate-y-2 active:scale-[0.98] transition-transform duration-500 group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[3.5rem] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
 
                             {/* iPhone Frame (Bezel) */}
                             <div className="absolute inset-0 bg-[#0f0f0f] border-[6px] border-[#1a1a1a] rounded-[3.5rem] shadow-[inset_0_0_2px_rgba(255,255,255,0.2)]">
@@ -157,7 +164,7 @@ export function Services() {
                                 {/* Power Button */}
                                 <div className="absolute right-[-10px] top-40 w-[4px] h-20 bg-[#1a1a1a] rounded-l-sm ring-1 ring-white/10" />
                             </div>
-                        </div>
+                        </Link>
                     </motion.div>
 
                 </div>

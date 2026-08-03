@@ -1,17 +1,33 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { usePathname } from "next/navigation";
 import { CornerButton } from "@/components/ui/corner-button";
 import { Sparkles, TrendingUp, Smartphone, Zap } from "lucide-react";
 import { useLang } from "@/lib/i18n/lang-context";
-import { enHref } from "@/lib/i18n/routes";
+import { enHref, caseStudiesHref } from "@/lib/i18n/routes";
+
+// Cada cuadro apunta a donde de verdad se habla de ese tema, no todos al mismo
+// sitio: cuatro cuadros que llevan a la misma página son cuatro veces el mismo
+// enlace, y el visitante lo nota a la segunda.
+//
+// "__CASOS__" es un centinela: el índice de casos cambia de slug entre idiomas
+// ("/casos" vs "/en/case-studies"), así que no puede pasar por enHref y se
+// resuelve con caseStudiesHref más abajo.
+const CUADROS = [
+    { icon: <Sparkles className="w-6 h-6 md:w-8 md:h-8" />, key: "ia", href: "/automatizacion-de-procesos" },
+    { icon: <TrendingUp className="w-6 h-6 md:w-8 md:h-8" />, key: "escala", href: "__CASOS__" },
+    { icon: <Smartphone className="w-6 h-6 md:w-8 md:h-8" />, key: "apps", href: "/desarrollo-de-software" },
+    { icon: <Zap className="w-6 h-6 md:w-8 md:h-8" />, key: "velocidad", href: "/desarrollo-web" },
+] as const;
 
 export function DigitalSolutions() {
     const { t } = useLang();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
+    const reduce = useReducedMotion();
+    const c = t.digital.cuadros;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -119,14 +135,17 @@ export function DigitalSolutions() {
                                 }
                             }}
                         >
-                            {[
-                                { icon: <Sparkles className="w-6 h-6 md:w-8 md:h-8" />, label: "IA" },
-                                { icon: <TrendingUp className="w-6 h-6 md:w-8 md:h-8" />, label: "Escala" },
-                                { icon: <Smartphone className="w-6 h-6 md:w-8 md:h-8" />, label: "Apps" },
-                                { icon: <Zap className="w-6 h-6 md:w-8 md:h-8" />, label: "Velocidad" }
-                            ].map((item, idx) => (
+                            {/* Los cuatro cuadros llevaban icono y etiqueta, se vaciaron en
+                                0f66112 y quedaron como cajas negras mudas: parecen botones,
+                                no lo eran, y no significaban nada. Ahora en reposo siguen
+                                limpios —que era la intención— pero al acercarse revelan su
+                                etiqueta, y son enlaces reales a la página de cada tema.
+                                Además de cerrar el hueco de interacción, dan cuatro enlaces
+                                internos del home a páginas que antes solo recibían el del
+                                botón de la esquina. */}
+                            {CUADROS.map((item, idx) => (
                                 <motion.div
-                                    key={idx}
+                                    key={item.key}
                                     variants={{
                                         hidden: { scale: 0, opacity: 0 },
                                         visible: {
@@ -135,9 +154,25 @@ export function DigitalSolutions() {
                                             transition: { type: "spring", stiffness: 260, damping: 20 }
                                         }
                                     }}
-                                    className="aspect-square bg-black rounded-[1.5rem] shadow-lg flex flex-col items-center justify-center p-2 text-white"
                                 >
-                                    {/* Contenido eliminado a petición del usuario */}
+                                    <motion.a
+                                        href={item.href === "__CASOS__" ? caseStudiesHref(isEn) : enHref(item.href, isEn)}
+                                        aria-label={c[`${item.key}Aria`]}
+                                        // Hundirse al tocar es lo que hace que en un móvil
+                                        // se sienta como un botón físico: en táctil no hay
+                                        // hover que dé la pista.
+                                        whileHover={reduce ? undefined : { y: -6, scale: 1.04 }}
+                                        whileTap={reduce ? undefined : { scale: 0.94 }}
+                                        transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                                        className="group relative aspect-square bg-black rounded-[1.5rem] shadow-lg flex flex-col items-center justify-center gap-1.5 p-2 text-white overflow-hidden cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                                    >
+                                        <span className="opacity-45 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                                            {item.icon}
+                                        </span>
+                                        <span className="text-[10px] font-medium tracking-[0.18em] uppercase opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-80 group-hover:translate-y-0 group-focus-visible:opacity-80 group-focus-visible:translate-y-0">
+                                            {c[item.key]}
+                                        </span>
+                                    </motion.a>
                                 </motion.div>
                             ))}
                         </motion.div>

@@ -111,6 +111,19 @@ const es = {
         subtitle: "Apps hiper-personalizadas",
         description:
             "Transformamos negocios digitales globales mediante soluciones innovadoras que integran inteligencia artificial, optimizando la experiencia del usuario, automatizando procesos y maximizando resultados con tecnología avanzada.",
+        // Etiquetas de los cuatro cuadros. Van aquí y no en el componente porque
+        // "Escala" y "Velocidad" no son palabras inglesas: escritas a mano en el
+        // JSX se colaban tal cual en /en.
+        cuadros: {
+            ia: "IA",
+            iaAria: "Automatización de procesos con IA",
+            escala: "Escala",
+            escalaAria: "Casos de éxito",
+            apps: "Apps",
+            appsAria: "Desarrollo de software y aplicaciones",
+            velocidad: "Velocidad",
+            velocidadAria: "Diseño y desarrollo web",
+        },
     },
     toogo: {
         eyebrow: "Caso · Toogo",
@@ -1173,6 +1186,16 @@ const en: typeof es = {
         subtitle: "Hyper-personalized apps",
         description:
             "We transform global digital businesses with innovative solutions powered by artificial intelligence — optimizing UX, automating processes and maximizing outcomes with advanced technology.",
+        cuadros: {
+            ia: "AI",
+            iaAria: "AI process automation",
+            escala: "Scale",
+            escalaAria: "Case studies",
+            apps: "Apps",
+            appsAria: "Software and app development",
+            velocidad: "Speed",
+            velocidadAria: "Web design and development",
+        },
     },
     toogo: {
         eyebrow: "Case · Toogo",

@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { CornerButton } from "@/components/ui/corner-button";
 import { useLang } from "@/lib/i18n/lang-context";
 
 export function Toogo() {
+    const reduce = useReducedMotion();
     const { t } = useLang();
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
@@ -100,13 +101,35 @@ export function Toogo() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="relative flex justify-center items-center h-full w-full mt-8 md:mt-0"
                     >
-                        <div className="relative w-[280px] h-[280px] bg-white rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] flex items-center justify-center p-8">
+                        {/* El muñeco es lo primero que cualquiera intenta tocar en esta
+                            sección, y no hacía nada: el único enlace era el botón de la
+                            esquina. Ahora la tarjeta entera lleva a toogo.store.
+
+                            La vuelta completa al tocarlo es deliberada y solo vive aquí.
+                            El resto del sitio es editorial y contenido; Toogo es un
+                            producto con mascota, y admite un gesto que en una página de
+                            servicios quedaría fuera de tono. Se anima al pulsar, no al
+                            soltar, así que el giro se ve mientras carga el destino en
+                            lugar de retrasarlo. */}
+                        <motion.a
+                            href="https://www.toogo.store"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Ver Toogo, la plataforma para crear tu tienda en línea"
+                            whileHover={reduce ? undefined : { y: -10, scale: 1.03 }}
+                            whileTap={reduce ? undefined : { rotate: 360, scale: 0.95 }}
+                            transition={{
+                                rotate: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+                                default: { type: "spring", stiffness: 300, damping: 20 },
+                            }}
+                            className="relative w-[280px] h-[280px] bg-white rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] flex items-center justify-center p-8 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+                        >
                             <img
                                 src="/toogo-character.png"
-                                alt="Toogo Character"
-                                className="w-full h-full object-contain"
+                                alt="Mascota de Toogo"
+                                className="w-full h-full object-contain pointer-events-none"
                             />
-                        </div>
+                        </motion.a>
                     </motion.div>
 
                 </div>
