@@ -70,14 +70,6 @@ export function authorHref(isEn: boolean): string {
     return isEn ? `${ABOUT_EN_ROOT}/carlos-beuvrin` : `${ABOUT_ES_ROOT}/carlos-beuvrin`;
 }
 
-// Índice de casos según idioma. Existía `caseStudyHref(slug, isEn)` para un caso
-// concreto, pero no para la raíz — y como el slug de la raíz cambia de idioma
-// ("/casos" vs "/en/case-studies"), enHref("/casos", true) devuelve "/en/casos",
-// que no existe. Cualquier enlace al índice debe pasar por aquí.
-export function caseStudiesHref(isEn: boolean): string {
-    return isEn ? CASE_STUDIES_EN_ROOT : CASE_STUDIES_ES_ROOT;
-}
-
 // Contacto: par con slug traducido, como about y case-studies. NO sigue el
 // patrón genérico "/en" + ruta española, así que necesita su propia entrada en
 // toEn/toEs o el selector de idioma mandaría a /en en vez de a la gemela.

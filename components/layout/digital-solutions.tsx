@@ -5,28 +5,20 @@ import { useRef } from "react";
 import { usePathname } from "next/navigation";
 import { CornerButton } from "@/components/ui/corner-button";
 import { useLang } from "@/lib/i18n/lang-context";
-import { enHref, caseStudiesHref } from "@/lib/i18n/routes";
+import Link from "next/link";
+import { enHref } from "@/lib/i18n/routes";
 
-// Cada cuadro apunta a donde de verdad se habla de ese tema, no todos al mismo
-// sitio: cuatro cuadros que llevan a la misma página son cuatro veces el mismo
-// enlace, y el visitante lo nota a la segunda.
-//
-// "__CASOS__" es un centinela: el índice de casos cambia de slug entre idiomas
-// ("/casos" vs "/en/case-studies"), así que no puede pasar por enHref y se
-// resuelve con caseStudiesHref más abajo.
-const CUADROS = [
-    { key: "ia", href: "/automatizacion-de-procesos" },
-    { key: "escala", href: "__CASOS__" },
-    { key: "apps", href: "/desarrollo-de-software" },
-    { key: "velocidad", href: "/desarrollo-web" },
-] as const;
+// Los cuatro cuadros llevan al mismo sitio que la sección — es el bloque de
+// "Soluciones digitales" — así que NO son cuatro enlaces: son un enlace con
+// cuatro piezas dentro. Cuatro anclas idénticas se le anuncian cuatro veces
+// seguidas a un lector de pantalla, y "Soluciones digitales, enlace" repetido
+// no aporta nada. Cada pieza gira por su cuenta al tocarla.
 
 export function DigitalSolutions() {
     const { t } = useLang();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
     const reduce = useReducedMotion();
-    const c = t.digital.cuadros;
     const containerRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -121,6 +113,11 @@ export function DigitalSolutions() {
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
                     >
+                        <Link
+                            href={enHref("/desarrollo-de-software", isEn)}
+                            aria-label={`${t.digital.title} ${t.digital.titleItalic}`}
+                            className="block cursor-pointer rounded-[1.5rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
+                        >
                         <motion.div
                             className="grid grid-cols-2 gap-4 w-[200px] md:w-[240px]"
                             variants={{
@@ -134,15 +131,11 @@ export function DigitalSolutions() {
                                 }
                             }}
                         >
-                            {/* Cuadros deliberadamente vacíos: Carlos los quiere sin icono
-                                ni etiqueta. Lo que sí son ahora es enlaces reales —antes no
-                                llevaban a ninguna parte— y giran al pulsarlos.
-                                Sin texto visible, el `aria-label` NO es opcional: es lo
-                                único que le dice a un lector de pantalla adónde va cada uno.
-                                Los cuatro destinos son distintos a propósito. */}
-                            {CUADROS.map((item, idx) => (
+                            {/* Cuadros deliberadamente vacíos, sin icono ni etiqueta.
+                                El índice solo sirve para repetirlos: no llevan datos. */}
+                            {[0, 1, 2, 3].map((idx) => (
                                 <motion.div
-                                    key={item.key}
+                                    key={idx}
                                     variants={{
                                         hidden: { scale: 0, opacity: 0 },
                                         visible: {
@@ -152,9 +145,7 @@ export function DigitalSolutions() {
                                         }
                                     }}
                                 >
-                                    <motion.a
-                                        href={item.href === "__CASOS__" ? caseStudiesHref(isEn) : enHref(item.href, isEn)}
-                                        aria-label={c[`${item.key}Aria`]}
+                                    <motion.div
                                         // El giro es la respuesta al clic; el hundimiento y
                                         // la elevación son la pista de que se puede pulsar.
                                         // En táctil no hay hover, así que sin el whileTap el
@@ -162,11 +153,12 @@ export function DigitalSolutions() {
                                         whileHover={reduce ? undefined : { y: -6, scale: 1.04 }}
                                         whileTap={reduce ? undefined : { rotate: 360, scale: 0.92 }}
                                         transition={{ rotate: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }, default: { type: "spring", stiffness: 400, damping: 22 } }}
-                                        className="block aspect-square bg-black rounded-[1.5rem] shadow-lg cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                                        className="aspect-square bg-black rounded-[1.5rem] shadow-lg"
                                     />
                                 </motion.div>
                             ))}
                         </motion.div>
+                        </Link>
                     </motion.div>
 
                 </div>
