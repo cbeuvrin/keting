@@ -104,6 +104,26 @@ function EditorialTitle({ title }: { title: string }) {
 
 // Recibe SOLO el contenido del idioma que se renderiza (ver splitCaseStudy):
 // pasar el caso completo metería el otro idioma en el payload RSC del HTML.
+/**
+ * Envuelve la captura en un enlace al sitio del cliente cuando existe. Si el
+ * proyecto no tiene URL pública devuelve el contenido tal cual — no hay destino
+ * honesto al que mandar y un enlace muerto es peor que ninguno.
+ */
+function ImgWrap({ url, alt, children }: { url?: string; alt: string; children: React.ReactNode }) {
+    if (!url) return <>{children}</>;
+    return (
+        <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={alt}
+            className="block relative transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] rounded-xl md:rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1d1d1f]"
+        >
+            {children}
+        </a>
+    );
+}
+
 export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; copy: CaseStudyLangContent; lang: Lang }) {
     const c = copy;
     const l = LABELS[lang];
@@ -210,6 +230,10 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                 <div className="max-w-6xl mx-auto relative">
                     <div className={`relative ${study.bareImage ? "max-w-[70%] mx-auto" : ""}`}>
                         <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/15 blur-3xl rounded-full pointer-events-none" />
+                        {/* La captura lleva al sitio real. Los proyectos sin URL pública
+                            (Suzuki, app de evento en iPad) se quedan sin enlace a propósito:
+                            antes que mandar a un destino inventado, ninguno. */}
+                        <ImgWrap url={study.url} alt={c.imageAlt}>
                         {study.bareImage ? (
                             <img
                                 src={study.image}
@@ -239,6 +263,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                                 </div>
                             </div>
                         )}
+                        </ImgWrap>
                         <div className="mt-5 md:mt-6 flex items-center justify-center gap-3">
                             <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-mono text-[#1d1d1f]/40">
                                 {l.designedBy}

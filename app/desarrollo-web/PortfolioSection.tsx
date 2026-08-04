@@ -9,20 +9,49 @@ import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n/lang-context";
 import { enHref } from "@/lib/i18n/routes";
 
+// El dominio de cada captura está impreso DENTRO de la propia imagen (barra de
+// direcciones del móvil), así que `url` no es una suposición: es lo que el
+// visitante lee en la miniatura. Si abre algo distinto a lo que ve, es un fallo.
+//
+// Sin `url` a propósito:
+//   · 4-6 (aersport.com) — el dominio ya no responde; enlazar a un sitio caído
+//     es peor que no enlazar.
+//   · 8-9 — no son webs, son maquetas de camiseta con un logo. No hay destino.
+//
+// `alt` describe lo que se ve; antes las doce decían "Portfolio".
 const projects = [
-    { src: "/gravity-portfolio-1.jpg" },
-    { src: "/gravity-portfolio-2.jpg" },
-    { src: "/gravity-portfolio-3.jpg" },
-    { src: "/gravity-portfolio-4.jpg" },
-    { src: "/gravity-portfolio-5.jpg" },
-    { src: "/gravity-portfolio-6.jpg" },
-    { src: "/gravity-portfolio-7.jpg" },
-    { src: "/gravity-portfolio-8.png" },
-    { src: "/gravity-portfolio-9.png" },
-    { src: "/gravity-portfolio-1.jpg" },
-    { src: "/gravity-portfolio-2.jpg" },
-    { src: "/gravity-portfolio-3.jpg" },
+    { src: "/gravity-portfolio-1.jpg", url: "https://ponguinguiola.org", alt: "Ponguinguiola — sitio de la organización ambiental" },
+    { src: "/gravity-portfolio-2.jpg", url: "https://smilebetterclinics.com", alt: "Smile Better Clinics — sitio de la clínica dental" },
+    { src: "/gravity-portfolio-3.jpg", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Executive Protection Academy — sitio del curso" },
+    { src: "/gravity-portfolio-4.jpg", alt: "AERS — tienda en línea de ropa deportiva" },
+    { src: "/gravity-portfolio-5.jpg", alt: "AERS — tienda en línea vista en móvil" },
+    { src: "/gravity-portfolio-6.jpg", alt: "AERS — tienda en línea vista en móvil" },
+    { src: "/gravity-portfolio-7.jpg", url: "https://basham.com.mx", alt: "Basham — sitio del despacho legal" },
+    { src: "/gravity-portfolio-8.png", alt: "Etiqueta de marca aplicada a prenda" },
+    { src: "/gravity-portfolio-9.png", alt: "Etiqueta de marca aplicada a prenda" },
+    { src: "/gravity-portfolio-1.jpg", url: "https://ponguinguiola.org", alt: "Ponguinguiola — sitio de la organización ambiental" },
+    { src: "/gravity-portfolio-2.jpg", url: "https://smilebetterclinics.com", alt: "Smile Better Clinics — sitio de la clínica dental" },
+    { src: "/gravity-portfolio-3.jpg", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Executive Protection Academy — sitio del curso" },
 ];
+
+/** Miniatura del muro: enlace al sitio real cuando existe, imagen suelta cuando no. */
+function Miniatura({ p }: { p: { src: string; url?: string; alt: string } }) {
+    const img = (
+        <img src={p.src} alt={p.alt} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+    );
+    const caja = "w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0";
+    if (!p.url) return <div className={caja}>{img}</div>;
+    return (
+        <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${caja} block transition-transform duration-500 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white`}
+        >
+            {img}
+        </a>
+    );
+}
 
 export default function PortfolioSection() {
     const { t } = useLang();
@@ -76,72 +105,56 @@ export default function PortfolioSection() {
                         {/* Column 1 */}
                         <motion.div style={{ y: y1 }} className="flex flex-col gap-2 md:gap-4">
                             {getProjects(0).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 2 */}
                         <motion.div style={{ y: y2 }} className="flex flex-col gap-2 md:gap-4 -mt-24">
                             {getProjects(3).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 3 */}
                         <motion.div style={{ y: y3 }} className="flex flex-col gap-2 md:gap-4">
                             {getProjects(5).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 4 */}
                         <motion.div style={{ y: y4 }} className="flex flex-col gap-2 md:gap-4 -mt-24">
                             {getProjects(7).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 5 */}
                         <motion.div style={{ y: y5 }} className="flex flex-col gap-2 md:gap-4">
                             {getProjects(2).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 6 */}
                         <motion.div style={{ y: y6 }} className="flex flex-col gap-2 md:gap-4 -mt-24">
                             {getProjects(9).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 7 */}
                         <motion.div style={{ y: y7 }} className="flex flex-col gap-2 md:gap-4">
                             {getProjects(4).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 
                         {/* Column 8 */}
                         <motion.div style={{ y: y8 }} className="flex flex-col gap-2 md:gap-4 -mt-24">
                             {getProjects(1).map((p, i) => (
-                                <div key={i} className="w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0">
-                                    <img src={p.src} alt="Portfolio" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                                </div>
+                                <Miniatura key={i} p={p} />
                             ))}
                         </motion.div>
 

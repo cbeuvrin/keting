@@ -284,12 +284,14 @@ function Ipad3D({ imgAlt }: { imgAlt: string }) {
                     className="absolute -bottom-6 left-[10%] right-[10%] h-8 bg-[#1d1d1f]/20 blur-2xl rounded-full"
                     style={{ transform: "translateZ(-50px)" }}
                 />
-                <img
+                <a href="/casos/suzuki" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                    <img
                     src="/soluciones/suzuki-ipad.png"
                     alt={imgAlt}
                     className="relative w-full h-auto drop-shadow-2xl"
                     draggable={false}
                 />
+                </a>
             </motion.div>
         </div>
     );
@@ -976,12 +978,14 @@ function Tilt3DPhone({ imgAlt }: { imgAlt: string }) {
                     className="absolute -bottom-8 left-[10%] right-[10%] h-8 bg-[#1d1d1f]/25 blur-2xl rounded-full"
                     style={{ transform: "translateZ(-60px)" }}
                 />
-                <img
+                <a href="https://www.toogo.store" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                    <img
                     src="/soluciones/iphone-toogo.png"
                     alt={imgAlt}
                     className="relative w-full h-auto max-w-[240px] md:max-w-[280px] drop-shadow-2xl pointer-events-none"
                     draggable={false}
                 />
+                </a>
             </motion.div>
         </div>
     );
@@ -1175,12 +1179,14 @@ export function GoberniaShowcase() {
                             className="md:col-span-7 relative"
                         >
                             <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/10 blur-3xl rounded-full pointer-events-none" />
-                            <img
+                            <a href="https://gobernia-liard.vercel.app/" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                                <img
                                 src="/soluciones/gobernia-imac.png"
                                 alt={s.imgAlt}
                                 className="relative w-full h-auto drop-shadow-2xl"
                                 draggable={false}
                             />
+                            </a>
 
                             {/* Etiqueta flotante */}
                             <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
@@ -1268,12 +1274,14 @@ export function IvanShowcase() {
                                     </div>
                                 </div>
                                 <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
-                                    <img
+                                    <a href="https://ivanivanovich.com" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                                        <img
                                         src="/portafolio/screenshots/ivanivanovich.jpg"
                                         alt={s.imgAlt}
                                         className="block w-full h-auto"
                                         draggable={false}
                                     />
+                                    </a>
                                 </div>
                             </div>
                             <div className="absolute top-4 right-4 bg-[#1d1d1f] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">

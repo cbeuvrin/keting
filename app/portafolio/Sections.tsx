@@ -472,7 +472,18 @@ function CaseCard({
                             {/* Sombra al piso */}
                             <div className={`absolute ${bareImage ? "-inset-x-4 -bottom-4 h-8" : "-inset-x-8 -bottom-8 h-12"} ${dark ? "bg-black/50" : "bg-[#1d1d1f]/20"} blur-3xl rounded-full pointer-events-none`} />
 
-                            {/* Imagen sin marco — render de dispositivo (ej. iPad de Suzuki) */}
+                            {/* La imagen ES el enlace, no solo los CTA de texto de al lado.
+                                Lleva al SITIO QUE MUESTRA —no a nuestro caso— porque eso es
+                                lo que el marco promete: barra de URL con el dominio real e
+                                indicador "Live". Cuando el proyecto no tiene sitio público
+                                (Suzuki es una app de evento en iPad) cae al caso, que es el
+                                único destino honesto que existe. */}
+                            <a
+                                href={url || caseStudyHref(caseSlug, isEn)}
+                                {...(url ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                aria-label={`${url ? card.viewLive : card.readCase} — ${imageAlt}`}
+                                className="block relative transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current rounded-xl md:rounded-2xl"
+                            >
                             {bareImage ? (
                                 <img
                                     src={image}
@@ -526,6 +537,7 @@ function CaseCard({
                             </div>
                             </>
                             )}
+                            </a>
 
                             {/* Firma KETING debajo del marco */}
                             <div className="mt-5 md:mt-6 flex items-center justify-center gap-3">

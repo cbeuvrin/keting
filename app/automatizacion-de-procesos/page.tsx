@@ -351,12 +351,14 @@ export default function AutomatizacionPage() {
                     >
                         <div className="absolute -inset-x-8 -bottom-8 h-12 bg-black/50 blur-3xl rounded-full pointer-events-none" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <a href="https://gobernia-liard.vercel.app/" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                            <img
                             src="/soluciones/gobernia-imac.png"
                             alt={a.darkSection.imgAlt}
                             className="relative w-full h-auto drop-shadow-2xl"
                             draggable={false}
                         />
+                        </a>
                         <div className="absolute top-4 right-4 bg-white text-black text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
                             {a.darkSection.badge}
                         </div>
@@ -421,7 +423,8 @@ export default function AutomatizacionPage() {
                         <div className="relative w-[240px] md:w-[300px]">
                             <div className="absolute -inset-x-6 -bottom-6 h-10 bg-[#1d1d1f]/15 blur-3xl rounded-full pointer-events-none" />
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <a href="https://www.toogo.store" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                                <img
                                 src="/soluciones/iphone-toogo.png"
                                 alt={a.implementacion.imgAlt}
                                 width={850}
@@ -429,6 +432,7 @@ export default function AutomatizacionPage() {
                                 className="relative w-full h-auto drop-shadow-2xl"
                                 draggable={false}
                             />
+                            </a>
                             <div className="absolute top-6 -right-3 md:-right-6 bg-[#25D366] text-white text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
                                 {a.implementacion.badge}
                             </div>

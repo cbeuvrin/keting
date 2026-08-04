@@ -77,12 +77,14 @@ export default function ZoomSection() {
                     />
 
                     {/* Desktop: Pantalla */}
-                    <img
+                    <a href="https://www.toogo.store" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                        <img
                         src="/pantalla-web.png"
                         alt={z.altDesktop}
                         className="hidden md:block relative w-full max-w-5xl h-auto drop-shadow-2xl"
                         draggable={false}
                     />
+                    </a>
 
                     {/* Etiqueta LIVE flotante */}
                     <div className="absolute top-2 right-2 md:top-6 md:right-6 bg-black text-white text-[9px] md:text-xs font-mono uppercase tracking-widest px-2 md:px-3 py-1 md:py-1.5 rounded-full">

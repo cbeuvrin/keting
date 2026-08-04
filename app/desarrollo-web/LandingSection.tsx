@@ -58,12 +58,14 @@ export function LandingSection() {
                         </div>
                         <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <a href="https://www.iudex.mx/" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                                <img
                                 src="/portafolio/screenshots/iudex.jpg"
                                 alt={c.imageAlt}
                                 className="block w-full h-auto"
                                 draggable={false}
                             />
+                            </a>
                         </div>
                     </div>
                     <div className="absolute top-4 right-4 bg-white text-black text-[10px] md:text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full">
