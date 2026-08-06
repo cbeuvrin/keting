@@ -9,19 +9,15 @@
 //
 // Reglas del proyecto (no violar): sin testimonios inventados, sin cifras de
 // inversión/duración de proyecto inventadas, sin números de "línea base" que
-// no tengamos. `quote`, `investment` y `duration` son opcionales y se dejan
-// SIN DEFINIR en los 9 casos — Carlos los añadirá cuando tenga los datos.
+// no tengamos. `investment` y `duration` son opcionales y siguen SIN DEFINIR en
+// los 9 casos — Carlos los añadirá cuando tenga los datos.
+//
+// Los testimonios se movieron a lib/testimonials.ts (agosto 2026): había que
+// poder publicar el de un cliente cuyo proyecto todavía no tiene página de caso.
 
 export type CaseStudyMetric = {
     value: string;
     label: string;
-};
-
-export type CaseStudyQuote = {
-    text: string;
-    name: string;
-    role: string;
-    company: string;
 };
 
 export type CaseStudyLangContent = {
@@ -51,8 +47,10 @@ export type CaseStudy = {
     bareImage?: boolean;
     es: CaseStudyLangContent;
     en: CaseStudyLangContent;
+    // Los testimonios YA NO viven aquí: fuente única en lib/testimonials.ts, que
+    // admite testimonios de proyectos sin página de caso. Ver la nota de ese
+    // fichero antes de reintroducir un campo `quote`.
     // Opcionales — pendientes de datos reales, NO rellenar con placeholders.
-    quote?: CaseStudyQuote;
     investment?: string;
     duration?: string;
 };
@@ -111,19 +109,6 @@ export const CASE_STUDIES: CaseStudy[] = [
             stack: ["Next.js", "AI Integration", "Dark mode", "Editorial"],
             imageAlt: "Iudex · Legal AI",
             metricLabel: "Sessions/mo",
-        },
-        // Recibido por /testimonio el 2026-07-30, con la casilla de autorización
-        // marcada. El texto va literal, sin tocar una coma.
-        //
-        // En el formulario escribió "Sebastián" como nombre y "Moncayo" como
-        // empresa, pero su correo es moncayo@iudex.mx: puso el apellido en la
-        // casilla equivocada. Carlos, que lo conoce, confirmó el 2026-07-30 que
-        // es Sebastián Moncayo, CEO de Iudex. Se publica así.
-        quote: {
-            text: "Un cambio necesario para nuestra imagen de marca. Nuestra página web cubrió exactamente lo que necesitábamos.",
-            name: "Sebastián Moncayo",
-            role: "CEO",
-            company: "Iudex",
         },
     },
     {
@@ -329,17 +314,6 @@ export const CASE_STUDIES: CaseStudy[] = [
             imageAlt: "Suzuki · Event quiz app, in partnership with Enso Media",
             metricLabel: "Quizzes at the event",
         },
-        // Recibido por /testimonio el 2026-07-30, con la casilla de autorización
-        // marcada. Del original solo se corrigieron dos erratas evidentes
-        // ("siemore" -> "siempre", "como" -> "cómo") y el punto final; ni una
-        // palabra más. Va sin traducir en la página inglesa a propósito: son las
-        // palabras de una persona real, no copy nuestro.
-        quote: {
-            text: "Todo perfecto, los cambios y las propuestas de cómo hacer las cosas siempre fueron en pro del evento y de hacerlo mejor.",
-            name: "Rodrigo Juárez",
-            role: "Productor",
-            company: "Enso Media",
-        },
     },
     {
         slug: "rosymar-gonzalez",
@@ -373,15 +347,6 @@ export const CASE_STUDIES: CaseStudy[] = [
             stack: ["E-Commerce", "Custom theme", "Manifesto", "Store"],
             imageAlt: "Rosymar González · Jewelry",
             metricLabel: "Online sales",
-        },
-        // Recibido por /testimonio el 2026-07-31, con la casilla de autorización
-        // marcada. Del original solo se añadió el punto final; el resto va literal,
-        // incluida la frase que arranca con "Y" — es su forma de hablar, no una errata.
-        quote: {
-            text: "No teníamos un sitio web para comercializar nuestros productos en línea. Y el equipo de Keting Media nos asesoró y nos apoyó en la construcción del sitio, de manera profesional y rápida. Luego también nos ofreció su soporte de mantenimiento. Muy contentos.",
-            name: "Andrés Bustillos",
-            role: "Director comercial",
-            company: "Rosymar González Joyas",
         },
     },
     {

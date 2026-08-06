@@ -14,7 +14,10 @@ import { useLang } from "@/lib/i18n/lang-context";
 
 const ZoomSection = dynamic(() => import("./ZoomSection"), { ssr: false });
 const PortfolioSection = dynamic(() => import("./PortfolioSection"), { ssr: false });
-const Testimonials = dynamic(() => import("@/components/layout/testimonials").then(mod => mod.Testimonials), { ssr: false });
+// Antes iba con ssr:false, y por eso los testimonios inventados que había aquí
+// no aparecían en ninguna auditoría del HTML aunque el visitante sí los leía.
+// Ahora es un import normal: lo que se publica, se puede comprobar.
+import { Testimonials } from "@/components/layout/testimonials";
 
 const ClientsShowcase = dynamic(() => import("./ClientsShowcase"), { ssr: false });
 const Footer = dynamic(() => import("@/components/layout/footer").then(mod => mod.Footer), { ssr: false });

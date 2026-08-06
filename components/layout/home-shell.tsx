@@ -6,6 +6,7 @@ import { Services } from "@/components/layout/services";
 import { DigitalSolutions } from "@/components/layout/digital-solutions";
 import { AutomationHome } from "@/components/layout/automation-home";
 import { Toogo } from "@/components/layout/toogo";
+import { Testimonials } from "@/components/layout/testimonials";
 import { AboutUs } from "@/components/layout/about-us";
 import { Footer } from "@/components/layout/footer";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
@@ -57,7 +58,8 @@ export function HomeShell() {
         <DigitalSolutions />
         <AutomationHome />
         <Toogo />
-        <AboutUs />
+        <Testimonials />
+            <AboutUs />
         <BlogCarousel />
         <BrandsConstellation />
         <Footer />

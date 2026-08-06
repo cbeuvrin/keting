@@ -14,6 +14,7 @@ import { Footer } from "@/components/layout/footer";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import type { CaseStudyBase, CaseStudyLangContent } from "@/lib/case-studies";
 import { CASE_STUDIES_PUBLISHED_DATE } from "@/lib/case-studies";
+import { getTestimonialForCase } from "@/lib/testimonials";
 
 type Lang = "es" | "en";
 
@@ -125,6 +126,9 @@ function ImgWrap({ url, alt, children }: { url?: string; alt: string; children: 
 }
 
 export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; copy: CaseStudyLangContent; lang: Lang }) {
+    // El testimonio ya no vive en el caso: la fuente única es lib/testimonials.ts,
+    // porque hay testimonios de proyectos que aún no tienen página de caso.
+    const testimonio = getTestimonialForCase(study.slug);
     const c = copy;
     const l = LABELS[lang];
     const isEn = lang === "en";
@@ -328,13 +332,13 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                 )}
 
                 {/* Testimonio — solo si existe una cita real (opcional, sin relleno). */}
-                {study.quote && (
+                {testimonio && (
                     <div className="max-w-4xl mx-auto mt-16 pt-14 border-t border-[#1d1d1f]/10">
                         <p className="text-2xl md:text-3xl font-[family-name:var(--font-playfair)] italic font-normal leading-snug text-[#1d1d1f]">
-                            &ldquo;{study.quote.text}&rdquo;
+                            &ldquo;{testimonio.text}&rdquo;
                         </p>
                         <p className="mt-6 text-sm uppercase tracking-[0.2em] text-[#1d1d1f]/50 font-mono">
-                            {study.quote.name} · {study.quote.role}, {study.quote.company}
+                            {testimonio.name} · {testimonio.role}, {testimonio.company}
                         </p>
                     </div>
                 )}
