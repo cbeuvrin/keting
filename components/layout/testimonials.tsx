@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLang } from "@/lib/i18n/lang-context";
@@ -9,101 +10,174 @@ import { TESTIMONIALS } from "@/lib/testimonials";
 
 // Sección de testimonios. Se usa en el home y en /desarrollo-web.
 //
-// Sustituye a la versión anterior, que traía tres testimonios inventados
-// atribuidos a empresas reales (NuRange Coffee, Escapely, Butcher Bird) con
-// métricas de resultado que nadie dijo. Venían de una plantilla y se retiraron
-// el 2026-08-03, confirmado por Carlos: no eran clientes. Lee de lib/testimonials.ts, que incluye
-// también los de proyectos sin página de caso — por eso existe esta sección y no
-// basta con los que salen dentro de cada caso.
+// Conserva el diseño editorial anterior —filas anchas separadas por línea
+// discontinua, cifra gigante a la izquierda, cita en el centro, cliente y
+// etiquetas a la derecha, con parallax— pero con testimonios REALES.
 //
-// Los testimonios van SIN TRADUCIR en la versión inglesa, a propósito: son las
-// palabras de una persona real, no copy nuestro. Traducirlas sería ponerle en la
-// boca algo que no dijo, y un lector inglés entiende perfectamente que un cliente
-// mexicano o argentino hable en español — de hecho refuerza que es auténtico.
-// Lo que sí se traduce es el marco: eyebrow, titular y el enlace al caso.
+// La versión que sustituye traía tres inventados atribuidos a empresas que sí
+// existen (NuRange Coffee, Escapely, Butcher Bird), con métricas de resultado
+// que nadie dijo. Venían de una plantilla; se retiraron el 2026-08-03 tras
+// confirmar Carlos que no eran clientes suyos.
+//
+// Las citas van SIN TRADUCIR en inglés a propósito: son palabras de personas
+// reales, no copy nuestro. Se traduce el marco —eyebrow, titular, etiquetas y
+// la leyenda de las métricas—, nunca la cita.
 export function Testimonials() {
     const { t } = useLang();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
+    const lang = isEn ? "en" : "es";
     const c = t.testimonials;
+
+    const containerRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"],
+    });
+
+    // ⚠️ Un solo par de transformaciones para todas las filas. La versión
+    // anterior creaba un useTransform DENTRO del map — hooks dentro de un bucle,
+    // que solo funcionaba porque la lista tenía exactamente tres elementos fijos.
+    // Con una lista que crece cada vez que llega un testimonio, eso rompe React.
+    const yStat = useTransform(scrollYProgress, [0, 1], [40, -40], { ease: cubicBezier(0.1, 0.5, 0.5, 1) });
+    const yQuote = useTransform(scrollYProgress, [0, 1], [20, -20], { ease: cubicBezier(0.1, 0.5, 0.5, 1) });
 
     if (TESTIMONIALS.length === 0) return null;
 
     return (
-        <section className="relative py-24 md:py-32 px-6 md:px-12 lg:px-20 bg-[#FAFAFA] overflow-hidden">
-            {/* Cuadrícula tenue, como el resto del sitio */}
-            <div
-                className="absolute inset-0 opacity-[0.04] pointer-events-none"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.6) 1px, transparent 1px)",
-                    backgroundSize: "60px 60px",
-                }}
-            />
-            <span className="absolute top-[6%] right-[4%] text-[7rem] md:text-[13rem] text-black/[0.04] select-none font-light leading-none rotate-12 pointer-events-none">
-                *
-            </span>
+        <section ref={containerRef} className="relative z-20 py-24 md:py-32 bg-[#FAFAFA] text-[#111111] overflow-hidden">
+            <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+                <div className="mb-16 md:mb-20 text-center md:text-left">
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center justify-center md:justify-start gap-3 mb-4 md:mb-6"
+                    >
+                        <span className="block w-10 h-px bg-black/40" />
+                        <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
+                            {c.eyebrow}
+                        </span>
+                    </motion.div>
 
-            <div className="max-w-6xl mx-auto relative">
-                <div className="flex items-center gap-3 mb-6">
-                    <span className="block w-10 h-px bg-black/40" />
-                    <span className="text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/50 font-sans">
-                        {c.eyebrow}
-                    </span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-3xl md:text-5xl font-normal tracking-tight mb-4 font-heading text-[#111]"
+                    >
+                        {c.title}{" "}
+                        <span className="font-[family-name:var(--font-playfair)] italic font-normal">
+                            {c.titleItalic}
+                        </span>
+                        <span className="inline-block ml-2 text-xl md:text-3xl align-top rotate-12 text-black/30">*</span>
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 1.2, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-gray-500 text-base md:text-lg font-light max-w-3xl"
+                    >
+                        {c.note}
+                    </motion.p>
                 </div>
 
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-14 md:mb-20 text-black max-w-3xl">
-                    {c.title}{" "}
-                    <span className="font-[family-name:var(--font-playfair)] italic font-normal">
-                        {c.titleItalic}
-                    </span>
-                </h2>
-
-                <div className="grid md:grid-cols-2 gap-x-12 gap-y-14">
-                    {TESTIMONIALS.map((item, i) => (
-                        <motion.figure
+                <div className="flex flex-col">
+                    {TESTIMONIALS.map((item, index) => (
+                        <motion.div
                             key={item.name}
-                            initial={{ opacity: 0, y: 24 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-10%" }}
-                            transition={{ duration: 0.8, delay: (i % 2) * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                            className="border-l-2 border-black/15 pl-6 md:pl-8"
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.8, delay: index * 0.15, ease: "easeOut" }}
+                            className={`py-10 md:py-12 flex flex-col md:flex-row gap-8 md:gap-16 border-t border-dashed border-[#d5d5d5] ${
+                                index === TESTIMONIALS.length - 1 ? "border-b" : ""
+                            }`}
                         >
-                            <blockquote className="text-lg md:text-xl font-[family-name:var(--font-playfair)] italic font-normal leading-snug text-black">
-                                &ldquo;{item.text}&rdquo;
-                            </blockquote>
+                            {/* Cifra */}
+                            <motion.div style={{ y: yStat }} className="md:w-1/4 flex flex-col items-start text-left pt-2">
+                                {item.metric ? (
+                                    <>
+                                        <span className="text-[4.5rem] md:text-[6.5rem] font-normal tracking-tighter leading-[0.8] mb-4 text-[#111]">
+                                            {item.metric.value}
+                                        </span>
+                                        <span className="text-[10px] md:text-[11px] text-[#666] uppercase tracking-[0.2em] font-mono font-medium">
+                                            {item.metric.label[lang]}
+                                        </span>
+                                    </>
+                                ) : (
+                                    // Sin caso publicado no hay cifra verificada. Antes que
+                                    // inventar una para cuadrar la columna, va el asterisco
+                                    // de la marca y la etiqueta del proyecto.
+                                    <>
+                                        <span
+                                            className="text-[4.5rem] md:text-[6.5rem] font-light leading-[0.8] mb-4 text-black/15 select-none"
+                                            aria-hidden="true"
+                                        >
+                                            *
+                                        </span>
+                                        <span className="text-[10px] md:text-[11px] text-[#666] uppercase tracking-[0.2em] font-mono font-medium">
+                                            {item.project}
+                                        </span>
+                                    </>
+                                )}
+                            </motion.div>
 
-                            <figcaption className="mt-6">
-                                <span className="block text-sm font-semibold text-black">
+                            {/* Cita */}
+                            <motion.div style={{ y: yQuote }} className="md:w-1/2 flex items-start pt-4">
+                                <p className="text-lg md:text-[1.125rem] leading-[1.8] text-[#333] font-medium tracking-tight italic">
+                                    <span className="text-3xl text-black/30 leading-none align-top mr-1">&ldquo;</span>
+                                    {item.text}
+                                    <span className="text-3xl text-black/30 leading-none align-top ml-1">&rdquo;</span>
+                                </p>
+                            </motion.div>
+
+                            {/* Cliente */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: index * 0.2 }}
+                                className="md:w-1/4 flex flex-col md:items-start justify-start pt-4"
+                            >
+                                <h4 className="text-sm font-bold uppercase tracking-widest mb-1 text-[#111]">
                                     {item.name}
-                                </span>
-                                <span className="block text-sm text-black/55">
+                                </h4>
+                                <p className="text-[13px] text-[#888] mb-5 font-light">
                                     {item.role}, {item.company}
-                                </span>
-                                <span className="block mt-2 text-[10px] uppercase tracking-[0.2em] text-black/35 font-mono">
-                                    {item.project}
-                                </span>
+                                </p>
 
-                                {/* Solo los proyectos con página de caso llevan enlace. El
-                                    resto no lo lleva — antes que un destino inventado,
-                                    ninguno. */}
+                                {item.tags && (
+                                    <div className="flex flex-wrap gap-2">
+                                        {item.tags[lang].map((tag) => (
+                                            <span
+                                                key={tag}
+                                                className="text-[10px] md:text-[11px] px-3 py-1.5 rounded-full border border-[rgba(0,0,0,0.15)] text-[#555] uppercase font-mono tracking-wider bg-white/50"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Solo enlaza quien tiene caso publicado. */}
                                 {item.caseSlug && (
                                     <Link
                                         href={caseStudyHref(item.caseSlug, isEn)}
-                                        className="inline-flex items-center gap-2 mt-3 text-[10px] uppercase tracking-[0.2em] text-black/45 hover:text-black transition-colors"
+                                        className="inline-flex items-center gap-2 mt-5 text-[10px] uppercase tracking-[0.2em] text-black/45 hover:text-black transition-colors"
                                     >
                                         <span className="block w-5 h-px bg-black/25" />
                                         {c.readCase}
                                     </Link>
                                 )}
-                            </figcaption>
-                        </motion.figure>
+                            </motion.div>
+                        </motion.div>
                     ))}
                 </div>
-
-                <p className="mt-16 text-sm text-black/45 font-light max-w-2xl">
-                    {c.note}
-                </p>
             </div>
         </section>
     );

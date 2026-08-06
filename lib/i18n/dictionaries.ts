@@ -117,7 +117,7 @@ const es = {
         title: "No lo decimos",
         titleItalic: "nosotros.",
         readCase: "Ver el caso",
-        note: "Todos los testimonios llegaron por escrito desde el formulario que enviamos a nuestros clientes, con su autorización expresa para publicarlos con nombre, cargo y empresa. Ninguno está redactado por nosotros.",
+        note: "Todos llegaron por escrito desde el formulario que mandamos a nuestros clientes, con su autorización para publicarlos con nombre y empresa. Ninguno está redactado por nosotros.",
     },
     toogo: {
         eyebrow: "Caso · Toogo",
@@ -1126,7 +1126,7 @@ const en: typeof es = {
         title: "Not our words.",
         titleItalic: "Theirs.",
         readCase: "Read the case",
-        note: "Every testimonial came in writing through the form we send our clients, with their explicit permission to publish it with their name, role and company. None of them was written by us — they appear in the language each client wrote them in.",
+        note: "Every one came in writing through the form we send our clients, with their permission to publish it with their name and company. None was written by us — each appears in the language its author wrote it in.",
     },
     toogo: {
         eyebrow: "Case · Toogo",

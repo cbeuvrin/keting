@@ -28,6 +28,18 @@ export type Testimonial = {
     received: string;
     /** Slug del caso, si el proyecto tiene página propia. */
     caseSlug?: string;
+    /**
+     * Métrica destacada. Se COPIA de la del caso (lib/case-studies.ts) en lugar
+     * de importarla: ese fichero lleva los nueve casos en dos idiomas y meterlo
+     * en un componente de cliente lo mandaría entero al bundle del home.
+     * Si cambias la métrica de un caso, cámbiala también aquí.
+     *
+     * Sin métrica cuando no hay caso: NO se inventa un número para rellenar la
+     * columna. El componente pone el asterisco de la marca en su lugar.
+     */
+    metric?: { value: string; label: { es: string; en: string } };
+    /** Stack/servicios visibles. Los de los casos vienen de su `stack`. */
+    tags?: { es: string[]; en: string[] };
 };
 
 export const TESTIMONIALS: readonly Testimonial[] = [
@@ -40,6 +52,8 @@ export const TESTIMONIALS: readonly Testimonial[] = [
         project: "App de activación para el evento de Suzuki",
         received: "2026-07-30",
         caseSlug: "suzuki",
+        metric: { value: "500+", label: { es: "Quizzes en el evento", en: "Quizzes at the event" } },
+        tags: { es: ["App de evento", "Quiz interactivo", "iPad"], en: ["Event app", "Interactive quiz", "iPad"] },
     },
     {
         // Literal, sin correcciones.
@@ -54,6 +68,8 @@ export const TESTIMONIALS: readonly Testimonial[] = [
         project: "Página web y estrategia",
         received: "2026-07-30",
         caseSlug: "iudex",
+        metric: { value: "100k+", label: { es: "Sesiones mes", en: "Sessions/mo" } },
+        tags: { es: ["Next.js", "Integración de IA", "Editorial"], en: ["Next.js", "AI Integration", "Editorial"] },
     },
     {
         // Solo se añadió el punto final. La frase que empieza por "Y" es suya.
@@ -64,6 +80,8 @@ export const TESTIMONIALS: readonly Testimonial[] = [
         project: "E-commerce de joyería",
         received: "2026-07-31",
         caseSlug: "rosymar-gonzalez",
+        metric: { value: "↑ 5x", label: { es: "Ventas online", en: "Online sales" } },
+        tags: { es: ["E-commerce", "Tema a medida", "Tienda"], en: ["E-commerce", "Custom theme", "Store"] },
     },
     {
         // Erratas corregidas: "metodologia" -> "metodología". Se retira el emoji
@@ -78,6 +96,10 @@ export const TESTIMONIALS: readonly Testimonial[] = [
         company: "Anexa",
         project: "E-commerce para Re-Dress",
         received: "2026-08-03",
+        // Sin `metric` a propósito: Re-Dress no tiene caso publicado y por tanto
+        // no hay una cifra verificada que enseñar. Antes que rellenar el hueco
+        // con un número, el hueco se queda.
+        tags: { es: ["E-commerce", "Agencia"], en: ["E-commerce", "Agency"] },
     },
 ];
 
