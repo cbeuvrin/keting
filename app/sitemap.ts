@@ -29,6 +29,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/desarrollo-web`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/en/desarrollo-de-software`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/en/automatizacion-de-procesos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/software-para-eventos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/en/software-para-eventos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
         { url: `${SITE_URL}/en/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
         { url: `${SITE_URL}/casos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },

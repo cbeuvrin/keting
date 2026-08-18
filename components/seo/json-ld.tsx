@@ -75,6 +75,11 @@ export function service(opts: {
     serviceType: string;
     description: string;
     path: string;
+    /** Catálogo de capacidades agrupadas. Opcional: las páginas de servicio que
+     *  no publican una lista de prestaciones lo omiten y el nodo sale igual que
+     *  antes. Cuando existe, los buscadores (y los de IA) leen la lista como
+     *  datos y no solo como texto suelto de la página. */
+    catalog?: { name: string; items: string[] }[];
 }) {
     return {
         "@context": "https://schema.org",
@@ -83,6 +88,22 @@ export function service(opts: {
         serviceType: opts.serviceType,
         description: opts.description,
         url: `${SITE}${opts.path}`,
+        ...(opts.catalog?.length
+            ? {
+                  hasOfferCatalog: {
+                      "@type": "OfferCatalog",
+                      name: opts.name,
+                      itemListElement: opts.catalog.map((group) => ({
+                          "@type": "OfferCatalog",
+                          name: group.name,
+                          itemListElement: group.items.map((item) => ({
+                              "@type": "Offer",
+                              itemOffered: { "@type": "Service", name: item },
+                          })),
+                      })),
+                  },
+              }
+            : {}),
         areaServed: { "@type": "Country", name: "México" },
         provider: {
             "@type": "Organization",

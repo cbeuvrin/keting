@@ -7,6 +7,7 @@ export const EN_MIRRORED = [
     "/desarrollo-web",
     "/desarrollo-de-software",
     "/automatizacion-de-procesos",
+    "/software-para-eventos",
     "/portafolio",
     "/aviso-de-privacidad",
     "/terminos-y-condiciones",

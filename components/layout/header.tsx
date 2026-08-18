@@ -33,6 +33,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
         { label: t.nav.webdesign, href: enHref("/desarrollo-web", isEn), styles: ["italic"] },
         { label: t.nav.digital, href: enHref("/desarrollo-de-software", isEn), styles: ["italic"] },
         { label: t.nav.automation, href: enHref("/automatizacion-de-procesos", isEn), styles: ["italic"] },
+        { label: t.nav.events, href: enHref("/software-para-eventos", isEn), styles: ["italic"] },
         { label: t.nav.portfolio, href: enHref("/portafolio", isEn), styles: ["italic"] },
         { label: t.nav.blog, href: enHref("/blog", isEn), styles: ["italicUnderline"] },
         { label: t.nav.about, href: aboutHref(isEn), styles: ["italic"] },

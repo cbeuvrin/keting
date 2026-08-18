@@ -89,6 +89,7 @@ export function Footer() {
                             <li><Link href={enHref("/desarrollo-web", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.webdesign}</Link></li>
                             <li><Link href={enHref("/desarrollo-de-software", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.digital}</Link></li>
                             <li><Link href={enHref("/automatizacion-de-procesos", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.automation}</Link></li>
+                            <li><Link href={enHref("/software-para-eventos", isEn)} className="text-white/80 hover:text-white transition-colors text-sm">{t.nav.events}</Link></li>
                         </ul>
                     </div>
 

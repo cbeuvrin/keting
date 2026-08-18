@@ -15,6 +15,7 @@ const es = {
         digitalShort: "Software",
         automation: "Automatización",
         automationShort: "IA",
+        events: "Eventos",
         price: "Precio",
         portfolio: "Portafolio",
         blog: "Blog",
@@ -103,6 +104,18 @@ const es = {
         description:
             "Tu equipo pierde horas en tareas repetitivas. Automatizamos tus procesos con flujos, agentes de IA y asistentes en WhatsApp conectados a tus sistemas — para que la operación corra sola y tu gente se dedique a lo que necesita criterio humano.",
         tags: ["Agentes", "Flujos", "WhatsApp"],
+    },
+    eventsHome: {
+        eyebrow: "04 · Eventos",
+        title: "Software para",
+        titleItalic: "eventos",
+        subtitle: "La fecha no se mueve.",
+        description:
+            "Registro con QR, control de acceso, activaciones en iPad y transmisión en vivo. Lo hemos hecho para Los DiDis, para Suzuki y para un evento transmitido de principio a fin.",
+        tags: ["Registro", "Acceso", "Transmisión"],
+        badgeLabel: "Acceso",
+        badgeStatus: "Válido",
+        badgeAria: "Ver el servicio de software para eventos",
     },
     digital: {
         eyebrow: "02 · Servicio",
@@ -714,6 +727,179 @@ const es = {
             },
         ],
     },
+    // ⚠️ TITULAR PROVISIONAL. El plan acordado con Carlos es preguntarle a sus
+    // agencias con qué palabras describirían lo que les resolvió, y usar ESA frase
+    // como encabezado. Hasta que contesten, `heroLead` es un texto de trabajo.
+    //
+    // Todo lo demás sale de proyectos reales: Suzuki y Los DiDis (ambos con Enso
+    // Media, con caso propio y cifra) y Apizeal (con Kaizen). Apizeal NO tiene
+    // caso todavía porque falta captura y cifra — el bloque lo dice tal cual en
+    // vez de rellenarlo.
+    eventsPage: {
+        hero: {
+            eyebrow: "04 · Servicio",
+            h1Lines: ["Software", "para", "eventos"],
+            heroLead: "La fecha no se mueve.",
+            sub: "Registro, control de acceso, activaciones y transmisión. Lo construimos para productoras que no pueden permitirse que algo falle el día del evento — porque ese día no hay segunda oportunidad.",
+        },
+        why: {
+            eyebrow: "Por qué es distinto",
+            titleLead: "Un evento no se parece",
+            titleAccent: "a un proyecto normal",
+            p1: "Un sitio web se puede corregir el martes. Un evento pasa una vez, a una hora concreta, delante de gente que ya llegó. Esa diferencia lo cambia todo: no hay margen para depurar en caliente ni para pedir una semana más.",
+            p2: "Por eso lo que importa no es el catálogo de funciones, sino que la puerta abra a la hora y que alguien conteste el sábado por la mañana.",
+        },
+        capabilities: {
+            eyebrow: "Lo que hemos construido",
+            title: "Tres piezas de un evento,",
+            titleAccent: "ya probadas",
+            items: [
+                {
+                    n: "01",
+                    name: "Registro y control de acceso",
+                    body: "Lector de QR con panel en vivo: cada acceso queda registrado al instante y sabes cuántos han entrado y cuántos faltan, sin esperar al informe del día siguiente.",
+                    proof: "Los DiDis · 1,800 asistentes esperados",
+                    caseSlug: "los-didis",
+                },
+                {
+                    n: "02",
+                    name: "Activaciones y experiencia",
+                    body: "Apps de marca para el propio evento: dinámicas en iPad con las que el asistente interactúa y se lleva algo, en vez de una lona más.",
+                    proof: "Suzuki · 500+ personas",
+                    caseSlug: "suzuki",
+                },
+                {
+                    n: "03",
+                    name: "Transmisión y métricas",
+                    body: "Plataforma con registro previo, transmisión en vivo, vigilancia durante el evento y métricas al terminar. El evento completo, de principio a fin.",
+                    proof: "Apizeal, con Kaizen",
+                    caseSlug: "",
+                },
+            ],
+        },
+        catalog: {
+            eyebrow: "Lo que podemos construir",
+            title: "Todo lo que cabe",
+            titleAccent: "alrededor de un evento",
+            lead: "Arriba está lo que ya entregamos, con su caso. Esto otro es el catálogo: lo que sabemos construir alrededor de un evento. Se toma por piezas — nadie necesita la lista entera.",
+            note: "¿Falta algo en la lista? Pregúntanoslo. Casi siempre la respuesta es sí, y si no lo es te lo decimos.",
+            groups: [
+                {
+                    n: "01",
+                    name: "Registro y acreditación",
+                    items: [
+                        "Micrositio del evento con registro y control de cupos",
+                        "Confirmación de registro con QR, listas por tipo de asistente",
+                        "Recordatorios automáticos por WhatsApp y correo, con confirmación de asistencia",
+                        "Check-in y acreditación con QR, impresión de gafete al vuelo",
+                        "Aforo en tiempo real por sala, asistencia real vs registrados",
+                        "Control de acceso a zonas restringidas: backstage, VIP, prensa",
+                        "Agente por WhatsApp que resuelve dudas del asistente 24/7",
+                    ],
+                },
+                {
+                    n: "02",
+                    name: "Experiencia del asistente",
+                    items: [
+                        "Agenda personalizada según perfil e intereses",
+                        "Mapa interactivo y orientación en sitio por WhatsApp",
+                        "Networking con citas 1 a 1 entre asistentes",
+                        "Matchmaking entre asistentes y expositores",
+                        "Gamificación: puntos por visitar stands, ranking en pantalla",
+                        "Moderación de preguntas del público: agrupa duplicadas, filtra y prioriza",
+                        "Traducción y subtítulos en vivo al celular, sin equipo de audio",
+                        "Accesibilidad: subtítulos, audiodescripción, lengua de señas por avatar",
+                        "Plataforma para asistentes virtuales: streaming, salas, preguntas",
+                        "Soporte en sitio por WhatsApp: dudas, quejas, objetos perdidos",
+                    ],
+                },
+                {
+                    n: "03",
+                    name: "Experiencias en pantalla",
+                    items: [
+                        "Muro generativo que reacciona a la música o a mensajes del público",
+                        "Obra colectiva que se construye con aportaciones de los asistentes",
+                        "Trivia y juegos desde el celular a pantalla grande, por equipos",
+                        "Kiosco con agente que responde sobre el evento o el patrocinador",
+                        "Presentadora o avatar IA para segmentos con guion cerrado",
+                        "Video de cierre generado con lo que pasó ese mismo día",
+                    ],
+                },
+                {
+                    n: "04",
+                    name: "Patrocinadores y expositores",
+                    items: [
+                        "Captura de leads en stand por QR, con calificación automática",
+                        "Reporte de ROI: visitas, interacciones, leads",
+                        "Activaciones brandeadas: juego o kiosco con la marca del patrocinador",
+                        "Paquete de métricas que la agencia revende como servicio premium",
+                    ],
+                },
+                {
+                    n: "05",
+                    name: "Después del evento",
+                    items: [
+                        "Encuestas de salida y constancias automáticas",
+                        "Reporte ejecutivo de resultados para el cliente final",
+                        "Análisis de comentarios abiertos, resumidos en hallazgos",
+                        "Videos personalizados de agradecimiento, a escala",
+                        "Memoria del evento: resúmenes por ponencia y clips para redes",
+                        "Reciclaje de contenido: de una ponencia salen 15 piezas",
+                        "Sala de prensa: boletín y clips el mismo día",
+                        "Base de datos acumulada: la audiencia de este año es el registro del siguiente",
+                    ],
+                },
+                {
+                    n: "06",
+                    name: "Producción y logística",
+                    items: [
+                        "Checklist de montaje con fotos, validando contra el render",
+                        "Control de staff: turnos, asistencia, credenciales por zona",
+                        "Inventario de mobiliario y equipo entre eventos",
+                        "Coordinación de proveedores con alertas de tiempos",
+                        "Proyección de no-shows y aforo por horario, para no sobrecomprar catering",
+                    ],
+                },
+                {
+                    n: "07",
+                    name: "Comercial de la agencia",
+                    items: [
+                        "Cotizador automático por tipo de evento",
+                        "Generador de propuestas y presentaciones con su marca",
+                        "Renders y moodboards para el pitch",
+                        "CRM de eventos con historial de cada cliente",
+                    ],
+                },
+            ],
+        },
+        cta: {
+            titleLead: "¿Tienes un evento",
+            titleAccent: "con fecha?",
+            body: "Cuéntanos qué necesitas y para cuándo. Si no llegamos, te lo decimos en la primera llamada en vez de comprometernos y verlo después.",
+            button: "Hablemos",
+        },
+        faqEyebrow: "Preguntas frecuentes",
+        faqTitleLead: "Lo que preguntan",
+        faqTitleAccent: "las productoras",
+        faq: [
+            {
+                q: "¿Con cuánta antelación hay que avisarles?",
+                a: "Depende de la pieza: un control de acceso es más rápido de montar que una activación a medida. Lo honesto es que nos digas la fecha del evento en el primer mensaje — con eso te decimos si llegamos o no, antes de cotizar nada.",
+            },
+            {
+                q: "¿Trabajan con la agencia o directo con la marca?",
+                a: "Con las dos. Suzuki y Los DiDis los ejecutamos en alianza con Enso Media, la productora; Apizeal con Kaizen. También trabajamos directo con la marca cuando no hay agencia de por medio.",
+            },
+            {
+                q: "¿La plataforma se queda después del evento?",
+                a: "El código es tuyo. Lo que se construye para un evento puede quedarse y reutilizarse en el siguiente, que es lo que suele pasar cuando el formato se repite cada año.",
+            },
+            {
+                q: "¿Cuánto cuesta?",
+                a: "Depende de qué piezas necesites y de la escala del evento. En la primera llamada te damos alcance y precio fijo para tu caso; si no encaja con tu presupuesto, te lo decimos ahí y no seguimos.",
+            },
+        ],
+    },
     automationPage: {
         hero: {
             eyebrow: "Servicio · Automatización",
@@ -1024,6 +1210,7 @@ const en: typeof es = {
         digitalShort: "Software",
         automation: "Automation",
         automationShort: "AI",
+        events: "Events",
         price: "Pricing",
         portfolio: "Portfolio",
         blog: "Journal",
@@ -1112,6 +1299,18 @@ const en: typeof es = {
         description:
             "Your team loses hours to repetitive tasks. We automate your processes with workflows, AI agents and WhatsApp assistants connected to your systems — so operations run on their own and your people focus on what truly needs human judgment.",
         tags: ["Agents", "Workflows", "WhatsApp"],
+    },
+    eventsHome: {
+        eyebrow: "04 · Events",
+        title: "Software for",
+        titleItalic: "events",
+        subtitle: "The date doesn't move.",
+        description:
+            "QR registration, access control, iPad activations and live streaming. We've done it for Los DiDis, for Suzuki and for an event streamed start to finish.",
+        tags: ["Registration", "Access", "Streaming"],
+        badgeLabel: "Access",
+        badgeStatus: "Valid",
+        badgeAria: "See the event software service",
     },
     digital: {
         eyebrow: "02 · Service",
@@ -1717,6 +1916,171 @@ const en: typeof es = {
             {
                 q: "How long does it take to build a platform?",
                 a: "A custom platform or app takes from 2 to 4 months depending on complexity. We define scope and deliverables in phases to launch the essentials early and scale afterward.",
+            },
+        ],
+    },
+    eventsPage: {
+        hero: {
+            eyebrow: "04 · Service",
+            h1Lines: ["Software", "for live", "events"],
+            heroLead: "The date doesn't move.",
+            sub: "Registration, access control, brand activations and streaming. Built for producers who can't afford anything to fail on show day — because that day there's no second chance.",
+        },
+        why: {
+            eyebrow: "Why it's different",
+            titleLead: "An event is not",
+            titleAccent: "a normal project",
+            p1: "A website can be fixed on Tuesday. An event happens once, at a set hour, in front of people who already showed up. That difference changes everything: there's no room to debug live or to ask for one more week.",
+            p2: "So what matters isn't the feature list — it's that the door opens on time and that someone picks up the phone on Saturday morning.",
+        },
+        capabilities: {
+            eyebrow: "What we've built",
+            title: "Three pieces of an event,",
+            titleAccent: "already proven",
+            items: [
+                {
+                    n: "01",
+                    name: "Registration and access control",
+                    body: "QR reader with a live dashboard: every check-in is logged instantly and you know how many are in and how many are still missing — without waiting for the next-day report.",
+                    proof: "Los DiDis · 1,800 expected attendees",
+                    caseSlug: "los-didis",
+                },
+                {
+                    n: "02",
+                    name: "Activations and experience",
+                    body: "Branded apps for the event itself: iPad experiences the attendee actually interacts with and takes something away from, instead of one more banner.",
+                    proof: "Suzuki · 500+ people",
+                    caseSlug: "suzuki",
+                },
+                {
+                    n: "03",
+                    name: "Streaming and metrics",
+                    body: "A platform with pre-registration, live streaming, monitoring during the event and metrics once it ends. The whole event, start to finish.",
+                    proof: "Apizeal, with Kaizen",
+                    caseSlug: "",
+                },
+            ],
+        },
+        catalog: {
+            eyebrow: "What we can build",
+            title: "Everything that fits",
+            titleAccent: "around an event",
+            lead: "Above is what we've already delivered, each with its case study. This is the catalogue: what we know how to build around an event. You pick the pieces — nobody needs the whole list.",
+            note: "Something missing from the list? Ask. The answer is almost always yes, and when it isn't we'll say so.",
+            groups: [
+                {
+                    n: "01",
+                    name: "Registration and accreditation",
+                    items: [
+                        "Event microsite with registration and capacity control",
+                        "QR registration confirmation, lists by attendee type",
+                        "Automated WhatsApp and email reminders, with attendance confirmation",
+                        "QR check-in and accreditation, badge printed on the spot",
+                        "Live capacity per room, actual attendance vs registered",
+                        "Access control for restricted areas: backstage, VIP, press",
+                        "WhatsApp agent answering attendee questions 24/7",
+                    ],
+                },
+                {
+                    n: "02",
+                    name: "Attendee experience",
+                    items: [
+                        "Personalized agenda based on profile and interests",
+                        "Interactive map and on-site wayfinding over WhatsApp",
+                        "Networking with one-on-one meetings between attendees",
+                        "Matchmaking between attendees and exhibitors",
+                        "Gamification: points for visiting booths, leaderboard on screen",
+                        "Audience Q&A moderation: groups duplicates, filters and prioritizes",
+                        "Live translation and captions on the attendee's phone, no audio hardware",
+                        "Accessibility: captions, audio description, sign language via avatar",
+                        "Platform for remote attendees: streaming, rooms, Q&A",
+                        "On-site support over WhatsApp: questions, complaints, lost and found",
+                    ],
+                },
+                {
+                    n: "03",
+                    name: "On-screen experiences",
+                    items: [
+                        "Generative wall that reacts to the music or to audience messages",
+                        "Collective artwork built from what attendees contribute",
+                        "Trivia and games from the phone to the big screen, in teams",
+                        "Kiosk with an agent that answers about the event or the sponsor",
+                        "AI host or avatar for scripted segments",
+                        "Closing video generated from what happened that same day",
+                    ],
+                },
+                {
+                    n: "04",
+                    name: "Sponsors and exhibitors",
+                    items: [
+                        "QR lead capture at the booth, with automatic scoring",
+                        "ROI report: visits, interactions, leads",
+                        "Branded activations: a game or kiosk carrying the sponsor's brand",
+                        "A metrics package the agency resells as a premium service",
+                    ],
+                },
+                {
+                    n: "05",
+                    name: "After the event",
+                    items: [
+                        "Exit surveys and automatic certificates",
+                        "Executive results report for the end client",
+                        "Open-comment analysis, summarized into findings",
+                        "Personalized thank-you videos, at scale",
+                        "Event record: per-talk summaries and clips for social",
+                        "Content recycling: one talk becomes fifteen pieces",
+                        "Press room: release and clips the same day",
+                        "A database that compounds: this year's audience is next year's list",
+                    ],
+                },
+                {
+                    n: "06",
+                    name: "Production and logistics",
+                    items: [
+                        "Build-out checklist with photos, validated against the render",
+                        "Staff control: shifts, attendance, credentials by zone",
+                        "Furniture and equipment inventory across events",
+                        "Vendor coordination with deadline alerts",
+                        "No-show and hourly capacity forecasting, so catering isn't over-ordered",
+                    ],
+                },
+                {
+                    n: "07",
+                    name: "The agency's sales side",
+                    items: [
+                        "Automatic quoting by event type",
+                        "Proposal and deck generator in the agency's own brand",
+                        "Renders and moodboards for the pitch",
+                        "Event CRM with each client's history",
+                    ],
+                },
+            ],
+        },
+        cta: {
+            titleLead: "Got an event",
+            titleAccent: "with a date?",
+            body: "Tell us what you need and by when. If we can't make it, we'll say so on the first call instead of committing and finding out later.",
+            button: "Let's talk",
+        },
+        faqEyebrow: "FAQ",
+        faqTitleLead: "What producers",
+        faqTitleAccent: "ask us",
+        faq: [
+            {
+                q: "How much notice do you need?",
+                a: "It depends on the piece: access control is quicker to stand up than a custom activation. The honest answer is to give us the event date in your first message — with that we'll tell you whether we can make it, before quoting anything.",
+            },
+            {
+                q: "Do you work with the agency or directly with the brand?",
+                a: "Both. Suzuki and Los DiDis were built in partnership with Enso Media, the producer; Apizeal with Kaizen. We also work directly with the brand when there's no agency involved.",
+            },
+            {
+                q: "Do we keep the platform after the event?",
+                a: "The code is yours. What we build for one event can stay and be reused for the next — which is what usually happens when the format repeats every year.",
+            },
+            {
+                q: "How much does it cost?",
+                a: "It depends on which pieces you need and the scale of the event. On the first call we give you a fixed scope and price for your case; if it doesn't fit your budget we say so right there and stop.",
             },
         ],
     },

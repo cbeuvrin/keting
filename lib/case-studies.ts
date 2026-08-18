@@ -282,6 +282,51 @@ export const CASE_STUDIES: CaseStudy[] = [
         },
     },
     {
+        // Cliente: Enso Media (productora), marca del evento: Los DiDis. Misma
+        // relación que Suzuki — se acredita la alianza, como allí.
+        //
+        // Sin `url`: es una app de evento que corrió en un iPad en la puerta, no
+        // un sitio público. La imagen cae al caso, no a un destino inventado.
+        //
+        // ⚠️ La métrica son asistentes ESPERADOS, que es el dato que existe (sale
+        // del propio panel de la app). NO se convierte en "1,800 personas
+        // entraron": eso sería afirmar un resultado que nadie midió. Si Carlos
+        // consigue el número real de accesos, se cambia aquí y en
+        // lib/testimonials.ts si algún día tiene testimonio.
+        slug: "los-didis",
+        metricValue: "1,800",
+        image: "/soluciones/ipad-didis-3.png",
+        bareImage: true,
+        es: {
+            title: "Los DiDis — cada QR contado",
+            industry: "Control de acceso · Evento en vivo",
+            summary:
+                "Los DiDis necesitaba saber en tiempo real quién había entrado al evento y quién no, sobre 1,800 asistentes esperados. Construimos, en alianza con Enso Media, un lector de QR con panel en vivo que corre desde un iPad en la puerta.",
+            challenge:
+                "Saber durante el evento, y no al día siguiente, quién había accedido y quién seguía sin llegar — sobre 1,800 asistentes esperados y con el control hecho en la propia puerta.",
+            solution:
+                "Lector de QR con panel en vivo para iPad, en alianza con Enso Media: cada acceso queda registrado al instante y el panel muestra cuántos han entrado y cuántos faltan.",
+            result: "Control de acceso y conteo en vivo para un evento de 1,800 asistentes esperados.",
+            stack: ["Lector QR", "Panel en vivo", "iPad", "Control de acceso"],
+            imageAlt: "Los DiDis · Lector de QR y panel en vivo, en alianza con Enso Media",
+            metricLabel: "Asistentes esperados",
+        },
+        en: {
+            title: "Los DiDis — every QR accounted for",
+            industry: "Access control · Live event",
+            summary:
+                "Los DiDis needed to know in real time who had entered the event and who hadn't, across 1,800 expected attendees. In partnership with Enso Media, we built a QR reader with a live dashboard running from an iPad at the door.",
+            challenge:
+                "Knowing during the event — not the next day — who had checked in and who still hadn't, across 1,800 expected attendees, with the control happening right at the door.",
+            solution:
+                "A QR reader with a live dashboard for iPad, built in partnership with Enso Media: every check-in is logged instantly and the dashboard shows how many are in and how many are still missing.",
+            result: "Access control and live headcount for an event with 1,800 expected attendees.",
+            stack: ["QR reader", "Live dashboard", "iPad", "Access control"],
+            imageAlt: "Los DiDis · QR reader and live dashboard, in partnership with Enso Media",
+            metricLabel: "Expected attendees",
+        },
+    },
+    {
         slug: "suzuki",
         metricValue: "500+",
         image: "/soluciones/suzuki-ipad.png",

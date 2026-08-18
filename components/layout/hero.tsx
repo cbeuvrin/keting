@@ -285,7 +285,11 @@ export function Hero() {
                         suppressHydrationWarning
                         className="hidden lg:flex justify-end absolute top-32 right-20 z-20"
                     >
-                        <div className="text-base text-gray-500 max-w-lg text-right leading-relaxed">
+                        {/* Alineado a la IZQUIERDA, igual que su gemelo de móvil de más
+                            abajo. El bloque sigue anclado arriba a la derecha (lo posiciona
+                            el contenedor con `absolute top-32 right-20`); lo que cambia es
+                            cómo fluye el texto dentro de su caja, no dónde está la caja. */}
+                        <div className="text-base text-gray-500 max-w-lg text-left leading-relaxed">
                             {t.hero.stats.prefix}{" "}
                             <span className="bg-black text-white px-2 py-0.5 font-medium">{t.hero.stats.stat}</span>{" "}
                             {t.hero.stats.middle}{" "}

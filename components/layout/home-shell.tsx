@@ -5,6 +5,7 @@ import { Hero } from "@/components/layout/hero";
 import { Services } from "@/components/layout/services";
 import { DigitalSolutions } from "@/components/layout/digital-solutions";
 import { AutomationHome } from "@/components/layout/automation-home";
+import { EventsHome } from "@/components/layout/events-home";
 import { Toogo } from "@/components/layout/toogo";
 import { Testimonials } from "@/components/layout/testimonials";
 import { AboutUs } from "@/components/layout/about-us";
@@ -57,6 +58,7 @@ export function HomeShell() {
         <Services />
         <DigitalSolutions />
         <AutomationHome />
+        <EventsHome />
         <Toogo />
         <Testimonials />
             <AboutUs />
