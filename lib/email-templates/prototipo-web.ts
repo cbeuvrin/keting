@@ -45,21 +45,11 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
 
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;">
 
-    <!-- Logo -->
-    <tr><td style="padding:0 8px 20px 8px;" align="left">
+    <!-- La barra negra con el logo, marca de la casa -->
+    <tr><td style="background-color:#111111;padding:40px 32px;" align="center">
         <a href="${SITE_URL}" style="text-decoration:none;">
-            <img src="${SITE_URL}/keting-logo-black.png" width="110" alt="Keting Media" style="display:block;border:0;width:110px;height:auto;"/>
+            <img src="${SITE_URL}/keting-logo-white.png" width="200" alt="Keting Media" style="display:block;border:0;width:200px;height:auto;"/>
         </a>
-    </td></tr>
-
-    <!-- La barra negra, marca de la casa -->
-    <tr><td style="background-color:#111111;padding:36px 32px;" align="center">
-        <div style="font-family:${sans};font-size:30px;line-height:1.15;font-weight:bold;color:#ffffff;letter-spacing:0.5px;">
-            REVIS&Eacute; TU SITIO WEB
-        </div>
-        <div style="font-family:${serif};font-style:italic;font-size:30px;line-height:1.2;color:#d8d8d3;padding-top:6px;">
-            y puede dar m&aacute;s.
-        </div>
     </td></tr>
 
     <!-- Mensaje -->
