@@ -33,6 +33,16 @@ export function prototipoWebEmail(opts: {
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="color-scheme" content="light"/>
 <title>${PROTOTIPO_WEB_SUBJECT}</title>
+<style>
+@media only screen and (max-width:480px){
+    .bar{padding:16px 20px !important;}
+    .bar img{width:120px !important;}
+    .px{padding-left:20px !important;padding-right:20px !important;}
+    .stack{display:block !important;width:100% !important;padding:0 0 18px 0 !important;}
+    .gap{display:none !important;}
+    .h-offer{font-size:18px !important;}
+}
+</style>
 </head>
 <body style="margin:0;padding:0;background-color:#EFEFEA;">
 <!-- Preheader: la línea que se ve en la bandeja junto al asunto -->
@@ -43,17 +53,17 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EFEFEA;">
 <tr><td align="center" style="padding:32px 12px;">
 
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
 
     <!-- La barra negra con el logo, marca de la casa -->
-    <tr><td style="background-color:#111111;padding:40px 32px;" align="center">
+    <tr><td class="bar" style="background-color:#111111;padding:22px 32px;" align="center">
         <a href="${SITE_URL}" style="text-decoration:none;">
-            <img src="${SITE_URL}/keting-logo-white.png" width="200" alt="Keting Media" style="display:block;border:0;width:200px;height:auto;"/>
+            <img src="${SITE_URL}/keting-logo-white.png" width="140" alt="Keting Media" style="display:block;border:0;width:140px;height:auto;"/>
         </a>
     </td></tr>
 
     <!-- Mensaje -->
-    <tr><td style="background-color:#ffffff;padding:36px 32px 8px 32px;">
+    <tr><td class="px" style="background-color:#ffffff;padding:36px 32px 8px 32px;">
         <p style="margin:0 0 18px 0;font-family:${sans};font-size:16px;line-height:1.65;color:#1d1d1f;">
             Hola ${firstName},
         </p>
@@ -66,13 +76,13 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
     </td></tr>
 
     <!-- La oferta -->
-    <tr><td style="background-color:#ffffff;padding:8px 32px 4px 32px;">
+    <tr><td class="px" style="background-color:#ffffff;padding:8px 32px 4px 32px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F5F0;border-left:3px solid #111111;">
             <tr><td style="padding:24px 24px 8px 24px;">
-                <div style="font-family:${sans};font-size:20px;font-weight:bold;color:#1d1d1f;line-height:1.3;">
+                <div class="h-offer" style="font-family:${sans};font-size:20px;font-weight:bold;color:#1d1d1f;line-height:1.3;">
                     Un prototipo de tu nueva web.
                 </div>
-                <div style="font-family:${serif};font-style:italic;font-size:20px;color:#1d1d1f;line-height:1.4;padding-bottom:12px;">
+                <div class="h-offer" style="font-family:${serif};font-style:italic;font-size:20px;color:#1d1d1f;line-height:1.4;padding-bottom:12px;">
                     Sin costo. Sin compromiso.
                 </div>
             </td></tr>
@@ -96,7 +106,7 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
     </td></tr>
 
     <!-- CTA -->
-    <tr><td style="background-color:#ffffff;padding:28px 32px 12px 32px;" align="center">
+    <tr><td class="px" style="background-color:#ffffff;padding:28px 32px 12px 32px;" align="center">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
             <tr><td style="background-color:#111111;" align="center">
                 <a href="mailto:info@ketingmedia.com?subject=S%C3%AD%2C%20quiero%20el%20prototipo"
@@ -111,7 +121,7 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
     </td></tr>
 
     <!-- Trabajo reciente -->
-    <tr><td style="background-color:#ffffff;padding:28px 32px 8px 32px;">
+    <tr><td class="px" style="background-color:#ffffff;padding:28px 32px 8px 32px;">
         <div style="font-family:${sans};font-size:11px;letter-spacing:3px;color:#8e8e93;padding-bottom:14px;">
             &mdash;&mdash; TRABAJO RECIENTE
         </div>
@@ -123,15 +133,15 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
         <div style="font-family:${sans};font-size:12px;color:#8e8e93;line-height:1.5;padding-bottom:18px;">Plataforma web de agentes de IA</div>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-                <td width="48%" valign="top" style="padding-right:8px;">
+                <td class="stack" width="48%" valign="top" style="padding-right:8px;">
                     <a href="${SITE_URL}/casos/los-didis" style="text-decoration:none;">
                         <img src="${SITE_URL}/soluciones/ipad-didis-3.png" width="260" alt="Los DiDis — control de acceso con QR" style="display:block;border:0;width:100%;height:auto;background-color:#F5F5F0;"/>
                     </a>
                     <div style="font-family:${sans};font-size:13px;color:#1d1d1f;font-weight:bold;padding-top:8px;">Los DiDis</div>
                     <div style="font-family:${sans};font-size:12px;color:#8e8e93;line-height:1.5;">Control de acceso con QR para evento</div>
                 </td>
-                <td width="4%">&nbsp;</td>
-                <td width="48%" valign="top" style="padding-left:8px;">
+                <td class="gap" width="4%">&nbsp;</td>
+                <td class="stack" width="48%" valign="top" style="padding-left:8px;">
                     <a href="${SITE_URL}/casos/suzuki" style="text-decoration:none;">
                         <img src="${SITE_URL}/soluciones/suzuki-ipad.png" width="260" alt="Suzuki — quiz interactivo en iPad" style="display:block;border:0;width:100%;height:auto;background-color:#F5F5F0;"/>
                     </a>
@@ -146,7 +156,7 @@ Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo resp
     </td></tr>
 
     <!-- Firma -->
-    <tr><td style="background-color:#ffffff;padding:28px 32px 36px 32px;">
+    <tr><td class="px" style="background-color:#ffffff;padding:28px 32px 36px 32px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #E5E5E0;">
             <tr><td style="padding-top:22px;">
                 <div style="font-family:${sans};font-size:15px;font-weight:bold;color:#1d1d1f;">Carlos Beuvrin</div>
