@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { crmAdmin } from "@/lib/crm";
 import { buildEmailHtml, unsubscribeHeaders } from "@/lib/email-html";
+import { prototipoWebEmail } from "@/lib/email-templates/prototipo-web";
 
 export const runtime = "nodejs";
 
@@ -24,10 +25,18 @@ export async function POST(request: Request) {
         );
     }
 
-    const { lead_id, subject, body } = await request.json().catch(() => ({}));
-    if (typeof lead_id !== "string" || typeof subject !== "string" || typeof body !== "string" || !subject.trim() || !body.trim()) {
+    const { lead_id, subject, body, template } = await request.json().catch(() => ({}));
+    // Con plantilla, el cuerpo lo pone la plantilla; sin ella, es obligatorio.
+    const usesTemplate = template === "prototipo-web";
+    if (
+        typeof lead_id !== "string" ||
+        typeof subject !== "string" ||
+        !subject.trim() ||
+        (!usesTemplate && (typeof body !== "string" || !body.trim()))
+    ) {
         return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
     }
+    const bodyText = usesTemplate ? "[plantilla: prototipo-web]" : (body as string).trim();
 
     const db = crmAdmin();
     const { data: lead } = await db
@@ -42,7 +51,7 @@ export async function POST(request: Request) {
     // dentro del HTML como pixel de apertura.
     const { data: emailRow, error: insErr } = await db
         .from("crm_emails")
-        .insert({ lead_id, to_email: lead.email, subject: subject.trim(), body: body.trim() })
+        .insert({ lead_id, to_email: lead.email, subject: subject.trim(), body: bodyText })
         .select("id")
         .single();
     if (insErr || !emailRow) return NextResponse.json({ error: insErr?.message ?? "DB" }, { status: 500 });
@@ -55,7 +64,9 @@ export async function POST(request: Request) {
             to: [lead.email],
             reply_to: "info@ketingmedia.com",
             subject: subject.trim(),
-            html: buildEmailHtml({ bodyText: body.trim(), emailId: emailRow.id, leadId: lead.id }),
+            html: usesTemplate
+                ? prototipoWebEmail({ name: lead.name, emailId: emailRow.id, leadId: lead.id })
+                : buildEmailHtml({ bodyText: bodyText, emailId: emailRow.id, leadId: lead.id }),
             headers: unsubscribeHeaders(lead.id),
         }),
     });

@@ -19,6 +19,7 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
     }, [leads]);
 
     const [list, setList] = useState<string>("");
+    const [template, setTemplate] = useState<"" | "prototipo-web">("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const [progress, setProgress] = useState<SendState[] | null>(null);
@@ -39,8 +40,10 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
         [leads, list]
     );
 
+    const bodyOk = template === "prototipo-web" || body.trim().length > 0;
+
     async function run() {
-        if (!eligible.length || !subject.trim() || !body.trim() || running) return;
+        if (!eligible.length || !subject.trim() || !bodyOk || running) return;
         if (!confirm(`Se enviará a ${eligible.length} contactos, uno por uno. ¿Continuar?`)) return;
         setRunning(true);
         const states: SendState[] = eligible.map((l) => ({
@@ -57,7 +60,7 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
                 const res = await fetch("/api/admin/crm/campaign-send", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim() }),
+                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined }),
                 });
                 const data = await res.json().catch(() => ({}));
                 states[i].status = res.ok ? "ok" : "error";
@@ -111,6 +114,21 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
                     </span>
                 </div>
 
+                <select
+                    value={template}
+                    onChange={(ev) => {
+                        const t = ev.target.value as "" | "prototipo-web";
+                        setTemplate(t);
+                        if (t === "prototipo-web" && !subject) {
+                            setSubject("Revisé tu sitio web — te propongo algo sin costo");
+                        }
+                    }}
+                    disabled={running}
+                    className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f]"
+                >
+                    <option value="">Texto simple (sin diseño)</option>
+                    <option value="prototipo-web">Plantilla: Revisé tu web → prototipo sin costo</option>
+                </select>
                 <input
                     value={subject}
                     onChange={(ev) => setSubject(ev.target.value)}
@@ -118,19 +136,27 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
                     disabled={running}
                     className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f]"
                 />
-                <textarea
-                    value={body}
-                    onChange={(ev) => setBody(ev.target.value)}
-                    placeholder="Cuerpo del correo (texto). El pie con el enlace de baja se añade solo."
-                    rows={10}
-                    disabled={running}
-                    className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f] resize-y"
-                />
+                {template === "prototipo-web" ? (
+                    <p className="text-sm text-[#1d1d1f]/60 border border-[#1d1d1f]/10 bg-white px-3 py-3">
+                        Esta plantilla lleva su propio diseño y contenido, personalizado con el
+                        nombre de cada contacto (logo, barra negra, oferta del prototipo, casos y
+                        firma). No necesitas escribir cuerpo.
+                    </p>
+                ) : (
+                    <textarea
+                        value={body}
+                        onChange={(ev) => setBody(ev.target.value)}
+                        placeholder="Cuerpo del correo (texto). El pie con el enlace de baja se añade solo."
+                        rows={10}
+                        disabled={running}
+                        className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f] resize-y"
+                    />
+                )}
 
                 <div className="flex items-center gap-4">
                     <button
                         onClick={run}
-                        disabled={!resendReady || running || !eligible.length || !subject.trim() || !body.trim()}
+                        disabled={!resendReady || running || !eligible.length || !subject.trim() || !bodyOk}
                         className="bg-[#111111] text-white px-6 py-3 text-xs font-medium tracking-[0.25em] uppercase disabled:opacity-40 hover:bg-black transition-colors"
                     >
                         {running ? `Enviando… ${done + failed}/${eligible.length}` : `Enviar a ${eligible.length}`}
