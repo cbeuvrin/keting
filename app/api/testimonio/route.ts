@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { captureLead } from '@/lib/crm';
 
 // Recoge testimonios de clientes para publicarlos en los casos de éxito
 // (/casos/*). No se guarda en base de datos a propósito: son pocos, de una sola
@@ -114,6 +115,16 @@ export async function POST(request: Request) {
                     <p style="color:#888; font-size:13px;">Para publicarlo: añadir el campo <code>quote</code> al caso en <code>lib/case-studies.ts</code>.</p>
                 </div>
             `,
+        });
+
+        // Quien manda testimonio ya es cliente: entra al CRM como contacto
+        // vivo (captureLead nunca lanza — no puede romper el envío).
+        await captureLead({
+            name: String(name),
+            email: String(email),
+            company: String(company),
+            source: 'testimonio',
+            message: `Testimonio sobre ${String(project)}:\n${String(testimonial)}`,
         });
 
         return NextResponse.json({ success: true });

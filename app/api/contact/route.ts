@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { captureLead } from '@/lib/crm';
 
 // Envío vía SMTP (Banahost). Requiere SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_TO.
 export const runtime = 'nodejs';
@@ -138,6 +139,18 @@ export async function POST(request: Request) {
                     <p style="font-size: 12px; color: #888;">Enviado desde: ${escapeHtml(source || 'Formulario general')}</p>
                 </div>
             `,
+        });
+
+        // El lead entra al CRM después de que el correo ya salió: si la
+        // captura fallara (tablas sin crear, Supabase caído), el formulario
+        // sigue funcionando igual que siempre.
+        await captureLead({
+            name: typeof name === 'string' && name.trim() ? name.trim() : 'Sin nombre',
+            email,
+            phone: typeof phone === 'string' ? phone : undefined,
+            source: 'contacto',
+            message: typeof message === 'string' ? message : undefined,
+            interests: Array.isArray(interests) ? interests.join(', ') : undefined,
         });
 
         return NextResponse.json({ success: true, message: 'Correo enviado con éxito' });
