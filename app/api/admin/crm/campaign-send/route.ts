@@ -3,6 +3,7 @@ import { isAdminRequest } from "@/lib/admin-auth";
 import { crmAdmin } from "@/lib/crm";
 import { buildEmailHtml, unsubscribeHeaders } from "@/lib/email-html";
 import { prototipoWebEmail } from "@/lib/email-templates/prototipo-web";
+import { loadPrototipoCopy } from "@/lib/crm-settings";
 
 export const runtime = "nodejs";
 
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
             reply_to: "info@ketingmedia.com",
             subject: subject.trim(),
             html: usesTemplate
-                ? prototipoWebEmail({ name: lead.name, emailId: emailRow.id, leadId: lead.id })
+                ? prototipoWebEmail({ name: lead.name, emailId: emailRow.id, leadId: lead.id, copy: await loadPrototipoCopy() })
                 : buildEmailHtml({ bodyText: bodyText, emailId: emailRow.id, leadId: lead.id }),
             headers: unsubscribeHeaders(lead.id),
         }),

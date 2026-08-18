@@ -11,7 +11,7 @@ import type { Lead } from "@/lib/crm";
 const PAUSE_MS = 900;
 type SendState = { email: string; name: string; status: "pendiente" | "enviando" | "ok" | "error"; detail?: string };
 
-export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: boolean }) {
+export function Campana({ leads, resendReady, templateSubject }: { leads: Lead[]; resendReady: boolean; templateSubject: string }) {
     const lists = useMemo(() => {
         const names = new Set<string>();
         for (const l of leads) if (l.list_name) names.add(l.list_name);
@@ -120,7 +120,7 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
                         const t = ev.target.value as "" | "prototipo-web";
                         setTemplate(t);
                         if (t === "prototipo-web" && !subject) {
-                            setSubject("Revisé tu sitio web — te propongo algo sin costo");
+                            setSubject(templateSubject);
                         }
                     }}
                     disabled={running}
@@ -139,8 +139,8 @@ export function Campana({ leads, resendReady }: { leads: Lead[]; resendReady: bo
                 {template === "prototipo-web" ? (
                     <p className="text-sm text-[#1d1d1f]/60 border border-[#1d1d1f]/10 bg-white px-3 py-3">
                         Esta plantilla lleva su propio diseño y contenido, personalizado con el
-                        nombre de cada contacto (logo, barra negra, oferta del prototipo, casos y
-                        firma). No necesitas escribir cuerpo.
+                        nombre de cada contacto. Sus textos se editan en la pestaña{" "}
+                        <a href="/admin/plantilla" className="underline underline-offset-2">Plantilla</a>.
                     </p>
                 ) : (
                     <textarea

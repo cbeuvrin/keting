@@ -19,6 +19,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
                     <nav className="flex items-center gap-6 text-sm">
                         <Link href="/admin" className="hover:underline underline-offset-4">Tablero</Link>
                         <Link href="/admin/campana" className="hover:underline underline-offset-4">Campaña</Link>
+                        <Link href="/admin/plantilla" className="hover:underline underline-offset-4">Plantilla</Link>
                         <Link href="/" className="text-[#1d1d1f]/50 hover:text-[#1d1d1f]">Ver sitio</Link>
                     </nav>
                 </div>
