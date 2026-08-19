@@ -5,14 +5,24 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
     let leads: Lead[] = [];
+    let emailed: Record<string, string> = {};
     let dbError: string | null = null;
     try {
-        const { data, error } = await crmAdmin()
+        const db = crmAdmin();
+        const { data, error } = await db
             .from("crm_leads")
             .select("*")
             .order("updated_at", { ascending: false });
         if (error) throw error;
         leads = (data as Lead[]) ?? [];
+        // Último correo enviado por lead (ordenado desc: la primera aparición gana)
+        const { data: mails } = await db
+            .from("crm_emails")
+            .select("lead_id, created_at")
+            .order("created_at", { ascending: false });
+        for (const m of mails ?? []) {
+            if (!(m.lead_id in emailed)) emailed[m.lead_id] = m.created_at;
+        }
     } catch (err) {
         // Caso típico: aún no se pegó scripts/crm-schema.sql en Supabase.
         dbError = err instanceof Error ? err.message : String(err);
@@ -33,5 +43,5 @@ export default async function AdminHome() {
         );
     }
 
-    return <Board initialLeads={leads} />;
+    return <Board initialLeads={leads} emailed={emailed} />;
 }

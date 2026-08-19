@@ -11,7 +11,7 @@ import type { Lead } from "@/lib/crm";
 const PAUSE_MS = 900;
 type SendState = { email: string; name: string; status: "pendiente" | "enviando" | "ok" | "error"; detail?: string };
 
-export function Campana({ leads, resendReady, templateSubject }: { leads: Lead[]; resendReady: boolean; templateSubject: string }) {
+export function Campana({ leads, emailed, resendReady, templateSubject }: { leads: Lead[]; emailed: Record<string, string>; resendReady: boolean; templateSubject: string }) {
     const lists = useMemo(() => {
         const names = new Set<string>();
         for (const l of leads) if (l.list_name) names.add(l.list_name);
@@ -19,25 +19,34 @@ export function Campana({ leads, resendReady, templateSubject }: { leads: Lead[]
     }, [leads]);
 
     const [list, setList] = useState<string>("");
+    // Por defecto la campaña solo va a quienes NUNCA han recibido un correo:
+    // así puedes importar contactos nuevos a la misma lista y reenviar sin
+    // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
+    const [onlyNew, setOnlyNew] = useState(true);
     const [template, setTemplate] = useState<"" | "prototipo-web">("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const [progress, setProgress] = useState<SendState[] | null>(null);
     const [running, setRunning] = useState(false);
 
-    const eligible = useMemo(
-        () =>
-            leads.filter(
-                (l) => l.email && !l.unsubscribed && (list === "" ? true : l.list_name === list)
-            ),
+    const inList = useMemo(
+        () => leads.filter((l) => (list === "" ? true : l.list_name === list)),
         [leads, list]
     );
-    const excluded = useMemo(
+    const eligible = useMemo(
         () =>
-            leads.filter(
-                (l) => (list === "" ? true : l.list_name === list) && (!l.email || l.unsubscribed)
-            ).length,
-        [leads, list]
+            inList.filter(
+                (l) => l.email && !l.unsubscribed && (!onlyNew || !emailed[l.id])
+            ),
+        [inList, onlyNew, emailed]
+    );
+    const alreadySent = useMemo(
+        () => inList.filter((l) => l.email && !l.unsubscribed && emailed[l.id]).length,
+        [inList, emailed]
+    );
+    const excluded = useMemo(
+        () => inList.filter((l) => !l.email || l.unsubscribed).length,
+        [inList]
     );
 
     const bodyOk = template === "prototipo-web" || body.trim().length > 0;
@@ -110,9 +119,21 @@ export function Campana({ leads, resendReady, templateSubject }: { leads: Lead[]
                     </select>
                     <span className="text-sm text-[#1d1d1f]/60">
                         <strong>{eligible.length}</strong> destinatarios
-                        {excluded > 0 && <> · {excluded} excluidos (sin correo o de baja)</>}
+                        {onlyNew && alreadySent > 0 && <> · {alreadySent} ya recibieron y quedan fuera</>}
+                        {excluded > 0 && <> · {excluded} sin correo o de baja</>}
                     </span>
                 </div>
+
+                <label className="flex items-center gap-2.5 text-sm text-[#1d1d1f]/70 select-none">
+                    <input
+                        type="checkbox"
+                        checked={onlyNew}
+                        onChange={(ev) => setOnlyNew(ev.target.checked)}
+                        disabled={running}
+                        className="w-4 h-4 accent-black"
+                    />
+                    Solo a quienes aún no se les ha enviado ningún correo
+                </label>
 
                 <select
                     value={template}

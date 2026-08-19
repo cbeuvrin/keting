@@ -26,7 +26,7 @@ function timeAgo(iso: string): string {
     return `hace ${Math.floor(days / 30)} m`;
 }
 
-export function Board({ initialLeads }: { initialLeads: Lead[] }) {
+export function Board({ initialLeads, emailed }: { initialLeads: Lead[]; emailed: Record<string, string> }) {
     const router = useRouter();
     const [leads, setLeads] = useState(initialLeads);
     const [query, setQuery] = useState("");
@@ -34,6 +34,8 @@ export function Board({ initialLeads }: { initialLeads: Lead[] }) {
     const [draft, setDraft] = useState({ name: "", email: "", phone: "", company: "" });
     const [busy, setBusy] = useState(false);
     const [listFilter, setListFilter] = useState("");
+    // "": todos · "sin": aún sin correo enviado · "con": ya se les envió
+    const [mailFilter, setMailFilter] = useState<"" | "sin" | "con">("");
 
     const lists = useMemo(() => {
         const names = new Set<string>();
@@ -45,10 +47,12 @@ export function Board({ initialLeads }: { initialLeads: Lead[] }) {
         const q = query.trim().toLowerCase();
         return leads.filter((l) => {
             if (listFilter && l.list_name !== listFilter) return false;
+            if (mailFilter === "sin" && emailed[l.id]) return false;
+            if (mailFilter === "con" && !emailed[l.id]) return false;
             if (!q) return true;
             return [l.name, l.email, l.company, l.phone, l.list_name].some((v) => v?.toLowerCase().includes(q));
         });
-    }, [leads, query, listFilter]);
+    }, [leads, query, listFilter, mailFilter, emailed]);
 
     async function move(lead: Lead, dir: -1 | 1) {
         const idx = LEAD_STAGES.indexOf(lead.stage);
@@ -104,6 +108,15 @@ export function Board({ initialLeads }: { initialLeads: Lead[] }) {
                         ))}
                     </select>
                 )}
+                <select
+                    value={mailFilter}
+                    onChange={(ev) => setMailFilter(ev.target.value as "" | "sin" | "con")}
+                    className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f]"
+                >
+                    <option value="">Con y sin correo</option>
+                    <option value="sin">Aún sin correo</option>
+                    <option value="con">Correo enviado</option>
+                </select>
                 <button
                     onClick={() => setAdding((v) => !v)}
                     className="bg-[#111111] text-white px-5 py-2.5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-black transition-colors"
@@ -146,6 +159,11 @@ export function Board({ initialLeads }: { initialLeads: Lead[] }) {
                                             <div className="flex flex-wrap items-center gap-2 mt-2.5 text-[10px] font-mono uppercase tracking-wider text-[#1d1d1f]/40">
                                                 <span className="border border-[#1d1d1f]/15 px-1.5 py-0.5">{SOURCE_BADGE[lead.source] ?? lead.source}</span>
                                                 {lead.list_name && <span className="border border-[#1d1d1f]/15 px-1.5 py-0.5">{lead.list_name}</span>}
+                                                {emailed[lead.id] && (
+                                                    <span className="border border-emerald-300 text-emerald-700 px-1.5 py-0.5">
+                                                        ✉ {timeAgo(emailed[lead.id])}
+                                                    </span>
+                                                )}
                                                 {lead.unsubscribed && <span className="border border-red-300 text-red-600 px-1.5 py-0.5">Baja</span>}
                                                 <span>{timeAgo(lead.updated_at)}</span>
                                             </div>
