@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Upload } from "lucide-react";
 
 // Importador de CSV. El parseo pasa en el navegador (no se sube el archivo a
 // ningún lado: al servidor solo viajan las filas ya estructuradas).
@@ -117,9 +118,9 @@ export function ImportCsv() {
             <input ref={fileRef} type="file" accept=".csv,text/csv" onChange={onFile} className="hidden" />
             <button
                 onClick={() => fileRef.current?.click()}
-                className="border border-[#1d1d1f]/20 px-5 py-2.5 text-xs font-medium tracking-[0.2em] uppercase hover:border-[#1d1d1f] transition-colors"
+                className="inline-flex items-center gap-2 border border-[#1d1d1f]/15 bg-white px-3.5 py-2 text-sm rounded-md hover:border-[#1d1d1f] transition-colors"
             >
-                Importar CSV
+                <Upload className="w-4 h-4" strokeWidth={1.75} /> Importar
             </button>
             {rows !== null && (
                 <>
@@ -130,12 +131,12 @@ export function ImportCsv() {
                         value={list}
                         onChange={(ev) => setList(ev.target.value)}
                         placeholder="Nombre de la lista"
-                        className="border border-[#1d1d1f]/15 px-3 py-2 text-sm outline-none focus:border-[#1d1d1f]"
+                        className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
                     />
                     <button
                         onClick={doImport}
                         disabled={busy || rows.length === 0}
-                        className="bg-[#111111] text-white px-4 py-2 text-xs font-medium tracking-[0.2em] uppercase disabled:opacity-40"
+                        className="bg-[#111111] text-white px-4 py-2 text-sm rounded-md disabled:opacity-40"
                     >
                         {busy ? "Importando…" : "Importar"}
                     </button>
