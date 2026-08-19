@@ -15,6 +15,7 @@
 // importa desde el navegador para la vista previa en vivo.
 
 import { SITE_URL } from "@/lib/email-html";
+import { greetingLine } from "@/lib/email-templates/greeting";
 
 export type PrototipoCopy = {
     subject: string;
@@ -62,7 +63,7 @@ function fmt(text: string): string {
 }
 
 export function prototipoWebEmail(opts: {
-    /** Nombre del lead; se usa solo el primer nombre en el saludo. */
+    /** Nombre del lead; greetingLine decide si es usable en el saludo. */
     name: string;
     /** id de la fila crm_emails → pixel de apertura */
     emailId: string;
@@ -75,7 +76,7 @@ export function prototipoWebEmail(opts: {
     if (!Array.isArray(c.bullets) || c.bullets.length === 0) {
         c.bullets = PROTOTIPO_DEFAULT_COPY.bullets;
     }
-    const firstName = opts.name.trim().split(/\s+/)[0] || "hola";
+    const saludo = greetingLine(opts.name);
     const pixelUrl = `${SITE_URL}/api/t/o/${opts.emailId}`;
     const unsubUrl = `${SITE_URL}/api/t/u/${opts.leadId}`;
     const sans = "Arial, Helvetica, sans-serif";
@@ -129,7 +130,7 @@ ${fmt(c.preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
     <!-- Mensaje -->
     <tr><td class="px" style="background-color:#ffffff;padding:36px 32px 8px 32px;">
         <p style="margin:0 0 18px 0;font-family:${sans};font-size:16px;line-height:1.65;color:#1d1d1f;">
-            Hola ${fmt(firstName)},
+            ${fmt(saludo)}
         </p>
         <p style="margin:0 0 18px 0;font-family:${sans};font-size:16px;line-height:1.65;color:#1d1d1f;">
             ${fmt(c.intro1)}

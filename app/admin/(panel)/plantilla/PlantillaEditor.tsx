@@ -35,7 +35,7 @@ export function PlantillaEditor({ initial }: { initial: PrototipoCopy }) {
     const previewHtml = useMemo(
         () =>
             prototipoWebEmail({
-                name: "Alejandra Ruiz",
+                name: "Alejandra Ruiz", // ejemplo con nombre presentable
                 emailId: "00000000-0000-0000-0000-000000000000",
                 leadId: "00000000-0000-0000-0000-000000000000",
                 copy,

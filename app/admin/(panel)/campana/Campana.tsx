@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Lead } from "@/lib/crm";
+import { greetingLine } from "@/lib/email-templates/greeting";
 
 // Campaña a una lista: el navegador recorre los destinatarios y dispara UN
 // envío por petición, con pausa entre cada uno. Así ninguna función de
@@ -83,6 +84,15 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
         }
         setRunning(false);
     }
+
+    // Cómo va a abrir el correo de cada destinatario. Se muestra ANTES de
+    // enviar porque un saludo feo ("Hola lzaragoza,") solo se ve cuando ya
+    // salió: aquí se detecta a tiempo y se corrige el nombre en su ficha.
+    const saludos = useMemo(
+        () => eligible.slice(0, 60).map((l) => ({ id: l.id, name: l.name, line: greetingLine(l.name) })),
+        [eligible]
+    );
+    const sinNombre = saludos.filter((s) => s.line === "Hola,").length;
 
     const done = progress?.filter((s) => s.status === "ok").length ?? 0;
     const failed = progress?.filter((s) => s.status === "error").length ?? 0;
@@ -172,6 +182,35 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                         disabled={running}
                         className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f] resize-y"
                     />
+                )}
+
+                {/* Cómo saludará a cada uno */}
+                {template === "prototipo-web" && eligible.length > 0 && (
+                    <details className="border border-[#1d1d1f]/10 bg-white">
+                        <summary className="cursor-pointer px-3 py-3 text-sm text-[#1d1d1f]/70">
+                            Revisar los saludos
+                            {sinNombre > 0 && (
+                                <span className="ml-2 text-amber-700">
+                                    · {sinNombre} sin nombre usable → saludarán «Hola,»
+                                </span>
+                            )}
+                        </summary>
+                        <ul className="max-h-56 overflow-y-auto divide-y divide-[#1d1d1f]/5 border-t border-[#1d1d1f]/10">
+                            {saludos.map((s) => (
+                                <li key={s.id} className="flex items-center justify-between gap-3 px-3 py-1.5 text-sm">
+                                    <a href={`/admin/lead/${s.id}`} className="text-[#1d1d1f]/40 truncate hover:underline">
+                                        {s.name}
+                                    </a>
+                                    <span className={s.line === "Hola," ? "text-amber-700" : "text-[#1d1d1f]"}>
+                                        {s.line}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                        <p className="px-3 py-2 text-xs text-[#1d1d1f]/50 border-t border-[#1d1d1f]/10">
+                            ¿Un saludo no te convence? Abre la ficha del contacto y corrige su nombre.
+                        </p>
+                    </details>
                 )}
 
                 <div className="flex items-center gap-4">

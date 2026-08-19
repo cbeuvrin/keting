@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Lead, LeadEmail, LeadNote, LeadStage } from "@/lib/crm";
 import { LEAD_STAGES, STAGE_LABELS } from "@/lib/crm";
+import { greetingLine } from "@/lib/email-templates/greeting";
 
 const DATE_FMT = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" });
 
@@ -22,8 +23,29 @@ export function LeadActions({
     const [note, setNote] = useState("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
-    const [busy, setBusy] = useState<"" | "note" | "email" | "stage">("");
+    const [busy, setBusy] = useState<"" | "note" | "email" | "stage" | "name">("");
     const [emailStatus, setEmailStatus] = useState("");
+    // Edición del nombre: importa porque de él sale el saludo del correo, y los
+    // contactos importados de un CSV sin columna de nombre traen el trozo del
+    // correo ("lzaragoza") en su lugar.
+    const [editingName, setEditingName] = useState(false);
+    const [draftName, setDraftName] = useState(lead.name);
+
+    async function saveName() {
+        if (!draftName.trim() || draftName.trim() === lead.name) {
+            setEditingName(false);
+            return;
+        }
+        setBusy("name");
+        await fetch(`/api/admin/crm/leads/${lead.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: draftName.trim() }),
+        });
+        setEditingName(false);
+        router.refresh();
+        setBusy("");
+    }
 
     async function setStage(stage: LeadStage) {
         setBusy("stage");
@@ -77,7 +99,39 @@ export function LeadActions({
             {/* Cabecera */}
             <div className="flex flex-wrap items-start justify-between gap-6 mb-10">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{lead.name}</h1>
+                    {editingName ? (
+                        <div className="flex items-center gap-2">
+                            <input
+                                autoFocus
+                                value={draftName}
+                                onChange={(ev) => setDraftName(ev.target.value)}
+                                onKeyDown={(ev) => {
+                                    if (ev.key === "Enter") saveName();
+                                    if (ev.key === "Escape") { setDraftName(lead.name); setEditingName(false); }
+                                }}
+                                className="text-2xl font-bold tracking-tight border border-[#1d1d1f]/20 px-2 py-1 outline-none focus:border-[#1d1d1f]"
+                            />
+                            <button onClick={saveName} disabled={busy === "name"} className="bg-[#111111] text-white px-3 py-2 text-xs tracking-[0.2em] uppercase disabled:opacity-40">
+                                Guardar
+                            </button>
+                        </div>
+                    ) : (
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight group inline-flex items-center gap-3">
+                            {lead.name}
+                            <button
+                                onClick={() => { setDraftName(lead.name); setEditingName(true); }}
+                                className="text-xs font-normal tracking-[0.2em] uppercase text-[#1d1d1f]/40 hover:text-[#1d1d1f] opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                Editar
+                            </button>
+                        </h1>
+                    )}
+                    <p className="mt-1.5 text-sm text-[#1d1d1f]/50">
+                        En el correo se le saluda:{" "}
+                        <span className={greetingLine(lead.name) === "Hola," ? "text-amber-700" : "text-[#1d1d1f]"}>
+                            «{greetingLine(lead.name)}»
+                        </span>
+                    </p>
                     <div className="mt-2 text-[#1d1d1f]/60 space-y-0.5 text-sm">
                         {lead.company && <div>{lead.company}</div>}
                         {lead.email && <div>{lead.email}</div>}
