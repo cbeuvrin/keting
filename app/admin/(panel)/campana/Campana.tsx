@@ -89,7 +89,10 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // enviar porque un saludo feo ("Hola lzaragoza,") solo se ve cuando ya
     // salió: aquí se detecta a tiempo y se corrige el nombre en su ficha.
     const saludos = useMemo(
-        () => eligible.slice(0, 60).map((l) => ({ id: l.id, name: l.name, line: greetingLine(l.name) })),
+        () =>
+            eligible
+                .slice(0, 100)
+                .map((l) => ({ id: l.id, name: l.name, email: l.email ?? "", line: greetingLine(l.name) })),
         [eligible]
     );
     const sinNombre = saludos.filter((s) => s.line === "Hola,").length;
@@ -184,33 +187,52 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                     />
                 )}
 
-                {/* Cómo saludará a cada uno */}
-                {template === "prototipo-web" && eligible.length > 0 && (
-                    <details className="border border-[#1d1d1f]/10 bg-white">
-                        <summary className="cursor-pointer px-3 py-3 text-sm text-[#1d1d1f]/70">
-                            Revisar los saludos
-                            {sinNombre > 0 && (
-                                <span className="ml-2 text-amber-700">
-                                    · {sinNombre} sin nombre usable → saludarán «Hola,»
-                                </span>
+                {/* Quién lo va a recibir — abierto por defecto cuando son
+                    pocos, porque revisar la lista antes de enviar es el paso
+                    que evita los errores caros. */}
+                {eligible.length > 0 && (
+                    <details open={eligible.length <= 25} className="border border-[#1d1d1f]/10 bg-white rounded-md">
+                        <summary className="cursor-pointer px-3.5 py-3 text-sm">
+                            <span className="font-medium">Le va a llegar a estos {eligible.length}</span>
+                            {onlyNew && alreadySent > 0 && (
+                                <span className="text-[#1d1d1f]/50"> · los {alreadySent} que ya recibieron no salen aquí</span>
+                            )}
+                            {template === "prototipo-web" && sinNombre > 0 && (
+                                <span className="text-amber-700"> · {sinNombre} saludarán «Hola,»</span>
                             )}
                         </summary>
-                        <ul className="max-h-56 overflow-y-auto divide-y divide-[#1d1d1f]/5 border-t border-[#1d1d1f]/10">
+                        <ul className="max-h-72 overflow-y-auto divide-y divide-[#1d1d1f]/5 border-t border-[#1d1d1f]/10">
                             {saludos.map((s) => (
-                                <li key={s.id} className="flex items-center justify-between gap-3 px-3 py-1.5 text-sm">
-                                    <a href={`/admin/lead/${s.id}`} className="text-[#1d1d1f]/40 truncate hover:underline">
-                                        {s.name}
+                                <li key={s.id} className="flex items-center justify-between gap-3 px-3.5 py-2 text-sm">
+                                    <a
+                                        href={`/admin/lead/${s.id}`}
+                                        className="min-w-0 flex-1 truncate hover:underline underline-offset-2"
+                                    >
+                                        <span className="font-medium">{s.name}</span>{" "}
+                                        <span className="text-[#1d1d1f]/45">{s.email}</span>
                                     </a>
-                                    <span className={s.line === "Hola," ? "text-amber-700" : "text-[#1d1d1f]"}>
-                                        {s.line}
-                                    </span>
+                                    {template === "prototipo-web" && (
+                                        <span className={`shrink-0 ${s.line === "Hola," ? "text-amber-700" : "text-[#1d1d1f]/60"}`}>
+                                            {s.line}
+                                        </span>
+                                    )}
                                 </li>
                             ))}
                         </ul>
-                        <p className="px-3 py-2 text-xs text-[#1d1d1f]/50 border-t border-[#1d1d1f]/10">
-                            ¿Un saludo no te convence? Abre la ficha del contacto y corrige su nombre.
-                        </p>
+                        {eligible.length > saludos.length && (
+                            <p className="px-3.5 py-2 text-xs text-[#1d1d1f]/50 border-t border-[#1d1d1f]/10">
+                                Se listan los primeros {saludos.length}; el envío va a los {eligible.length}.
+                            </p>
+                        )}
                     </details>
+                )}
+
+                {eligible.length === 0 && (
+                    <p className="border border-[#1d1d1f]/10 bg-white rounded-md px-3.5 py-3 text-sm text-[#1d1d1f]/60">
+                        {onlyNew && alreadySent > 0
+                            ? `Todos los de esta selección (${alreadySent}) ya recibieron un correo. Importa contactos nuevos, o desmarca la casilla de arriba para volver a escribirles.`
+                            : "No hay destinatarios con correo en esta selección."}
+                    </p>
                 )}
 
                 <div className="flex items-center gap-4">
