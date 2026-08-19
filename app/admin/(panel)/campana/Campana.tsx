@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { Lead } from "@/lib/crm";
 import { greetingLine } from "@/lib/email-templates/greeting";
+import { LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
 
 // Campaña a una lista: el navegador recorre los destinatarios y dispara UN
 // envío por petición, con pausa entre cada uno. Así ninguna función de
@@ -20,6 +21,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     }, [leads]);
 
     const [list, setList] = useState<string>("");
+    const [servicio, setServicio] = useState<string>("");
     // Por defecto la campaña solo va a quienes NUNCA han recibido un correo:
     // así puedes importar contactos nuevos a la misma lista y reenviar sin
     // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
@@ -31,8 +33,13 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     const [running, setRunning] = useState(false);
 
     const inList = useMemo(
-        () => leads.filter((l) => (list === "" ? true : l.list_name === list)),
-        [leads, list]
+        () =>
+            leads.filter(
+                (l) =>
+                    (list === "" ? true : l.list_name === list) &&
+                    (servicio === "" ? true : (l.service ?? "") === servicio)
+            ),
+        [leads, list, servicio]
     );
     const eligible = useMemo(
         () =>
@@ -128,6 +135,17 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                         <option value="">Todos los contactos</option>
                         {lists.map((name) => (
                             <option key={name} value={name}>{name}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={servicio}
+                        onChange={(ev) => setServicio(ev.target.value)}
+                        disabled={running}
+                        className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
+                    >
+                        <option value="">Todos los servicios</option>
+                        {LEAD_SERVICES.map((sv) => (
+                            <option key={sv} value={sv}>{SERVICE_LABELS[sv]}</option>
                         ))}
                     </select>
                     <span className="text-sm text-[#1d1d1f]/60">

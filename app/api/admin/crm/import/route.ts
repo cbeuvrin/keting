@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
-import { crmAdmin } from "@/lib/crm";
+import { crmAdmin, isMissingColumn, LEAD_SERVICES, type LeadService } from "@/lib/crm";
 
 export const runtime = "nodejs";
 
@@ -14,7 +14,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: Request) {
     if (!(await isAdminRequest())) return NextResponse.json({ error: "no" }, { status: 401 });
 
-    const { list_name, rows } = await request.json().catch(() => ({}));
+    const { list_name, rows, service } = await request.json().catch(() => ({}));
     if (!Array.isArray(rows) || rows.length === 0) {
         return NextResponse.json({ error: "Sin filas que importar" }, { status: 400 });
     }
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Máximo 2000 filas por importación" }, { status: 400 });
     }
     const list = typeof list_name === "string" && list_name.trim() ? list_name.trim() : null;
+    const svc = LEAD_SERVICES.includes(service as LeadService) ? (service as LeadService) : null;
 
     // Filas válidas y sin repetidos dentro del propio archivo
     const seen = new Set<string>();
@@ -56,9 +57,11 @@ export async function POST(request: Request) {
     const toInsert = clean.filter((r) => !existing.has(r.email));
 
     if (toInsert.length > 0) {
-        const { error } = await db.from("crm_leads").insert(
-            toInsert.map((r) => ({ ...r, source: "csv", list_name: list }))
-        );
+        const base = toInsert.map((r) => ({ ...r, source: "csv", list_name: list }));
+        let { error } = await db.from("crm_leads").insert(base.map((r) => ({ ...r, service: svc })));
+        if (isMissingColumn(error, "service")) {
+            ({ error } = await db.from("crm_leads").insert(base));
+        }
         if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     }
 

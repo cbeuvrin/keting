@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowUpDown, Download, Plus, Trash2, Pencil } from "lucide-react";
-import { LEAD_STAGES, STAGE_LABELS, type LeadStage } from "@/lib/crm";
+import { LEAD_STAGES, STAGE_LABELS, LEAD_SERVICES, SERVICE_LABELS, SERVICE_SHORT, type LeadStage, type LeadService } from "@/lib/crm";
 import type { LeadRow } from "@/lib/crm-rows";
 import { ImportCsv } from "../ImportCsv";
 
@@ -36,10 +36,12 @@ export function ContactsTable({
     rows,
     initialCorreo,
     initialEtapa,
+    initialServicio,
 }: {
     rows: LeadRow[];
     initialCorreo: string;
     initialEtapa: string;
+    initialServicio: string;
 }) {
     const router = useRouter();
     // Copia local de las filas: la edición se ve al instante y se confirma
@@ -56,6 +58,7 @@ export function ContactsTable({
     const [error, setError] = useState("");
     const [query, setQuery] = useState("");
     const [lista, setLista] = useState("");
+    const [servicio, setServicio] = useState(initialServicio);
     const [etapa, setEtapa] = useState(initialEtapa);
     // "" todos · "con" con correo · "sin" sin correo · "abierto" abrieron ·
     // "noabierto" recibieron y no abrieron · "baja" dados de baja
@@ -65,7 +68,7 @@ export function ContactsTable({
         dir: "desc",
     });
     const [adding, setAdding] = useState(false);
-    const [draft, setDraft] = useState({ name: "", email: "", phone: "", company: "" });
+    const [draft, setDraft] = useState({ name: "", email: "", phone: "", company: "", service: "" });
     const [saving, setSaving] = useState(false);
 
     async function addLead(ev: React.FormEvent) {
@@ -78,7 +81,7 @@ export function ContactsTable({
             body: JSON.stringify(draft),
         });
         if (res.ok) {
-            setDraft({ name: "", email: "", phone: "", company: "" });
+            setDraft({ name: "", email: "", phone: "", company: "", service: "" });
             setAdding(false);
             router.refresh();
         }
@@ -96,6 +99,7 @@ export function ContactsTable({
         const out = data.filter((r) => {
             if (lista && r.list_name !== lista) return false;
             if (etapa && r.stage !== etapa) return false;
+            if (servicio && (r.service ?? "") !== servicio) return false;
             if (correo === "con" && !r.sentAt) return false;
             if (correo === "sin" && r.sentAt) return false;
             if (correo === "abierto" && !r.openedAt) return false;
@@ -116,7 +120,7 @@ export function ContactsTable({
             if (av && !bv) return -1;
             return String(av).localeCompare(String(bv), "es") * dir;
         });
-    }, [data, query, lista, etapa, correo, sort]);
+    }, [data, query, lista, etapa, correo, servicio, sort]);
 
     function toggleSort(key: SortKey) {
         setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
@@ -152,6 +156,16 @@ export function ContactsTable({
         router.refresh();
     }
 
+    async function cambiarServicio(id: string, service: string) {
+        setData((all) => all.map((r) => (r.id === id ? { ...r, service: (service || null) as LeadService | null } : r)));
+        await fetch(`/api/admin/crm/leads/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ service }),
+        });
+        router.refresh();
+    }
+
     async function cambiarEtapa(id: string, stage: LeadStage) {
         setData((all) => all.map((r) => (r.id === id ? { ...r, stage } : r)));
         await fetch(`/api/admin/crm/leads/${id}`, {
@@ -163,13 +177,15 @@ export function ContactsTable({
     }
 
     function exportar() {
-        const cols = ["Nombre", "Correo", "Empresa", "Teléfono", "Lista", "Etapa", "Enviado", "Abierto", "Baja"];
+        const cols = ["Nombre", "Correo", "Empresa", "Teléfono", "Servicio", "Lista", "Etapa", "Enviado", "Abierto", "Baja"];
         const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
         const csv = [
             cols.join(","),
             ...filtradas.map((r) =>
                 [
-                    r.name, r.email, r.company, r.phone, r.list_name,
+                    r.name, r.email, r.company, r.phone,
+                    r.service ? SERVICE_LABELS[r.service] : "",
+                    r.list_name,
                     STAGE_LABELS[r.stage],
                     r.sentAt ? new Date(r.sentAt).toISOString() : "",
                     r.openedAt ? new Date(r.openedAt).toISOString() : "",
@@ -277,11 +293,17 @@ export function ContactsTable({
             </header>
 
             {adding && (
-                <form onSubmit={addLead} className="mb-4 grid grid-cols-1 md:grid-cols-5 gap-2 bg-white border border-[#1d1d1f]/10 rounded-lg p-3">
+                <form onSubmit={addLead} className="mb-4 grid grid-cols-1 md:grid-cols-6 gap-2 bg-white border border-[#1d1d1f]/10 rounded-lg p-3">
                     <input autoFocus value={draft.name} onChange={(ev) => setDraft({ ...draft, name: ev.target.value })} placeholder="Nombre *" className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]" />
                     <input value={draft.email} onChange={(ev) => setDraft({ ...draft, email: ev.target.value })} placeholder="Correo" type="email" className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]" />
                     <input value={draft.phone} onChange={(ev) => setDraft({ ...draft, phone: ev.target.value })} placeholder="Teléfono" className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]" />
                     <input value={draft.company} onChange={(ev) => setDraft({ ...draft, company: ev.target.value })} placeholder="Empresa" className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]" />
+                    <select value={draft.service} onChange={(ev) => setDraft({ ...draft, service: ev.target.value })} className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f] bg-white">
+                        <option value="">Servicio…</option>
+                        {LEAD_SERVICES.map((sv) => (
+                            <option key={sv} value={sv}>{SERVICE_LABELS[sv]}</option>
+                        ))}
+                    </select>
                     <button type="submit" disabled={saving || !draft.name.trim()} className="bg-[#111111] text-white text-sm rounded-md disabled:opacity-40">
                         Guardar
                     </button>
@@ -304,6 +326,12 @@ export function ContactsTable({
                     <option value="noabierto">Recibieron y no abrieron</option>
                     <option value="baja">Dados de baja</option>
                 </select>
+                <select value={servicio} onChange={(ev) => setServicio(ev.target.value)} className={selectCls}>
+                    <option value="">Todos los servicios</option>
+                    {LEAD_SERVICES.map((sv) => (
+                        <option key={sv} value={sv}>{SERVICE_LABELS[sv]}</option>
+                    ))}
+                </select>
                 <select value={etapa} onChange={(ev) => setEtapa(ev.target.value)} className={selectCls}>
                     <option value="">Todas las etapas</option>
                     {LEAD_STAGES.map((s) => (
@@ -318,9 +346,9 @@ export function ContactsTable({
                         ))}
                     </select>
                 )}
-                {(query || correo || etapa || lista) && (
+                {(query || correo || etapa || lista || servicio) && (
                     <button
-                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); }}
+                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); setServicio(""); }}
                         className="text-sm text-[#1d1d1f]/50 hover:text-[#1d1d1f] px-2"
                     >
                         Limpiar
@@ -342,6 +370,7 @@ export function ContactsTable({
                                 <Th k="email">Correo</Th>
                                 <Th k="company">Empresa</Th>
                                 <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55 whitespace-nowrap">Teléfono</th>
+                                <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55 whitespace-nowrap">Servicio</th>
                                 <Th k="list_name">Lista</Th>
                                 <Th k="stage">Etapa</Th>
                                 <Th k="sentAt">Enviado</Th>
@@ -360,6 +389,20 @@ export function ContactsTable({
                                     <Cell row={r} field="email" className="text-[#1d1d1f]/70 min-w-[200px]" />
                                     <Cell row={r} field="company" className="text-[#1d1d1f]/70 max-w-[160px]" />
                                     <Cell row={r} field="phone" className="text-[#1d1d1f]/70 whitespace-nowrap" />
+                                    <td className="px-3 py-2.5">
+                                        <select
+                                            value={r.service ?? ""}
+                                            onChange={(ev) => cambiarServicio(r.id, ev.target.value)}
+                                            className={`text-xs px-2 py-1 rounded appearance-none cursor-pointer outline-none ${
+                                                r.service ? "bg-[#1d1d1f]/[0.07] text-[#1d1d1f]" : "text-[#1d1d1f]/30"
+                                            }`}
+                                        >
+                                            <option value="">—</option>
+                                            {LEAD_SERVICES.map((sv) => (
+                                                <option key={sv} value={sv} className="text-[#1d1d1f]">{SERVICE_LABELS[sv]}</option>
+                                            ))}
+                                        </select>
+                                    </td>
                                     <td className="px-3 py-2.5 max-w-[130px]">
                                         {r.list_name ? (
                                             <span className="block text-xs font-mono text-[#1d1d1f]/50 truncate" title={r.list_name}>{r.list_name}</span>

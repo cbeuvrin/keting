@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
-import { crmAdmin, LEAD_STAGES, type LeadStage } from "@/lib/crm";
+import { crmAdmin, isMissingColumn, LEAD_STAGES, LEAD_SERVICES, type LeadStage, type LeadService } from "@/lib/crm";
 
 export const runtime = "nodejs";
 
@@ -19,6 +19,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         patch.stage = body.stage;
     }
     if (typeof body.unsubscribed === "boolean") patch.unsubscribed = body.unsubscribed;
+    if (body.service !== undefined) {
+        // "" limpia el servicio; cualquier otro valor debe ser uno de los válidos.
+        patch.service = LEAD_SERVICES.includes(body.service as LeadService) ? body.service : null;
+    }
 
     for (const field of ["name", "email", "phone", "company", "list_name"] as const) {
         if (typeof body[field] === "string") {
@@ -34,7 +38,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         }
     }
 
-    const { error } = await crmAdmin().from("crm_leads").update(patch).eq("id", id);
+    const db = crmAdmin();
+    let { error } = await db.from("crm_leads").update(patch).eq("id", id);
+    if (isMissingColumn(error, "service")) {
+        const { service: _omit, ...resto } = patch;
+        ({ error } = await db.from("crm_leads").update(resto).eq("id", id));
+    }
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });
 }

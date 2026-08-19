@@ -5,7 +5,12 @@ import { createClient } from "@supabase/supabase-js";
 // jamás desde un componente cliente. Las tablas viven en scripts/crm-schema.sql.
 
 export type LeadStage = "nuevo" | "contactado" | "propuesta" | "ganado" | "perdido";
-export type LeadSource = "manual" | "contacto" | "testimonio";
+export type LeadSource = "manual" | "contacto" | "testimonio" | "csv";
+
+/** Qué servicio le interesa al contacto. Eje independiente de la lista de
+ *  origen y de la etapa del trato: agrupa para poder escribirle a cada uno lo
+ *  que le corresponde. */
+export type LeadService = "web" | "apps" | "eventos" | "personalizado";
 
 export type Lead = {
     id: string;
@@ -21,6 +26,7 @@ export type Lead = {
     interests: string | null;
     list_name: string | null;
     unsubscribed: boolean;
+    service: LeadService | null;
 };
 
 export type LeadNote = {
@@ -43,6 +49,23 @@ export type LeadEmail = {
 
 export const LEAD_STAGES: readonly LeadStage[] = ["nuevo", "contactado", "propuesta", "ganado", "perdido"];
 
+export const LEAD_SERVICES: readonly LeadService[] = ["web", "apps", "eventos", "personalizado"];
+
+export const SERVICE_LABELS: Record<LeadService, string> = {
+    web: "Sitio web",
+    apps: "Apps",
+    eventos: "Software para eventos",
+    personalizado: "Personalizado",
+};
+
+/** Etiqueta corta, para las columnas estrechas de la tabla. */
+export const SERVICE_SHORT: Record<LeadService, string> = {
+    web: "Web",
+    apps: "Apps",
+    eventos: "Eventos",
+    personalizado: "A medida",
+};
+
 export const STAGE_LABELS: Record<LeadStage, string> = {
     nuevo: "Nuevo",
     contactado: "Contactado",
@@ -50,6 +73,16 @@ export const STAGE_LABELS: Record<LeadStage, string> = {
     ganado: "Ganado",
     perdido: "Perdido",
 };
+
+/**
+ * True si el error de Supabase es "esa columna no existe". Pasa cuando el
+ * código ya trae un campo nuevo pero todavía no se corrió su migración: en vez
+ * de romper la operación, quien llama reintenta sin ese campo.
+ */
+export function isMissingColumn(error: { message?: string } | null, column: string): boolean {
+    const msg = error?.message ?? "";
+    return msg.includes(column) && /column|schema cache/i.test(msg);
+}
 
 export function crmAdmin() {
     const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;

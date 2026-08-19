@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function ContactosPage({
     searchParams,
 }: {
-    searchParams: Promise<{ correo?: string; etapa?: string }>;
+    searchParams: Promise<{ correo?: string; etapa?: string; servicio?: string }>;
 }) {
     const [{ rows, error }, params] = await Promise.all([loadCrmData(), searchParams]);
 
@@ -24,6 +24,7 @@ export default async function ContactosPage({
             rows={rows}
             initialCorreo={params.correo ?? ""}
             initialEtapa={params.etapa ?? ""}
+            initialServicio={params.servicio ?? ""}
         />
     );
 }

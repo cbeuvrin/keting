@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload } from "lucide-react";
+import { LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
 
 // Importador de CSV. El parseo pasa en el navegador (no se sube el archivo a
 // ningún lado: al servidor solo viajan las filas ya estructuradas).
@@ -80,6 +81,7 @@ export function ImportCsv() {
     const [rows, setRows] = useState<Row[] | null>(null);
     const [fileName, setFileName] = useState("");
     const [list, setList] = useState("");
+    const [service, setService] = useState("");
     const [busy, setBusy] = useState(false);
     const [result, setResult] = useState("");
 
@@ -99,7 +101,7 @@ export function ImportCsv() {
         const res = await fetch("/api/admin/crm/import", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ list_name: list.trim() || null, rows }),
+            body: JSON.stringify({ list_name: list.trim() || null, service: service || null, rows }),
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
@@ -133,6 +135,16 @@ export function ImportCsv() {
                         placeholder="Nombre de la lista"
                         className="border border-[#1d1d1f]/15 px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
                     />
+                    <select
+                        value={service}
+                        onChange={(ev) => setService(ev.target.value)}
+                        className="border border-[#1d1d1f]/15 bg-white px-3 py-2 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
+                    >
+                        <option value="">Servicio (opcional)</option>
+                        {LEAD_SERVICES.map((sv) => (
+                            <option key={sv} value={sv}>{SERVICE_LABELS[sv]}</option>
+                        ))}
+                    </select>
                     <button
                         onClick={doImport}
                         disabled={busy || rows.length === 0}

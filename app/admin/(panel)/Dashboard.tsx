@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { LEAD_STAGES, STAGE_LABELS } from "@/lib/crm";
+import { LEAD_STAGES, STAGE_LABELS, LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
 import type { LeadRow } from "@/lib/crm-rows";
 
 // Dashboard del CRM. Los gráficos van en HTML/CSS y no en SVG: el texto queda
@@ -98,6 +98,29 @@ export function Dashboard({
         [rows]
     );
     const maxEtapa = Math.max(1, ...pipeline.map((p) => p.count));
+
+    // Cada grupo, con cuántos ya recibieron correo y cuántos siguen pendientes.
+    const porServicio = useMemo(() => {
+        const grupos = LEAD_SERVICES.map((sv) => {
+            const del = rows.filter((r) => r.service === sv);
+            return {
+                key: sv as string,
+                label: SERVICE_LABELS[sv],
+                total: del.length,
+                enviados: del.filter((r) => r.sentAt).length,
+            };
+        });
+        const sinAsignar = rows.filter((r) => !r.service);
+        if (sinAsignar.length > 0) {
+            grupos.push({
+                key: "",
+                label: "Sin servicio asignado",
+                total: sinAsignar.length,
+                enviados: sinAsignar.filter((r) => r.sentAt).length,
+            });
+        }
+        return grupos.filter((g) => g.total > 0);
+    }, [rows]);
 
     const pctAperturas = stats.conCorreo > 0 ? Math.round((stats.abiertos / stats.conCorreo) * 100) : 0;
 
@@ -232,6 +255,60 @@ export function Dashboard({
                     </div>
                 </section>
             </div>
+
+            {/* Grupos por servicio: cuántos han recibido correo y cuántos no */}
+            {porServicio.length > 0 && (
+                <section className="bg-white border border-[#1d1d1f]/10 rounded-lg p-5 mt-6">
+                    <div className="flex items-baseline justify-between gap-4 mb-1">
+                        <h2 className="font-bold tracking-tight">Por servicio</h2>
+                        <span className="text-xs text-[#1d1d1f]/45">quién ya recibió correo y quién no</span>
+                    </div>
+                    <div className="flex items-center gap-4 mb-5 text-xs text-[#1d1d1f]/60">
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-sm bg-[#1d1d1f]" /> ya recibieron
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-sm bg-[#1d1d1f]/15" /> pendientes
+                        </span>
+                    </div>
+
+                    <div className="grid gap-4">
+                        {porServicio.map((g) => {
+                            const pendientes = g.total - g.enviados;
+                            return (
+                                <div key={g.key || "sin"}>
+                                    <div className="flex items-baseline justify-between mb-1.5 gap-3">
+                                        <span className="text-sm font-medium">{g.label}</span>
+                                        <span className="text-sm text-[#1d1d1f]/60 tabular-nums">
+                                            {g.enviados} de {g.total}
+                                            {pendientes > 0 && (
+                                                <Link
+                                                    href={`/admin/contactos?correo=sin${g.key ? `&servicio=${g.key}` : ""}`}
+                                                    className="ml-2 text-[#1d1d1f] underline underline-offset-2 hover:no-underline"
+                                                >
+                                                    {pendientes} sin escribir
+                                                </Link>
+                                            )}
+                                        </span>
+                                    </div>
+                                    {/* Una sola barra partida: lo enviado y lo que falta,
+                                        con 2px de aire entre los dos tramos. */}
+                                    <div className="flex h-2.5 gap-0.5">
+                                        <div
+                                            className="bg-[#1d1d1f] rounded-sm"
+                                            style={{ width: `${(g.enviados / g.total) * 100}%` }}
+                                        />
+                                        <div
+                                            className="bg-[#1d1d1f]/15 rounded-sm"
+                                            style={{ width: `${(pendientes / g.total) * 100}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
         </main>
     );
 }
