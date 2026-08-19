@@ -4,7 +4,7 @@ import { crmAdmin, LEAD_STAGES, type LeadStage } from "@/lib/crm";
 
 export const runtime = "nodejs";
 
-/** Actualiza un lead (por ahora: cambiar de etapa y editar datos básicos). */
+/** Actualiza un lead: etapa, datos básicos o su estado de baja. */
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
     if (!(await isAdminRequest())) return NextResponse.json({ error: "no" }, { status: 401 });
     const { id } = await params;
@@ -18,11 +18,32 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         }
         patch.stage = body.stage;
     }
-    for (const field of ["name", "email", "phone", "company"] as const) {
-        if (typeof body[field] === "string") patch[field] = body[field].trim() || null;
+    if (typeof body.unsubscribed === "boolean") patch.unsubscribed = body.unsubscribed;
+
+    for (const field of ["name", "email", "phone", "company", "list_name"] as const) {
+        if (typeof body[field] === "string") {
+            const value = body[field].trim();
+            // El nombre es obligatorio; el resto puede vaciarse a null.
+            if (field === "name" && !value) {
+                return NextResponse.json({ error: "El nombre no puede quedar vacío" }, { status: 400 });
+            }
+            if (field === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                return NextResponse.json({ error: "Correo inválido" }, { status: 400 });
+            }
+            patch[field] = value || null;
+        }
     }
 
     const { error } = await crmAdmin().from("crm_leads").update(patch).eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+}
+
+/** Borra un lead con sus notas y correos (cascade en el esquema). */
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+    if (!(await isAdminRequest())) return NextResponse.json({ error: "no" }, { status: 401 });
+    const { id } = await params;
+    const { error } = await crmAdmin().from("crm_leads").delete().eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });
 }

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowUpDown, Download, Plus } from "lucide-react";
+import { ArrowUpDown, Download, Plus, Trash2, Pencil } from "lucide-react";
 import { LEAD_STAGES, STAGE_LABELS, type LeadStage } from "@/lib/crm";
 import type { LeadRow } from "@/lib/crm-rows";
 import { ImportCsv } from "../ImportCsv";
@@ -12,6 +12,8 @@ import { ImportCsv } from "../ImportCsv";
 // filtros arriba y exportación a CSV. Sustituye a las tarjetas del tablero
 // anterior — con decenas de contactos, una tabla se recorre y se compara; unas
 // tarjetas, no.
+
+type EditableField = "name" | "email" | "company" | "phone";
 
 type SortKey = "name" | "email" | "company" | "list_name" | "stage" | "sentAt" | "openedAt" | "created_at";
 
@@ -40,6 +42,18 @@ export function ContactsTable({
     initialEtapa: string;
 }) {
     const router = useRouter();
+    // Copia local de las filas: la edición se ve al instante y se confirma
+    // detrás. Se resincroniza cuando el servidor manda datos nuevos.
+    const [data, setData] = useState(rows);
+    const [prevRows, setPrevRows] = useState(rows);
+    if (prevRows !== rows) {
+        // El servidor mandó datos nuevos (refresh tras guardar, importar o
+        // borrar): esa es la verdad, se adopta y se descarta lo optimista.
+        setPrevRows(rows);
+        setData(rows);
+    }
+    const [editing, setEditing] = useState<{ id: string; field: EditableField } | null>(null);
+    const [error, setError] = useState("");
     const [query, setQuery] = useState("");
     const [lista, setLista] = useState("");
     const [etapa, setEtapa] = useState(initialEtapa);
@@ -73,13 +87,13 @@ export function ContactsTable({
 
     const listas = useMemo(() => {
         const set = new Set<string>();
-        for (const r of rows) if (r.list_name) set.add(r.list_name);
+        for (const r of data) if (r.list_name) set.add(r.list_name);
         return [...set].sort();
-    }, [rows]);
+    }, [data]);
 
     const filtradas = useMemo(() => {
         const q = query.trim().toLowerCase();
-        const out = rows.filter((r) => {
+        const out = data.filter((r) => {
             if (lista && r.list_name !== lista) return false;
             if (etapa && r.stage !== etapa) return false;
             if (correo === "con" && !r.sentAt) return false;
@@ -102,13 +116,44 @@ export function ContactsTable({
             if (av && !bv) return -1;
             return String(av).localeCompare(String(bv), "es") * dir;
         });
-    }, [rows, query, lista, etapa, correo, sort]);
+    }, [data, query, lista, etapa, correo, sort]);
 
     function toggleSort(key: SortKey) {
         setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
     }
 
+    async function guardarCampo(id: string, field: EditableField, value: string) {
+        setEditing(null);
+        const actual = data.find((r) => r.id === id);
+        if (!actual || (actual[field] ?? "") === value.trim()) return;
+        const previo = actual[field];
+        setData((all) => all.map((r) => (r.id === id ? { ...r, [field]: value.trim() || null } : r)));
+        setError("");
+        const res = await fetch(`/api/admin/crm/leads/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ [field]: value }),
+        });
+        if (!res.ok) {
+            // Revertir y decir por qué: un correo inválido no puede quedarse
+            // en pantalla como si se hubiera guardado.
+            const d = await res.json().catch(() => ({}));
+            setData((all) => all.map((r) => (r.id === id ? { ...r, [field]: previo } : r)));
+            setError(d.error || "No se pudo guardar");
+        } else {
+            router.refresh();
+        }
+    }
+
+    async function borrar(id: string, name: string) {
+        if (!confirm(`¿Borrar a ${name}? Se van también sus notas y su historial de correos.`)) return;
+        setData((all) => all.filter((r) => r.id !== id));
+        await fetch(`/api/admin/crm/leads/${id}`, { method: "DELETE" });
+        router.refresh();
+    }
+
     async function cambiarEtapa(id: string, stage: LeadStage) {
+        setData((all) => all.map((r) => (r.id === id ? { ...r, stage } : r)));
         await fetch(`/api/admin/crm/leads/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -141,6 +186,54 @@ export function ContactsTable({
         URL.revokeObjectURL(url);
     }
 
+    // Celda editable: un clic la convierte en campo. Enter o salir guarda,
+    // Escape cancela. El correo mantiene su enlace mailto cuando no se edita.
+    const Cell = ({
+        row,
+        field,
+        className = "",
+    }: {
+        row: LeadRow;
+        field: EditableField;
+        className?: string;
+    }) => {
+        const activa = editing?.id === row.id && editing.field === field;
+        const valor = (row[field] as string | null) ?? "";
+        if (activa) {
+            return (
+                <td className={`px-1 py-1 ${className}`}>
+                    <input
+                        autoFocus
+                        defaultValue={valor}
+                        onBlur={(ev) => guardarCampo(row.id, field, ev.target.value)}
+                        onKeyDown={(ev) => {
+                            if (ev.key === "Enter") (ev.target as HTMLInputElement).blur();
+                            if (ev.key === "Escape") setEditing(null);
+                        }}
+                        className="w-full border border-[#1d1d1f] bg-white px-2 py-1.5 text-sm rounded outline-none"
+                    />
+                </td>
+            );
+        }
+        return (
+            <td
+                onClick={() => { setEditing({ id: row.id, field }); setError(""); }}
+                title="Clic para editar"
+                className={`px-3 py-2.5 cursor-text truncate ${className}`}
+            >
+                {valor ? (
+                    field === "email" ? (
+                        <span>{valor}</span>
+                    ) : (
+                        valor
+                    )
+                ) : (
+                    <span className="text-[#1d1d1f]/25">—</span>
+                )}
+            </td>
+        );
+    };
+
     const Th = ({ k, children, className = "" }: { k: SortKey; children: React.ReactNode; className?: string }) => (
         <th className={`text-left font-medium px-3 py-2.5 whitespace-nowrap ${className}`}>
             <button
@@ -163,7 +256,7 @@ export function ContactsTable({
                     Contactos{" "}
                     <span className="font-[family-name:var(--font-playfair)] italic font-normal text-[#1d1d1f]/40 text-2xl">
                         {filtradas.length}
-                        {filtradas.length !== rows.length && ` de ${rows.length}`}
+                        {filtradas.length !== data.length && ` de ${data.length}`}
                     </span>
                 </h1>
                 <div className="flex flex-wrap items-center gap-2">
@@ -235,6 +328,10 @@ export function ContactsTable({
                 )}
             </div>
 
+            {error && (
+                <p className="mb-3 text-sm text-[#b4472f]">{error}</p>
+            )}
+
             {/* La tabla */}
             <div className="bg-white border border-[#1d1d1f]/10 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
@@ -244,36 +341,25 @@ export function ContactsTable({
                                 <Th k="name">Nombre</Th>
                                 <Th k="email">Correo</Th>
                                 <Th k="company">Empresa</Th>
+                                <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55 whitespace-nowrap">Teléfono</th>
                                 <Th k="list_name">Lista</Th>
                                 <Th k="stage">Etapa</Th>
                                 <Th k="sentAt">Enviado</Th>
                                 <Th k="openedAt">Abierto</Th>
                                 <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55">Estado</th>
+                                <th className="w-10" />
                             </tr>
                         </thead>
                         <tbody>
                             {filtradas.map((r) => (
                                 <tr
                                     key={r.id}
-                                    className="border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]"
+                                    className="group/row border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]"
                                 >
-                                    <td className="px-3 py-2.5 whitespace-nowrap">
-                                        <Link href={`/admin/lead/${r.id}`} className="font-medium hover:underline underline-offset-2">
-                                            {r.name}
-                                        </Link>
-                                    </td>
-                                    <td className="px-3 py-2.5 text-[#1d1d1f]/70 whitespace-nowrap">
-                                        {r.email ? (
-                                            <a href={`mailto:${r.email}`} className="hover:underline underline-offset-2">
-                                                {r.email}
-                                            </a>
-                                        ) : (
-                                            <span className="text-[#1d1d1f]/30">—</span>
-                                        )}
-                                    </td>
-                                    <td className="px-3 py-2.5 text-[#1d1d1f]/70 max-w-[160px] truncate">
-                                        {r.company || <span className="text-[#1d1d1f]/30">—</span>}
-                                    </td>
+                                    <Cell row={r} field="name" className="font-medium min-w-[150px]" />
+                                    <Cell row={r} field="email" className="text-[#1d1d1f]/70 min-w-[200px]" />
+                                    <Cell row={r} field="company" className="text-[#1d1d1f]/70 max-w-[160px]" />
+                                    <Cell row={r} field="phone" className="text-[#1d1d1f]/70 whitespace-nowrap" />
                                     <td className="px-3 py-2.5 max-w-[130px]">
                                         {r.list_name ? (
                                             <span className="block text-xs font-mono text-[#1d1d1f]/50 truncate" title={r.list_name}>{r.list_name}</span>
@@ -324,6 +410,24 @@ export function ContactsTable({
                                             </span>
                                         )}
                                     </td>
+                                    <td className="px-2 py-2.5">
+                                        <div className="flex items-center gap-1 opacity-0 group-hover/row:opacity-100 transition-opacity">
+                                            <Link
+                                                href={`/admin/lead/${r.id}`}
+                                                title="Abrir ficha"
+                                                className="p-1.5 rounded text-[#1d1d1f]/40 hover:text-[#1d1d1f] hover:bg-[#1d1d1f]/[0.06]"
+                                            >
+                                                <Pencil className="w-3.5 h-3.5" strokeWidth={1.75} />
+                                            </Link>
+                                            <button
+                                                onClick={() => borrar(r.id, r.name)}
+                                                title="Borrar contacto"
+                                                className="p-1.5 rounded text-[#1d1d1f]/40 hover:text-[#b4472f] hover:bg-[#b4472f]/10"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -331,7 +435,7 @@ export function ContactsTable({
                 </div>
                 {filtradas.length === 0 && (
                     <div className="py-16 text-center text-sm text-[#1d1d1f]/40">
-                        {rows.length === 0
+                        {data.length === 0
                             ? "Todavía no hay contactos. Importa un CSV o añade uno a mano."
                             : "Ningún contacto coincide con estos filtros."}
                     </div>
