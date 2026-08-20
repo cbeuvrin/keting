@@ -25,7 +25,7 @@ export type PersonalVars = {
 
 export const PERSONAL_VARIABLES = ["nombre", "empresa", "correo"] as const;
 
-export const PERSONAL_DEFAULT_BODY = `Soy Carlos, de Keting Media. Estuve viendo el sitio de {{empresa}} y me quedé con un par de ideas de cómo podría trabajar mejor: cómo se ve, qué tan rápido carga y cómo convierte las visitas en clientes.
+export const PERSONAL_DEFAULT_BODY = `Soy Carlos Beuvrin, de Keting Media. Estuve viendo el sitio de {{empresa}} y me quedé con un par de ideas de cómo podría trabajar mejor: cómo se ve, qué tan rápido carga y cómo convierte las visitas en clientes.
 
 Si te interesa, te armo un prototipo de la nueva versión sin costo y sin compromiso — sobre tu marca y tu contenido, no una maqueta genérica. Lo ves funcionando en tu navegador y decides.
 

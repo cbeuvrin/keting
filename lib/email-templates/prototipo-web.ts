@@ -37,7 +37,7 @@ export type PrototipoCopy = {
 export const PROTOTIPO_DEFAULT_COPY: PrototipoCopy = {
     subject: "Revisé tu sitio web — te propongo algo sin costo",
     preheader: "Un prototipo de tu nueva web, funcionando, sin costo y sin compromiso. Solo responde este correo.",
-    intro1: "Soy Carlos, de **Keting Media** — diseñamos y construimos sitios y software a medida en Ciudad de México. Estuve viendo tu sitio web y encontré varias cosas que, bien resueltas, pueden traducirse en más clientes: cómo se ve, cómo carga y cómo convierte visitas en contactos.",
+    intro1: "Soy Carlos Beuvrin, de **Keting Media** — diseñamos y construimos sitios y software a medida en Ciudad de México. Estuve viendo tu sitio web y encontré varias cosas que, bien resueltas, pueden traducirse en más clientes: cómo se ve, cómo carga y cómo convierte visitas en contactos.",
     intro2: "En vez de contártelo, prefiero **mostrártelo**:",
     ofertaTitulo: "Un prototipo de tu nueva web.",
     ofertaSub: "Sin costo. Sin compromiso.",
