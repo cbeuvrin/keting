@@ -33,6 +33,10 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     const [conLogo, setConLogo] = useState(true);
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState(PERSONAL_DEFAULT_BODY);
+    // Ids desmarcados a mano dentro de la selección. Se guarda la exclusión y
+    // no la inclusión: así, al cambiar de lista o de filtro, lo nuevo entra
+    // marcado por defecto en vez de aparecer apagado sin motivo.
+    const [excluidos, setExcluidos] = useState<Set<string>>(new Set());
     const [progress, setProgress] = useState<SendState[] | null>(null);
     const [running, setRunning] = useState(false);
 
@@ -61,28 +65,39 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
         [inList]
     );
 
+    const finales = useMemo(() => eligible.filter((l) => !excluidos.has(l.id)), [eligible, excluidos]);
+
+    function alternar(id: string) {
+        setExcluidos((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    }
+
     const bodyOk = template === "prototipo-web" || body.trim().length > 0;
     const esPersonal = template === "personal";
 
     async function run() {
-        if (!eligible.length || !subject.trim() || !bodyOk || running) return;
-        if (!confirm(`Se enviará a ${eligible.length} contactos, uno por uno. ¿Continuar?`)) return;
+        if (!finales.length || !subject.trim() || !bodyOk || running) return;
+        if (!confirm(`Se enviará a ${finales.length} contactos, uno por uno. ¿Continuar?`)) return;
         setRunning(true);
-        const states: SendState[] = eligible.map((l) => ({
+        const states: SendState[] = finales.map((l) => ({
             email: l.email!,
             name: l.name,
             status: "pendiente",
         }));
         setProgress([...states]);
 
-        for (let i = 0; i < eligible.length; i++) {
+        for (let i = 0; i < finales.length; i++) {
             states[i].status = "enviando";
             setProgress([...states]);
             try {
                 const res = await fetch("/api/admin/crm/campaign-send", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined, firma, saludo, conLogo }),
+                    body: JSON.stringify({ lead_id: finales[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined, firma, saludo, conLogo }),
                 });
                 const data = await res.json().catch(() => ({}));
                 states[i].status = res.ok ? "ok" : "error";
@@ -92,7 +107,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 states[i].detail = "red";
             }
             setProgress([...states]);
-            if (i < eligible.length - 1) await new Promise((r) => setTimeout(r, PAUSE_MS));
+            if (i < finales.length - 1) await new Promise((r) => setTimeout(r, PAUSE_MS));
         }
         setRunning(false);
     }
@@ -102,7 +117,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // salió: aquí se detecta a tiempo y se corrige el nombre en su ficha.
     const saludos = useMemo(
         () =>
-            eligible.slice(0, 100).map((l) => {
+            eligible.map((l) => {
                 const faltan = esPersonal
                     ? fillVars(body, varsFor({ name: l.name, company: l.company, email: l.email })).missing
                     : [];
@@ -166,7 +181,8 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                         ))}
                     </select>
                     <span className="text-sm text-[#1d1d1f]/60">
-                        <strong>{eligible.length}</strong> destinatarios
+                        <strong>{finales.length}</strong> destinatarios
+                        {excluidos.size > 0 && <> · {excluidos.size} desmarcados</>}
                         {onlyNew && alreadySent > 0 && <> · {alreadySent} ya recibieron y quedan fuera</>}
                         {excluded > 0 && <> · {excluded} sin correo o de baja</>}
                     </span>
@@ -277,7 +293,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 {eligible.length > 0 && (
                     <details open={eligible.length <= 25} className="border border-[#1d1d1f]/10 bg-white rounded-md">
                         <summary className="cursor-pointer px-3.5 py-3 text-sm">
-                            <span className="font-medium">Le va a llegar a estos {eligible.length}</span>
+                            <span className="font-medium">Le va a llegar a estos {finales.length}</span>
                             {onlyNew && alreadySent > 0 && (
                                 <span className="text-[#1d1d1f]/50"> · los {alreadySent} que ya recibieron no salen aquí</span>
                             )}
@@ -288,9 +304,53 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                 <span className="text-amber-700"> · {conHuecos} con variables sin dato</span>
                             )}
                         </summary>
+                        <div className="flex items-center gap-4 px-3.5 py-2 border-t border-[#1d1d1f]/10 text-xs">
+                            <button
+                                type="button"
+                                onClick={() => setExcluidos(new Set())}
+                                className="text-[#1d1d1f]/60 hover:text-[#1d1d1f] underline underline-offset-2"
+                            >
+                                Marcar todos
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setExcluidos(new Set(eligible.map((l) => l.id)))}
+                                className="text-[#1d1d1f]/60 hover:text-[#1d1d1f] underline underline-offset-2"
+                            >
+                                Desmarcar todos
+                            </button>
+                            {conHuecos > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setExcluidos(
+                                            new Set(saludos.filter((s) => s.faltan.length > 0).map((s) => s.id))
+                                        )
+                                    }
+                                    className="text-amber-700 hover:text-amber-900 underline underline-offset-2"
+                                >
+                                    Desmarcar los {conHuecos} con huecos
+                                </button>
+                            )}
+                            <span className="text-[#1d1d1f]/40">
+                                Desmarca a quien no quieras incluir en este envío.
+                            </span>
+                        </div>
                         <ul className="max-h-72 overflow-y-auto divide-y divide-[#1d1d1f]/5 border-t border-[#1d1d1f]/10">
                             {saludos.map((s) => (
-                                <li key={s.id} className="flex items-center justify-between gap-3 px-3.5 py-2 text-sm">
+                                <li
+                                    key={s.id}
+                                    className={`flex items-center gap-3 px-3.5 py-2 text-sm ${
+                                        excluidos.has(s.id) ? "opacity-40" : ""
+                                    }`}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={!excluidos.has(s.id)}
+                                        onChange={() => alternar(s.id)}
+                                        disabled={running}
+                                        className="w-4 h-4 accent-black shrink-0"
+                                    />
                                     <a
                                         href={`/admin/lead/${s.id}`}
                                         className="min-w-0 flex-1 truncate hover:underline underline-offset-2"
@@ -310,11 +370,6 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                 </li>
                             ))}
                         </ul>
-                        {eligible.length > saludos.length && (
-                            <p className="px-3.5 py-2 text-xs text-[#1d1d1f]/50 border-t border-[#1d1d1f]/10">
-                                Se listan los primeros {saludos.length}; el envío va a los {eligible.length}.
-                            </p>
-                        )}
                     </details>
                 )}
 
@@ -329,10 +384,10 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 <div className="flex items-center gap-4">
                     <button
                         onClick={run}
-                        disabled={!resendReady || running || !eligible.length || !subject.trim() || !bodyOk}
+                        disabled={!resendReady || running || !finales.length || !subject.trim() || !bodyOk}
                         className="bg-[#111111] text-white px-6 py-3 text-xs font-medium tracking-[0.25em] uppercase disabled:opacity-40 hover:bg-black transition-colors"
                     >
-                        {running ? `Enviando… ${done + failed}/${eligible.length}` : `Enviar a ${eligible.length}`}
+                        {running ? `Enviando… ${done + failed}/${finales.length}` : `Enviar a ${finales.length}`}
                     </button>
                     {running && (
                         <span className="text-sm text-[#1d1d1f]/60">
