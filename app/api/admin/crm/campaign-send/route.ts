@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         );
     }
 
-    const { lead_id, subject, body, template, firma, conLogo } = await request.json().catch(() => ({}));
+    const { lead_id, subject, body, template, firma, saludo, conLogo } = await request.json().catch(() => ({}));
     // Con la plantilla de diseño el cuerpo lo pone ella; en personal y en texto
     // simple lo escribe Carlos, así que es obligatorio.
     const usesTemplate = template === "prototipo-web";
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
               lead: { name: lead.name, company: lead.company ?? null, email: lead.email },
               body: bodyText,
               firma: typeof firma === "string" && firma.trim() ? firma.trim() : "Carlos Beuvrin",
+              saludo: typeof saludo === "string" && saludo.trim() ? saludo.trim() : undefined,
               emailId: emailRow.id,
               leadId: lead.id,
               conLogo: conLogo !== false,

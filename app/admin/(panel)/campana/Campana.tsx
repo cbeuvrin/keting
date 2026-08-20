@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Lead } from "@/lib/crm";
 import { greetingLine } from "@/lib/email-templates/greeting";
 import { LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
-import { PERSONAL_DEFAULT_BODY, fillVars, varsFor } from "@/lib/email-templates/personal";
+import { PERSONAL_DEFAULT_BODY, PERSONAL_DEFAULT_SALUDO, buildSaludo, fillVars, varsFor } from "@/lib/email-templates/personal";
 
 // Campaña a una lista: el navegador recorre los destinatarios y dispara UN
 // envío por petición, con pausa entre cada uno. Así ninguna función de
@@ -29,6 +29,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     const [onlyNew, setOnlyNew] = useState(true);
     const [template, setTemplate] = useState<"" | "prototipo-web" | "personal">("personal");
     const [firma, setFirma] = useState("Carlos Beuvrin");
+    const [saludo, setSaludo] = useState(PERSONAL_DEFAULT_SALUDO);
     const [conLogo, setConLogo] = useState(true);
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState(PERSONAL_DEFAULT_BODY);
@@ -81,7 +82,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 const res = await fetch("/api/admin/crm/campaign-send", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined, firma, conLogo }),
+                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined, firma, saludo, conLogo }),
                 });
                 const data = await res.json().catch(() => ({}));
                 states[i].status = res.ok ? "ok" : "error";
@@ -109,13 +110,15 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                     id: l.id,
                     name: l.name,
                     email: l.email ?? "",
-                    line: greetingLine(l.name),
+                    line: esPersonal
+                        ? buildSaludo(saludo, varsFor({ name: l.name, company: l.company, email: l.email }).nombre)
+                        : greetingLine(l.name),
                     faltan,
                 };
             }),
-        [eligible, body, esPersonal]
+        [eligible, body, esPersonal, saludo]
     );
-    const sinNombre = saludos.filter((s) => s.line === "Hola,").length;
+    const sinNombre = saludos.filter((s) => !varsFor({ name: s.name, company: null, email: null }).nombre).length;
     const conHuecos = saludos.filter((s) => s.faltan.length > 0).length;
 
     const done = progress?.filter((s) => s.status === "ok").length ?? 0;
@@ -236,6 +239,14 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                     ))}
                                 </span>
                                 <label className="flex items-center gap-2 text-[#1d1d1f]/70">
+                                    Saludo:
+                                    <input
+                                        value={saludo}
+                                        onChange={(ev) => setSaludo(ev.target.value)}
+                                        className="border border-[#1d1d1f]/15 px-2 py-1 text-sm rounded w-56 outline-none focus:border-[#1d1d1f]"
+                                    />
+                                </label>
+                                <label className="flex items-center gap-2 text-[#1d1d1f]/70">
                                     Firma:
                                     <input
                                         value={firma}
@@ -271,7 +282,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                 <span className="text-[#1d1d1f]/50"> · los {alreadySent} que ya recibieron no salen aquí</span>
                             )}
                             {sinNombre > 0 && (
-                                <span className="text-amber-700"> · {sinNombre} saludarán «Hola,»</span>
+                                <span className="text-amber-700"> · {sinNombre} sin nombre en el saludo</span>
                             )}
                             {conHuecos > 0 && (
                                 <span className="text-amber-700"> · {conHuecos} con variables sin dato</span>
@@ -292,7 +303,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                             falta {s.faltan.join(", ")}
                                         </span>
                                     ) : (
-                                        <span className={`shrink-0 ${s.line === "Hola," ? "text-amber-700" : "text-[#1d1d1f]/60"}`}>
+                                        <span className={"shrink-0 text-[#1d1d1f]/60 max-w-[45%] truncate"}>
                                             {s.line}
                                         </span>
                                     )}

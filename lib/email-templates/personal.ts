@@ -25,15 +25,36 @@ export type PersonalVars = {
 
 export const PERSONAL_VARIABLES = ["nombre", "empresa", "correo"] as const;
 
-export const PERSONAL_DEFAULT_BODY = `Soy Carlos Beuvrin, de Keting Media. Estuve viendo el sitio de {{empresa}} y me quedé con un par de ideas de cómo podría trabajar mejor: cómo se ve, qué tan rápido carga y cómo convierte las visitas en clientes.
+export const PERSONAL_DEFAULT_SALUDO = "Hola {{nombre}}, mucho gusto.";
 
-No usamos plantillas: programamos a la medida con React y Next.js, la tecnología con la que están hechas las aplicaciones que usas a diario. Y si tiene sentido para tu operación, le integramos inteligencia artificial — desde un asistente que atiende a tus clientes hasta procesos internos que hoy alguien hace a mano.
+/**
+ * Arma el saludo. Si el contacto no tiene un nombre presentable, la variable
+ * se va y la frase se recompone sola: «Hola {{nombre}}, mucho gusto.» queda en
+ * «Hola, mucho gusto.» — nunca «Hola , mucho gusto.».
+ */
+export function buildSaludo(plantilla: string, nombre: string): string {
+    return plantilla
+        .replace(/\{\{\s*nombre\s*\}\}/g, nombre)
+        .replace(/\s+([,.;:!?])/g, "$1")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+}
 
-Si te interesa, te armo un prototipo de la nueva versión sin costo y sin compromiso, sobre tu marca y tu contenido. Lo ves funcionando en tu navegador y decides.
+export const PERSONAL_DEFAULT_BODY = `Soy Carlos Beuvrin, de Keting Media. Somos una compañía que crea páginas web, apps y soluciones digitales hiper-personalizadas para empresas como {{empresa}}.
 
-En ketingmedia.com están los proyectos que hemos hecho, cada uno con sus números.
+Estuve viendo el sitio de {{empresa}} y nos gustaría proponerles algunas ideas de cómo su página podría mejorar: cómo se ve, qué tan rápido carga y cómo convertir de forma más eficiente las visitas en clientes.
 
-¿Te lo mando?`;
+Nosotros no usamos plantillas porque programamos a la medida con React y Next.js; con esta tecnología están hechas muchas de las aplicaciones que usamos a diario.
+
+En caso de que estén pensando en trabajar con IA, también podemos integrarla en procesos internos, desde tareas que hoy se hacen a mano hasta un asistente que atienda a sus clientes, todo con la idea de reducir tareas repetitivas y aumentar la eficiencia.
+
+Si les interesa la propuesta para mejorar la página, les puedo presentar una muestra de la página principal (home/inicio) sin costo y sin compromiso: la ven funcionando en su navegador y así deciden si quieren trabajar con nosotros.
+
+Quisiera mostrarles nuestra página para que puedan revisar nuestros proyectos, nuestros clientes y qué hemos hecho: ketingmedia.com
+
+Estamos muy interesados en trabajar con ustedes. Si quieren que hablemos por teléfono, mi número está en la firma.
+
+¡Saludos!`;
 
 /**
  * Sustituye {{variables}} en el texto. Devuelve también cuáles quedaron sin
@@ -94,13 +115,15 @@ export function personalEmail(opts: {
     /** Cuerpo con {{variables}}, tal como lo escribió Carlos */
     body: string;
     firma: string;
+    /** Plantilla del saludo, con {{nombre}} opcional */
+    saludo?: string;
     emailId: string;
     leadId: string;
     /** Sin logo, el correo es texto puro y no se pueden medir aperturas. */
     conLogo: boolean;
 }): { html: string; text: string } {
     const vars = varsFor(opts.lead);
-    const saludo = greetingLine(opts.lead.name);
+    const saludo = buildSaludo(opts.saludo || PERSONAL_DEFAULT_SALUDO, vars.nombre);
     const cuerpo = fillVars(opts.body, vars).text.trim();
     const unsubUrl = `${SITE_URL}/api/t/u/${opts.leadId}`;
     const pixelUrl = `${SITE_URL}/api/t/o/${opts.emailId}`;
