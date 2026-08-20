@@ -28,7 +28,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
     const [onlyNew, setOnlyNew] = useState(true);
     const [template, setTemplate] = useState<"" | "prototipo-web" | "personal">("personal");
-    const [firma, setFirma] = useState("Carlos");
+    const [firma, setFirma] = useState("Carlos Beuvrin");
     const [conLogo, setConLogo] = useState(true);
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState(PERSONAL_DEFAULT_BODY);
@@ -240,7 +240,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                     <input
                                         value={firma}
                                         onChange={(ev) => setFirma(ev.target.value)}
-                                        className="border border-[#1d1d1f]/15 px-2 py-1 text-sm rounded w-28 outline-none focus:border-[#1d1d1f]"
+                                        className="border border-[#1d1d1f]/15 px-2 py-1 text-sm rounded w-36 outline-none focus:border-[#1d1d1f]"
                                     />
                                 </label>
                                 <label className="flex items-center gap-2 text-[#1d1d1f]/70 select-none">

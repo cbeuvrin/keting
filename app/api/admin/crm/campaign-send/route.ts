@@ -66,7 +66,7 @@ export async function POST(request: Request) {
         ? personalEmail({
               lead: { name: lead.name, company: lead.company ?? null, email: lead.email },
               body: bodyText,
-              firma: typeof firma === "string" && firma.trim() ? firma.trim() : "Carlos",
+              firma: typeof firma === "string" && firma.trim() ? firma.trim() : "Carlos Beuvrin",
               emailId: emailRow.id,
               leadId: lead.id,
               conLogo: conLogo !== false,

@@ -29,6 +29,8 @@ export const PERSONAL_DEFAULT_BODY = `Soy Carlos, de Keting Media. Estuve viendo
 
 Si te interesa, te armo un prototipo de la nueva versión sin costo y sin compromiso — sobre tu marca y tu contenido, no una maqueta genérica. Lo ves funcionando en tu navegador y decides.
 
+Por si quieres ver antes con quién estás hablando, en ketingmedia.com están los proyectos que hemos hecho, cada uno con sus números.
+
 ¿Te lo mando?`;
 
 /**
@@ -54,6 +56,23 @@ export function fillVars(
 
 function esc(text: string): string {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * Convierte en enlace lo que ya se ve como una dirección: http(s)://…, www.…
+ * o un dominio suelto (ketingmedia.com). Se aplica SOBRE texto ya escapado.
+ * Los enlaces heredan el color del cliente de correo — un azul de marca sería
+ * otra pista de plantilla.
+ */
+function linkify(html: string): string {
+    return html.replace(
+        /\b((?:https?:\/\/|www\.)[^\s<)]+|[a-z0-9-]+\.(?:com|mx|net|org|io|co|es)(?:\.[a-z]{2})?(?:\/[^\s<)]*)?)/gi,
+        (match) => {
+            // No re-enlazar lo que ya va dentro de un href.
+            const href = /^https?:\/\//i.test(match) ? match : `https://${match}`;
+            return `<a href="${href}">${match}</a>`;
+        }
+    );
 }
 
 /** Variables de un lead, listas para fillVars. */
@@ -84,18 +103,19 @@ export function personalEmail(opts: {
     const unsubUrl = `${SITE_URL}/api/t/u/${opts.leadId}`;
     const pixelUrl = `${SITE_URL}/api/t/o/${opts.emailId}`;
 
-    // Fuente del sistema: la que usa el propio cliente de correo para redactar.
-    // Nada de tipografías de marca aquí — delatan la plantilla.
-    const font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+    // SIN declarar tipografía ni tamaño: cada cliente pinta el mensaje con la
+    // suya, que es exactamente cómo se ve un correo escrito a mano. Declarar
+    // una fuente —aunque sea la del sistema— hace que se note distinto al
+    // resto de la bandeja, y eso ya delata la plantilla.
     const parrafos = esc(cuerpo)
         .split(/\n{2,}/)
-        .map((p) => `<p style="margin:0 0 16px 0;">${p.replace(/\n/g, "<br/>")}</p>`)
+        .map((p) => `<p style="margin:0 0 16px 0;">${linkify(p.replace(/\n/g, "<br/>"))}</p>`)
         .join("\n");
 
     const html = `<!doctype html>
 <html lang="es"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;">
-<div style="font-family:${font};font-size:15px;line-height:1.6;color:#222222;max-width:620px;padding:8px;">
+<div style="max-width:620px;padding-top:24px;">
 <p style="margin:0 0 16px 0;">${esc(saludo)}</p>
 ${parrafos}
 <p style="margin:22px 0 0 0;">${esc(opts.firma)}</p>
@@ -105,7 +125,7 @@ ${
         : ""
 }
 <p style="margin:8px 0 0 0;font-size:13px;color:#777777;">
-<a href="${SITE_URL}" style="color:#777777;">ketingmedia.com</a> &middot; +52 55 4383 0150
+Keting Media &middot; <a href="${SITE_URL}" style="color:#777777;">ketingmedia.com</a> &middot; +52 55 4383 0150
 </p>
 <p style="margin:20px 0 0 0;font-size:12px;color:#9a9a9a;">
 Si prefieres que no te vuelva a escribir, <a href="${unsubUrl}" style="color:#9a9a9a;">dímelo aquí</a> y no insisto.
@@ -119,7 +139,7 @@ ${opts.conLogo ? `<img src="${pixelUrl}" width="1" height="1" alt="" style="disp
 ${cuerpo}
 
 ${opts.firma}
-ketingmedia.com · +52 55 4383 0150
+Keting Media · ketingmedia.com · +52 55 4383 0150
 
 Si prefieres que no te vuelva a escribir, dímelo y no insisto: ${unsubUrl}`;
 
