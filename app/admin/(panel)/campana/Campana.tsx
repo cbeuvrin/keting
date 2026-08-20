@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { Lead } from "@/lib/crm";
 import { greetingLine } from "@/lib/email-templates/greeting";
 import { LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
+import { PERSONAL_DEFAULT_BODY, fillVars, varsFor } from "@/lib/email-templates/personal";
 
 // Campaña a una lista: el navegador recorre los destinatarios y dispara UN
 // envío por petición, con pausa entre cada uno. Así ninguna función de
@@ -26,9 +27,11 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // así puedes importar contactos nuevos a la misma lista y reenviar sin
     // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
     const [onlyNew, setOnlyNew] = useState(true);
-    const [template, setTemplate] = useState<"" | "prototipo-web">("");
+    const [template, setTemplate] = useState<"" | "prototipo-web" | "personal">("personal");
+    const [firma, setFirma] = useState("Carlos");
+    const [conLogo, setConLogo] = useState(true);
     const [subject, setSubject] = useState("");
-    const [body, setBody] = useState("");
+    const [body, setBody] = useState(PERSONAL_DEFAULT_BODY);
     const [progress, setProgress] = useState<SendState[] | null>(null);
     const [running, setRunning] = useState(false);
 
@@ -58,6 +61,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     );
 
     const bodyOk = template === "prototipo-web" || body.trim().length > 0;
+    const esPersonal = template === "personal";
 
     async function run() {
         if (!eligible.length || !subject.trim() || !bodyOk || running) return;
@@ -77,7 +81,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 const res = await fetch("/api/admin/crm/campaign-send", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined }),
+                    body: JSON.stringify({ lead_id: eligible[i].id, subject: subject.trim(), body: body.trim(), template: template || undefined, firma, conLogo }),
                 });
                 const data = await res.json().catch(() => ({}));
                 states[i].status = res.ok ? "ok" : "error";
@@ -97,12 +101,22 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // salió: aquí se detecta a tiempo y se corrige el nombre en su ficha.
     const saludos = useMemo(
         () =>
-            eligible
-                .slice(0, 100)
-                .map((l) => ({ id: l.id, name: l.name, email: l.email ?? "", line: greetingLine(l.name) })),
-        [eligible]
+            eligible.slice(0, 100).map((l) => {
+                const faltan = esPersonal
+                    ? fillVars(body, varsFor({ name: l.name, company: l.company, email: l.email })).missing
+                    : [];
+                return {
+                    id: l.id,
+                    name: l.name,
+                    email: l.email ?? "",
+                    line: greetingLine(l.name),
+                    faltan,
+                };
+            }),
+        [eligible, body, esPersonal]
     );
     const sinNombre = saludos.filter((s) => s.line === "Hola,").length;
+    const conHuecos = saludos.filter((s) => s.faltan.length > 0).length;
 
     const done = progress?.filter((s) => s.status === "ok").length ?? 0;
     const failed = progress?.filter((s) => s.status === "error").length ?? 0;
@@ -169,17 +183,17 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                 <select
                     value={template}
                     onChange={(ev) => {
-                        const t = ev.target.value as "" | "prototipo-web";
+                        const t = ev.target.value as "" | "prototipo-web" | "personal";
                         setTemplate(t);
-                        if (t === "prototipo-web" && !subject) {
-                            setSubject(templateSubject);
-                        }
+                        if (t === "prototipo-web" && !subject) setSubject(templateSubject);
+                        if (t === "personal" && !body.trim()) setBody(PERSONAL_DEFAULT_BODY);
                     }}
                     disabled={running}
                     className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f]"
                 >
-                    <option value="">Texto simple (sin diseño)</option>
-                    <option value="prototipo-web">Plantilla: Revisé tu web → prototipo sin costo</option>
+                    <option value="personal">Personal — texto plano, como si lo escribieras tú</option>
+                    <option value="prototipo-web">Con diseño — plantilla del prototipo</option>
+                    <option value="">Texto simple, sin firma</option>
                 </select>
                 <input
                     value={subject}
@@ -195,14 +209,55 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                         <a href="/admin/plantilla" className="underline underline-offset-2">Plantilla</a>.
                     </p>
                 ) : (
-                    <textarea
-                        value={body}
-                        onChange={(ev) => setBody(ev.target.value)}
-                        placeholder="Cuerpo del correo (texto). El pie con el enlace de baja se añade solo."
-                        rows={10}
-                        disabled={running}
-                        className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#1d1d1f] resize-y"
-                    />
+                    <>
+                        <textarea
+                            value={body}
+                            onChange={(ev) => setBody(ev.target.value)}
+                            placeholder={esPersonal
+                                ? "Escríbelo como se lo escribirías a una persona."
+                                : "Cuerpo del correo (texto). El pie con el enlace de baja se añade solo."}
+                            rows={esPersonal ? 12 : 10}
+                            disabled={running}
+                            className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm rounded-md outline-none focus:border-[#1d1d1f] resize-y leading-relaxed"
+                        />
+                        {esPersonal && (
+                            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                                <span className="text-[#1d1d1f]/50">
+                                    Variables:{" "}
+                                    {["nombre", "empresa", "correo"].map((v) => (
+                                        <button
+                                            key={v}
+                                            type="button"
+                                            onClick={() => setBody((b) => `${b}{{${v}}}`)}
+                                            className="font-mono text-xs bg-[#1d1d1f]/[0.06] hover:bg-[#1d1d1f]/10 px-1.5 py-0.5 rounded mr-1"
+                                        >
+                                            {`{{${v}}}`}
+                                        </button>
+                                    ))}
+                                </span>
+                                <label className="flex items-center gap-2 text-[#1d1d1f]/70">
+                                    Firma:
+                                    <input
+                                        value={firma}
+                                        onChange={(ev) => setFirma(ev.target.value)}
+                                        className="border border-[#1d1d1f]/15 px-2 py-1 text-sm rounded w-28 outline-none focus:border-[#1d1d1f]"
+                                    />
+                                </label>
+                                <label className="flex items-center gap-2 text-[#1d1d1f]/70 select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={conLogo}
+                                        onChange={(ev) => setConLogo(ev.target.checked)}
+                                        className="w-4 h-4 accent-black"
+                                    />
+                                    Logo en la firma
+                                    <span className="text-[#1d1d1f]/40">
+                                        {conLogo ? "(permite medir aperturas)" : "(texto puro: sin datos de apertura)"}
+                                    </span>
+                                </label>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {/* Quién lo va a recibir — abierto por defecto cuando son
@@ -215,8 +270,11 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                             {onlyNew && alreadySent > 0 && (
                                 <span className="text-[#1d1d1f]/50"> · los {alreadySent} que ya recibieron no salen aquí</span>
                             )}
-                            {template === "prototipo-web" && sinNombre > 0 && (
+                            {sinNombre > 0 && (
                                 <span className="text-amber-700"> · {sinNombre} saludarán «Hola,»</span>
+                            )}
+                            {conHuecos > 0 && (
+                                <span className="text-amber-700"> · {conHuecos} con variables sin dato</span>
                             )}
                         </summary>
                         <ul className="max-h-72 overflow-y-auto divide-y divide-[#1d1d1f]/5 border-t border-[#1d1d1f]/10">
@@ -229,7 +287,11 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                         <span className="font-medium">{s.name}</span>{" "}
                                         <span className="text-[#1d1d1f]/45">{s.email}</span>
                                     </a>
-                                    {template === "prototipo-web" && (
+                                    {s.faltan.length > 0 ? (
+                                        <span className="shrink-0 text-amber-700" title="Se enviaría con un hueco en el texto">
+                                            falta {s.faltan.join(", ")}
+                                        </span>
+                                    ) : (
                                         <span className={`shrink-0 ${s.line === "Hola," ? "text-amber-700" : "text-[#1d1d1f]/60"}`}>
                                             {s.line}
                                         </span>

@@ -4,6 +4,7 @@ import { crmAdmin } from "@/lib/crm";
 import { buildEmailHtml, unsubscribeHeaders } from "@/lib/email-html";
 import { prototipoWebEmail } from "@/lib/email-templates/prototipo-web";
 import { loadPrototipoCopy } from "@/lib/crm-settings";
+import { personalEmail } from "@/lib/email-templates/personal";
 
 export const runtime = "nodejs";
 
@@ -26,9 +27,11 @@ export async function POST(request: Request) {
         );
     }
 
-    const { lead_id, subject, body, template } = await request.json().catch(() => ({}));
-    // Con plantilla, el cuerpo lo pone la plantilla; sin ella, es obligatorio.
+    const { lead_id, subject, body, template, firma, conLogo } = await request.json().catch(() => ({}));
+    // Con la plantilla de diseño el cuerpo lo pone ella; en personal y en texto
+    // simple lo escribe Carlos, así que es obligatorio.
     const usesTemplate = template === "prototipo-web";
+    const esPersonal = template === "personal";
     if (
         typeof lead_id !== "string" ||
         typeof subject !== "string" ||
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
     const db = crmAdmin();
     const { data: lead } = await db
         .from("crm_leads")
-        .select("id, email, name, unsubscribed")
+        .select("id, email, name, company, unsubscribed")
         .eq("id", lead_id)
         .maybeSingle();
     if (!lead?.email) return NextResponse.json({ error: "Sin correo" }, { status: 400 });
@@ -57,6 +60,19 @@ export async function POST(request: Request) {
         .single();
     if (insErr || !emailRow) return NextResponse.json({ error: insErr?.message ?? "DB" }, { status: 500 });
 
+    // El correo personal manda también versión de texto: es lo que lo hace
+    // parecer escrito a mano en los clientes que prefieren texto plano.
+    const personal = esPersonal
+        ? personalEmail({
+              lead: { name: lead.name, company: lead.company ?? null, email: lead.email },
+              body: bodyText,
+              firma: typeof firma === "string" && firma.trim() ? firma.trim() : "Carlos",
+              emailId: emailRow.id,
+              leadId: lead.id,
+              conLogo: conLogo !== false,
+          })
+        : null;
+
     const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -65,9 +81,12 @@ export async function POST(request: Request) {
             to: [lead.email],
             reply_to: "info@ketingmedia.com",
             subject: subject.trim(),
-            html: usesTemplate
-                ? prototipoWebEmail({ name: lead.name, emailId: emailRow.id, leadId: lead.id, copy: await loadPrototipoCopy() })
-                : buildEmailHtml({ bodyText: bodyText, emailId: emailRow.id, leadId: lead.id }),
+            html: personal
+                ? personal.html
+                : usesTemplate
+                  ? prototipoWebEmail({ name: lead.name, emailId: emailRow.id, leadId: lead.id, copy: await loadPrototipoCopy() })
+                  : buildEmailHtml({ bodyText: bodyText, emailId: emailRow.id, leadId: lead.id }),
+            ...(personal ? { text: personal.text } : {}),
             headers: unsubscribeHeaders(lead.id),
         }),
     });
