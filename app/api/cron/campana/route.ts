@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 import { crmAdmin } from "@/lib/crm";
-import { loadPersonalCopy } from "@/lib/crm-settings";
+import { loadPersonalCopy, type PersonalCopy } from "@/lib/crm-settings";
+import type { LeadService } from "@/lib/crm";
 import { personalEmail } from "@/lib/email-templates/personal";
 import { unsubscribeHeaders } from "@/lib/email-html";
 
 // ── Envío diario automático ──────────────────────────────────────────────────
-// Cada día a las 11:00 de CDMX (17:00 UTC — México no cambia de horario desde
-// 2022) sale una tanda a quienes nunca han recibido un correo. Si hay menos de
-// la tanda, van los que haya; si no hay ninguno, no se hace nada y no se avisa
-// —el silencio significa "no había a quién escribir"—, salvo que algo falle.
+// De lunes a viernes a las 11:00 de CDMX (17:00 UTC — México no cambia de
+// horario desde 2022) sale una tanda a quienes nunca han recibido un correo.
+// Los fines de semana no se envía: lo decide el propio cron en vercel.json.
+// Si hay menos de la tanda, van los que haya; si no hay ninguno, no se hace
+// nada y no se avisa —el silencio significa "no había a quién escribir"—,
+// salvo que algo falle.
 //
-// El texto es el que Carlos tenga guardado en el panel: se edita en Campaña,
-// se guarda, y a partir de ahí es lo que sale solo.
+// CADA CONTACTO RECIBE EL TEXTO DE SU SERVICIO: a quien busca una app no se le
+// puede escribir sobre mejorar su web. Se agrupa por servicio y cada grupo usa
+// su propio texto guardado; los que no tienen uno propio heredan el general.
 
 export const maxDuration = 300;
 
@@ -23,7 +27,7 @@ const LIMITE_MS = 240_000;
 
 const REPORTE_A = process.env.CRON_REPORT_TO || "djbeuvrin@gmail.com";
 
-type Enviado = { name: string; email: string; ok: boolean; detalle?: string };
+type Enviado = { name: string; email: string; ok: boolean; detalle?: string; asunto: string };
 
 async function resend(apiKey: string, payload: Record<string, unknown>) {
     const res = await fetch("https://api.resend.com/emails", {
@@ -55,7 +59,7 @@ export async function GET(request: Request) {
 
     const { data: todos, error } = await db
         .from("crm_leads")
-        .select("id, name, email, company, unsubscribed")
+        .select("id, name, email, company, service, unsubscribed")
         .not("email", "is", null)
         .eq("unsubscribed", false)
         .order("created_at", { ascending: true });
@@ -67,12 +71,20 @@ export async function GET(request: Request) {
         return NextResponse.json({ ok: true, enviados: 0, motivo: "sin contactos pendientes" });
     }
 
-    const copy = await loadPersonalCopy();
     const tanda = pendientes.slice(0, TANDA);
+
+    // Un texto por servicio, cargado una sola vez por grupo presente en la tanda.
+    const servicios = [...new Set(tanda.map((l) => (l.service ?? null) as LeadService | null))];
+    const textos = new Map<string, PersonalCopy>();
+    for (const sv of servicios) {
+        textos.set(sv ?? "", await loadPersonalCopy(sv));
+    }
+
     const resultados: Enviado[] = [];
 
     for (const lead of tanda) {
         if (Date.now() - arranque > LIMITE_MS) break;
+        const copy = textos.get((lead.service ?? "") as string) ?? textos.get("")!;
 
         // La fila se crea antes de enviar para que su id viaje como pixel.
         const { data: fila } = await db
@@ -114,7 +126,7 @@ export async function GET(request: Request) {
             // mañana vuelve a entrar en la tanda en vez de perderse.
             await db.from("crm_emails").delete().eq("id", fila.id);
         }
-        resultados.push({ name: lead.name, email: lead.email as string, ok, detalle });
+        resultados.push({ name: lead.name, email: lead.email as string, ok, detalle, asunto: copy.subject });
 
         await new Promise((r) => setTimeout(r, PAUSA_MS));
     }
@@ -127,12 +139,13 @@ export async function GET(request: Request) {
     const lineas = resultados
         .map((r) => `${r.ok ? "✓" : "✕"} ${r.name} · ${r.email}${r.detalle ? ` — ${r.detalle}` : ""}`)
         .join("\n");
+    const asuntos = [...new Set(resultados.map((r) => r.asunto))];
     const cuerpo = `Envío automático de hoy.
 
 Enviados: ${enviados.length}${fallidos.length ? ` · Con error: ${fallidos.length}` : ""}
 Quedan pendientes: ${restan}
 
-Asunto usado: ${copy.subject}
+Asunto${asuntos.length > 1 ? "s" : ""} usado${asuntos.length > 1 ? "s" : ""}: ${asuntos.join(" · ")}
 
 ${lineas}
 

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { crmAdmin } from "@/lib/crm";
-import { PROTOTIPO_SETTINGS_KEY, PERSONAL_SETTINGS_KEY, PERSONAL_DEFAULT_COPY, type PersonalCopy } from "@/lib/crm-settings";
+import { PROTOTIPO_SETTINGS_KEY, personalKey, PERSONAL_DEFAULT_COPY, type PersonalCopy } from "@/lib/crm-settings";
+import { LEAD_SERVICES, type LeadService } from "@/lib/crm";
 import { PROTOTIPO_DEFAULT_COPY, type PrototipoCopy } from "@/lib/email-templates/prototipo-web";
 
 export const runtime = "nodejs";
@@ -22,9 +23,12 @@ export async function POST(request: Request) {
         }
         if (typeof body.conLogo === "boolean") limpio.conLogo = body.conLogo;
 
+        const svc = LEAD_SERVICES.includes(body?.service as LeadService)
+            ? (body.service as LeadService)
+            : null;
         const { error } = await crmAdmin()
             .from("crm_settings")
-            .upsert({ key: PERSONAL_SETTINGS_KEY, value: limpio, updated_at: new Date().toISOString() });
+            .upsert({ key: personalKey(svc), value: limpio, updated_at: new Date().toISOString() });
         if (error) {
             return NextResponse.json(
                 { error: `${error.message} — ¿ya pegaste scripts/crm-schema-3.sql en Supabase?` },

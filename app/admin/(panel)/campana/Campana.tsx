@@ -15,7 +15,7 @@ import type { PersonalCopy } from "@/lib/crm-settings";
 const PAUSE_MS = 900;
 type SendState = { email: string; name: string; status: "pendiente" | "enviando" | "ok" | "error"; detail?: string };
 
-export function Campana({ leads, emailed, resendReady, templateSubject, personal }: { leads: Lead[]; emailed: Record<string, string>; resendReady: boolean; templateSubject: string; personal: PersonalCopy }) {
+export function Campana({ leads, emailed, resendReady, templateSubject, personales }: { leads: Lead[]; emailed: Record<string, string>; resendReady: boolean; templateSubject: string; personales: Record<string, PersonalCopy> }) {
     const lists = useMemo(() => {
         const names = new Set<string>();
         for (const l of leads) if (l.list_name) names.add(l.list_name);
@@ -24,17 +24,19 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
 
     const [list, setList] = useState<string>("");
     const [servicio, setServicio] = useState<string>("");
+    // El texto activo es el del servicio elegido; cada grupo guarda el suyo.
+    const copyActual = personales[servicio] ?? personales[""];
     // Por defecto la campaña solo va a quienes NUNCA han recibido un correo:
     // así puedes importar contactos nuevos a la misma lista y reenviar sin
     // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
     const [onlyNew, setOnlyNew] = useState(true);
     const [template, setTemplate] = useState<"" | "prototipo-web" | "personal">("personal");
-    const [firma, setFirma] = useState(personal.firma);
-    const [saludo, setSaludo] = useState(personal.saludo);
-    const [conLogo, setConLogo] = useState(personal.conLogo);
+    const [firma, setFirma] = useState(copyActual.firma);
+    const [saludo, setSaludo] = useState(copyActual.saludo);
+    const [conLogo, setConLogo] = useState(copyActual.conLogo);
     const [guardando, setGuardando] = useState("");
-    const [subject, setSubject] = useState(personal.subject);
-    const [body, setBody] = useState(personal.body);
+    const [subject, setSubject] = useState(copyActual.subject);
+    const [body, setBody] = useState(copyActual.body);
     // Ids desmarcados a mano dentro de la selección. Se guarda la exclusión y
     // no la inclusión: así, al cambiar de lista o de filtro, lo nuevo entra
     // marcado por defecto en vez de aparecer apagado sin motivo.
@@ -87,10 +89,16 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
         const res = await fetch("/api/admin/crm/template", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ template: "personal", subject, saludo, body, firma, conLogo }),
+            body: JSON.stringify({ template: "personal", service: servicio || null, subject, saludo, body, firma, conLogo }),
         });
         const d = await res.json().catch(() => ({}));
-        setGuardando(res.ok ? "Guardado ✓ — así saldrá la próxima vez" : d.error || "No se pudo guardar");
+        setGuardando(
+            res.ok
+                ? servicio
+                    ? `Guardado ✓ — así saldrá para «${SERVICE_LABELS[servicio as keyof typeof SERVICE_LABELS]}»`
+                    : "Guardado ✓ — así saldrá para los que no tengan texto propio"
+                : d.error || "No se pudo guardar"
+        );
     }
 
     function alternar(id: string) {
@@ -197,7 +205,18 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                     </select>
                     <select
                         value={servicio}
-                        onChange={(ev) => setServicio(ev.target.value)}
+                        onChange={(ev) => {
+                            const sv = ev.target.value;
+                            setServicio(sv);
+                            // Cada servicio trae su propio texto guardado.
+                            const c = personales[sv] ?? personales[""];
+                            setSubject(c.subject);
+                            setSaludo(c.saludo);
+                            setBody(c.body);
+                            setFirma(c.firma);
+                            setConLogo(c.conLogo);
+                            setGuardando("");
+                        }}
                         disabled={running}
                         className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
                     >
@@ -339,7 +358,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                                     onClick={guardarTextos}
                                     className="border border-[#1d1d1f]/20 px-3 py-1.5 rounded-md hover:border-[#1d1d1f] transition-colors"
                                 >
-                                    Guardar este texto
+                                    {servicio ? `Guardar para ${SERVICE_LABELS[servicio as keyof typeof SERVICE_LABELS]}` : "Guardar texto general"}
                                 </button>
                                 {guardando && <span className="text-[#1d1d1f]/60">{guardando}</span>}
                             </div>
