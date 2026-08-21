@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import type { Lead } from "@/lib/crm";
 import { greetingLine } from "@/lib/email-templates/greeting";
 import { LEAD_SERVICES, SERVICE_LABELS } from "@/lib/crm";
-import { PERSONAL_DEFAULT_BODY, PERSONAL_DEFAULT_SALUDO, buildSaludo, fillVars, varsFor } from "@/lib/email-templates/personal";
+import { PERSONAL_DEFAULT_BODY, buildSaludo, fillVars, varsFor } from "@/lib/email-templates/personal";
+import type { PersonalCopy } from "@/lib/crm-settings";
 
 // Campaña a una lista: el navegador recorre los destinatarios y dispara UN
 // envío por petición, con pausa entre cada uno. Así ninguna función de
@@ -14,7 +15,7 @@ import { PERSONAL_DEFAULT_BODY, PERSONAL_DEFAULT_SALUDO, buildSaludo, fillVars, 
 const PAUSE_MS = 900;
 type SendState = { email: string; name: string; status: "pendiente" | "enviando" | "ok" | "error"; detail?: string };
 
-export function Campana({ leads, emailed, resendReady, templateSubject }: { leads: Lead[]; emailed: Record<string, string>; resendReady: boolean; templateSubject: string }) {
+export function Campana({ leads, emailed, resendReady, templateSubject, personal }: { leads: Lead[]; emailed: Record<string, string>; resendReady: boolean; templateSubject: string; personal: PersonalCopy }) {
     const lists = useMemo(() => {
         const names = new Set<string>();
         for (const l of leads) if (l.list_name) names.add(l.list_name);
@@ -28,11 +29,12 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     // miedo a repetirle a nadie. Desmarcable para reenvíos deliberados.
     const [onlyNew, setOnlyNew] = useState(true);
     const [template, setTemplate] = useState<"" | "prototipo-web" | "personal">("personal");
-    const [firma, setFirma] = useState("Carlos Beuvrin");
-    const [saludo, setSaludo] = useState(PERSONAL_DEFAULT_SALUDO);
-    const [conLogo, setConLogo] = useState(true);
-    const [subject, setSubject] = useState("");
-    const [body, setBody] = useState(PERSONAL_DEFAULT_BODY);
+    const [firma, setFirma] = useState(personal.firma);
+    const [saludo, setSaludo] = useState(personal.saludo);
+    const [conLogo, setConLogo] = useState(personal.conLogo);
+    const [guardando, setGuardando] = useState("");
+    const [subject, setSubject] = useState(personal.subject);
+    const [body, setBody] = useState(personal.body);
     // Ids desmarcados a mano dentro de la selección. Se guarda la exclusión y
     // no la inclusión: así, al cambiar de lista o de filtro, lo nuevo entra
     // marcado por defecto en vez de aparecer apagado sin motivo.
@@ -66,6 +68,17 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
     );
 
     const finales = useMemo(() => eligible.filter((l) => !excluidos.has(l.id)), [eligible, excluidos]);
+
+    async function guardarTextos() {
+        setGuardando("Guardando…");
+        const res = await fetch("/api/admin/crm/template", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ template: "personal", subject, saludo, body, firma, conLogo }),
+        });
+        const d = await res.json().catch(() => ({}));
+        setGuardando(res.ok ? "Guardado ✓ — así saldrá la próxima vez" : d.error || "No se pudo guardar");
+    }
 
     function alternar(id: string) {
         setExcluidos((prev) => {
@@ -282,6 +295,14 @@ export function Campana({ leads, emailed, resendReady, templateSubject }: { lead
                                         {conLogo ? "(permite medir aperturas)" : "(texto puro: sin datos de apertura)"}
                                     </span>
                                 </label>
+                                <button
+                                    type="button"
+                                    onClick={guardarTextos}
+                                    className="border border-[#1d1d1f]/20 px-3 py-1.5 rounded-md hover:border-[#1d1d1f] transition-colors"
+                                >
+                                    Guardar este texto
+                                </button>
+                                {guardando && <span className="text-[#1d1d1f]/60">{guardando}</span>}
                             </div>
                         )}
                     </>

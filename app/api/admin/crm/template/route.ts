@@ -1,16 +1,39 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { crmAdmin } from "@/lib/crm";
-import { PROTOTIPO_SETTINGS_KEY } from "@/lib/crm-settings";
+import { PROTOTIPO_SETTINGS_KEY, PERSONAL_SETTINGS_KEY, PERSONAL_DEFAULT_COPY, type PersonalCopy } from "@/lib/crm-settings";
 import { PROTOTIPO_DEFAULT_COPY, type PrototipoCopy } from "@/lib/email-templates/prototipo-web";
 
 export const runtime = "nodejs";
 
-/** Guarda los textos editados de la plantilla (solo campos conocidos). */
+/** Guarda los textos editados de una plantilla (solo campos conocidos). */
 export async function POST(request: Request) {
     if (!(await isAdminRequest())) return NextResponse.json({ error: "no" }, { status: 401 });
 
     const body = await request.json().catch(() => ({}));
+
+    // Correo personal: cuerpo, saludo, firma, asunto y si lleva logo.
+    if (body?.template === "personal") {
+        const limpio: Partial<PersonalCopy> = {};
+        for (const key of ["subject", "saludo", "body", "firma"] as const) {
+            if (typeof body[key] === "string" && body[key].trim()) {
+                limpio[key] = body[key].trim().slice(0, 5000);
+            }
+        }
+        if (typeof body.conLogo === "boolean") limpio.conLogo = body.conLogo;
+
+        const { error } = await crmAdmin()
+            .from("crm_settings")
+            .upsert({ key: PERSONAL_SETTINGS_KEY, value: limpio, updated_at: new Date().toISOString() });
+        if (error) {
+            return NextResponse.json(
+                { error: `${error.message} — ¿ya pegaste scripts/crm-schema-3.sql en Supabase?` },
+                { status: 500 }
+            );
+        }
+        return NextResponse.json({ ok: true });
+    }
+
     const clean: Partial<PrototipoCopy> = {};
     for (const key of Object.keys(PROTOTIPO_DEFAULT_COPY) as (keyof PrototipoCopy)[]) {
         const v = body?.[key];

@@ -1,7 +1,42 @@
 import { crmAdmin } from "@/lib/crm";
 import { PROTOTIPO_DEFAULT_COPY, type PrototipoCopy } from "@/lib/email-templates/prototipo-web";
+import {
+    PERSONAL_DEFAULT_BODY,
+    PERSONAL_DEFAULT_SALUDO,
+} from "@/lib/email-templates/personal";
 
 export const PROTOTIPO_SETTINGS_KEY = "template:prototipo-web";
+export const PERSONAL_SETTINGS_KEY = "template:personal";
+
+export type PersonalCopy = {
+    subject: string;
+    saludo: string;
+    body: string;
+    firma: string;
+    conLogo: boolean;
+};
+
+export const PERSONAL_DEFAULT_COPY: PersonalCopy = {
+    subject: "Una idea para tu sitio web",
+    saludo: PERSONAL_DEFAULT_SALUDO,
+    body: PERSONAL_DEFAULT_BODY,
+    firma: "Carlos Beuvrin",
+    conLogo: true,
+};
+
+/** Lo guardado en el panel mezclado sobre los valores de fábrica. */
+export async function loadPersonalCopy(): Promise<PersonalCopy> {
+    try {
+        const { data } = await crmAdmin()
+            .from("crm_settings")
+            .select("value")
+            .eq("key", PERSONAL_SETTINGS_KEY)
+            .maybeSingle();
+        return { ...PERSONAL_DEFAULT_COPY, ...((data?.value ?? {}) as Partial<PersonalCopy>) };
+    } catch {
+        return PERSONAL_DEFAULT_COPY;
+    }
+}
 
 /**
  * Textos de la plantilla: lo guardado en el panel mezclado sobre los defaults.
