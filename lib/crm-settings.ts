@@ -17,7 +17,7 @@ export type PersonalCopy = {
 };
 
 export const PERSONAL_DEFAULT_COPY: PersonalCopy = {
-    subject: "Una idea para tu sitio web",
+    subject: "Podemos mejorar tu web",
     saludo: PERSONAL_DEFAULT_SALUDO,
     body: PERSONAL_DEFAULT_BODY,
     firma: "Carlos Beuvrin",
