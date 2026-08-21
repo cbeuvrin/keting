@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowUpDown, Download, Plus, Trash2, Pencil } from "lucide-react";
+import { ArrowUpDown, Download, Plus, Trash2, Pencil, X } from "lucide-react";
 import { LEAD_STAGES, STAGE_LABELS, LEAD_SERVICES, SERVICE_LABELS, SERVICE_SHORT, type LeadStage, type LeadService } from "@/lib/crm";
 import type { LeadRow } from "@/lib/crm-rows";
 import { ImportCsv } from "../ImportCsv";
@@ -67,6 +67,11 @@ export function ContactsTable({
         key: "created_at",
         dir: "desc",
     });
+    // Selección para cambios en lote. Se guarda por id, así sobrevive a que
+    // cambien los filtros: lo seleccionado sigue seleccionado aunque salga de
+    // la vista, y el contador dice cuántos hay en total.
+    const [sel, setSel] = useState<Set<string>>(new Set());
+    const [loteBusy, setLoteBusy] = useState(false);
     const [adding, setAdding] = useState(false);
     const [draft, setDraft] = useState({ name: "", email: "", phone: "", company: "", service: "" });
     const [saving, setSaving] = useState(false);
@@ -147,6 +152,68 @@ export function ContactsTable({
         } else {
             router.refresh();
         }
+    }
+
+    const visiblesSel = useMemo(
+        () => filtradas.filter((r) => sel.has(r.id)).length,
+        [filtradas, sel]
+    );
+
+    function alternarSel(id: string) {
+        setSel((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    }
+
+    function alternarTodasVisibles() {
+        setSel((prev) => {
+            const next = new Set(prev);
+            const todasPuestas = filtradas.every((r) => next.has(r.id));
+            for (const r of filtradas) {
+                if (todasPuestas) next.delete(r.id);
+                else next.add(r.id);
+            }
+            return next;
+        });
+    }
+
+    async function aplicarLote(patch: Record<string, unknown>) {
+        const ids = [...sel];
+        if (ids.length === 0) return;
+        setLoteBusy(true);
+        setError("");
+        // Optimista, igual que la edición de celda.
+        setData((all) => all.map((r) => (sel.has(r.id) ? { ...r, ...patch } as typeof r : r)));
+        const res = await fetch("/api/admin/crm/leads/bulk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids, ...patch }),
+        });
+        if (!res.ok) {
+            const d = await res.json().catch(() => ({}));
+            setError(d.error || "No se pudo aplicar el cambio");
+        }
+        router.refresh();
+        setLoteBusy(false);
+    }
+
+    async function borrarLote() {
+        const ids = [...sel];
+        if (ids.length === 0) return;
+        if (!confirm(`¿Borrar ${ids.length} contactos? Se van también sus notas y su historial de correos.`)) return;
+        setLoteBusy(true);
+        setData((all) => all.filter((r) => !sel.has(r.id)));
+        await fetch("/api/admin/crm/leads/bulk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids, action: "delete" }),
+        });
+        setSel(new Set());
+        router.refresh();
+        setLoteBusy(false);
     }
 
     async function borrar(id: string, name: string) {
@@ -356,6 +423,68 @@ export function ContactsTable({
                 )}
             </div>
 
+            {sel.size > 0 && (
+                <div className="mb-3 flex flex-wrap items-center gap-3 bg-[#111111] text-white rounded-lg px-4 py-3">
+                    <span className="text-sm font-medium">
+                        {sel.size} seleccionado{sel.size === 1 ? "" : "s"}
+                        {visiblesSel !== sel.size && (
+                            <span className="text-white/50"> · {sel.size - visiblesSel} fuera del filtro</span>
+                        )}
+                    </span>
+
+                    <select
+                        disabled={loteBusy}
+                        value=""
+                        onChange={(ev) => ev.target.value && aplicarLote({ service: ev.target.value === "__none" ? "" : ev.target.value })}
+                        className="bg-white/10 border border-white/20 text-white px-3 py-1.5 text-sm rounded-md outline-none"
+                    >
+                        <option value="" className="text-[#1d1d1f]">Cambiar servicio…</option>
+                        {LEAD_SERVICES.map((sv) => (
+                            <option key={sv} value={sv} className="text-[#1d1d1f]">{SERVICE_LABELS[sv]}</option>
+                        ))}
+                        <option value="__none" className="text-[#1d1d1f]">Quitar servicio</option>
+                    </select>
+
+                    <select
+                        disabled={loteBusy}
+                        value=""
+                        onChange={(ev) => ev.target.value && aplicarLote({ stage: ev.target.value })}
+                        className="bg-white/10 border border-white/20 text-white px-3 py-1.5 text-sm rounded-md outline-none"
+                    >
+                        <option value="" className="text-[#1d1d1f]">Cambiar etapa…</option>
+                        {LEAD_STAGES.map((st) => (
+                            <option key={st} value={st} className="text-[#1d1d1f]">{STAGE_LABELS[st]}</option>
+                        ))}
+                    </select>
+
+                    <button
+                        disabled={loteBusy}
+                        onClick={() => {
+                            const nombre = prompt("Nombre de la lista (vacío para quitarla):", "");
+                            if (nombre !== null) aplicarLote({ list_name: nombre });
+                        }}
+                        className="bg-white/10 border border-white/20 px-3 py-1.5 text-sm rounded-md hover:bg-white/20 transition-colors"
+                    >
+                        Asignar lista
+                    </button>
+
+                    <button
+                        disabled={loteBusy}
+                        onClick={borrarLote}
+                        className="ml-auto flex items-center gap-1.5 text-white/70 hover:text-white px-2 py-1.5 text-sm"
+                    >
+                        <Trash2 className="w-4 h-4" strokeWidth={1.75} /> Borrar
+                    </button>
+                    <button
+                        onClick={() => setSel(new Set())}
+                        className="text-white/50 hover:text-white p-1.5"
+                        title="Quitar selección"
+                    >
+                        <X className="w-4 h-4" strokeWidth={2} />
+                    </button>
+                </div>
+            )}
+
             {error && (
                 <p className="mb-3 text-sm text-[#b4472f]">{error}</p>
             )}
@@ -366,6 +495,15 @@ export function ContactsTable({
                     <table className="w-full text-sm border-collapse">
                         <thead className="sticky top-0 bg-[#FAFAF8] border-b border-[#1d1d1f]/10 text-xs uppercase tracking-wider">
                             <tr>
+                                <th className="w-10 px-3 py-2.5">
+                                    <input
+                                        type="checkbox"
+                                        checked={filtradas.length > 0 && filtradas.every((r) => sel.has(r.id))}
+                                        onChange={alternarTodasVisibles}
+                                        title="Seleccionar todo lo que se ve"
+                                        className="w-4 h-4 accent-black align-middle"
+                                    />
+                                </th>
                                 <Th k="name">Nombre</Th>
                                 <Th k="email">Correo</Th>
                                 <Th k="company">Empresa</Th>
@@ -383,8 +521,16 @@ export function ContactsTable({
                             {filtradas.map((r) => (
                                 <tr
                                     key={r.id}
-                                    className="group/row border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]"
+                                    className={`group/row ${sel.has(r.id) ? "bg-[#1d1d1f]/[0.04]" : ""} border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]`}
                                 >
+                                    <td className="px-3 py-2.5">
+                                        <input
+                                            type="checkbox"
+                                            checked={sel.has(r.id)}
+                                            onChange={() => alternarSel(r.id)}
+                                            className="w-4 h-4 accent-black align-middle"
+                                        />
+                                    </td>
                                     <Cell row={r} field="name" className="font-medium min-w-[150px]" />
                                     <Cell row={r} field="email" className="text-[#1d1d1f]/70 min-w-[200px]" />
                                     <Cell row={r} field="company" className="text-[#1d1d1f]/70 max-w-[160px]" />
