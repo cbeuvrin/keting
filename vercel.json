@@ -1,3 +1,8 @@
 {
-  "crons": []
+  "crons": [
+    {
+      "path": "/api/cron/campana",
+      "schedule": "0 17 * * *"
+    }
+  ]
 }
