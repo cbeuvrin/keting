@@ -39,6 +39,10 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
     // no la inclusión: así, al cambiar de lista o de filtro, lo nuevo entra
     // marcado por defecto en vez de aparecer apagado sin motivo.
     const [excluidos, setExcluidos] = useState<Set<string>>(new Set());
+    // Tanda: cuántos salen en este envío. Un dominio recién verificado que
+    // manda cientos de correos en frío de golpe acaba en spam; por tandas la
+    // reputación se construye. 0 = sin límite.
+    const [tanda, setTanda] = useState(25);
     const [progress, setProgress] = useState<SendState[] | null>(null);
     const [running, setRunning] = useState(false);
 
@@ -67,7 +71,16 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
         [inList]
     );
 
-    const finales = useMemo(() => eligible.filter((l) => !excluidos.has(l.id)), [eligible, excluidos]);
+    // Quiénes podrían recibir (filtros + desmarcados), y de esos, la tanda.
+    const seleccionables = useMemo(
+        () => eligible.filter((l) => !excluidos.has(l.id)),
+        [eligible, excluidos]
+    );
+    const finales = useMemo(
+        () => (tanda > 0 ? seleccionables.slice(0, tanda) : seleccionables),
+        [seleccionables, tanda]
+    );
+    const enCola = seleccionables.length - finales.length;
 
     async function guardarTextos() {
         setGuardando("Guardando…");
@@ -130,7 +143,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
     // salió: aquí se detecta a tiempo y se corrige el nombre en su ficha.
     const saludos = useMemo(
         () =>
-            eligible.map((l) => {
+            finales.map((l) => {
                 const faltan = esPersonal
                     ? fillVars(body, varsFor({ name: l.name, company: l.company, email: l.email })).missing
                     : [];
@@ -144,7 +157,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                     faltan,
                 };
             }),
-        [eligible, body, esPersonal, saludo]
+        [finales, body, esPersonal, saludo]
     );
     const sinNombre = saludos.filter((s) => !varsFor({ name: s.name, company: null, email: null }).nombre).length;
     const conHuecos = saludos.filter((s) => s.faltan.length > 0).length;
@@ -194,7 +207,8 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                         ))}
                     </select>
                     <span className="text-sm text-[#1d1d1f]/60">
-                        <strong>{finales.length}</strong> destinatarios
+                        <strong>{finales.length}</strong> en esta tanda
+                        {enCola > 0 && <> de {seleccionables.length} pendientes</>}
                         {excluidos.size > 0 && <> · {excluidos.size} desmarcados</>}
                         {onlyNew && alreadySent > 0 && <> · {alreadySent} ya recibieron y quedan fuera</>}
                         {excluded > 0 && <> · {excluded} sin correo o de baja</>}
@@ -210,6 +224,31 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                         className="w-4 h-4 accent-black"
                     />
                     Solo a quienes aún no se les ha enviado ningún correo
+                </label>
+
+                <label className="flex flex-wrap items-center gap-2.5 text-sm text-[#1d1d1f]/70">
+                    Enviar por tandas de
+                    <select
+                        value={tanda}
+                        onChange={(ev) => setTanda(Number(ev.target.value))}
+                        disabled={running}
+                        className="border border-[#1d1d1f]/15 bg-white px-3 py-1.5 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
+                    >
+                        {[10, 25, 50, 100].map((n) => (
+                            <option key={n} value={n}>{n}</option>
+                        ))}
+                        <option value={0}>sin límite</option>
+                    </select>
+                    {enCola > 0 && (
+                        <span className="text-[#1d1d1f]/45">
+                            quedan {enCola} para las siguientes tandas
+                        </span>
+                    )}
+                    {tanda === 0 && seleccionables.length > 50 && (
+                        <span className="text-amber-700">
+                            {seleccionables.length} de golpe es mucho para correo en frío
+                        </span>
+                    )}
                 </label>
 
                 <select
@@ -335,7 +374,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                             </button>
                             <button
                                 type="button"
-                                onClick={() => setExcluidos(new Set(eligible.map((l) => l.id)))}
+                                onClick={() => setExcluidos(new Set(seleccionables.map((l) => l.id)))}
                                 className="text-[#1d1d1f]/60 hover:text-[#1d1d1f] underline underline-offset-2"
                             >
                                 Desmarcar todos
@@ -418,6 +457,7 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                     {progress && !running && (
                         <span className="text-sm text-[#1d1d1f]/60">
                             Terminado: {done} enviados{failed > 0 && <>, {failed} con error</>}.
+                            {enCola > 0 && " Recarga la página para preparar la siguiente tanda."}
                         </span>
                     )}
                 </div>
