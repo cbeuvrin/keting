@@ -101,6 +101,23 @@ export const TESTIMONIALS: readonly Testimonial[] = [
         // con un número, el hueco se queda.
         tags: { es: ["E-commerce", "Agencia"], en: ["E-commerce", "Agency"] },
     },
+    {
+        // Erratas de acentuación corregidas: "habia", "pagina", "mas interes"
+        // -> "había", "página", "más interés". No se toca nada más: "Ketingmedia"
+        // en una palabra es como él escribe la marca, y la concordancia de
+        // "no estaba actualizado" es suya.
+        //
+        // SIN caseSlug ni metric: WSO aparece en la tira de logos pero no tiene
+        // página de caso, así que no hay cifra verificada que enseñar. Antes que
+        // inventar un número, el hueco se queda — igual que con Anexa.
+        text: "Antes de Ketingmedia, no había mucha visibilidad en nuestra página y no estaba actualizado. Con Keting, hemos podido generar más interés y más invitaciones para presentar nuestros servicios y productos.",
+        name: "Nelson Vergara",
+        role: "Director Ejecutivo Norteamérica",
+        company: "WSO Worldwide Security Options",
+        project: "Rediseño web y blogs profesionales",
+        received: "2026-08-21",
+        tags: { es: ["Rediseño web", "Blog corporativo"], en: ["Web redesign", "Corporate blog"] },
+    },
 ];
 
 /** El testimonio de un caso concreto, si lo tiene. Lo usa la página de caso. */
