@@ -33,6 +33,35 @@ export interface KetingOgInput {
     headingSize?: number;
 }
 
+/**
+ * El logo, como data URI. Primero del disco —que es lo que hay al compilar,
+ * cuando se prerenderizan las imágenes de las páginas estáticas— y si no está,
+ * por HTTP desde el propio sitio.
+ *
+ * La diferencia importa: una imagen OG de ruta dinámica (como la de cada
+ * artículo del blog) se genera al vuelo en el servidor, donde `public/` no
+ * viene en el paquete de la función. Sin este respaldo, esas rutas devolvían
+ * 500 mientras las estáticas funcionaban.
+ */
+async function loadLogo(logoFile: string): Promise<string | null> {
+    try {
+        const b = await readFile(join(process.cwd(), "public", logoFile));
+        return `data:image/png;base64,${b.toString("base64")}`;
+    } catch {
+        try {
+            const site = process.env.NEXT_PUBLIC_SITE_URL || "https://ketingmedia.com";
+            const res = await fetch(`${site}/${logoFile}`);
+            if (!res.ok) return null;
+            const buf = Buffer.from(await res.arrayBuffer());
+            return `data:image/png;base64,${buf.toString("base64")}`;
+        } catch {
+            // Sin logo la tarjeta sigue siendo válida: mejor una imagen sin
+            // logotipo que un 500 y ninguna vista previa.
+            return null;
+        }
+    }
+}
+
 export async function ketingOgImage({
     eyebrow,
     lineSans,
@@ -47,9 +76,7 @@ export async function ketingOgImage({
     const logoFile = dark ? "keting-logo-white.png" : "keting-logo-black.png";
 
     const [logo, playfair, montserrat] = await Promise.all([
-        readFile(join(process.cwd(), "public", logoFile)).then(
-            (b) => `data:image/png;base64,${b.toString("base64")}`
-        ),
+        loadLogo(logoFile),
         loadGoogleFont("Playfair+Display:ital@1").catch(() => null),
         loadGoogleFont("Montserrat:wght@700").catch(() => null),
     ]);
@@ -112,7 +139,7 @@ export async function ketingOgImage({
                         </div>
                     </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={logo} width={270} height={154} alt="Keting Media" />
+                    {logo && <img src={logo} width={270} height={154} alt="Keting Media" />}
                 </div>
 
                 {/* Bloque central: slogan (sans bold + serif italic) + subtítulo opcional */}
