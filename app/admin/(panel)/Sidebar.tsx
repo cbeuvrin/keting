@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink } from "lucide-react";
 
-// Barra lateral fija del panel. En móvil se convierte en una tira horizontal
-// arriba (mismo orden, solo iconos + etiqueta corta) para no comerse la
-// pantalla.
+// Barra lateral fija del panel. En móvil se reparte en cinco columnas iguales
+// con el icono sobre la etiqueta: en fila los cinco enlaces medían 544 px en
+// una pantalla de 390 y arrastraban toda la página de lado.
 
 const NAV = [
     { href: "/admin", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
@@ -23,7 +23,7 @@ export function Sidebar() {
         href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
     return (
-        <aside className="md:w-[220px] md:shrink-0 md:min-h-screen md:sticky md:top-0 bg-white border-b md:border-b-0 md:border-r border-[#1d1d1f]/10">
+        <aside className="md:w-[220px] md:shrink-0 md:min-h-screen sticky top-0 z-30 md:z-auto bg-white border-b md:border-b-0 md:border-r border-[#1d1d1f]/10">
             <div className="hidden md:block px-6 pt-7 pb-8">
                 <Link href="/admin" className="flex items-baseline gap-2">
                     <span className="font-bold tracking-tight text-lg">CRM</span>
@@ -34,21 +34,21 @@ export function Sidebar() {
                 </Link>
             </div>
 
-            <nav className="flex md:flex-col gap-1 px-3 md:px-3 py-2 md:py-0 overflow-x-auto">
+            <nav className="grid grid-cols-5 md:flex md:flex-col gap-0.5 md:gap-1 px-1.5 md:px-3 py-1.5 md:py-0">
                 {NAV.map(({ href, label, short, icon: Icon }) => {
                     const active = isActive(href);
                     return (
                         <Link
                             key={href}
                             href={href}
-                            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-md text-sm whitespace-nowrap transition-colors ${
+                            className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-2.5 px-1 md:px-3 py-2 md:py-2.5 rounded-md text-[11px] md:text-sm transition-colors ${
                                 active
                                     ? "bg-[#111111] text-white"
                                     : "text-[#1d1d1f]/70 hover:bg-[#1d1d1f]/[0.05] hover:text-[#1d1d1f]"
                             }`}
                         >
                             <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.75} />
-                            <span className="md:inline">{short}</span>
+                            <span className="max-w-full truncate leading-none md:leading-normal">{short}</span>
                             <span className="sr-only">{label}</span>
                         </Link>
                     );
