@@ -350,6 +350,16 @@ function EditorMensaje({ inicial }: { inicial: NetworkingCopy }) {
                         value={copy.firma}
                         onChange={(v) => setCopy((c) => ({ ...c, firma: v }))}
                     />
+                    <label className="flex items-center gap-2.5 text-sm text-[#1d1d1f]/70">
+                        <input
+                            type="checkbox"
+                            checked={copy.conFoto}
+                            onChange={(e) => setCopy((c) => ({ ...c, conFoto: e.target.checked }))}
+                            className="w-4 h-4 accent-[#111111]"
+                        />
+                        Empezar el correo con tu foto
+                    </label>
+
                     <Area
                         label="Mensaje de WhatsApp"
                         value={copy.whatsapp}
@@ -414,7 +424,7 @@ function Resultado({ hecho, onSiguiente }: { hecho: Guardado; onSiguiente: () =>
                 {hecho.correoEnviado
                     ? "El correo salió hace un segundo."
                     : hecho.yaTenia
-                      ? "Ya le habías escrito hoy: no le mandé otro correo."
+                      ? "Ya le habías escrito antes: no le mandé otro correo."
                       : hecho.correoError
                         ? `El correo no salió: ${hecho.correoError}`
                         : "Sin correo: no diste su dirección."}

@@ -36,7 +36,7 @@ export const PERSONAL_DEFAULT_COPY: PersonalCopy = {
 };
 
 /** Lo que se manda a quien acabas de conocer: correo + mensaje de WhatsApp. */
-export type NetworkingCopy = PersonalCopy & { whatsapp: string };
+export type NetworkingCopy = PersonalCopy & { whatsapp: string; conFoto: boolean };
 
 export const NETWORKING_DEFAULT_COPY: NetworkingCopy = {
     subject: "Un gusto conocerte hoy",
@@ -52,6 +52,7 @@ Si en algún momento te sirve algo de esto, o simplemente quieres platicarlo, aq
 ¡Saludos!`,
     firma: "Carlos Beuvrin",
     conLogo: true,
+    conFoto: true,
     whatsapp: `Hola {{nombre}}, soy Carlos Beuvrin de Keting Media — un gusto conocerte hoy. Te dejo mi contacto por aquí, y te acabo de mandar un correo con más información. Si en algún momento necesitas web, apps o automatización con IA, aquí estoy: ketingmedia.com`,
 };
 

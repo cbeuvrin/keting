@@ -74,16 +74,16 @@ export async function POST(request: Request) {
     const vars = varsFor({ name: lead.name, company: lead.company, email: lead.email });
     const mensajeWa = fillVars(copy.whatsapp, vars).text.trim();
 
-    // Un doble escaneo del mismo QR no puede mandar dos veces lo mismo: en un
-    // evento pasa, y llegar duplicado arruina justo la impresión que se busca.
+    // A quien ya se le escribió alguna vez no se le vuelve a escribir solo:
+    // ni por un doble escaneo del mismo QR, ni por reencontrarlo en otro
+    // evento meses después. Un segundo correo solo sale si Carlos lo manda a
+    // mano desde Campaña, que es su autorización explícita.
     let yaTenia = false;
     if (lead.email) {
-        const ayer = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
         const { data: previo } = await db
             .from("crm_emails")
             .select("id")
             .eq("lead_id", lead.id)
-            .gte("created_at", ayer)
             .limit(1);
         yaTenia = Boolean(previo?.length);
     }
@@ -109,6 +109,7 @@ export async function POST(request: Request) {
                 emailId: fila.id,
                 leadId: lead.id,
                 conLogo: copy.conLogo,
+                conFoto: copy.conFoto,
             });
             const res = await fetch("https://api.resend.com/emails", {
                 method: "POST",

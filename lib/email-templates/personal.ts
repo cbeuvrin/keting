@@ -121,6 +121,13 @@ export function personalEmail(opts: {
     leadId: string;
     /** Sin logo, el correo es texto puro y no se pueden medir aperturas. */
     conLogo: boolean;
+    /**
+     * Foto de Carlos arriba del saludo. Va pequeña y redonda a propósito: se
+     * lee como el avatar de una persona escribiendo, no como la cabecera de
+     * una campaña. Una imagen grande arriba es justo la señal que manda un
+     * correo a Promociones en Gmail.
+     */
+    conFoto?: boolean;
 }): { html: string; text: string } {
     const vars = varsFor(opts.lead);
     const saludo = buildSaludo(opts.saludo || PERSONAL_DEFAULT_SALUDO, vars.nombre);
@@ -141,6 +148,11 @@ export function personalEmail(opts: {
 <html lang="es"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;">
 <div style="max-width:620px;padding-top:24px;">
+${
+    opts.conFoto
+        ? `<p style="margin:0 0 18px 0;"><img src="${SITE_URL}/carlos-beuvrin-correo.png" width="72" height="72" alt="Carlos Beuvrin" style="border:0;width:72px;height:72px;border-radius:36px;display:block;"/></p>`
+        : ""
+}
 <p style="margin:0 0 16px 0;">${esc(saludo)}</p>
 ${parrafos}
 <p style="margin:22px 0 0 0;">${esc(opts.firma)}</p>

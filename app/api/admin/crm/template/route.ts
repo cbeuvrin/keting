@@ -22,6 +22,7 @@ export async function POST(request: Request) {
             }
         }
         if (typeof body.conLogo === "boolean") limpio.conLogo = body.conLogo;
+        if (typeof body.conFoto === "boolean") limpio.conFoto = body.conFoto;
 
         const { error } = await crmAdmin()
             .from("crm_settings")
