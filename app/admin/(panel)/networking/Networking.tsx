@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ScanLine, X, Check, MessageCircle, Loader2, UserPlus, AlertCircle, Pencil } from "lucide-react";
 import { parseQr, paraWhatsapp, type ContactoQr } from "@/lib/qr-contact";
+import { fillVars, varsFor } from "@/lib/email-templates/personal";
 import { LEAD_SERVICES, SERVICE_LABELS, type LeadService } from "@/lib/crm";
 import type { NetworkingCopy } from "@/lib/crm-settings";
 
@@ -62,6 +63,17 @@ export function Networking({
             localStorage.setItem("crm:evento", evento);
         } catch {}
     }, [evento]);
+
+    // El envío de un toque se dispara justo antes de saltar a WhatsApp, así que
+    // su resultado llega cuando la app ya no está delante. Al volver se recarga
+    // la lista: ahí se ve el punto verde de quien sí recibió el correo.
+    useEffect(() => {
+        const alVolver = () => {
+            if (document.visibilityState === "visible") router.refresh();
+        };
+        document.addEventListener("visibilitychange", alVolver);
+        return () => document.removeEventListener("visibilitychange", alVolver);
+    }, [router]);
 
     const aplicar = useCallback((c: ContactoQr) => {
         setCampos((prev) => ({
@@ -168,13 +180,48 @@ export function Networking({
                         className="mt-5 bg-white rounded-xl border border-[#1d1d1f]/10 p-4 md:p-5 space-y-4"
                         onSubmit={async (e) => {
                             e.preventDefault();
+
+                            const cuerpo = JSON.stringify({
+                                ...campos,
+                                evento,
+                                service: service || null,
+                            });
+
+                            // Con teléfono, todo cae en el mismo toque: se
+                            // dispara el guardado y se salta a WhatsApp sin
+                            // esperarlo. Encadenar la navegación DESPUÉS de un
+                            // await la bloquearía Safari, que solo abre apps
+                            // dentro del gesto que la persona hizo. `keepalive`
+                            // es lo que mantiene viva la petición aunque la
+                            // pantalla se vaya al fondo.
+                            const tel = paraWhatsapp(campos.phone);
+                            if (tel) {
+                                const vars = varsFor({
+                                    name: campos.name,
+                                    company: campos.company || null,
+                                    email: campos.email || null,
+                                });
+                                const mensaje = fillVars(copy.whatsapp, vars).text.trim();
+                                fetch("/api/admin/crm/networking", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: cuerpo,
+                                    keepalive: true,
+                                }).catch(() => {});
+                                setCampos(VACIO);
+                                setAviso("");
+                                setEnlaceWa("");
+                                window.location.href = `https://wa.me/${tel}?text=${encodeURIComponent(mensaje)}`;
+                                return;
+                            }
+
                             setError("");
                             setGuardando(true);
                             try {
                                 const res = await fetch("/api/admin/crm/networking", {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ ...campos, evento, service: service || null }),
+                                    body: cuerpo,
                                 });
                                 const json = await res.json();
                                 if (!res.ok) throw new Error(json?.error ?? "No se pudo guardar");
@@ -269,12 +316,21 @@ export function Networking({
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" /> Enviando…
                                 </>
+                            ) : campos.phone ? (
+                                <>
+                                    <MessageCircle className="w-5 h-5" strokeWidth={2} /> Enviar y abrir WhatsApp
+                                </>
                             ) : (
                                 <>
                                     <UserPlus className="w-5 h-5" strokeWidth={1.75} /> Guardar y enviar
                                 </>
                             )}
                         </button>
+                        {campos.phone && (
+                            <p className="text-xs text-[#1d1d1f]/45 text-center -mt-1">
+                                Se guarda, le sale el correo y te abre su chat con el mensaje escrito.
+                            </p>
+                        )}
                     </form>
                 </>
             )}
