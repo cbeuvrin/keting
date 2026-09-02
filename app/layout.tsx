@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat, Playfair_Display, Sulphur_Point } from "next/font/google"; // Added Sulphur_Point
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { WhatsAppButton } from "@/components/ui/whatsapp-button";
-import { CookieConsent } from "@/components/ui/cookie-consent";
+import { SiteWidgets } from "@/components/ui/site-widgets";
 import { LangProvider } from "@/lib/i18n/lang-context";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -223,8 +222,7 @@ export default function RootLayout({
       >
         <LangProvider>
           {children}
-          <WhatsAppButton />
-          <CookieConsent />
+          <SiteWidgets />
         </LangProvider>
       </body>
     </html>

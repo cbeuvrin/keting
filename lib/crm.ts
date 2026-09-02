@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 // jamás desde un componente cliente. Las tablas viven en scripts/crm-schema.sql.
 
 export type LeadStage = "nuevo" | "contactado" | "propuesta" | "ganado" | "perdido";
-export type LeadSource = "manual" | "contacto" | "testimonio" | "csv";
+export type LeadSource = "manual" | "contacto" | "testimonio" | "csv" | "networking";
 
 /** Qué servicio le interesa al contacto. Eje independiente de la lista de
  *  origen y de la etapa del trato: agrupa para poder escribirle a cada uno lo

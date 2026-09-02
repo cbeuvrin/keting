@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Table2, Send, FileText, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink } from "lucide-react";
 
 // Barra lateral fija del panel. En móvil se convierte en una tira horizontal
 // arriba (mismo orden, solo iconos + etiqueta corta) para no comerse la
@@ -11,6 +11,7 @@ import { LayoutDashboard, Table2, Send, FileText, ExternalLink } from "lucide-re
 const NAV = [
     { href: "/admin", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
     { href: "/admin/contactos", label: "Contactos", short: "Contactos", icon: Table2 },
+    { href: "/admin/networking", label: "Networking", short: "Evento", icon: ScanLine },
     { href: "/admin/campana", label: "Campaña", short: "Campaña", icon: Send },
     { href: "/admin/plantilla", label: "Plantilla", short: "Plantilla", icon: FileText },
 ];

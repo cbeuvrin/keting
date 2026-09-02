@@ -7,6 +7,7 @@ import {
 
 export const PROTOTIPO_SETTINGS_KEY = "template:prototipo-web";
 export const PERSONAL_SETTINGS_KEY = "template:personal";
+export const NETWORKING_SETTINGS_KEY = "template:networking";
 
 /**
  * Clave del texto de un servicio. Sin servicio (o si ese grupo no tiene texto
@@ -33,6 +34,39 @@ export const PERSONAL_DEFAULT_COPY: PersonalCopy = {
     firma: "Carlos Beuvrin",
     conLogo: true,
 };
+
+/** Lo que se manda a quien acabas de conocer: correo + mensaje de WhatsApp. */
+export type NetworkingCopy = PersonalCopy & { whatsapp: string };
+
+export const NETWORKING_DEFAULT_COPY: NetworkingCopy = {
+    subject: "Un gusto conocerte hoy",
+    saludo: "Hola {{nombre}}, un gusto conocerte.",
+    body: `Te escribo para dejarte mis datos y que los tengas a la mano.
+
+Soy Carlos Beuvrin, de Keting Media. Diseñamos y programamos páginas web, apps y automatizaciones con IA a la medida — sin plantillas, todo desde cero con React y Next.js.
+
+En ketingmedia.com puedes ver los proyectos que hemos hecho, cada uno con sus números.
+
+Si en algún momento te sirve algo de esto, o simplemente quieres platicarlo, aquí estoy. Mi teléfono está en la firma.
+
+¡Saludos!`,
+    firma: "Carlos Beuvrin",
+    conLogo: true,
+    whatsapp: `Hola {{nombre}}, soy Carlos Beuvrin de Keting Media — un gusto conocerte hoy. Te dejo mi contacto por aquí, y te acabo de mandar un correo con más información. Si en algún momento necesitas web, apps o automatización con IA, aquí estoy: ketingmedia.com`,
+};
+
+export async function loadNetworkingCopy(): Promise<NetworkingCopy> {
+    try {
+        const { data } = await crmAdmin()
+            .from("crm_settings")
+            .select("value")
+            .eq("key", NETWORKING_SETTINGS_KEY)
+            .maybeSingle();
+        return { ...NETWORKING_DEFAULT_COPY, ...((data?.value ?? {}) as Partial<NetworkingCopy>) };
+    } catch {
+        return NETWORKING_DEFAULT_COPY;
+    }
+}
 
 /**
  * Texto para un servicio. Si ese grupo no tiene el suyo, cae al general, y de
