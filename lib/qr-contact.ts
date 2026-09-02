@@ -14,10 +14,12 @@ export type ContactoQr = {
     phone: string;
     company: string;
     /** Qué formato se reconoció, para poder decírselo a quien escanea. */
-    formato: "vcard" | "mecard" | "whatsapp" | "texto" | "desconocido";
+    formato: "vcard" | "mecard" | "whatsapp" | "whatsapp-qr" | "texto" | "desconocido";
+    /** Enlace para abrir el chat cuando el QR no traía el número. */
+    link: string;
 };
 
-const VACIO: ContactoQr = { name: "", email: "", phone: "", company: "", formato: "desconocido" };
+const VACIO: ContactoQr = { name: "", email: "", phone: "", company: "", formato: "desconocido", link: "" };
 
 /** Deja el teléfono en dígitos, conservando el + inicial si lo traía. */
 export function normalizaTelefono(raw: string): string {
@@ -39,6 +41,7 @@ function desdeVcard(texto: string): ContactoQr {
         phone: normalizaTelefono(campo(/^TEL[^:]*:(.+)$/im)),
         company: campo(/^ORG[^:]*:(.+)$/im).split(";")[0].trim(),
         formato: "vcard",
+        link: "",
     };
 }
 
@@ -56,11 +59,21 @@ function desdeMecard(texto: string): ContactoQr {
         phone: normalizaTelefono(campo("TEL")),
         company: campo("ORG"),
         formato: "mecard",
+        link: "",
     };
 }
 
 function desdeWhatsapp(texto: string): ContactoQr | null {
-    // wa.me/521555…, api.whatsapp.com/send?phone=…, o el QR de "mi código"
+    // El QR personal de WhatsApp ("mi código") es wa.me/qr/<código>. No lleva
+    // el teléfono dentro: solo un identificador que únicamente WhatsApp sabe
+    // traducir, y su página tampoco lo publica. Lo único que se puede hacer
+    // con él es abrir el chat, así que se guarda el enlace y ya.
+    const qr = texto.match(/(?:wa\.me|api\.whatsapp\.com)\/qr\/([A-Z0-9]{6,40})/i);
+    if (qr) {
+        return { ...VACIO, formato: "whatsapp-qr", link: `https://wa.me/qr/${qr[1]}` };
+    }
+
+    // wa.me/521555… o api.whatsapp.com/send?phone=…
     const m =
         texto.match(/wa\.me\/(\+?\d{7,15})/i) ||
         texto.match(/[?&]phone=(\+?\d{7,15})/i);

@@ -48,6 +48,7 @@ export function Networking({
     const [error, setError] = useState("");
     const [hecho, setHecho] = useState<Guardado | null>(null);
     const [aviso, setAviso] = useState("");
+    const [enlaceWa, setEnlaceWa] = useState("");
 
     // El nombre del evento se repite en cada contacto de la misma noche: se
     // recuerda para no volver a escribirlo diez veces.
@@ -69,9 +70,18 @@ export function Networking({
             phone: c.phone || prev.phone,
             company: c.company || prev.company,
         }));
-        if (c.formato === "whatsapp") setAviso("El QR solo traía el teléfono. Escribe su nombre para el mensaje.");
-        else if (c.formato === "desconocido") setAviso("Ese QR no traía datos de contacto. Escríbelos a mano.");
-        else setAviso("");
+        setEnlaceWa(c.link);
+        if (c.formato === "whatsapp-qr") {
+            setAviso(
+                "Es el QR personal de WhatsApp: por seguridad no lleva el número dentro, ni siquiera WhatsApp lo publica. Abre su chat con el botón de abajo y de ahí copias el número, o pídele su tarjeta."
+            );
+        } else if (c.formato === "whatsapp") {
+            setAviso("El QR solo traía el teléfono. Escribe su nombre para el mensaje.");
+        } else if (c.formato === "desconocido") {
+            setAviso("Ese QR no traía datos de contacto. Escríbelos a mano.");
+        } else {
+            setAviso("");
+        }
     }, []);
 
     return (
@@ -99,6 +109,7 @@ export function Networking({
                         setHecho(null);
                         setCampos(VACIO);
                         setAviso("");
+                        setEnlaceWa("");
                         router.refresh();
                     }}
                 />
@@ -139,6 +150,18 @@ export function Networking({
                         <p className="mt-3 text-sm text-[#1d1d1f]/70 bg-white border border-[#1d1d1f]/10 rounded-lg px-3 py-2.5">
                             {aviso}
                         </p>
+                    )}
+
+                    {enlaceWa && (
+                        <a
+                            href={enlaceWa}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 w-full flex items-center justify-center gap-2.5 rounded-xl border border-[#25D366] text-[#128C4A] py-3.5 text-sm font-medium"
+                        >
+                            <MessageCircle className="w-4 h-4" strokeWidth={2} />
+                            Abrir su chat en WhatsApp
+                        </a>
                     )}
 
                     <form
@@ -486,11 +509,25 @@ function Escaner({
             try {
                 const { Html5Qrcode } = await import("html5-qrcode");
                 if (!vivo) return;
-                const lector = new Html5Qrcode(LECTOR_ID);
+                // El decodificador nativo del navegador, cuando existe, lee
+                // los QR densos y con logo mucho mejor que el de la librería.
+                const lector = new Html5Qrcode(LECTOR_ID, {
+                    verbose: false,
+                    experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+                });
                 instancia.current = lector as unknown as { stop: () => Promise<void>; clear: () => void };
                 await lector.start(
                     { facingMode: "environment" },
-                    { fps: 10, qrbox: { width: 240, height: 240 } },
+                    {
+                        fps: 10,
+                        // Un recuadro fijo de 240px deja fuera los QR densos —
+                        // el personal de WhatsApp lo es, y encima lleva logo en
+                        // medio. Se ajusta al visor en vez de imponer tamaño.
+                        qrbox: (ancho: number, alto: number) => {
+                            const lado = Math.floor(Math.min(ancho, alto) * 0.8);
+                            return { width: lado, height: lado };
+                        },
+                    },
                     (texto) => {
                         // start() sigue disparando mientras el QR esté delante:
                         // sin este cerrojo se rellenaría el formulario en bucle.
