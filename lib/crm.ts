@@ -7,6 +7,17 @@ import { createClient } from "@supabase/supabase-js";
 export type LeadStage = "nuevo" | "contactado" | "propuesta" | "ganado" | "perdido";
 export type LeadSource = "manual" | "contacto" | "testimonio" | "csv" | "networking";
 
+export const LEAD_SOURCES: readonly LeadSource[] = ["networking", "contacto", "testimonio", "csv", "manual"];
+
+/** Cómo entró cada contacto, dicho para quien lo lee en la tabla. */
+export const SOURCE_LABELS: Record<LeadSource, string> = {
+    networking: "Capturados en eventos",
+    contacto: "Formulario de la web",
+    testimonio: "Dejaron testimonio",
+    csv: "Importados",
+    manual: "Añadidos a mano",
+};
+
 /** Qué servicio le interesa al contacto. Eje independiente de la lista de
  *  origen y de la etapa del trato: agrupa para poder escribirle a cada uno lo
  *  que le corresponde. */

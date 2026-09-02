@@ -4,7 +4,9 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowUpDown, Download, Plus, Trash2, Pencil, X } from "lucide-react";
-import { LEAD_STAGES, STAGE_LABELS, LEAD_SERVICES, SERVICE_LABELS, SERVICE_SHORT, type LeadStage, type LeadService } from "@/lib/crm";
+import { LEAD_STAGES, STAGE_LABELS, LEAD_SOURCES,
+    SOURCE_LABELS,
+    LEAD_SERVICES, SERVICE_LABELS, SERVICE_SHORT, type LeadStage, type LeadService } from "@/lib/crm";
 import type { LeadRow } from "@/lib/crm-rows";
 import { ImportCsv } from "../ImportCsv";
 
@@ -37,11 +39,13 @@ export function ContactsTable({
     initialCorreo,
     initialEtapa,
     initialServicio,
+    initialOrigen,
 }: {
     rows: LeadRow[];
     initialCorreo: string;
     initialEtapa: string;
     initialServicio: string;
+    initialOrigen: string;
 }) {
     const router = useRouter();
     // Copia local de las filas: la edición se ve al instante y se confirma
@@ -59,6 +63,7 @@ export function ContactsTable({
     const [query, setQuery] = useState("");
     const [lista, setLista] = useState("");
     const [servicio, setServicio] = useState(initialServicio);
+    const [origen, setOrigen] = useState(initialOrigen);
     const [etapa, setEtapa] = useState(initialEtapa);
     // "" todos · "con" con correo · "sin" sin correo · "abierto" abrieron ·
     // "noabierto" recibieron y no abrieron · "baja" dados de baja
@@ -95,13 +100,16 @@ export function ContactsTable({
 
     const listas = useMemo(() => {
         const set = new Set<string>();
-        for (const r of data) if (r.list_name) set.add(r.list_name);
+        // Con un origen elegido solo se ofrecen sus listas: dentro de los
+        // eventos no tiene sentido ver los nombres de las importaciones.
+        for (const r of data) if (r.list_name && (!origen || r.source === origen)) set.add(r.list_name);
         return [...set].sort();
-    }, [data]);
+    }, [data, origen]);
 
     const filtradas = useMemo(() => {
         const q = query.trim().toLowerCase();
         const out = data.filter((r) => {
+            if (origen && r.source !== origen) return false;
             if (lista && r.list_name !== lista) return false;
             if (etapa && r.stage !== etapa) return false;
             if (servicio && (r.service ?? "") !== servicio) return false;
@@ -125,7 +133,7 @@ export function ContactsTable({
             if (av && !bv) return -1;
             return String(av).localeCompare(String(bv), "es") * dir;
         });
-    }, [data, query, lista, etapa, correo, servicio, sort]);
+    }, [data, query, lista, etapa, correo, servicio, origen, sort]);
 
     function toggleSort(key: SortKey) {
         setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
@@ -399,6 +407,12 @@ export function ContactsTable({
                         <option key={sv} value={sv}>{SERVICE_LABELS[sv]}</option>
                     ))}
                 </select>
+                <select value={origen} onChange={(ev) => setOrigen(ev.target.value)} className={selectCls}>
+                    <option value="">Todos los orígenes</option>
+                    {LEAD_SOURCES.map((sc) => (
+                        <option key={sc} value={sc}>{SOURCE_LABELS[sc]}</option>
+                    ))}
+                </select>
                 <select value={etapa} onChange={(ev) => setEtapa(ev.target.value)} className={selectCls}>
                     <option value="">Todas las etapas</option>
                     {LEAD_STAGES.map((s) => (
@@ -413,9 +427,9 @@ export function ContactsTable({
                         ))}
                     </select>
                 )}
-                {(query || correo || etapa || lista || servicio) && (
+                {(query || correo || etapa || lista || servicio || origen) && (
                     <button
-                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); setServicio(""); }}
+                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); setServicio(""); setOrigen(""); }}
                         className="text-sm text-[#1d1d1f]/50 hover:text-[#1d1d1f] px-2"
                     >
                         Limpiar

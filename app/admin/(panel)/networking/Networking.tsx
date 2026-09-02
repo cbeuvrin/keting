@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ScanLine, X, Check, MessageCircle, Loader2, UserPlus, AlertCircle, Pencil } from "lucide-react";
 import { parseQr, paraWhatsapp, type ContactoQr } from "@/lib/qr-contact";
@@ -337,9 +338,17 @@ export function Networking({
 
             {recientes.length > 0 && (
                 <section className="mt-8">
-                    <h2 className="text-xs uppercase tracking-wider text-[#1d1d1f]/45 mb-3">
-                        Últimos capturados
-                    </h2>
+                    <div className="flex items-baseline justify-between mb-3">
+                        <h2 className="text-xs uppercase tracking-wider text-[#1d1d1f]/45">
+                            Últimos capturados
+                        </h2>
+                        <Link
+                            href="/admin/contactos?origen=networking"
+                            className="text-xs text-[#1d1d1f]/45 underline underline-offset-2"
+                        >
+                            Ver todos
+                        </Link>
+                    </div>
                     <ul className="bg-white rounded-xl border border-[#1d1d1f]/10 divide-y divide-[#1d1d1f]/[0.07]">
                         {recientes.map((l) => (
                             <li key={l.id} className="flex items-center gap-3 px-4 py-3">
