@@ -8,9 +8,17 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ketingmedia.com';
 
-// Revalida cada hora: el sitemap refleja altas/bajas de artículos en la DB sin
-// necesidad de un redeploy (antes era estático y quedaba desfasado).
-export const revalidate = 3600;
+// Se genera en cada petición. La versión anterior declaraba `revalidate = 3600`
+// contando con que se refrescara sola cada hora, y no lo hacía: medido en
+// producción, el sitemap llevaba 21 horas devolviendo el contenido del último
+// deploy, y `revalidatePath("/sitemap.xml")` tampoco lo alcanzaba —el endpoint
+// respondía 200 pero el <lastmod> no se movía—. El efecto era que cada
+// artículo nuevo quedaba fuera del sitemap hasta que alguien tocara código.
+//
+// El costo de generarlo siempre es una consulta a Supabase por petición, y el
+// sitemap lo piden los rastreadores unas cuantas veces al día. Barato a cambio
+// de que un artículo publicado esté listado en el momento.
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 1. Obtener artículos de Supabase

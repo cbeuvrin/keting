@@ -16,7 +16,11 @@ const CRON_SECRET = process.env.CRON_SECRET!;
 //
 // El carrusel del home NO va aquí: es un componente de cliente que consulta
 // Supabase al cargar, así que nunca está desfasado.
-const RUTAS_BASE = ["/blog", "/en/blog", "/sitemap.xml"];
+//
+// /sitemap.xml tampoco: estaba en esta lista y no servía de nada —el endpoint
+// respondía que lo había revalidado y el archivo seguía igual—. Ahora se
+// genera en cada petición, así que no hay nada que invalidar.
+const RUTAS_BASE = ["/blog", "/en/blog"];
 
 /**
  * Invalida la caché de las rutas del blog.
