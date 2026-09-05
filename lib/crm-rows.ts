@@ -1,4 +1,4 @@
-import { crmAdmin, type Lead } from "@/lib/crm";
+import { selectAll, type Lead } from "@/lib/crm";
 
 // Una fila = un contacto con su estado de correo resuelto. Lo usan tanto la
 // tabla como el dashboard, para que ambos cuenten exactamente lo mismo.
@@ -21,12 +21,12 @@ export type CrmData = {
 
 export async function loadCrmData(): Promise<CrmData> {
     try {
-        const db = crmAdmin();
-        const [{ data: leads, error }, { data: mails }] = await Promise.all([
-            db.from("crm_leads").select("*").order("updated_at", { ascending: false }),
-            db.from("crm_emails").select("lead_id, created_at, opened_at").order("created_at", { ascending: false }),
+        const [leads, mails] = await Promise.all([
+            selectAll<Lead>("crm_leads", "*", { campo: "updated_at", ascendente: false }),
+            selectAll<{ lead_id: string; created_at: string; opened_at: string | null }>(
+                "crm_emails", "lead_id, created_at, opened_at", { campo: "created_at", ascendente: false }
+            ),
         ]);
-        if (error) throw error;
 
         const sent = new Map<string, { last: string; opened: string | null; count: number }>();
         const sentByDay: Record<string, number> = {};

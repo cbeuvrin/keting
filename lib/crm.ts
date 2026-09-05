@@ -107,6 +107,37 @@ export const STAGE_LABELS: Record<LeadStage, string> = {
  */
 const DOMINIOS_MAL_ESCRITOS = /^(gamil|gmai|gmial|gmaill|gmailcom|hotmial|hotmai|htomail|hotmil|yaho|outlok|iclod)\./i;
 
+/**
+ * Lee una tabla entera, en páginas.
+ *
+ * Supabase devuelve como mucho 1.000 filas por consulta y NO avisa: no da
+ * error, simplemente corta. Con la base pequeña no se notaba; al pasar de mil
+ * contactos, el tablero empezó a mostrar exactamente 1000 y cero correos
+ * enviados, porque las mil filas que llegaban eran las más recientes y el
+ * historial quedaba fuera.
+ *
+ * El caso peligroso es otro: el envío diario arma con esta tabla el conjunto
+ * de "a quién ya le escribí". Truncado, ese conjunto deja de incluir a los
+ * primeros y les vuelve a escribir.
+ */
+export async function selectAll<T = Record<string, unknown>>(
+    tabla: string,
+    columnas: string,
+    orden?: { campo: string; ascendente?: boolean }
+): Promise<T[]> {
+    const db = crmAdmin();
+    const PAGINA = 1000;
+    const filas: T[] = [];
+    for (let desde = 0; ; desde += PAGINA) {
+        let q = db.from(tabla).select(columnas).range(desde, desde + PAGINA - 1);
+        if (orden) q = q.order(orden.campo, { ascending: orden.ascendente ?? true });
+        const { data, error } = await q;
+        if (error) throw error;
+        filas.push(...((data ?? []) as T[]));
+        if ((data?.length ?? 0) < PAGINA) return filas;
+    }
+}
+
 export function esCorreoEnviable(email: string | null | undefined): boolean {
     const e = (email ?? "").trim().toLowerCase();
     if (!e || e.length > 254) return false;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { esCorreoEnviable, crmAdmin } from "@/lib/crm";
+import { esCorreoEnviable, selectAll, crmAdmin } from "@/lib/crm";
 import { loadPersonalCopy, type PersonalCopy } from "@/lib/crm-settings";
-import type { LeadService } from "@/lib/crm";
+import type { Lead, LeadService } from "@/lib/crm";
 import { personalEmail } from "@/lib/email-templates/personal";
 import { unsubscribeHeaders } from "@/lib/email-html";
 
@@ -53,21 +53,26 @@ export async function GET(request: Request) {
     const arranque = Date.now();
     const db = crmAdmin();
 
-    // A quién ya se le escribió alguna vez.
-    const { data: previos } = await db.from("crm_emails").select("lead_id");
-    const yaEscritos = new Set((previos ?? []).map((m) => m.lead_id as string));
+    // A quién ya se le escribió alguna vez. Va paginado a propósito: con el
+    // límite de 1.000 de Supabase, en cuanto el historial pase de mil correos
+    // este conjunto dejaría fuera a los primeros y se les volvería a escribir.
+    const previos = await selectAll<{ lead_id: string }>("crm_emails", "lead_id");
+    const yaEscritos = new Set(previos.map((m) => m.lead_id));
 
-    const { data: todos, error } = await db
-        .from("crm_leads")
-        .select("id, name, email, company, service, unsubscribed")
-        .not("email", "is", null)
-        .eq("unsubscribed", false)
-        .order("created_at", { ascending: true });
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    let todos: Lead[];
+    try {
+        todos = (await selectAll<Lead>(
+            "crm_leads",
+            "id, name, email, company, service, unsubscribed",
+            { campo: "created_at", ascendente: true }
+        )).filter((l) => l.email && !l.unsubscribed);
+    } catch (e) {
+        return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    }
 
     // Fuera los que rebotarían: direcciones rotas o con el dominio mal
     // tecleado en el CSV de origen. Quedan en el CRM para arreglarlos a mano.
-    const pendientes = (todos ?? []).filter((l) => !yaEscritos.has(l.id) && esCorreoEnviable(l.email));
+    const pendientes = todos.filter((l) => !yaEscritos.has(l.id) && esCorreoEnviable(l.email));
     if (pendientes.length === 0) {
         // Nadie a quien escribir: se termina en silencio, sin correo de aviso.
         return NextResponse.json({ ok: true, enviados: 0, motivo: "sin contactos pendientes" });
