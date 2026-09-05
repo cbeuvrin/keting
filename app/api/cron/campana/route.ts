@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { crmAdmin } from "@/lib/crm";
+import { esCorreoEnviable, crmAdmin } from "@/lib/crm";
 import { loadPersonalCopy, type PersonalCopy } from "@/lib/crm-settings";
 import type { LeadService } from "@/lib/crm";
 import { personalEmail } from "@/lib/email-templates/personal";
@@ -65,7 +65,9 @@ export async function GET(request: Request) {
         .order("created_at", { ascending: true });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    const pendientes = (todos ?? []).filter((l) => !yaEscritos.has(l.id));
+    // Fuera los que rebotarían: direcciones rotas o con el dominio mal
+    // tecleado en el CSV de origen. Quedan en el CRM para arreglarlos a mano.
+    const pendientes = (todos ?? []).filter((l) => !yaEscritos.has(l.id) && esCorreoEnviable(l.email));
     if (pendientes.length === 0) {
         // Nadie a quien escribir: se termina en silencio, sin correo de aviso.
         return NextResponse.json({ ok: true, enviados: 0, motivo: "sin contactos pendientes" });

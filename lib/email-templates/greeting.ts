@@ -31,6 +31,16 @@ export function greetingName(raw: string): string | null {
     const name = (raw ?? "").trim();
     if (!name) return null;
 
+    // Un correo entero metido en el campo del nombre: pasa cuando el CSV de
+    // origen no traía columna de nombre y se usó la dirección como etiqueta.
+    // "atencionclientes@imcmex.com" no es el nombre de nadie, y el patrón
+    // nombre.apellido de más abajo lo convertiría en «Hola Atencionclientes@imcmex,».
+    if (name.includes("@")) return null;
+
+    // Un nombre con dígitos dentro no es un nombre: suele ser un teléfono o un
+    // usuario del sistema de origen.
+    if (/\d/.test(name)) return null;
+
     // Vino de una columna de nombre: tiene espacios o mayúscula inicial.
     if (/\s/.test(name)) {
         const first = name.split(/\s+/)[0];

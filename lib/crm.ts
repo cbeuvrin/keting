@@ -94,6 +94,26 @@ export const STAGE_LABELS: Record<LeadStage, string> = {
  * código ya trae un campo nuevo pero todavía no se corrió su migración: en vez
  * de romper la operación, quien llama reintenta sin ese campo.
  */
+/**
+ * ¿Se le puede escribir a esta dirección sin quemar reputación?
+ *
+ * No basta con que tenga arroba: en los CSV importados hay direcciones que
+ * rebotan seguro —"gmai..com", "benotto@.com.mx"— y dominios mal tecleados de
+ * origen —"gamil.com", "gmaill.com"—. Un rebote cuesta caro: los proveedores
+ * penalizan al remitente, así que se filtran antes de enviar y se dejan para
+ * revisar a mano. No se corrigen solos a propósito: "adolgogalnares@gamil.com"
+ * seguramente sea gmail, pero "seguramente" no es suficiente para escribirle a
+ * una persona que quizá no es.
+ */
+const DOMINIOS_MAL_ESCRITOS = /^(gamil|gmai|gmial|gmaill|gmailcom|hotmial|hotmai|htomail|hotmil|yaho|outlok|iclod)\./i;
+
+export function esCorreoEnviable(email: string | null | undefined): boolean {
+    const e = (email ?? "").trim().toLowerCase();
+    if (!e || e.length > 254) return false;
+    if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(e)) return false; // arroba única, sin puntos dobles ni finales
+    return !DOMINIOS_MAL_ESCRITOS.test(e.split("@")[1] ?? "");
+}
+
 export function isMissingColumn(error: { message?: string } | null, column: string): boolean {
     const msg = error?.message ?? "";
     return msg.includes(column) && /column|schema cache/i.test(msg);
