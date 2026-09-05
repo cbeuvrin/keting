@@ -36,6 +36,10 @@ export type Lead = {
     message: string | null;
     interests: string | null;
     list_name: string | null;
+    /** Plaza del contacto, ya normalizada (CDMX, Guadalajara, Monterrey…).
+     *  Sirve para segmentar los envíos por zona. */
+    city: string | null;
+    country: string | null;
     unsubscribed: boolean;
     service: LeadService | null;
 };

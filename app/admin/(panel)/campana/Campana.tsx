@@ -22,7 +22,16 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
         return [...names].sort();
     }, [leads]);
 
+    // Plazas presentes, ordenadas por volumen: con un centenar de valores, la
+    // que interesa es siempre una de las de arriba.
+    const ciudades = useMemo(() => {
+        const cuenta = new Map<string, number>();
+        for (const l of leads) if (l.city) cuenta.set(l.city, (cuenta.get(l.city) ?? 0) + 1);
+        return [...cuenta.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
+    }, [leads]);
+
     const [list, setList] = useState<string>("");
+    const [ciudad, setCiudad] = useState<string>("");
     const [servicio, setServicio] = useState<string>("");
     // El texto activo es el del servicio elegido; cada grupo guarda el suyo.
     const copyActual = personales[servicio] ?? personales[""];
@@ -53,9 +62,10 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
             leads.filter(
                 (l) =>
                     (list === "" ? true : l.list_name === list) &&
+                    (ciudad === "" ? true : l.city === ciudad) &&
                     (servicio === "" ? true : (l.service ?? "") === servicio)
             ),
-        [leads, list, servicio]
+        [leads, list, ciudad, servicio]
     );
     const eligible = useMemo(
         () =>
@@ -203,6 +213,19 @@ export function Campana({ leads, emailed, resendReady, templateSubject, personal
                             <option key={name} value={name}>{name}</option>
                         ))}
                     </select>
+                    {ciudades.length > 0 && (
+                        <select
+                            value={ciudad}
+                            onChange={(ev) => setCiudad(ev.target.value)}
+                            disabled={running}
+                            className="border border-[#1d1d1f]/15 bg-white px-3 py-2.5 text-sm rounded-md outline-none focus:border-[#1d1d1f]"
+                        >
+                            <option value="">Todas las ciudades</option>
+                            {ciudades.map(([c, n]) => (
+                                <option key={c} value={c}>{c} ({n})</option>
+                            ))}
+                        </select>
+                    )}
                     <select
                         value={servicio}
                         onChange={(ev) => {

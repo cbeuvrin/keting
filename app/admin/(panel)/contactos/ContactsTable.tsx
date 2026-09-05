@@ -17,7 +17,7 @@ import { ImportCsv } from "../ImportCsv";
 
 type EditableField = "name" | "email" | "company" | "phone";
 
-type SortKey = "name" | "email" | "company" | "list_name" | "stage" | "sentAt" | "openedAt" | "created_at";
+type SortKey = "name" | "email" | "company" | "city" | "list_name" | "stage" | "sentAt" | "openedAt" | "created_at";
 
 const FECHA = new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short" });
 const FECHA_LARGA = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" });
@@ -64,6 +64,7 @@ export function ContactsTable({
     const [lista, setLista] = useState("");
     const [servicio, setServicio] = useState(initialServicio);
     const [origen, setOrigen] = useState(initialOrigen);
+    const [ciudad, setCiudad] = useState("");
     const [etapa, setEtapa] = useState(initialEtapa);
     // "" todos · "con" con correo · "sin" sin correo · "abierto" abrieron ·
     // "noabierto" recibieron y no abrieron · "baja" dados de baja
@@ -106,10 +107,17 @@ export function ContactsTable({
         return [...set].sort();
     }, [data, origen]);
 
+    const ciudades = useMemo(() => {
+        const cuenta = new Map<string, number>();
+        for (const r of data) if (r.city) cuenta.set(r.city, (cuenta.get(r.city) ?? 0) + 1);
+        return [...cuenta.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
+    }, [data]);
+
     const filtradas = useMemo(() => {
         const q = query.trim().toLowerCase();
         const out = data.filter((r) => {
             if (origen && r.source !== origen) return false;
+            if (ciudad && r.city !== ciudad) return false;
             if (lista && r.list_name !== lista) return false;
             if (etapa && r.stage !== etapa) return false;
             if (servicio && (r.service ?? "") !== servicio) return false;
@@ -119,7 +127,7 @@ export function ContactsTable({
             if (correo === "noabierto" && (!r.sentAt || r.openedAt)) return false;
             if (correo === "baja" && !r.unsubscribed) return false;
             if (!q) return true;
-            return [r.name, r.email, r.company, r.phone, r.list_name].some((v) =>
+            return [r.name, r.email, r.company, r.phone, r.list_name, r.city].some((v) =>
                 v?.toLowerCase().includes(q)
             );
         });
@@ -133,7 +141,7 @@ export function ContactsTable({
             if (av && !bv) return -1;
             return String(av).localeCompare(String(bv), "es") * dir;
         });
-    }, [data, query, lista, etapa, correo, servicio, origen, sort]);
+    }, [data, query, lista, etapa, correo, servicio, origen, ciudad, sort]);
 
     function toggleSort(key: SortKey) {
         setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
@@ -252,7 +260,7 @@ export function ContactsTable({
     }
 
     function exportar() {
-        const cols = ["Nombre", "Correo", "Empresa", "Teléfono", "Servicio", "Lista", "Etapa", "Enviado", "Abierto", "Baja"];
+        const cols = ["Nombre", "Correo", "Empresa", "Teléfono", "Servicio", "Ciudad", "País", "Lista", "Etapa", "Enviado", "Abierto", "Baja"];
         const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
         const csv = [
             cols.join(","),
@@ -260,6 +268,7 @@ export function ContactsTable({
                 [
                     r.name, r.email, r.company, r.phone,
                     r.service ? SERVICE_LABELS[r.service] : "",
+                    r.city, r.country,
                     r.list_name,
                     STAGE_LABELS[r.stage],
                     r.sentAt ? new Date(r.sentAt).toISOString() : "",
@@ -413,6 +422,14 @@ export function ContactsTable({
                         <option key={sc} value={sc}>{SOURCE_LABELS[sc]}</option>
                     ))}
                 </select>
+                {ciudades.length > 0 && (
+                    <select value={ciudad} onChange={(ev) => setCiudad(ev.target.value)} className={selectCls}>
+                        <option value="">Todas las ciudades</option>
+                        {ciudades.map(([c, n]) => (
+                            <option key={c} value={c}>{c} ({n})</option>
+                        ))}
+                    </select>
+                )}
                 <select value={etapa} onChange={(ev) => setEtapa(ev.target.value)} className={selectCls}>
                     <option value="">Todas las etapas</option>
                     {LEAD_STAGES.map((s) => (
@@ -427,9 +444,9 @@ export function ContactsTable({
                         ))}
                     </select>
                 )}
-                {(query || correo || etapa || lista || servicio || origen) && (
+                {(query || correo || etapa || lista || servicio || origen || ciudad) && (
                     <button
-                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); setServicio(""); setOrigen(""); }}
+                        onClick={() => { setQuery(""); setCorreo(""); setEtapa(""); setLista(""); setServicio(""); setOrigen(""); setCiudad(""); }}
                         className="text-sm text-[#1d1d1f]/50 hover:text-[#1d1d1f] px-2"
                     >
                         Limpiar
@@ -523,6 +540,7 @@ export function ContactsTable({
                                 <Th k="company">Empresa</Th>
                                 <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55 whitespace-nowrap">Teléfono</th>
                                 <th className="text-left font-medium px-3 py-2.5 text-[#1d1d1f]/55 whitespace-nowrap">Servicio</th>
+                                <Th k="city">Ciudad</Th>
                                 <Th k="list_name">Lista</Th>
                                 <Th k="stage">Etapa</Th>
                                 <Th k="sentAt">Enviado</Th>
@@ -562,6 +580,13 @@ export function ContactsTable({
                                                 <option key={sv} value={sv} className="text-[#1d1d1f]">{SERVICE_LABELS[sv]}</option>
                                             ))}
                                         </select>
+                                    </td>
+                                    <td className="px-3 py-2.5 max-w-[120px]">
+                                        {r.city ? (
+                                            <span className="block text-xs truncate" title={[r.city, r.country].filter(Boolean).join(", ")}>{r.city}</span>
+                                        ) : (
+                                            <span className="text-[#1d1d1f]/30">—</span>
+                                        )}
                                     </td>
                                     <td className="px-3 py-2.5 max-w-[130px]">
                                         {r.list_name ? (

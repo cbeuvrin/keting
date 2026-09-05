@@ -48,3 +48,10 @@ next-env.d.ts
 # Maqueta local de la landing de Toogo — NO forma parte del sitio de Keting
 # ni debe desplegarse con él. Se abre directamente en el navegador.
 toogo-landing/
+
+# Datos personales de contactos: cientos de correos y teléfonos de gente real.
+# El repositorio es PÚBLICO, así que esto no puede entrar ni por accidente con
+# un `git add -A`.
+BASE DE DATO/
+*.contactos.csv
+articles-backup-*.json

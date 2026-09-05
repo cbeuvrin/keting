@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     // Filas válidas y sin repetidos dentro del propio archivo
     const seen = new Set<string>();
-    const clean: { name: string; email: string; phone: string | null; company: string | null }[] = [];
+    const clean: { name: string; email: string; phone: string | null; company: string | null; city: string | null; country: string | null }[] = [];
     let invalid = 0;
     for (const row of rows) {
         const email = String(row?.email ?? "").trim().toLowerCase();
@@ -40,6 +40,8 @@ export async function POST(request: Request) {
             email,
             phone: String(row?.phone ?? "").trim() || null,
             company: String(row?.company ?? "").trim() || null,
+            city: String(row?.city ?? "").trim() || null,
+            country: String(row?.country ?? "").trim() || null,
         });
     }
     if (clean.length === 0) {
@@ -58,9 +60,15 @@ export async function POST(request: Request) {
 
     if (toInsert.length > 0) {
         const base = toInsert.map((r) => ({ ...r, source: "csv", list_name: list }));
+        // Se intenta con todo; si la migración de turno aún no está aplicada,
+        // se reintenta sin ese campo. Así el orden de los despliegues da igual.
+        const sinGeo = base.map(({ city, country, ...r }) => r);
         let { error } = await db.from("crm_leads").insert(base.map((r) => ({ ...r, service: svc })));
+        if (isMissingColumn(error, "city") || isMissingColumn(error, "country")) {
+            ({ error } = await db.from("crm_leads").insert(sinGeo.map((r) => ({ ...r, service: svc }))));
+        }
         if (isMissingColumn(error, "service")) {
-            ({ error } = await db.from("crm_leads").insert(base));
+            ({ error } = await db.from("crm_leads").insert(sinGeo));
         }
         if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     }
