@@ -633,7 +633,7 @@ export function CaseGobernia() {
             font="Inter"
             fontStyle="sans"
             metric={{ value: "↑ 8x", label: c.metricLabel }}
-            url="https://gobernia-liard.vercel.app/"
+            url="https://www.gobernia.ai/"
             image="/portafolio/screenshots/gobernia.jpg"
             imageAlt={c.imageAlt}
             effect="rise"

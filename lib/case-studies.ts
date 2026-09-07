@@ -148,7 +148,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     {
         slug: "gobernia",
         metricValue: "↑ 8x",
-        url: "https://gobernia-liard.vercel.app/",
+        url: "https://www.gobernia.ai/",
         image: "/portafolio/screenshots/gobernia.jpg",
         es: {
             title: "Gobernia — un consejo de 4 agentes de IA",

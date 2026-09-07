@@ -1179,7 +1179,7 @@ export function GoberniaShowcase() {
                             className="md:col-span-7 relative"
                         >
                             <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/10 blur-3xl rounded-full pointer-events-none" />
-                            <a href="https://gobernia-liard.vercel.app/" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
+                            <a href="https://www.gobernia.ai/" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
                                 <img
                                 src="/soluciones/gobernia-imac.png"
                                 alt={s.imgAlt}
