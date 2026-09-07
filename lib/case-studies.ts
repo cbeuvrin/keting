@@ -182,7 +182,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     {
         slug: "happtek",
         metricValue: "↑ 6x",
-        url: "https://audio-five-blue.vercel.app/",
+        url: "https://www.happtek.com.mx/",
         image: "/portafolio/screenshots/audiofive.jpg",
         es: {
             title: "Happtek — la voz de la elegancia",

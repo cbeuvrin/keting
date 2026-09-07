@@ -758,7 +758,7 @@ export function CaseHapptek() {
             font="Playfair Display"
             fontStyle="serif"
             metric={{ value: "↑ 6x", label: c.metricLabel }}
-            url="https://audio-five-blue.vercel.app/"
+            url="https://www.happtek.com.mx/"
             image="/portafolio/screenshots/audiofive.jpg"
             imageAlt={c.imageAlt}
             dark
