@@ -867,6 +867,7 @@ export function PortafolioCierre() {
                         <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </motion.a>
                 </div>
+
             </div>
         </section>
     );
