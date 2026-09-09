@@ -78,7 +78,22 @@ export async function GET(request: Request) {
         return NextResponse.json({ ok: true, enviados: 0, motivo: "sin contactos pendientes" });
     }
 
-    const tanda = pendientes.slice(0, TANDA);
+    // Orden de salida: primero los grupos de esta lista, y dentro de cada uno
+    // los más antiguos. Lo demás va después, también por antigüedad.
+    //
+    // Sirve para vaciar un grupo concreto antes que el resto — ahora mismo,
+    // software para eventos. Cambiar la prioridad es reordenar esta constante.
+    const PRIORIDAD: LeadService[] = ["eventos"];
+    const rango = (l: Lead) => {
+        const i = PRIORIDAD.indexOf((l.service ?? "") as LeadService);
+        return i === -1 ? PRIORIDAD.length : i;
+    };
+    // `pendientes` ya viene por created_at ascendente y el sort de JS es
+    // estable, así que ordenar solo por rango conserva la antigüedad dentro
+    // de cada grupo.
+    const enOrden = [...pendientes].sort((a, b) => rango(a) - rango(b));
+
+    const tanda = enOrden.slice(0, TANDA);
 
     // Un texto por servicio, cargado una sola vez por grupo presente en la tanda.
     const servicios = [...new Set(tanda.map((l) => (l.service ?? null) as LeadService | null))];
@@ -141,6 +156,7 @@ export async function GET(request: Request) {
     const enviados = resultados.filter((r) => r.ok);
     const fallidos = resultados.filter((r) => !r.ok);
     const restan = pendientes.length - enviados.length;
+    const restanPrioritarios = pendientes.filter((l) => rango(l) < PRIORIDAD.length).length - enviados.length;
 
     // Reporte a Carlos: qué salió hoy y cuánto queda.
     const lineas = resultados
@@ -150,7 +166,7 @@ export async function GET(request: Request) {
     const cuerpo = `Envío automático de hoy.
 
 Enviados: ${enviados.length}${fallidos.length ? ` · Con error: ${fallidos.length}` : ""}
-Quedan pendientes: ${restan}
+Quedan pendientes: ${restan}${restanPrioritarios > 0 ? `\nDe software para eventos: ${restanPrioritarios}` : ""}
 
 Asunto${asuntos.length > 1 ? "s" : ""} usado${asuntos.length > 1 ? "s" : ""}: ${asuntos.join(" · ")}
 
