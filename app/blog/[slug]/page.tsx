@@ -95,6 +95,7 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
 
 import { createClient } from '@supabase/supabase-js';
 import { getCategoryImage, toIsoDate } from "@/lib/blog-utils";
+import { faqSchema } from "@/lib/faq-schema";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -237,12 +238,23 @@ export default async function ArticlePage({ params }: { params: any }) {
         },
     };
 
+    // Si el artículo trae una sección de preguntas frecuentes, se publica
+    // también como FAQPage: Google las puede mostrar en el resultado y los
+    // modelos que citan fuentes las toman ya separadas en pregunta y respuesta.
+    const faqLd = faqSchema(article.content);
+
     return (
         <main className="min-h-screen bg-[#FAFAFA] text-black font-heading overflow-hidden">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
             />
+            {faqLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+                />
+            )}
             <Header />
 
             {/* View Tracker - Increments views in Supabase */}
