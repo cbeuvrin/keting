@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Check } from "lucide-react";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -68,6 +69,10 @@ export function ContactForm() {
                 setStatus("error");
                 return;
             }
+            // El lead ya está guardado; esto solo lo anuncia al dataLayer para
+            // que GTM lo recoja. Va DESPUÉS de la comprobación de éxito a
+            // propósito: un envío fallido no es un lead.
+            sendGTMEvent({ event: "generate_lead", form: "contact" });
             setStatus("sent");
         } catch {
             setError("We couldn't send it. Check your connection and try again.");
