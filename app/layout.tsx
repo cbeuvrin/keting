@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SiteWidgets } from "@/components/ui/site-widgets";
 import { LangProvider } from "@/lib/i18n/lang-context";
+import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
@@ -220,6 +222,7 @@ export default function RootLayout({
         className={cn(inter.variable, montserrat.variable, playfair.variable, sulphur.variable, "font-sans antialiased bg-[#FAFAFA] text-[#333333]")}
         suppressHydrationWarning
       >
+        <GoogleTagManager />
         <LangProvider>
           {children}
           <SiteWidgets />
