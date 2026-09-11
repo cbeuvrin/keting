@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Desarrollo de software a la medida en México",
+    title: "Desarrollo de software y apps en CDMX y México",
     description:
-        "Desarrollo de aplicaciones móviles, plataformas y software a medida con IA para empresas mexicanas. Producto digital end-to-end: estrategia, diseño, ingeniería y crecimiento.",
+        "Desarrollo de apps móviles, plataformas y software a medida con IA en Ciudad de México (CDMX) y todo el país. Estrategia, diseño, ingeniería y crecimiento.",
     keywords: [
         "desarrollo de aplicaciones móviles",
         "desarrollo de apps",
@@ -14,6 +14,8 @@ export const metadata: Metadata = {
         "sistema de gestión",
         "automatización con ia",
         "agentes ia",
+        "desarrollo de software a la medida cdmx",
+        "desarrollo de apps móviles ciudad de méxico",
     ],
     alternates: {
         canonical: "/desarrollo-de-software",

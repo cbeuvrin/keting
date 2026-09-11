@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Automatización de procesos con IA en México",
+    title: "Automatización de procesos con IA en CDMX y México",
     description:
-        "Automatización de procesos con IA en México: flujos, agentes y chatbots conectados a tus sistemas (ERP, CRM, WhatsApp). Recupera horas de trabajo manual y reduce errores.",
+        "Automatización de procesos con IA en Ciudad de México (CDMX) y todo el país: flujos, agentes y chatbots conectados a tus sistemas (ERP, CRM, WhatsApp).",
     keywords: [
         "automatización de procesos",
         "automatización con ia",
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
         "chatbots para empresas",
         "automatizar procesos",
         "integración de sistemas",
+        "automatización de procesos cdmx",
+        "agentes de ia ciudad de méxico",
     ],
     alternates: {
         canonical: "/automatizacion-de-procesos",

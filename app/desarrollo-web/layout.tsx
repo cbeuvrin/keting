@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-    title: "Diseño y desarrollo web a medida en México",
+    title: "Diseño y desarrollo web en CDMX y todo México",
     description:
-        "Diseño y desarrollo web a medida en México: sitios, aplicaciones web, e-commerce y landing pages con Next.js, SEO técnico y máximo rendimiento. Diseño UX/UI e ingeniería.",
+        "Agencia de diseño y desarrollo web a medida en Ciudad de México (CDMX) y todo el país: sitios, aplicaciones web, e-commerce y landing pages con Next.js y SEO técnico.",
     keywords: [
         "diseño web",
         "desarrollo web",
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
         "landing pages",
         "seo técnico",
         "next.js",
+        "desarrollo web cdmx",
+        "agencia de desarrollo web ciudad de méxico",
     ],
     alternates: {
         canonical: "/desarrollo-web",

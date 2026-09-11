@@ -258,7 +258,7 @@ const es = {
     },
     webPage: {
         hero: {
-            h1: "Diseño y desarrollo web a medida en México",
+            h1: "Diseño y desarrollo web a medida en CDMX y todo México",
             badge: "World Wide Web",
             drag: "arrástralas",
             cornerPre: "Diseño ",
@@ -450,7 +450,7 @@ const es = {
     },
     softwarePage: {
         hero: {
-            h1: "Desarrollo de software y aplicaciones móviles",
+            h1: "Desarrollo de software y apps móviles en CDMX",
             h2Line1: "Experiencias",
             h2Line2: "digitales",
             h2Line3: "únicas",
@@ -911,7 +911,7 @@ const es = {
             h1dot: ".",
             ctaLabel: "Cotiza tu automatización",
             subBold: "Automatización de procesos e implementación de IA",
-            subMid1: " para tu empresa: tu equipo pierde horas cada semana en tareas repetitivas y nosotros las ",
+            subMid1: " para tu empresa en Ciudad de México y todo el país: tu equipo pierde horas cada semana en tareas repetitivas y nosotros las ",
             subItalic: "automatizamos",
             subMid2: " —con flujos, agentes de IA y chatbots conectados a tus sistemas— para que tu gente se dedique a lo que sí necesita criterio humano.",
         },

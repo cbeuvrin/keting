@@ -104,7 +104,12 @@ export function service(opts: {
                   },
               }
             : {}),
-        areaServed: { "@type": "Country", name: "México" },
+        // Base en Ciudad de México y clientes en todo el país: ambas cosas son
+        // ciertas, y la ciudad es la señal que falta para las búsquedas locales.
+        areaServed: [
+            { "@type": "City", name: "Ciudad de México" },
+            { "@type": "Country", name: "México" },
+        ],
         provider: {
             "@type": "Organization",
             name: "Keting Media",
