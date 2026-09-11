@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { esCorreoEnviable, selectAll, crmAdmin } from "@/lib/crm";
+import { esCorreoEnviable, selectAll, crmAdmin, SERVICE_LABELS } from "@/lib/crm";
 import { loadPersonalCopy, type PersonalCopy } from "@/lib/crm-settings";
 import type { Lead, LeadService } from "@/lib/crm";
 import { personalEmail } from "@/lib/email-templates/personal";
@@ -19,7 +19,23 @@ import { unsubscribeHeaders } from "@/lib/email-html";
 
 export const maxDuration = 300;
 
-const TANDA = 25;
+// Cuántos correos como máximo salen hoy de cada grupo, en este orden.
+//
+// Antes esto era un simple orden de prioridad con un tope único: el primer
+// grupo se comía la tanda entera y el segundo no veía un correo hasta que el
+// primero se vaciaba. Con cupos se trabajan dos listas a la vez y cada una
+// avanza a un ritmo conocido — 20 al día son 4 días hábiles por cada 80
+// contactos, y eso se puede prometer.
+//
+// Solo sale quien está en esta lista. Un contacto sin servicio asignado NO
+// recibe nada: heredaría el texto general —el de "podemos mejorar tu web"— y
+// mandarle eso a una cámara de comercio es peor que no escribirle. Para que
+// un grupo empiece a salir hay que clasificarlo y darle su cupo aquí.
+const CUPOS: { service: LeadService; cupo: number }[] = [
+    { service: "asociaciones", cupo: 20 },
+    { service: "eventos", cupo: 20 },
+];
+const TANDA = CUPOS.reduce((n, c) => n + c.cupo, 0);
 const PAUSA_MS = 700;
 // Margen para no chocar con el límite de la función: si se acaba el tiempo,
 // se corta y se reporta lo enviado en vez de morir a media tanda.
@@ -27,7 +43,7 @@ const LIMITE_MS = 240_000;
 
 const REPORTE_A = process.env.CRON_REPORT_TO || "djbeuvrin@gmail.com";
 
-type Enviado = { name: string; email: string; ok: boolean; detalle?: string; asunto: string };
+type Enviado = { id: string; service: LeadService | null; name: string; email: string; ok: boolean; detalle?: string; asunto: string };
 
 async function resend(apiKey: string, payload: Record<string, unknown>) {
     const res = await fetch("https://api.resend.com/emails", {
@@ -78,22 +94,21 @@ export async function GET(request: Request) {
         return NextResponse.json({ ok: true, enviados: 0, motivo: "sin contactos pendientes" });
     }
 
-    // Orden de salida: primero los grupos de esta lista, y dentro de cada uno
-    // los más antiguos. Lo demás va después, también por antigüedad.
+    // Quién sale hoy: el cupo de cada grupo, en el orden de CUPOS.
     //
-    // Sirve para vaciar un grupo concreto antes que el resto — ahora mismo,
-    // software para eventos. Cambiar la prioridad es reordenar esta constante.
-    const PRIORIDAD: LeadService[] = ["eventos"];
-    const rango = (l: Lead) => {
-        const i = PRIORIDAD.indexOf((l.service ?? "") as LeadService);
-        return i === -1 ? PRIORIDAD.length : i;
-    };
-    // `pendientes` ya viene por created_at ascendente y el sort de JS es
-    // estable, así que ordenar solo por rango conserva la antigüedad dentro
-    // de cada grupo.
-    const enOrden = [...pendientes].sort((a, b) => rango(a) - rango(b));
+    // `pendientes` ya viene por created_at ascendente, así que dentro de cada
+    // grupo salen siempre los más viejos primero.
+    const tanda: Lead[] = [];
+    for (const { service, cupo } of CUPOS) {
+        tanda.push(...pendientes.filter((l) => l.service === service).slice(0, cupo));
+    }
 
-    const tanda = enOrden.slice(0, TANDA);
+    // Puede haber pendientes y aun así nadie a quien escribir hoy, si ninguno
+    // pertenece a un grupo con cupo. Mismo criterio que arriba: se termina en
+    // silencio en vez de mandar un reporte diario de "enviados: 0".
+    if (tanda.length === 0) {
+        return NextResponse.json({ ok: true, enviados: 0, motivo: "ningún grupo con cupo tiene pendientes" });
+    }
 
     // Un texto por servicio, cargado una sola vez por grupo presente en la tanda.
     const servicios = [...new Set(tanda.map((l) => (l.service ?? null) as LeadService | null))];
@@ -148,15 +163,34 @@ export async function GET(request: Request) {
             // mañana vuelve a entrar en la tanda en vez de perderse.
             await db.from("crm_emails").delete().eq("id", fila.id);
         }
-        resultados.push({ name: lead.name, email: lead.email as string, ok, detalle, asunto: copy.subject });
+        resultados.push({
+            id: lead.id,
+            service: (lead.service ?? null) as LeadService | null,
+            name: lead.name,
+            email: lead.email as string,
+            ok,
+            detalle,
+            asunto: copy.subject,
+        });
 
         await new Promise((r) => setTimeout(r, PAUSA_MS));
     }
 
     const enviados = resultados.filter((r) => r.ok);
     const fallidos = resultados.filter((r) => !r.ok);
-    const restan = pendientes.length - enviados.length;
-    const restanPrioritarios = pendientes.filter((l) => rango(l) < PRIORIDAD.length).length - enviados.length;
+    // Lo que queda, contado solo sobre los grupos que SÍ salen: un total que
+    // incluyera a los contactos sin clasificar sería un número que nunca baja.
+    const yaSalieron = new Set(enviados.map((r) => r.id));
+    const conCupo = pendientes.filter(
+        (l) => CUPOS.some((c) => c.service === l.service) && !yaSalieron.has(l.id)
+    );
+    const restan = conCupo.length;
+    const restanPorGrupo = CUPOS.map(({ service }) => {
+        const n = conCupo.filter((l) => l.service === service).length;
+        return n > 0 ? `${SERVICE_LABELS[service]}: ${n}` : "";
+    }).filter(Boolean);
+    // Los que están en el CRM pero no saldrán nunca mientras no se clasifiquen.
+    const sinClasificar = pendientes.filter((l) => !CUPOS.some((c) => c.service === l.service)).length;
 
     // Reporte a Carlos: qué salió hoy y cuánto queda.
     const lineas = resultados
@@ -166,7 +200,7 @@ export async function GET(request: Request) {
     const cuerpo = `Envío automático de hoy.
 
 Enviados: ${enviados.length}${fallidos.length ? ` · Con error: ${fallidos.length}` : ""}
-Quedan pendientes: ${restan}${restanPrioritarios > 0 ? `\nDe software para eventos: ${restanPrioritarios}` : ""}
+Quedan pendientes: ${restan}${restanPorGrupo.length ? `\n${restanPorGrupo.join("\n")}` : ""}${sinClasificar > 0 ? `\n\nSin clasificar (no reciben nada): ${sinClasificar}` : ""}
 
 Asunto${asuntos.length > 1 ? "s" : ""} usado${asuntos.length > 1 ? "s" : ""}: ${asuntos.join(" · ")}
 

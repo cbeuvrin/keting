@@ -20,8 +20,14 @@ export const SOURCE_LABELS: Record<LeadSource, string> = {
 
 /** Qué servicio le interesa al contacto. Eje independiente de la lista de
  *  origen y de la etapa del trato: agrupa para poder escribirle a cada uno lo
- *  que le corresponde. */
-export type LeadService = "web" | "apps" | "eventos" | "personalizado";
+ *  que le corresponde.
+ *
+ *  "asociaciones" agrupa a los organismos con socios que organizan eventos
+ *  todo el año — cámaras de comercio, colegios de profesionistas, clústeres,
+ *  patronatos. Es distinto de "eventos": una productora vive de montar el
+ *  evento de alguien más; una cámara tiene padrón, cuotas y asambleas, y su
+ *  dolor está ahí. Por eso lleva texto propio. */
+export type LeadService = "web" | "apps" | "eventos" | "asociaciones" | "personalizado";
 
 export type Lead = {
     id: string;
@@ -64,12 +70,13 @@ export type LeadEmail = {
 
 export const LEAD_STAGES: readonly LeadStage[] = ["nuevo", "contactado", "propuesta", "ganado", "perdido"];
 
-export const LEAD_SERVICES: readonly LeadService[] = ["web", "apps", "eventos", "personalizado"];
+export const LEAD_SERVICES: readonly LeadService[] = ["web", "apps", "eventos", "asociaciones", "personalizado"];
 
 export const SERVICE_LABELS: Record<LeadService, string> = {
     web: "Sitio web",
     apps: "Apps",
     eventos: "Software para eventos",
+    asociaciones: "Software para asociaciones",
     personalizado: "Personalizado",
 };
 
@@ -78,6 +85,7 @@ export const SERVICE_SHORT: Record<LeadService, string> = {
     web: "Web",
     apps: "Apps",
     eventos: "Eventos",
+    asociaciones: "Asociaciones",
     personalizado: "A medida",
 };
 
