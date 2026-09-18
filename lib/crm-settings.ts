@@ -8,6 +8,7 @@ import {
 export const PROTOTIPO_SETTINGS_KEY = "template:prototipo-web";
 export const PERSONAL_SETTINGS_KEY = "template:personal";
 export const NETWORKING_SETTINGS_KEY = "template:networking";
+export const SEGUIMIENTO_SETTINGS_KEY = "template:seguimiento";
 
 /**
  * Clave del texto de un servicio. Sin servicio (o si ese grupo no tiene texto
@@ -99,6 +100,65 @@ export async function loadAllPersonalCopies(): Promise<Record<string, PersonalCo
         for (const sv of LEAD_SERVICES) {
             const fila = (data ?? []).find((r) => r.key === personalKey(sv));
             // Sin texto propio, el grupo hereda el general.
+            out[sv] = { ...general, ...((fila?.value ?? {}) as Partial<PersonalCopy>) };
+        }
+    } catch {
+        for (const sv of LEAD_SERVICES) out[sv] = general;
+    }
+    return out;
+}
+
+/**
+ * Clave del texto de seguimiento de un servicio. Mismo mecanismo que
+ * personalKey: sin propio, cae al general.
+ */
+export function seguimientoKey(service?: LeadService | null): string {
+    return service ? `${SEGUIMIENTO_SETTINGS_KEY}:${service}` : SEGUIMIENTO_SETTINGS_KEY;
+}
+
+// El recordatorio que sale solo cuando alguien abrió el correo inicial y no
+// respondió: corto, sin repetir el argumento completo, una sola pregunta
+// abierta y el teléfono en el cuerpo (no solo en el pie gris) — mismo criterio
+// que ya se validó para el correo inicial. Ver keting-cta-correos-frios.
+export const SEGUIMIENTO_DEFAULT_COPY: PersonalCopy = {
+    subject: "¿Le llegó mi correo?",
+    saludo: "Hola {{nombre}},",
+    body: `Hace unos días le escribí y no sé si le llegó a tiempo o se perdió entre otros correos.
+
+¿Sigue siendo algo de su interés? Si es más fácil por teléfono o WhatsApp, escríbame al 55 4383 0150.`,
+    firma: "Carlos Beuvrin",
+    conLogo: true,
+};
+
+/**
+ * Texto de seguimiento para un servicio. Si ese grupo no tiene el suyo, cae
+ * al general, y de ahí a los valores de fábrica. Nunca lanza.
+ */
+export async function loadSeguimientoCopy(service?: LeadService | null): Promise<PersonalCopy> {
+    try {
+        const db = crmAdmin();
+        const claves = service ? [seguimientoKey(service), SEGUIMIENTO_SETTINGS_KEY] : [SEGUIMIENTO_SETTINGS_KEY];
+        const { data } = await db.from("crm_settings").select("key, value").in("key", claves);
+        const porClave = new Map((data ?? []).map((r) => [r.key as string, r.value as Partial<PersonalCopy>]));
+        const propio = service ? porClave.get(seguimientoKey(service)) : undefined;
+        const general = porClave.get(SEGUIMIENTO_SETTINGS_KEY);
+        return { ...SEGUIMIENTO_DEFAULT_COPY, ...(general ?? {}), ...(propio ?? {}) };
+    } catch {
+        return SEGUIMIENTO_DEFAULT_COPY;
+    }
+}
+
+/** Todos los textos de seguimiento de golpe, para el editor del panel. */
+export async function loadAllSeguimientoCopies(): Promise<Record<string, PersonalCopy>> {
+    const general = await loadSeguimientoCopy();
+    const out: Record<string, PersonalCopy> = { "": general };
+    try {
+        const { data } = await crmAdmin()
+            .from("crm_settings")
+            .select("key, value")
+            .in("key", LEAD_SERVICES.map((sv) => seguimientoKey(sv)));
+        for (const sv of LEAD_SERVICES) {
+            const fila = (data ?? []).find((r) => r.key === seguimientoKey(sv));
             out[sv] = { ...general, ...((fila?.value ?? {}) as Partial<PersonalCopy>) };
         }
     } catch {

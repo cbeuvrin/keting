@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { crmAdmin } from "@/lib/crm";
-import { PROTOTIPO_SETTINGS_KEY, NETWORKING_SETTINGS_KEY, personalKey, PERSONAL_DEFAULT_COPY, type PersonalCopy, type NetworkingCopy } from "@/lib/crm-settings";
+import { PROTOTIPO_SETTINGS_KEY, NETWORKING_SETTINGS_KEY, personalKey, seguimientoKey, PERSONAL_DEFAULT_COPY, type PersonalCopy, type NetworkingCopy } from "@/lib/crm-settings";
 import { LEAD_SERVICES, type LeadService } from "@/lib/crm";
 import { PROTOTIPO_DEFAULT_COPY, type PrototipoCopy } from "@/lib/email-templates/prototipo-web";
 
@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     }
 
     // Correo personal: cuerpo, saludo, firma, asunto y si lleva logo.
-    if (body?.template === "personal") {
+    // El de seguimiento usa exactamente la misma forma, solo cambia la clave.
+    if (body?.template === "personal" || body?.template === "seguimiento") {
         const limpio: Partial<PersonalCopy> = {};
         for (const key of ["subject", "saludo", "body", "firma"] as const) {
             if (typeof body[key] === "string" && body[key].trim()) {
@@ -44,9 +45,10 @@ export async function POST(request: Request) {
         const svc = LEAD_SERVICES.includes(body?.service as LeadService)
             ? (body.service as LeadService)
             : null;
+        const key = body.template === "seguimiento" ? seguimientoKey(svc) : personalKey(svc);
         const { error } = await crmAdmin()
             .from("crm_settings")
-            .upsert({ key: personalKey(svc), value: limpio, updated_at: new Date().toISOString() });
+            .upsert({ key, value: limpio, updated_at: new Date().toISOString() });
         if (error) {
             return NextResponse.json(
                 { error: `${error.message} — ¿ya pegaste scripts/crm-schema-3.sql en Supabase?` },
