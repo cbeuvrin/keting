@@ -51,7 +51,7 @@ const LIMITE_MS = 240_000;
 // Cuántos seguimientos como máximo salen hoy, y a partir de cuántos días de
 // abierto un inicial ya es candidato. 4 días hábiles da margen a que
 // conteste antes de recordárselo — antes de eso es apurar, no dar seguimiento.
-const SEGUIMIENTO_CUPO = 10;
+const SEGUIMIENTO_CUPO = 20;
 const SEGUIMIENTO_DIAS = 4;
 // Etapas donde el trato ya se cerró a mano en el panel: insistir ahí no suma.
 const SEGUIMIENTO_ETAPAS_EXCLUIDAS = new Set(["ganado", "perdido"]);
