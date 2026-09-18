@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowUpDown, Download, Plus, Trash2, Pencil, X } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Plus, Trash2, Pencil, X } from "lucide-react";
 import { LEAD_STAGES, STAGE_LABELS, LEAD_SOURCES,
     SOURCE_LABELS,
     LEAD_SERVICES, SERVICE_LABELS, SERVICE_SHORT, type LeadStage, type LeadService } from "@/lib/crm";
@@ -18,6 +18,8 @@ import { ImportCsv } from "../ImportCsv";
 type EditableField = "name" | "email" | "company" | "phone";
 
 type SortKey = "name" | "email" | "company" | "city" | "list_name" | "stage" | "sentAt" | "openedAt" | "created_at";
+
+const PAGE_SIZE = 100;
 
 const FECHA = new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short" });
 const FECHA_LARGA = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" });
@@ -73,6 +75,18 @@ export function ContactsTable({
         key: "created_at",
         dir: "desc",
     });
+    // Página actual de la tabla — de 100 en 100 en vez de correr todo junto.
+    // Cambiar un filtro o buscar vuelve a la primera; cambiar el orden no,
+    // porque siguen siendo los mismos contactos, solo en otro orden. Mismo
+    // patrón que prevRows/data arriba: ajustar el estado en el propio render
+    // en vez de un useEffect, para no disparar una vuelta extra de render.
+    const [pagina, setPagina] = useState(0);
+    const filtroFirma = JSON.stringify([query, lista, servicio, origen, ciudad, etapa, correo]);
+    const [prevFiltroFirma, setPrevFiltroFirma] = useState(filtroFirma);
+    if (prevFiltroFirma !== filtroFirma) {
+        setPrevFiltroFirma(filtroFirma);
+        setPagina(0);
+    }
     // Selección para cambios en lote. Se guarda por id, así sobrevive a que
     // cambien los filtros: lo seleccionado sigue seleccionado aunque salga de
     // la vista, y el contador dice cuántos hay en total.
@@ -142,6 +156,15 @@ export function ContactsTable({
             return String(av).localeCompare(String(bv), "es") * dir;
         });
     }, [data, query, lista, etapa, correo, servicio, origen, ciudad, sort]);
+
+    const totalPaginas = Math.max(1, Math.ceil(filtradas.length / PAGE_SIZE));
+    // Por si un filtro nuevo deja la página actual fuera de rango, en vez de
+    // una tabla en blanco que parece rota.
+    const paginaActual = Math.min(pagina, totalPaginas - 1);
+    const visibles = useMemo(
+        () => filtradas.slice(paginaActual * PAGE_SIZE, paginaActual * PAGE_SIZE + PAGE_SIZE),
+        [filtradas, paginaActual]
+    );
 
     function toggleSort(key: SortKey) {
         setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
@@ -531,7 +554,7 @@ export function ContactsTable({
                                         type="checkbox"
                                         checked={filtradas.length > 0 && filtradas.every((r) => sel.has(r.id))}
                                         onChange={alternarTodasVisibles}
-                                        title="Seleccionar todo lo que se ve"
+                                        title={`Seleccionar los ${filtradas.length} filtrados (no solo esta página)`}
                                         className="w-4 h-4 accent-black align-middle"
                                     />
                                 </th>
@@ -550,7 +573,7 @@ export function ContactsTable({
                             </tr>
                         </thead>
                         <tbody>
-                            {filtradas.map((r) => (
+                            {visibles.map((r) => (
                                 <tr
                                     key={r.id}
                                     className={`group/row ${sel.has(r.id) ? "bg-[#1d1d1f]/[0.04]" : ""} border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]`}
@@ -666,6 +689,34 @@ export function ContactsTable({
                         {data.length === 0
                             ? "Todavía no hay contactos. Importa un CSV o añade uno a mano."
                             : "Ningún contacto coincide con estos filtros."}
+                    </div>
+                )}
+                {totalPaginas > 1 && (
+                    <div className="flex items-center justify-between gap-3 px-4 py-3 border-t border-[#1d1d1f]/10 text-sm text-[#1d1d1f]/60">
+                        <span>
+                            {paginaActual * PAGE_SIZE + 1}–{Math.min((paginaActual + 1) * PAGE_SIZE, filtradas.length)} de {filtradas.length}
+                        </span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setPagina((p) => Math.max(0, p - 1))}
+                                disabled={paginaActual === 0}
+                                className="p-1.5 rounded hover:bg-[#1d1d1f]/[0.06] disabled:opacity-30 disabled:hover:bg-transparent"
+                                title="Página anterior"
+                            >
+                                <ChevronLeft className="w-4 h-4" strokeWidth={1.75} />
+                            </button>
+                            <span className="tabular-nums px-1">
+                                Página {paginaActual + 1} de {totalPaginas}
+                            </span>
+                            <button
+                                onClick={() => setPagina((p) => Math.min(totalPaginas - 1, p + 1))}
+                                disabled={paginaActual >= totalPaginas - 1}
+                                className="p-1.5 rounded hover:bg-[#1d1d1f]/[0.06] disabled:opacity-30 disabled:hover:bg-transparent"
+                                title="Página siguiente"
+                            >
+                                <ChevronRight className="w-4 h-4" strokeWidth={1.75} />
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
