@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Header } from "@/components/layout/header";
@@ -382,6 +383,21 @@ export function EventsPage() {
                                     <p className="text-base md:text-lg text-[#1d1d1f]/70 font-light leading-relaxed max-w-2xl">
                                         {item.body}
                                     </p>
+                                    {item.caseSlug === "los-didis-2026" && (
+                                        <Link
+                                            href={caseStudyHref(item.caseSlug, isEn)}
+                                            className="mt-6 block max-w-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+                                        >
+                                            <Image
+                                                src="/portafolio/screenshots/los-didis-registro.webp"
+                                                alt={t.portfolioPage.cases.losDidis.imageAlt}
+                                                width={1920}
+                                                height={970}
+                                                sizes="(max-width: 767px) 90vw, 672px"
+                                                className="block h-auto w-full"
+                                            />
+                                        </Link>
+                                    )}
                                 </div>
 
                                 <div className="md:text-right md:pl-8">

@@ -15,7 +15,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Portafolio](https://ketingmedia.com/portafolio): Casos y proyectos seleccionados de marcas que cambian su industria.
 
 ## Casos de éxito
-- [Casos de éxito](https://ketingmedia.com/casos): Índice de los 9 casos de éxito de Keting Media, con el reto, la solución y el resultado de cada proyecto.
+- [Portafolio](https://ketingmedia.com/portafolio): Proyectos de Keting Media con vistas previas y enlaces al caso completo de cada uno.
 - [Iudex — la primera IA jurídica de México](https://ketingmedia.com/casos/iudex): Plataforma legal-tech con IA y diseño brutalista premium — 100,000+ sesiones al mes.
 - [Smile Better Clinics — cercanía y tecnología](https://ketingmedia.com/casos/smile-better-clinics): Sitio multi-clínica con reservas a un tap y SEO local — ↑3x citas mensuales.
 - [Gobernia — un consejo de 4 agentes de IA](https://ketingmedia.com/casos/gobernia): SaaS con 4 agentes de IA (CFO, CSO, CRO, Auditor) — ↑8x conversión.
@@ -36,7 +36,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 
 ## English
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.
-- [Case studies](https://ketingmedia.com/en/case-studies): English index of Keting Media's 9 case studies — the challenge, the solution and the result of every project.
+- [Portfolio](https://ketingmedia.com/en/portafolio): Keting Media projects with previews and links to each full case study.
 - [About us](https://ketingmedia.com/en/about): Keting Media's story since 2019, how the company works, and links to its real case studies.
 - [Carlos Beuvrin](https://ketingmedia.com/en/about/carlos-beuvrin): AI Engineer and founder of Keting Media — bio, products he has built, and a link to the blog he writes.
 - [Blog](https://ketingmedia.com/en/blog): English-language guides on custom software development, web and app pricing, and e-commerce — written for US companies evaluating nearshore development in Mexico.

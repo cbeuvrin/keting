@@ -1,13 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Plus } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
-import { caseStudyHref } from "@/lib/i18n/routes";
+import { PortfolioProject as CaseCard } from "./ProjectAccordion";
+import { getCaseStudy } from "@/lib/case-studies";
 
 /* ==========================================================================
    Utilidades editoriales
@@ -39,18 +38,6 @@ function GridBg({ light = false }: { light?: boolean }) {
                 backgroundSize: "80px 80px",
             }}
         />
-    );
-}
-
-function SpinAsterisk({ progress, top, left, right, bottom, size = "[10rem] md:text-[16rem]", reverse = false, light = false }: any) {
-    const rot = useTransform(progress, [0, 1], reverse ? [0, -600] : [0, 600]);
-    return (
-        <motion.span
-            style={{ rotate: rot, top, left, right, bottom }}
-            className={`absolute text-${size} ${light ? "text-white/[0.06]" : "text-[#1d1d1f]/[0.07]"} select-none font-light leading-none inline-block origin-center pointer-events-none`}
-        >
-            *
-        </motion.span>
     );
 }
 
@@ -252,326 +239,14 @@ export function PortafolioIntro() {
     );
 }
 
-/* ==========================================================================
-   Componente CaseCard reusable — un caso por proyecto
-   ========================================================================== */
-
-type CaseProps = {
-    badge: string;
-    eyebrow: string;
-    titleTop: string;
-    titleAccent: string;
-    titleBottom?: string;
-    body: React.ReactNode;
-    tags: string[];
-    palette: string[];        // colores HEX
-    font: string;             // tipografía principal
-    fontStyle?: "serif" | "sans" | "display";  // para renderizado del nombre
-    metric?: { value: string; label: string };
-    url?: string;
-    image: string;
-    imageAlt: string;
-    imageMaxClass?: string;   // limita el ancho del marco (ej. Suzuki más pequeño)
-    bareImage?: boolean;      // muestra la imagen sin marco de navegador (ej. render de iPad)
-    dark?: boolean;
-    effect?: "tilt" | "slide" | "rise" | "float";
-    /** Slug en lib/case-studies.ts — enlaza la tarjeta a su página de caso propia. */
-    caseSlug: string;
-};
-
-function CaseCard({
-    badge, eyebrow, titleTop, titleAccent, titleBottom, body, tags, palette, font, fontStyle = "sans", metric, url, image, imageAlt, imageMaxClass, bareImage = false, dark = false, effect = "slide", caseSlug,
-}: CaseProps) {
-    const { t } = useLang();
-    const card = t.portfolioPage.card;
-    const pathname = usePathname();
-    const isEn = pathname?.startsWith("/en") ?? false;
-    const ref = useRef<HTMLElement>(null);
-    const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-    const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
-    const rotateAst = useTransform(smooth, [0, 1], [0, 540]);
-
-    // Efectos scroll-driven distintos por proyecto
-    const tiltY = useTransform(smooth, [0, 0.6], [-25, 0]);
-    const tiltX = useTransform(smooth, [0, 0.6], [10, 0]);
-    const slideX = useTransform(smooth, [0, 0.55], ["18%", "0%"]);
-    const slideRot = useTransform(smooth, [0, 0.55], [5, 0]);
-    const riseY = useTransform(smooth, [0.1, 0.55], ["50%", "0%"]);
-    const opacity = useTransform(smooth, [0.05, 0.3, 0.9, 1], [0, 1, 1, 0.9]);
-    const scale = useTransform(smooth, [0, 0.6], [0.92, 1]);
-
-    let imageMotion: any = {};
-    let perspective = false;
-    if (effect === "tilt") {
-        imageMotion = { rotateY: tiltY, rotateX: tiltX, scale, opacity };
-        perspective = true;
-    } else if (effect === "slide") {
-        imageMotion = { x: slideX, rotate: slideRot, scale, opacity };
-    } else if (effect === "rise") {
-        imageMotion = { y: riseY, scale, opacity };
-    } else if (effect === "float") {
-        imageMotion = { scale, opacity };
-    }
-
-    const accentColor = dark ? "text-white" : "text-[#1d1d1f]";
-    const bgColor = dark ? "bg-[#1a1a1a]" : "bg-[#FAFAFA]";
-    const altBgColor = dark ? "bg-[#F5F5F7]" : "bg-[#F5F5F7]";
-
-    return (
-        <section
-            ref={ref}
-            className={`${bgColor} ${dark ? "text-white" : "text-[#1d1d1f]"} relative py-32 md:py-44 px-6 md:px-12 lg:px-24 overflow-clip`}
-        >
-            <GridBg light={dark} />
-            <motion.span style={{ rotate: rotateAst }} className={`absolute top-[10%] ${effect === "slide" ? "right-[6%]" : "left-[5%]"} text-[8rem] md:text-[14rem] ${dark ? "text-white/[0.06]" : "text-[#1d1d1f]/[0.07]"} select-none font-light leading-none inline-block origin-center pointer-events-none`}>*</motion.span>
-
-            <div className="max-w-7xl mx-auto relative">
-
-                {/* Eyebrow + badge */}
-                <div className="flex items-center justify-between mb-12 md:mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-10%" }}
-                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        className="flex items-center gap-3"
-                    >
-                        <span className={`block w-12 h-px ${dark ? "bg-white/40" : "bg-[#1d1d1f]/40"}`} />
-                        <span className={`text-xs uppercase tracking-[0.3em] ${dark ? "text-white/60" : "text-[#1d1d1f]/60"} font-sans`}>
-                            {eyebrow}
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.7 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true, margin: "-10%" }}
-                        transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                        className={`w-16 h-16 md:w-20 md:h-20 rounded-full ${dark ? "bg-white" : "bg-[#1d1d1f]"} flex items-center justify-center`}
-                    >
-                        <span className={`font-serif italic text-2xl md:text-3xl ${dark ? "text-[#1a1a1a]" : "text-white"}`}>{badge}</span>
-                    </motion.div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-                    {/* Texto */}
-                    <div className={`lg:col-span-5 ${effect === "slide" ? "order-1" : ""}`}>
-                        <div className={`uppercase leading-[1] tracking-tight ${accentColor}`}>
-                            <RiseText delay={0}>
-                                <span className="block text-3xl md:text-5xl lg:text-6xl font-light">{titleTop}</span>
-                            </RiseText>
-                            <RiseText delay={0.12}>
-                                <span className="block text-3xl md:text-5xl lg:text-6xl font-[family-name:var(--font-playfair)] italic font-normal normal-case mt-2 tracking-tight px-[0.08em] pb-[0.14em]">
-                                    {titleAccent}
-                                </span>
-                            </RiseText>
-                            {titleBottom && (
-                                <RiseText delay={0.24}>
-                                    <span className="block text-3xl md:text-5xl lg:text-6xl font-light mt-2">{titleBottom}</span>
-                                </RiseText>
-                            )}
-                        </div>
-
-                        <RiseText delay={0.1}>
-                            <p className={`text-base md:text-lg ${dark ? "text-white/75" : "text-[#1d1d1f]/75"} font-light leading-relaxed max-w-md mt-8 md:mt-10`}>
-                                {body}
-                            </p>
-                        </RiseText>
-
-                        {/* Tags */}
-                        <RiseText delay={0.25}>
-                            <div className="flex flex-wrap gap-2 mt-8">
-                                {tags.map((t) => (
-                                    <span
-                                        key={t}
-                                        className={`text-xs font-mono uppercase tracking-widest border ${dark ? "border-white/20 text-white/80" : "border-[#1d1d1f]/20 text-[#1d1d1f]/80"} px-3 py-1.5 rounded-full`}
-                                    >
-                                        {t}
-                                    </span>
-                                ))}
-                            </div>
-                        </RiseText>
-
-                        {/* Spec sheet: Paleta + Tipografía */}
-                        <RiseText delay={0.3}>
-                            <div className={`grid grid-cols-2 gap-6 mt-8 pt-6 border-t ${dark ? "border-white/15" : "border-[#1d1d1f]/15"}`}>
-                                <div>
-                                    <div className={`text-[10px] uppercase tracking-[0.3em] ${dark ? "text-white/40" : "text-[#1d1d1f]/40"} font-mono mb-3`}>
-                                        {card.palette}
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {palette.map((c, i) => (
-                                            <div
-                                                key={c + i}
-                                                className={`w-8 h-8 rounded-full ring-1 ${dark ? "ring-white/15" : "ring-[#1d1d1f]/10"}`}
-                                                style={{ backgroundColor: c }}
-                                                title={c.toUpperCase()}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className={`text-[10px] uppercase tracking-[0.3em] ${dark ? "text-white/40" : "text-[#1d1d1f]/40"} font-mono mb-3`}>
-                                        {card.typography}
-                                    </div>
-                                    <div
-                                        className={`text-base md:text-lg ${dark ? "text-white" : "text-[#1d1d1f]"} ${fontStyle === "serif" ? "font-[family-name:var(--font-playfair)] italic" : fontStyle === "display" ? "font-heading font-medium" : "font-medium"} leading-none`}
-                                    >
-                                        {font}
-                                    </div>
-                                </div>
-                            </div>
-                        </RiseText>
-
-                        {/* Métrica + CTA */}
-                        <RiseText delay={0.35}>
-                            <div className={`mt-10 pt-6 border-t ${dark ? "border-white/15" : "border-[#1d1d1f]/15"} flex items-end justify-between gap-6`}>
-                                {metric && (
-                                    <div>
-                                        <div className={`text-3xl md:text-4xl font-light leading-none mb-1 ${accentColor}`}>
-                                            {metric.value}
-                                        </div>
-                                        <div className={`text-[10px] uppercase tracking-[0.25em] ${dark ? "text-white/40" : "text-[#1d1d1f]/40"} font-mono`}>
-                                            {metric.label}
-                                        </div>
-                                    </div>
-                                )}
-                                {url && (
-                                    <a
-                                        href={url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`group inline-flex items-center gap-2 text-sm font-medium ${dark ? "text-white hover:text-white/70" : "text-[#1d1d1f] hover:text-[#1d1d1f]/70"} transition-colors`}
-                                    >
-                                        {card.viewLive}
-                                        <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                                    </a>
-                                )}
-                            </div>
-                        </RiseText>
-
-                        {/* Enlace a la página de caso propia (/casos/[slug] o /en/case-studies/[slug]) */}
-                        <RiseText delay={0.4}>
-                            <Link
-                                href={caseStudyHref(caseSlug, isEn)}
-                                className={`group inline-flex items-center gap-2 text-sm font-medium mt-4 ${dark ? "text-white/70 hover:text-white" : "text-[#1d1d1f]/70 hover:text-[#1d1d1f]"} transition-colors underline decoration-1 underline-offset-4`}
-                            >
-                                {card.readCase}
-                                <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                            </Link>
-                        </RiseText>
-                    </div>
-
-                    {/* Imagen — marco tipo browser + KETING signature debajo */}
-                    <div className={`lg:col-span-7 ${effect === "slide" ? "order-2" : ""}`} style={perspective ? { perspective: "1400px" } : {}}>
-                        <motion.div
-                            style={{ ...imageMotion, transformStyle: perspective ? "preserve-3d" : undefined }}
-                            className={`relative ${imageMaxClass ?? ""}`}
-                        >
-                            {/* Sombra al piso */}
-                            <div className={`absolute ${bareImage ? "-inset-x-4 -bottom-4 h-8" : "-inset-x-8 -bottom-8 h-12"} ${dark ? "bg-black/50" : "bg-[#1d1d1f]/20"} blur-3xl rounded-full pointer-events-none`} />
-
-                            {/* La imagen ES el enlace, no solo los CTA de texto de al lado.
-                                Lleva al SITIO QUE MUESTRA —no a nuestro caso— porque eso es
-                                lo que el marco promete: barra de URL con el dominio real e
-                                indicador "Live". Cuando el proyecto no tiene sitio público
-                                (Suzuki es una app de evento en iPad) cae al caso, que es el
-                                único destino honesto que existe. */}
-                            <a
-                                href={url || caseStudyHref(caseSlug, isEn)}
-                                {...(url ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                aria-label={`${url ? card.viewLive : card.readCase} — ${imageAlt}`}
-                                className="block relative transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current rounded-xl md:rounded-2xl"
-                            >
-                            {bareImage ? (
-                                <img
-                                    src={image}
-                                    alt={imageAlt}
-                                    className="relative w-full h-auto drop-shadow-2xl"
-                                    draggable={false}
-                                />
-                            ) : (
-                            <>
-                            {/* Marco tipo monitor / browser */}
-                            <div
-                                className={`relative rounded-xl md:rounded-2xl overflow-hidden ${dark ? "bg-[#0a0a0a] ring-1 ring-white/10" : "bg-[#1a1a1a] ring-1 ring-black/20"} shadow-2xl`}
-                                style={{ padding: "0.4rem" }}
-                            >
-                                {/* Top bar tipo browser */}
-                                <div className={`flex items-center gap-3 px-3 py-2 ${dark ? "bg-[#1a1a1a]" : "bg-[#222]"} rounded-t-lg md:rounded-t-xl`}>
-                                    {/* Traffic lights */}
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="block w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
-                                        <span className="block w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
-                                        <span className="block w-2.5 h-2.5 rounded-full bg-[#28C840]" />
-                                    </div>
-                                    {/* URL bar */}
-                                    <div className="flex-1 mx-2 md:mx-4 h-6 rounded bg-white/5 flex items-center px-3">
-                                        <span className="text-[10px] md:text-xs text-white/50 font-mono truncate">
-                                            {url ? url.replace(/^https?:\/\//, "") : card.fallbackUrl}
-                                        </span>
-                                    </div>
-                                    {/* LIVE indicator */}
-                                    <div className="flex items-center gap-1.5">
-                                        <motion.span
-                                            animate={{ opacity: [0.4, 1, 0.4] }}
-                                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                                            className="block w-1.5 h-1.5 rounded-full bg-emerald-400"
-                                        />
-                                        <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-white/50">
-                                            Live
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Screen content */}
-                                <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
-                                    <img
-                                        src={image}
-                                        alt={imageAlt}
-                                        className="block w-full h-auto"
-                                        draggable={false}
-                                    />
-                                </div>
-                            </div>
-                            </>
-                            )}
-                            </a>
-
-                            {/* Firma KETING debajo del marco */}
-                            <div className="mt-5 md:mt-6 flex items-center justify-center gap-3">
-                                <span className={`text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-mono ${dark ? "text-white/40" : "text-[#1d1d1f]/40"}`}>
-                                    Designed by
-                                </span>
-                                <img
-                                    src={dark ? "/keting-logo-white.png" : "/keting-logo-black.png"}
-                                    alt="Keting Media"
-                                    className="h-4 md:h-5 w-auto object-contain opacity-60"
-                                    draggable={false}
-                                />
-                                <span className={`text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-mono ${dark ? "text-white/40" : "text-[#1d1d1f]/40"}`}>
-                                    Media
-                                </span>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ==========================================================================
-   Los 6 cases
-   ========================================================================== */
+/* Proyectos — contenido compartido por las filas del portafolio. */
 
 export function CaseIvanIvanovich() {
     const { t } = useLang();
     const c = t.portfolioPage.cases.ivan;
     return (
         <CaseCard
-            badge="09"
+            projectName="Ivan Ivanovich Academy"
             caseSlug="ivan-ivanovich-academy"
             eyebrow={c.eyebrow}
             titleTop="Ivan"
@@ -584,9 +259,9 @@ export function CaseIvanIvanovich() {
             fontStyle="display"
             metric={{ value: "↑ 4x", label: c.metricLabel }}
             url="https://ivanivanovich.com/"
-            image="/portafolio/screenshots/ivanivanovich.jpg"
+            image="/portafolio/screenshots/ivanivanovich-lms.webp"
+            imageSize={{ width: 1920, height: 984 }}
             imageAlt={c.imageAlt}
-            effect="tilt"
         />
     );
 }
@@ -596,7 +271,7 @@ export function CaseIudex() {
     const c = t.portfolioPage.cases.iudex;
     return (
         <CaseCard
-            badge="02"
+            projectName="Iudex"
             caseSlug="iudex"
             eyebrow={c.eyebrow}
             titleTop="Iudex"
@@ -610,8 +285,6 @@ export function CaseIudex() {
             url="https://www.iudex.mx/"
             image="/portafolio/screenshots/iudex.jpg"
             imageAlt={c.imageAlt}
-            dark
-            effect="slide"
         />
     );
 }
@@ -621,7 +294,7 @@ export function CaseGobernia() {
     const c = t.portfolioPage.cases.gobernia;
     return (
         <CaseCard
-            badge="04"
+            projectName="Gobernia"
             caseSlug="gobernia"
             eyebrow={c.eyebrow}
             titleTop="Gobernia."
@@ -636,7 +309,6 @@ export function CaseGobernia() {
             url="https://www.gobernia.ai/"
             image="/portafolio/screenshots/gobernia.jpg"
             imageAlt={c.imageAlt}
-            effect="rise"
         />
     );
 }
@@ -646,7 +318,7 @@ export function CaseSmileBetter() {
     const c = t.portfolioPage.cases.smileBetter;
     return (
         <CaseCard
-            badge="03"
+            projectName="Smile Better Clinics"
             caseSlug="smile-better-clinics"
             eyebrow={c.eyebrow}
             titleTop="Smile"
@@ -661,8 +333,6 @@ export function CaseSmileBetter() {
             url="https://smilebetterclinics.com/"
             image="/portafolio/screenshots/smilebetter.jpg"
             imageAlt={c.imageAlt}
-            dark
-            effect="tilt"
         />
     );
 }
@@ -672,7 +342,7 @@ export function CaseBarmored() {
     const c = t.portfolioPage.cases.barmored;
     return (
         <CaseCard
-            badge="06"
+            projectName="Barmored Security"
             caseSlug="barmored"
             eyebrow={c.eyebrow}
             titleTop="Barmored"
@@ -687,8 +357,28 @@ export function CaseBarmored() {
             url="https://www.barmoredsecurity.com/"
             image="/portafolio/screenshots/barmored.jpg"
             imageAlt={c.imageAlt}
-            dark
-            effect="tilt"
+        />
+    );
+}
+
+export function CaseReDress() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.reDress;
+    return (
+        <CaseCard
+            projectName="Re Dress"
+            caseSlug="re-dress"
+            eyebrow={c.eyebrow}
+            titleTop="Re Dress."
+            titleAccent={c.titleAccent}
+            body={<>{c.bodyPre}<span className="font-[family-name:var(--font-playfair)] italic font-normal">{c.bodyItalic}</span>{c.bodyPost}</>}
+            tags={c.tags}
+            palette={["#F4F0EA", "#3D3D29", "#FFFFFF", "#1A1A1A"]}
+            font="Poppins"
+            fontStyle="sans"
+            url="https://www.redressmx.com/"
+            image="/portafolio/screenshots/redress.jpg"
+            imageAlt={c.imageAlt}
         />
     );
 }
@@ -698,7 +388,7 @@ export function CaseToogo() {
     const c = t.portfolioPage.cases.toogo;
     return (
         <CaseCard
-            badge="07"
+            projectName="Toogo"
             caseSlug="toogo"
             eyebrow={c.eyebrow}
             titleTop="Toogo."
@@ -713,7 +403,6 @@ export function CaseToogo() {
             url="https://www.toogo.store/"
             image="/portafolio/screenshots/toogo.jpg"
             imageAlt={c.imageAlt}
-            effect="rise"
         />
     );
 }
@@ -723,7 +412,7 @@ export function CaseRosymar() {
     const c = t.portfolioPage.cases.rosymar;
     return (
         <CaseCard
-            badge="08"
+            projectName="Rosymar González"
             caseSlug="rosymar-gonzalez"
             eyebrow={c.eyebrow}
             titleTop="Rosymar"
@@ -737,7 +426,6 @@ export function CaseRosymar() {
             url="https://rosymargonzalez.com/"
             image="/portafolio/screenshots/rosymargonzalez.jpg"
             imageAlt={c.imageAlt}
-            effect="float"
         />
     );
 }
@@ -747,7 +435,7 @@ export function CaseHapptek() {
     const c = t.portfolioPage.cases.happtek;
     return (
         <CaseCard
-            badge="05"
+            projectName="Happtek"
             caseSlug="happtek"
             eyebrow={c.eyebrow}
             titleTop="Happtek."
@@ -761,8 +449,49 @@ export function CaseHapptek() {
             url="https://www.happtek.com.mx/"
             image="/portafolio/screenshots/audiofive.jpg"
             imageAlt={c.imageAlt}
-            dark
-            effect="slide"
+        />
+    );
+}
+
+export function CaseLosDidis() {
+    const { t } = useLang();
+    const c = t.portfolioPage.cases.losDidis;
+    return (
+        <CaseCard
+            projectName="Los DiDis 2026"
+            caseSlug="los-didis-2026"
+            url="https://losdidis2026.com/"
+            eyebrow={c.eyebrow}
+            titleTop="Los DiDis."
+            titleAccent={c.titleAccent}
+            body={c.body}
+            tags={c.tags}
+            image="/portafolio/screenshots/los-didis-registro.webp"
+            imageSize={{ width: 1920, height: 970 }}
+            imageAlt={c.imageAlt}
+            imageCaption={c.imageCaption}
+        />
+    );
+}
+
+export function CaseLosDidisAcceso() {
+    const { lang } = useLang();
+    const study = getCaseStudy("los-didis");
+    if (!study) return null;
+    const c = study[lang];
+    return (
+        <CaseCard
+            projectName={lang === "en" ? "Los DiDis 2024 · Access control" : "Los DiDis 2024 · Control de acceso"}
+            caseSlug={study.slug}
+            eyebrow={lang === "en" ? "Case · Event software" : "Caso · Software para eventos"}
+            titleTop="Los DiDis 2024."
+            titleAccent={lang === "en" ? "QR check-in." : "Acceso con QR."}
+            body={c.summary}
+            tags={c.stack}
+            metric={{ value: study.metricValue, label: c.metricLabel }}
+            image={study.image}
+            imageAlt={c.imageAlt}
+            bareImage
         />
     );
 }
@@ -772,7 +501,7 @@ export function CaseSuzuki() {
     const c = t.portfolioPage.cases.suzuki;
     return (
         <CaseCard
-            badge="10"
+            projectName="Suzuki"
             caseSlug="suzuki"
             eyebrow={c.eyebrow}
             titleTop="Suzuki."
@@ -786,10 +515,7 @@ export function CaseSuzuki() {
             metric={{ value: "500+", label: c.metricLabel }}
             image="/soluciones/suzuki-ipad.png"
             imageAlt={c.imageAlt}
-            imageMaxClass="max-w-[82%] mx-auto"
             bareImage
-            dark
-            effect="tilt"
         />
     );
 }

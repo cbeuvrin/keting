@@ -81,7 +81,7 @@ export default async function CasoPage({ params }: { params: Promise<{ slug: str
                     articleJsonLd,
                     breadcrumbTrail([
                         { name: "Inicio", path: "/" },
-                        { name: "Casos de éxito", path: "/casos" },
+                        { name: "Portafolio", path: "/portafolio" },
                         { name: c.title, path: `/casos/${slug}` },
                     ]),
                 ]}

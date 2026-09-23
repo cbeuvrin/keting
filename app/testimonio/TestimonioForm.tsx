@@ -72,11 +72,11 @@ export function TestimonioForm() {
                     hay que ajustar algo, te escribimos antes de publicarlo.
                 </p>
                 <Link
-                    href="/casos"
+                    href="/portafolio"
                     className="inline-flex items-center gap-3 mt-10 text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors"
                 >
                     <span className="block w-8 h-px bg-black/20" />
-                    Ver los casos
+                    Ver portafolio
                 </Link>
             </motion.div>
         );

@@ -33,7 +33,21 @@ export type CaseStudyLangContent = {
     /** Stack/servicios visibles, tomados de los tags de Sections.tsx. */
     stack: string[];
     imageAlt: string;
+    /** Crédito específico cuando el diseño y el desarrollo tienen autores distintos. */
+    imageCredit?: string;
     metricLabel: string;
+    /** Alcance detallado cuando el caso necesita explicar varios flujos. */
+    details?: {
+        title: string;
+        body: string;
+        screenshot?: {
+            src: string;
+            alt: string;
+            caption: string;
+            width: number;
+            height: number;
+        };
+    }[];
 };
 
 export type CaseStudy = {
@@ -77,6 +91,122 @@ export function splitCaseStudy(study: CaseStudy, lang: "es" | "en"): {
 }
 
 export const CASE_STUDIES: CaseStudy[] = [
+    {
+        slug: "re-dress",
+        metricValue: "Full stack",
+        url: "https://www.redressmx.com/",
+        image: "/portafolio/screenshots/redress.jpg",
+        es: {
+            title: "Re Dress — marketplace de vestidos pre-loved",
+            industry: "Marketplace · Moda circular",
+            summary:
+                "Desarrollamos el sistema completo de Re Dress: marketplace de vestidos de diseñador pre-loved, panel de vendedoras, administración, showroom y cobros recurrentes. Unificamos la operación en una plataforma propia y migramos las suscripciones de Stripe sin interrumpir los cobros.",
+            challenge:
+                "La operación estaba repartida entre una tienda heredada, Airtable y Zapier. El inventario, los cobros y las citas no coincidían, y las suscripciones activas de Stripe debían seguir funcionando durante toda la migración.",
+            solution:
+                "Construimos una plataforma propia de principio a fin: catálogo, carrito, publicación de vestidos, panel de vendedoras, agenda del showroom, administración y cobros. Reconciliamos los registros de cada herramienta antes de migrarlos, con scripts que simulan los cambios y solo escriben después de verificar el resultado.",
+            result:
+                "La tienda en línea y el showroom operan desde el mismo sistema, con inventario, membresías, ventas y citas conectados. Las suscripciones se conservaron sin interrupciones ni cobros perdidos, sobre una base de pruebas automatizadas y despliegue continuo.",
+            stack: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Vercel"],
+            imageAlt: "Re Dress · Marketplace de vestidos de diseñador pre-loved",
+            metricLabel: "Desarrollo integral",
+            details: [
+                {
+                    title: "El negocio",
+                    body: "Re Dress compra y vende vestidos de diseñador de segunda mano en México. Combina una tienda en línea con un showroom en Ciudad de México, donde las clientas agendan cita para probarse. Las vendedoras pagan una membresía mientras su vestido está publicado y una comisión solo cuando se vende.",
+                },
+                {
+                    title: "Para quien vende",
+                    body: "Un formulario por pasos permite publicar el vestido, elegir entre showroom o venta solo en línea y pagar en el mismo flujo. Desde su panel, cada vendedora sigue el estado de sus prendas, contrata servicios adicionales, cambia de plan o da de baja su membresía.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/redress-vendedora.png",
+                        alt: "Panel de vendedora de Re Dress: publicación de vestidos y selección de membresía para showroom o venta en línea",
+                        caption: "Panel de vendedora · Publicación y membresía por vestido. Captura editada para ocultar cifras.",
+                        width: 1657,
+                        height: 949,
+                    },
+                },
+                {
+                    title: "Para quien compra",
+                    body: "Catálogo con filtros por talla, color, silueta y diseñador, carrito de compras y agenda de citas con disponibilidad real del showroom.",
+                },
+                {
+                    title: "Para quien administra",
+                    body: "Un panel cubre el ciclo completo: moderación de publicaciones, inventario físico del showroom, agenda en calendario, ventas con desglose de comisiones, pagos a vendedoras, cobranza de membresías vencidas, envíos, reportes y bitácora de correos enviados.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/redress-supra-admin.png",
+                        alt: "Panel supra-admin de Re Dress: módulos de operación y gestión de vestidos donados, con datos personales y cifras ocultos",
+                        caption: "Supra-admin · Gestión de vestidos donados y acceso a la operación. Captura editada para ocultar cifras y datos personales.",
+                        width: 1614,
+                        height: 975,
+                    },
+                },
+                {
+                    title: "Cobros y comunicación",
+                    body: "Membresía por vestido, mensual para showroom y anual para venta en línea, con servicios opcionales de fotografía destacada, tintorería y guía de paquetería. Los correos transaccionales acompañan cada paso de la operación.",
+                },
+                {
+                    title: "Una migración con cobros en marcha",
+                    body: "El reto fue reconciliar fuentes que habían dejado de coincidir: suscripciones sin dueño identificable, vestidos vendidos que seguían cobrando y vendedoras con distintos correos para su registro y sus pagos. Cruzamos las fuentes registro por registro, verificando cada cambio antes de aplicarlo para preservar las suscripciones activas.",
+                },
+            ],
+        },
+        en: {
+            title: "Re Dress — a pre-loved dress marketplace",
+            industry: "Marketplace · Circular fashion",
+            summary:
+                "We built the complete Re Dress system: a pre-loved designer dress marketplace, seller dashboard, administration, showroom scheduling, and recurring billing. We unified operations on a custom platform and migrated Stripe subscriptions without interrupting payments.",
+            challenge:
+                "Operations were spread across a legacy store, Airtable, and Zapier. Inventory, billing, and appointments did not match, while active Stripe subscriptions had to keep running throughout the migration.",
+            solution:
+                "We built the platform from start to finish: catalog, cart, dress listings, seller dashboard, showroom scheduling, administration, and billing. We reconciled records across the existing tools before migrating them, using scripts that simulate changes and only write after the results have been verified.",
+            result:
+                "The online store and showroom now run on the same system, with connected inventory, memberships, sales, and appointments. Subscriptions were preserved without interruptions or lost payments, supported by automated testing and continuous deployment.",
+            stack: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Vercel"],
+            imageAlt: "Re Dress · Pre-loved designer dress marketplace",
+            metricLabel: "Complete platform development",
+            details: [
+                {
+                    title: "The business",
+                    body: "Re Dress buys and sells pre-loved designer dresses in Mexico. It combines an online store with a Mexico City showroom where customers book appointments to try on dresses. Sellers pay a membership while their dress is listed and a commission only when it sells.",
+                },
+                {
+                    title: "For sellers",
+                    body: "A step-by-step form lets sellers list a dress, choose showroom or online-only selling, and pay within the same flow. Their dashboard lets them track each garment, purchase additional services, change plans, or cancel their membership.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/redress-vendedora.png",
+                        alt: "Re Dress seller dashboard: dress listing and membership selection for showroom or online sales",
+                        caption: "Seller dashboard · Dress listings and per-dress memberships. Screenshot edited to hide figures.",
+                        width: 1657,
+                        height: 949,
+                    },
+                },
+                {
+                    title: "For buyers",
+                    body: "A catalog with filters for size, color, silhouette, and designer, a shopping cart, and appointment booking with real showroom availability.",
+                },
+                {
+                    title: "For administrators",
+                    body: "An administration panel covers the full cycle: listing moderation, physical showroom inventory, appointment calendars, sales with commission breakdowns, seller payouts, overdue membership collection, shipping, reports, and sent-email logs.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/redress-supra-admin.png",
+                        alt: "Re Dress super-admin dashboard: operational modules and donated dress management, with personal data and figures hidden",
+                        caption: "Super-admin · Donated dress management and operational modules. Screenshot edited to hide figures and personal data.",
+                        width: 1614,
+                        height: 975,
+                    },
+                },
+                {
+                    title: "Billing and communication",
+                    body: "Each dress has a membership: monthly for the showroom and annual for online-only sales. Optional services include featured photography, dry cleaning, and shipping labels. Transactional emails accompany each step of the operation.",
+                },
+                {
+                    title: "Migrating while payments kept running",
+                    body: "The challenge was reconciling sources that no longer agreed: subscriptions without an identifiable owner, sold dresses that were still being billed, and sellers using different emails for registration and payments. We cross-checked the sources record by record, verifying each change before applying it to preserve active subscriptions.",
+                },
+            ],
+        },
+    },
     {
         slug: "iudex",
         metricValue: "100k+",
@@ -282,6 +412,107 @@ export const CASE_STUDIES: CaseStudy[] = [
         },
     },
     {
+        // Edición 2026: registro, selección de evento, QR y métricas de asistencia.
+        slug: "los-didis-2026",
+        url: "https://losdidis2026.com/",
+        metricValue: "QR",
+        image: "/portafolio/screenshots/los-didis-registro.webp",
+        es: {
+            title: "Los DiDis 2026 — del registro al acceso con QR",
+            industry: "Software para eventos",
+            summary:
+                "El cliente proporcionó el diseño de Los DiDis 2026. KETING desarrolló todo el backend: registro, selección de evento, envío de QR, control de acceso y métricas para consultar quién asistió y quién no.",
+            challenge:
+                "Conectar el registro de cada persona con el evento elegido, su pase de acceso y el seguimiento de asistencia, para que el equipo organizador pueda distinguir entre personas registradas y personas que realmente llegaron.",
+            solution:
+                "Desarrollo del backend que procesa los registros, vincula a cada persona con el evento elegido, genera y envía su QR, valida el acceso y reúne las métricas de asistencia. El diseño visual fue proporcionado por el cliente.",
+            result: "Registro, acceso y seguimiento de asistencia conectados: el equipo puede consultar quién ingresó y quién no, y comparar los registros con la asistencia al evento.",
+            stack: ["Desarrollo backend", "Registro web", "Selección de evento", "Envío de QR", "Control de acceso", "Métricas de asistencia"],
+            imageAlt: "Los DiDis 2026 · Página de registro y selección de evento",
+            imageCredit: "Diseño proporcionado por el cliente. Desarrollo backend: KETING Media.",
+            metricLabel: "Registro y acceso",
+            details: [
+                {
+                    title: "Antes del evento: registro y QR",
+                    body: "Cada persona completa su registro, elige el evento al que quiere asistir y recibe el código QR que utilizará para ingresar.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/los-didis-2026-formulario.webp",
+                        alt: "Los DiDis 2026 · Formulario de registro vacío con selección de evento",
+                        caption: "Diseño proporcionado por el cliente; backend desarrollado por KETING. Formulario sin datos personales.",
+                        width: 1920,
+                        height: 982,
+                    },
+                },
+                {
+                    title: "El pase de acceso",
+                    body: "Al completar el registro, la persona recibe su pase con un QR para ingresar al evento. Esta muestra conserva el diseño del gafete; se retiraron los datos del asistente, el folio y el código original.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/los-didis-2026-pase-muestra.webp",
+                        alt: "Los DiDis 2026 · Pase de muestra anonimizado, sin QR ni folio originales",
+                        caption: "Diseño proporcionado por el cliente. Muestra anonimizada para el portafolio, sin datos ni QR originales y sin validez para acceso.",
+                        width: 1060,
+                        height: 1484,
+                    },
+                },
+                {
+                    title: "El día del evento: acceso y seguimiento",
+                    body: "El equipo de acceso escanea el QR y registra la entrada. El panel permite consultar quién accedió y quién sigue pendiente de llegar.",
+                },
+                {
+                    title: "Después: registrados frente a asistentes",
+                    body: "Las métricas permiten comparar los registros con los accesos y distinguir a las personas que asistieron de quienes no llegaron.",
+                },
+            ],
+        },
+        en: {
+            title: "Los DiDis 2026 — from registration to QR check-in",
+            industry: "Event software",
+            summary:
+                "The client provided the design for Los DiDis 2026. KETING developed the entire backend: registration, event selection, QR delivery, access control and metrics showing who attended and who did not.",
+            challenge:
+                "Connect each person's registration with their chosen event, entry pass and attendance record, so organizers can distinguish registrations from people who actually arrived.",
+            solution:
+                "Backend development to process registrations, associate each person with their chosen event, generate and deliver QR passes, validate entry and compile attendance metrics. The client provided the visual design.",
+            result: "Connected registration, entry and attendance tracking: organizers can see who checked in and who did not, and compare registrations with event attendance.",
+            stack: ["Backend development", "Web registration", "Event selection", "QR delivery", "Access control", "Attendance metrics"],
+            imageAlt: "Los DiDis 2026 · Registration and event selection page",
+            imageCredit: "Design provided by the client. Backend development: KETING Media.",
+            metricLabel: "Registration and entry",
+            details: [
+                {
+                    title: "Before the event: registration and QR",
+                    body: "Each person registers, chooses their event and receives the QR code they will use for entry.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/los-didis-2026-formulario.webp",
+                        alt: "Los DiDis 2026 · Empty registration form with event selection",
+                        caption: "Design provided by the client; backend developed by KETING. Form with no personal data.",
+                        width: 1920,
+                        height: 982,
+                    },
+                },
+                {
+                    title: "The entry pass",
+                    body: "After registration, the attendee receives a pass with a QR code for event entry. This sample preserves the badge design; attendee details, the reference number and the original code have been removed.",
+                    screenshot: {
+                        src: "/portafolio/screenshots/los-didis-2026-pase-muestra.webp",
+                        alt: "Los DiDis 2026 · Anonymized sample pass without the original QR or reference number",
+                        caption: "Design provided by the client. Anonymized portfolio sample with original details and QR removed; not valid for entry.",
+                        width: 1060,
+                        height: 1484,
+                    },
+                },
+                {
+                    title: "On the day: check-in and tracking",
+                    body: "Staff scan each QR code and log the arrival. The dashboard shows who has checked in and who has yet to arrive.",
+                },
+                {
+                    title: "Afterwards: registrations versus attendance",
+                    body: "Metrics compare registrations with check-ins, identifying the people who attended and those who did not arrive.",
+                },
+            ],
+        },
+    },
+    {
         // Cliente: Enso Media (productora), marca del evento: Los DiDis. Misma
         // relación que Suzuki — se acredita la alianza, como allí.
         //
@@ -298,31 +529,31 @@ export const CASE_STUDIES: CaseStudy[] = [
         image: "/soluciones/ipad-didis-3.png",
         bareImage: true,
         es: {
-            title: "Los DiDis — cada QR contado",
+            title: "Los DiDis 2024 — cada QR contado",
             industry: "Control de acceso · Evento en vivo",
             summary:
-                "Los DiDis necesitaba saber en tiempo real quién había entrado al evento y quién no, sobre 1,800 asistentes esperados. Construimos, en alianza con Enso Media, un lector de QR con panel en vivo que corre desde un iPad en la puerta.",
+                "Los DiDis 2024 necesitaba saber en tiempo real quién había entrado al evento y quién no, sobre 1,800 asistentes esperados. Construimos, en alianza con Enso Media, un lector de QR con panel en vivo que corre desde un iPad en la puerta.",
             challenge:
                 "Saber durante el evento, y no al día siguiente, quién había accedido y quién seguía sin llegar — sobre 1,800 asistentes esperados y con el control hecho en la propia puerta.",
             solution:
                 "Lector de QR con panel en vivo para iPad, en alianza con Enso Media: cada acceso queda registrado al instante y el panel muestra cuántos han entrado y cuántos faltan.",
             result: "Control de acceso y conteo en vivo para un evento de 1,800 asistentes esperados.",
             stack: ["Lector QR", "Panel en vivo", "iPad", "Control de acceso"],
-            imageAlt: "Los DiDis · Lector de QR y panel en vivo, en alianza con Enso Media",
+            imageAlt: "Los DiDis 2024 · Lector de QR y panel en vivo, en alianza con Enso Media",
             metricLabel: "Asistentes esperados",
         },
         en: {
-            title: "Los DiDis — every QR accounted for",
+            title: "Los DiDis 2024 — every QR accounted for",
             industry: "Access control · Live event",
             summary:
-                "Los DiDis needed to know in real time who had entered the event and who hadn't, across 1,800 expected attendees. In partnership with Enso Media, we built a QR reader with a live dashboard running from an iPad at the door.",
+                "Los DiDis 2024 needed to know in real time who had entered the event and who hadn't, across 1,800 expected attendees. In partnership with Enso Media, we built a QR reader with a live dashboard running from an iPad at the door.",
             challenge:
                 "Knowing during the event — not the next day — who had checked in and who still hadn't, across 1,800 expected attendees, with the control happening right at the door.",
             solution:
                 "A QR reader with a live dashboard for iPad, built in partnership with Enso Media: every check-in is logged instantly and the dashboard shows how many are in and how many are still missing.",
             result: "Access control and live headcount for an event with 1,800 expected attendees.",
             stack: ["QR reader", "Live dashboard", "iPad", "Access control"],
-            imageAlt: "Los DiDis · QR reader and live dashboard, in partnership with Enso Media",
+            imageAlt: "Los DiDis 2024 · QR reader and live dashboard, in partnership with Enso Media",
             metricLabel: "Expected attendees",
         },
     },
@@ -398,7 +629,7 @@ export const CASE_STUDIES: CaseStudy[] = [
         slug: "ivan-ivanovich-academy",
         metricValue: "↑ 4x",
         url: "https://ivanivanovich.com/",
-        image: "/portafolio/screenshots/ivanivanovich.jpg",
+        image: "/portafolio/screenshots/ivanivanovich-lms.webp",
         es: {
             title: "Ivan Ivanovich Academy — autoridad y precisión",
             industry: "Protección ejecutiva",

@@ -1276,7 +1276,7 @@ export function IvanShowcase() {
                                 <div className="relative overflow-hidden rounded-b-lg md:rounded-b-xl">
                                     <a href="https://ivanivanovich.com" target="_blank" rel="noopener noreferrer" className="block transition-transform duration-500 hover:-translate-y-2 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">
                                         <img
-                                        src="/portafolio/screenshots/ivanivanovich.jpg"
+                                        src="/portafolio/screenshots/ivanivanovich-lms.webp"
                                         alt={s.imgAlt}
                                         className="block w-full h-auto"
                                         draggable={false}

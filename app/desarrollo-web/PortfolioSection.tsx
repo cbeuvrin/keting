@@ -22,7 +22,7 @@ import { enHref } from "@/lib/i18n/routes";
 const projects = [
     { src: "/gravity-portfolio-1.jpg", url: "https://ponguinguiola.org", alt: "Ponguinguiola — sitio de la organización ambiental" },
     { src: "/gravity-portfolio-2.jpg", url: "https://smilebetterclinics.com", alt: "Smile Better Clinics — sitio de la clínica dental" },
-    { src: "/gravity-portfolio-3.jpg", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Executive Protection Academy — sitio del curso" },
+    { src: "/portafolio/screenshots/ivanivanovich-lms.webp", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Academy — plataforma de cursos LMS", aspectRatio: "1920 / 984" },
     { src: "/gravity-portfolio-4.jpg", alt: "AERS — tienda en línea de ropa deportiva" },
     { src: "/gravity-portfolio-5.jpg", alt: "AERS — tienda en línea vista en móvil" },
     { src: "/gravity-portfolio-6.jpg", alt: "AERS — tienda en línea vista en móvil" },
@@ -31,18 +31,19 @@ const projects = [
     { src: "/gravity-portfolio-9.png", alt: "Etiqueta de marca aplicada a prenda" },
     { src: "/gravity-portfolio-1.jpg", url: "https://ponguinguiola.org", alt: "Ponguinguiola — sitio de la organización ambiental" },
     { src: "/gravity-portfolio-2.jpg", url: "https://smilebetterclinics.com", alt: "Smile Better Clinics — sitio de la clínica dental" },
-    { src: "/gravity-portfolio-3.jpg", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Executive Protection Academy — sitio del curso" },
+    { src: "/portafolio/screenshots/ivanivanovich-lms.webp", url: "https://ivanivanovich.com", alt: "Ivan Ivanovich Academy — plataforma de cursos LMS", aspectRatio: "1920 / 984" },
 ];
 
 /** Miniatura del muro: enlace al sitio real cuando existe, imagen suelta cuando no. */
-function Miniatura({ p }: { p: { src: string; url?: string; alt: string } }) {
+function Miniatura({ p }: { p: { src: string; url?: string; alt: string; aspectRatio?: string } }) {
     const img = (
-        <img src={p.src} alt={p.alt} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+        <img src={p.src} alt={p.alt} className={cn("w-full h-full", p.aspectRatio ? "object-contain" : "object-cover")} loading="lazy" decoding="async" />
     );
     const caja = "w-full aspect-[3/4] bg-white/10 rounded-xl overflow-hidden shrink-0";
-    if (!p.url) return <div className={caja}>{img}</div>;
+    if (!p.url) return <div className={caja} style={{ aspectRatio: p.aspectRatio }}>{img}</div>;
     return (
         <a
+            style={{ aspectRatio: p.aspectRatio }}
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"

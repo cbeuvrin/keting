@@ -244,7 +244,7 @@ export function CompanyAboutPage({
                     </div>
 
                     <Link
-                        href={isEn ? "/en/case-studies" : "/casos"}
+                        href={isEn ? "/en/portafolio" : "/portafolio"}
                         className="group inline-flex items-center gap-2 text-sm font-medium text-[#1d1d1f] hover:text-[#1d1d1f]/70 transition-colors"
                     >
                         {c.workCta}

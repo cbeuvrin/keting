@@ -135,6 +135,7 @@ export function getEsBlogSlug(enSlug: string): string | undefined {
 
 // Ruta actual -> su equivalente en inglés (o /en si no hay gemela).
 export function toEn(pathname: string): string {
+    if (pathname === CASE_STUDIES_ES_ROOT || pathname === CASE_STUDIES_EN_ROOT) return "/en/portafolio";
     if (pathname === CONTACT_EN) return pathname;
     if (pathname === CONTACT_ES) return CONTACT_EN;
     if (isCaseStudyEnPath(pathname) || isAboutEnPath(pathname) || isBlogEnPath(pathname)) return pathname; // ya está en inglés
@@ -160,6 +161,7 @@ export function toEn(pathname: string): string {
 
 // Ruta actual -> su equivalente en español (o / si no hay gemela).
 export function toEs(pathname: string): string {
+    if (pathname === CASE_STUDIES_ES_ROOT || pathname === CASE_STUDIES_EN_ROOT) return "/portafolio";
     if (pathname === CONTACT_ES) return pathname;
     if (pathname === CONTACT_EN) return CONTACT_ES;
     if (isCaseStudyEsPath(pathname) || isAboutEsPath(pathname) || isBlogEsPath(pathname)) return pathname; // ya está en español

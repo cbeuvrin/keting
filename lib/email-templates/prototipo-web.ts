@@ -180,7 +180,7 @@ ${bulletRows}
             &mdash;&mdash; TRABAJO RECIENTE
         </div>
         <!-- Web a lo ancho (lo que se ofrece) + dos apps gemelas debajo -->
-        <a href="${SITE_URL}/casos" style="text-decoration:none;">
+        <a href="${SITE_URL}/portafolio" style="text-decoration:none;">
             <img src="${SITE_URL}/soluciones/gobernia-imac.png" width="536" alt="Gobernia — plataforma web de agentes de IA" style="display:block;border:0;width:100%;height:auto;background-color:#F5F5F0;"/>
         </a>
         <div style="font-family:${sans};font-size:13px;color:#1d1d1f;font-weight:bold;padding-top:8px;">Gobernia</div>
@@ -189,9 +189,9 @@ ${bulletRows}
             <tr>
                 <td class="stack" width="48%" valign="top" style="padding-right:8px;">
                     <a href="${SITE_URL}/casos/los-didis" style="text-decoration:none;">
-                        <img src="${SITE_URL}/soluciones/ipad-didis-3.png" width="260" alt="Los DiDis — control de acceso con QR" style="display:block;border:0;width:100%;height:auto;background-color:#F5F5F0;"/>
+                        <img src="${SITE_URL}/soluciones/ipad-didis-3.png" width="260" alt="Los DiDis 2024 — control de acceso con QR" style="display:block;border:0;width:100%;height:auto;background-color:#F5F5F0;"/>
                     </a>
-                    <div style="font-family:${sans};font-size:13px;color:#1d1d1f;font-weight:bold;padding-top:8px;">Los DiDis</div>
+                    <div style="font-family:${sans};font-size:13px;color:#1d1d1f;font-weight:bold;padding-top:8px;">Los DiDis 2024</div>
                     <div style="font-family:${sans};font-size:12px;color:#8e8e93;line-height:1.5;">Control de acceso con QR para evento</div>
                 </td>
                 <td class="gap" width="4%">&nbsp;</td>
@@ -205,7 +205,7 @@ ${bulletRows}
             </tr>
         </table>
         <p style="margin:16px 0 0 0;font-family:${sans};font-size:13px;color:#8e8e93;">
-            M&aacute;s casos en <a href="${SITE_URL}/casos" style="color:#1d1d1f;">ketingmedia.com/casos</a> &mdash; con m&eacute;tricas reales de cada proyecto.
+            M&aacute;s proyectos en <a href="${SITE_URL}/portafolio" style="color:#1d1d1f;">ketingmedia.com/portafolio</a> &mdash; con m&eacute;tricas reales de cada proyecto.
         </p>
     </td></tr>
 

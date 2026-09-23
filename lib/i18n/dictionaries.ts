@@ -632,18 +632,18 @@ const es = {
             tag: "LMS · Cursos · Multi-idioma · E-commerce",
         },
         didisShowcase: {
-            eyebrow: "Un caso · Los DiDis",
+            eyebrow: "Un caso · Los DiDis 2024",
             h2Pre: "Acceso",
             h2Accent: "en vivo",
             h2Mid: ",",
             h2Highlight: "cada QR",
             h2End: "contado.",
             bodyPre: "Para",
-            bodyAccent: "Los DiDis",
+            bodyAccent: "Los DiDis 2024",
             bodyEnd: "construimos un lector de QR + dashboard que monitorea en tiempo real quién accede al evento y quién todavía no — todo desde un iPad en la puerta.",
             liveLabel: "Live · accesos",
             counterSuffix: "/ 1,800 esperados",
-            imgAlt: "Los DiDis · Lector QR + dashboard en vivo",
+            imgAlt: "Los DiDis 2024 · Lector QR + dashboard en vivo",
             badge: "QR · EVENT MODE",
         },
         iaComoAliado: {
@@ -757,9 +757,9 @@ const es = {
                 {
                     n: "01",
                     name: "Registro y control de acceso",
-                    body: "Lector de QR con panel en vivo: cada acceso queda registrado al instante y sabes cuántos han entrado y cuántos faltan, sin esperar al informe del día siguiente.",
-                    proof: "Los DiDis · 1,800 asistentes esperados",
-                    caseSlug: "los-didis",
+                    body: "Backend para registro en línea, selección de evento, envío de QR y validación de accesos, con métricas de asistencia. En Los DiDis 2026, el cliente proporcionó el diseño y KETING desarrolló todo el backend.",
+                    proof: "Los DiDis 2026 · Registro, QR y asistencia",
+                    caseSlug: "los-didis-2026",
                 },
                 {
                     n: "02",
@@ -1086,6 +1086,23 @@ const es = {
             readCase: "Ver caso completo",
         },
         cases: {
+            losDidis: {
+                eyebrow: "Caso · Software para eventos",
+                titleAccent: "Del registro al acceso.",
+                body: "El cliente proporcionó el diseño de Los DiDis 2026. KETING desarrolló todo el backend: registro, selección de evento, generación y envío del QR, validación de accesos y métricas para consultar quién asistió y quién no.",
+                tags: ["Backend", "Registro", "Selección de evento", "Acceso QR", "Métricas de asistencia"],
+                imageAlt: "Los DiDis 2026 · Página de registro y selección de evento",
+                imageCaption: "Diseño del cliente · Backend de KETING",
+            },
+            reDress: {
+                eyebrow: "Caso · Marketplace de moda circular",
+                titleAccent: "Pre-loved.",
+                bodyPre: "Desarrollamos el sistema completo: un ",
+                bodyItalic: "marketplace de vestidos de diseñador",
+                bodyPost: " con panel de vendedoras, showroom, administración y membresías por prenda. Unificamos inventario, citas y pagos, y migramos las suscripciones de Stripe sin interrumpir los cobros.",
+                tags: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Vercel"],
+                imageAlt: "Re Dress · Marketplace de vestidos de diseñador pre-loved",
+            },
             iudex: {
                 eyebrow: "Caso · Legal AI",
                 bodyPre: "Plataforma para la primera IA jurídica de México con criterio jurídico real. Diseño ",
@@ -1096,7 +1113,7 @@ const es = {
                 imageAlt: "Iudex · Legal AI",
             },
             smileBetter: {
-                eyebrow: "Caso · Salud dental",
+                eyebrow: "Caso · Diseño web",
                 bodyPre: "Clínica dental holística con enfoque integral. Diseñamos un sitio que comunica ",
                 bodyItalic: "cercanía y tecnología",
                 bodyPost: " a partes iguales — agendar cita está a un solo tap.",
@@ -1116,7 +1133,7 @@ const es = {
                 imageAlt: "Gobernia · 4 agentes IA",
             },
             happtek: {
-                eyebrow: "Caso · Audio premium",
+                eyebrow: "Caso · Diseño web",
                 titleAccent: "La voz de la elegancia.",
                 bodyPre:
                     "Showroom de equipos de audio de gama alta. Tipografía editorial, fotografía cinematográfica y una experiencia que se siente como un ",
@@ -1127,7 +1144,7 @@ const es = {
                 imageAlt: "Happtek · Audio premium",
             },
             barmored: {
-                eyebrow: "Caso · Blindaje automotriz",
+                eyebrow: "Caso · Diseño web",
                 titleBottom: "Blindaje perfecto.",
                 bodyPre: "Sitio para una firma líder en ",
                 bodyItalic: "blindaje automotriz",
@@ -1150,7 +1167,7 @@ const es = {
                 imageAlt: "Toogo · SaaS E-commerce multi-tenant",
             },
             rosymar: {
-                eyebrow: "Caso · Joyería",
+                eyebrow: "Caso · Ecommerce",
                 bodyPre: "E-commerce de joyería con baño en ",
                 bodyItalic: "oro 18k y 24k",
                 bodyPost:
@@ -1160,7 +1177,7 @@ const es = {
                 imageAlt: "Rosymar González · Joyería",
             },
             ivan: {
-                eyebrow: "Caso · Protección Ejecutiva",
+                eyebrow: "Caso · Plataforma de cursos LMS",
                 bodyPre: "Plataforma para la academia de protección ejecutiva más reconocida de México. ",
                 bodyItalic: "Cursos en vivo",
                 bodyPost: ", eventos, blog y un sistema de afiliados — todo bajo una identidad de autoridad y precisión.",
@@ -1824,18 +1841,18 @@ const en: typeof es = {
             tag: "LMS · Courses · Multi-language · E-commerce",
         },
         didisShowcase: {
-            eyebrow: "A case · Los DiDis",
+            eyebrow: "A case · Los DiDis 2024",
             h2Pre: "",
             h2Accent: "Live",
             h2Mid: " access,",
             h2Highlight: "every QR",
             h2End: "counted.",
             bodyPre: "For",
-            bodyAccent: "Los DiDis",
+            bodyAccent: "Los DiDis 2024",
             bodyEnd: "we built a QR reader + dashboard that monitors in real time who's entering the event and who isn't yet — all from an iPad at the door.",
             liveLabel: "Live · check-ins",
             counterSuffix: "/ 1,800 expected",
-            imgAlt: "Los DiDis · QR reader + live dashboard",
+            imgAlt: "Los DiDis 2024 · QR reader + live dashboard",
             badge: "QR · EVENT MODE",
         },
         iaComoAliado: {
@@ -1941,9 +1958,9 @@ const en: typeof es = {
                 {
                     n: "01",
                     name: "Registration and access control",
-                    body: "QR reader with a live dashboard: every check-in is logged instantly and you know how many are in and how many are still missing — without waiting for the next-day report.",
-                    proof: "Los DiDis · 1,800 expected attendees",
-                    caseSlug: "los-didis",
+                    body: "Backend for online registration, event selection, QR delivery and entry validation, with attendance metrics. For Los DiDis 2026, the client provided the design and KETING developed the entire backend.",
+                    proof: "Los DiDis 2026 · Registration, QR and attendance",
+                    caseSlug: "los-didis-2026",
                 },
                 {
                     n: "02",
@@ -2270,6 +2287,23 @@ const en: typeof es = {
             readCase: "Read full case study",
         },
         cases: {
+            losDidis: {
+                eyebrow: "Case · Event software",
+                titleAccent: "From registration to check-in.",
+                body: "The client provided the design for Los DiDis 2026. KETING developed the entire backend: registration, event selection, QR generation and delivery, entry validation and metrics showing who attended and who did not.",
+                tags: ["Backend", "Registration", "Event selection", "QR check-in", "Attendance metrics"],
+                imageAlt: "Los DiDis 2026 · Registration and event selection page",
+                imageCaption: "Client-provided design · Backend by KETING",
+            },
+            reDress: {
+                eyebrow: "Case · Circular fashion marketplace",
+                titleAccent: "Pre-loved.",
+                bodyPre: "We built the complete system: a ",
+                bodyItalic: "designer dress marketplace",
+                bodyPost: " with a seller dashboard, showroom, administration, and per-dress memberships. We unified inventory, appointments, and payments, and migrated Stripe subscriptions without interrupting billing.",
+                tags: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Vercel"],
+                imageAlt: "Re Dress · Pre-loved designer dress marketplace",
+            },
             iudex: {
                 eyebrow: "Case · Legal AI",
                 bodyPre: "Platform for Mexico's first legal AI with real legal judgment. ",
@@ -2280,7 +2314,7 @@ const en: typeof es = {
                 imageAlt: "Iudex · Legal AI",
             },
             smileBetter: {
-                eyebrow: "Case · Dental health",
+                eyebrow: "Case · Web design",
                 bodyPre: "Holistic dental clinic with an integral approach. We designed a site that communicates ",
                 bodyItalic: "warmth and technology",
                 bodyPost: " in equal measure — booking an appointment is one tap away.",
@@ -2300,7 +2334,7 @@ const en: typeof es = {
                 imageAlt: "Gobernia · 4 AI agents",
             },
             happtek: {
-                eyebrow: "Case · Premium audio",
+                eyebrow: "Case · Web design",
                 titleAccent: "The voice of elegance.",
                 bodyPre:
                     "Showroom for high-end audio equipment. Editorial typography, cinematic photography and an experience that feels like a ",
@@ -2311,7 +2345,7 @@ const en: typeof es = {
                 imageAlt: "Happtek · Premium audio",
             },
             barmored: {
-                eyebrow: "Case · Vehicle armoring",
+                eyebrow: "Case · Web design",
                 titleBottom: "Flawless armoring.",
                 bodyPre: "Site for a leading firm in high-profile ",
                 bodyItalic: "vehicle armoring",
@@ -2334,7 +2368,7 @@ const en: typeof es = {
                 imageAlt: "Toogo · SaaS E-commerce multi-tenant",
             },
             rosymar: {
-                eyebrow: "Case · Jewelry",
+                eyebrow: "Case · Ecommerce",
                 bodyPre: "Jewelry e-commerce with ",
                 bodyItalic: "18k and 24k gold",
                 bodyPost:
@@ -2344,7 +2378,7 @@ const en: typeof es = {
                 imageAlt: "Rosymar González · Jewelry",
             },
             ivan: {
-                eyebrow: "Case · Executive Protection",
+                eyebrow: "Case · LMS course platform",
                 bodyPre: "Platform for Mexico's most recognized executive-protection academy. ",
                 bodyItalic: "Live courses",
                 bodyPost: ", events, a blog and an affiliate system — all under an identity of authority and precision.",

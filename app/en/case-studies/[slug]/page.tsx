@@ -84,7 +84,7 @@ export default async function EnCaseStudyPage({ params }: { params: Promise<{ sl
                     articleJsonLd,
                     breadcrumbTrail([
                         { name: "Home", path: "/en" },
-                        { name: "Case Studies", path: "/en/case-studies" },
+                        { name: "Portfolio", path: "/en/portafolio" },
                         { name: c.title, path: `/en/case-studies/${slug}` },
                     ]),
                 ]}

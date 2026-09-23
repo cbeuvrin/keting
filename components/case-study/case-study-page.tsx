@@ -34,7 +34,7 @@ const LABELS: Record<Lang, {
 }> = {
     es: {
         eyebrow: "Caso de éxito",
-        back: "Ver todos los casos",
+        back: "Volver al portafolio",
         viewLive: "Ver en vivo",
         challenge: "El reto",
         solution: "La solución",
@@ -48,7 +48,7 @@ const LABELS: Record<Lang, {
     },
     en: {
         eyebrow: "Case study",
-        back: "See all case studies",
+        back: "Back to portfolio",
         viewLive: "View live",
         challenge: "The challenge",
         solution: "The solution",
@@ -160,7 +160,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
 
                 <div className="max-w-7xl mx-auto relative">
                     <Link
-                        href={isEn ? "/en/case-studies" : "/casos"}
+                        href={isEn ? "/en/portafolio" : "/portafolio"}
                         className="group inline-flex items-center gap-2 text-sm text-[#1d1d1f]/60 hover:text-[#1d1d1f] transition-colors mb-12 md:mb-16"
                     >
                         <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
@@ -230,7 +230,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
             </section>
 
             {/* ============ IMAGEN ============ */}
-            <section className="relative px-6 md:px-12 lg:px-24 pb-24 md:pb-32">
+            <section className="relative overflow-x-clip px-6 md:px-12 lg:px-24 pb-24 md:pb-32">
                 <div className="max-w-6xl mx-auto relative">
                     <div className={`relative ${study.bareImage ? "max-w-[70%] mx-auto" : ""}`}>
                         <div className="absolute -inset-x-8 -bottom-8 h-12 bg-[#1d1d1f]/15 blur-3xl rounded-full pointer-events-none" />
@@ -268,6 +268,9 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                             </div>
                         )}
                         </ImgWrap>
+                        {c.imageCredit ? (
+                            <p className="mt-5 md:mt-6 text-center text-xs leading-relaxed text-[#1d1d1f]/60">{c.imageCredit}</p>
+                        ) : (
                         <div className="mt-5 md:mt-6 flex items-center justify-center gap-3">
                             <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-mono text-[#1d1d1f]/40">
                                 {l.designedBy}
@@ -282,6 +285,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                                 Media
                             </span>
                         </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -308,6 +312,45 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                         <p className="text-base md:text-lg font-light leading-relaxed text-[#1d1d1f]/85">{c.result}</p>
                     </div>
                 </div>
+
+                {c.details && (
+                    <div className="max-w-5xl mx-auto mt-16 border-t border-[#1d1d1f]/10">
+                        {c.details.map((detail) => (
+                            <div key={detail.title} className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 py-10 border-b border-[#1d1d1f]/10">
+                                <h2 className="text-xl md:text-2xl font-light tracking-tight">{detail.title}</h2>
+                                <p className="md:col-span-2 text-base md:text-lg font-light leading-relaxed text-[#1d1d1f]/85">{detail.body}</p>
+                                {detail.screenshot && (
+                                    <figure className={`min-w-0 md:col-span-3 mt-4 ${detail.screenshot.height > detail.screenshot.width ? "w-full max-w-md mx-auto" : ""}`}>
+                                        <a
+                                            href={detail.screenshot.src}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${isEn ? "Enlarge screenshot" : "Ampliar captura"}: ${detail.title}`}
+                                            className="block overflow-hidden rounded-xl ring-1 ring-black/10 cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1d1d1f]"
+                                        >
+                                            <img
+                                                src={detail.screenshot.src}
+                                                alt={detail.screenshot.alt}
+                                                width={detail.screenshot.width}
+                                                height={detail.screenshot.height}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="block w-full h-auto"
+                                            />
+                                        </a>
+                                        <figcaption className="mt-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 text-sm text-[#1d1d1f]/60">
+                                            <span>{detail.screenshot.caption}</span>
+                                            <a href={detail.screenshot.src} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-[#1d1d1f] underline underline-offset-4">
+                                                {isEn ? "Enlarge screenshot" : "Ampliar captura"}
+                                                <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                                            </a>
+                                        </figcaption>
+                                    </figure>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Duración / inversión — solo si existen datos reales (opcional, sin relleno). */}
                 {(study.duration || study.investment) && (
@@ -348,7 +391,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
             <section className="relative bg-[#1a1a1a] text-white py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-clip">
                 <GridBg />
                 <div className="max-w-4xl mx-auto relative text-center">
-                    <h2 className="text-3xl md:text-5xl font-light tracking-tight mb-6">
+                    <h2 className="text-white text-3xl md:text-5xl font-light tracking-tight mb-6">
                         {l.ctaHeading}
                     </h2>
                     <p className="text-white/70 font-light text-base md:text-lg max-w-xl mx-auto mb-10">{l.ctaBody}</p>

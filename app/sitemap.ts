@@ -41,8 +41,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/software-para-eventos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
         { url: `${SITE_URL}/en/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
-        { url: `${SITE_URL}/casos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
-        { url: `${SITE_URL}/en/case-studies`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
         { url: `${SITE_URL}/nosotros`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${SITE_URL}/en/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/nosotros/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
@@ -57,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
     ];
 
-    // 3. Casos de éxito — 9 en ES (/casos/[slug]) + 9 en EN (/en/case-studies/[slug]).
+    // 3. Casos individuales del portafolio, en español e inglés.
     const caseStudyRoutes: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.flatMap((slug) => [
         {
             url: `${SITE_URL}/casos/${slug}`,

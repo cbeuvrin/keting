@@ -1,9 +1,11 @@
 "use client";
 
 import { GravityHeader } from "@/components/gravity/header";
+import { ProjectAccordion } from "./ProjectAccordion";
 import { Footer } from "@/components/layout/footer";
 import {
     PortafolioHeroV2,
+    CaseReDress,
     CaseIvanIvanovich,
     CaseIudex,
     CaseGobernia,
@@ -11,6 +13,8 @@ import {
     CaseBarmored,
     CaseToogo,
     CaseSuzuki,
+    CaseLosDidis,
+    CaseLosDidisAcceso,
     CaseRosymar,
     CaseHapptek,
     PortafolioCierre,
@@ -23,15 +27,20 @@ export default function PortafolioPage() {
 
             <PortafolioHeroV2 />
 
-            <CaseIudex />
-            <CaseSmileBetter />
-            <CaseGobernia />
-            <CaseHapptek />
-            <CaseBarmored />
-            <CaseToogo />
-            <CaseSuzuki />
-            <CaseRosymar />
-            <CaseIvanIvanovich />
+            <ProjectAccordion>
+                <CaseReDress />
+                <CaseIudex />
+                <CaseSmileBetter />
+                <CaseGobernia />
+                <CaseHapptek />
+                <CaseBarmored />
+                <CaseToogo />
+                <CaseLosDidis />
+                <CaseLosDidisAcceso />
+                <CaseSuzuki />
+                <CaseRosymar />
+                <CaseIvanIvanovich />
+            </ProjectAccordion>
 
             <PortafolioCierre />
 
