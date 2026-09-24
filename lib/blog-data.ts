@@ -359,7 +359,7 @@ export const articles = [
     },
     {
         id: 8,
-        slug: "animaciones-web-tendencias-2025",
+        slug: "animaciones-web-tendencias-2026",
         category: "Desarrollo Web",
         title: "Animaciones web en 2026: la línea entre wow y molesto",
         excerpt: "Las micro-animaciones bien usadas aumentan el engagement; las mal usadas ahuyentan al usuario. Tendencias 2026: View Transitions, scroll-driven animations y motion con física.",
