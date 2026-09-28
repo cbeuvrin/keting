@@ -53,8 +53,10 @@ const LIMITE_MS = 240_000;
 // conteste antes de recordárselo — antes de eso es apurar, no dar seguimiento.
 const SEGUIMIENTO_CUPO = 20;
 const SEGUIMIENTO_DIAS = 4;
-// Etapas donde el trato ya se cerró a mano en el panel: insistir ahí no suma.
-const SEGUIMIENTO_ETAPAS_EXCLUIDAS = new Set(["ganado", "perdido"]);
+// El seguimiento solo va a quien sigue en "nuevo". El CRM no ve las respuestas:
+// si alguien contestó, Carlos lo mueve a "contactado" (o más adelante) en el
+// panel, y un "¿Le llegó mi correo?" a quien ya está hablando con él sobra.
+const SEGUIMIENTO_SOLO_ETAPA = "nuevo";
 
 const REPORTE_A = process.env.CRON_REPORT_TO || "djbeuvrin@gmail.com";
 
@@ -141,7 +143,7 @@ export async function GET(request: Request) {
     const corteSeguimiento = arranque - SEGUIMIENTO_DIAS * 24 * 60 * 60 * 1000;
     const tandaSeguimiento: Lead[] = todos
         .filter((l) => {
-            if (yaSeguimiento.has(l.id) || SEGUIMIENTO_ETAPAS_EXCLUIDAS.has(l.stage)) return false;
+            if (yaSeguimiento.has(l.id) || l.stage !== SEGUIMIENTO_SOLO_ETAPA) return false;
             if (!esCorreoEnviable(l.email)) return false;
             const abierto = inicialAbierto.get(l.id);
             return Boolean(abierto) && new Date(abierto!).getTime() <= corteSeguimiento;
