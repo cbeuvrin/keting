@@ -10,12 +10,14 @@ const article: EnArticle = {
     excerpt:
         "The same question to ChatGPT returns the same ranking once in a thousand times. Here's what the evidence — 600 volunteers, 3,000 runs, 12,933 responses analyzed — says about ranking guarantees in AI search, and how to read a GEO proposal without getting sold smoke.",
     category: "Artificial Intelligence",
-    date: "Jul 2026",
+    date: "Sep 2026",
     image: "/images/blog/geo-optimization.png",
     author: "Carlos Beuvrin",
-    wordCount: 1527,
-    readTime: 8,
+    wordCount: 2004,
+    readTime: 11,
     content: `
+<p><em>Updated in September 2026 with what Google said in its official guide to the generative AI features in Search.</em></p>
+
 <p>If someone is selling you <strong>"guaranteed ranking on ChatGPT,"</strong> it's worth asking one simple question before you sign anything: <strong>guaranteed measured how, and against what baseline?</strong></p>
 
 <p>The answer usually takes the whole pitch apart. Not because GEO is entirely smoke and mirrors, but because the system that the promise of control is built on is, by design, non-deterministic. And that's not a market opinion — it's measured.</p>
@@ -106,6 +108,25 @@ const article: EnArticle = {
 
 <p>None of this is a guarantee. It's something better: <strong>it's a basis for working with the right expectations</strong>.</p>
 
+<h2>What Google said in July 2026</h2>
+
+<p>In July 2026 Google published its guide <a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide" target="_blank">"Optimizing your website for generative AI features on Google Search"</a>. It's the closest thing to a first-hand answer we're going to get, with one clear limit: it covers <em>its</em> search engine (Google's AI Overviews and AI Mode), not ChatGPT, Perplexity, or Claude.</p>
+
+<p>On the buzzwords, the line is blunt: <em>"From Google Search's perspective, optimizing for generative AI search is optimizing for the search experience, and thus still SEO."</em></p>
+
+<p>It also lists things you don't need, several of them among the most heavily sold "GEO" services:</p>
+
+<ul>
+<li><strong>AI files like llms.txt.</strong> <em>"You don't need to create new machine readable files, AI text files, markup, or Markdown to appear in Google Search (including its generative AI capabilities), as Google Search itself doesn't use them."</em> Having one doesn't hurt, and other systems might read it; Google doesn't.</li>
+<li><strong>Chopping content into chunks or rewriting it "for the AI."</strong> According to the guide, its systems already understand synonyms and search intent, and can surface the relevant part of a long page.</li>
+<li><strong>Special markup.</strong> <em>"Structured data isn't required for generative AI search, and there's no special schema.org markup you need to add."</em> It still helps with regular rich results.</li>
+<li><strong>Chasing mentions.</strong> <em>"However, seeking inauthentic 'mentions' across the web isn't as helpful as it might seem."</em></li>
+</ul>
+
+<p>So what does work? The usual, stated plainly: <em>"Creating content that people find unique, compelling, and useful will likely influence your website's presence in generative AI search in the long run more than any of the other suggestions in this guide."</em> The guide asks for content grounded in first-hand experience and a point of view that isn't what any model could already write, a site that can be crawled and indexed, quality images and video, and up-to-date business details in your Google Business Profile.</p>
+
+<p>It isn't a guarantee either: the guide itself notes that meeting every requirement doesn't ensure Google will index or show your content. But it matches what the research was already showing: there's no technical shortcut that replaces having something worth citing.</p>
+
 <h2>How to read a GEO proposal</h2>
 
 <p>Red flags:</p>
@@ -116,14 +137,15 @@ const article: EnArticle = {
 <li><strong>Reports based on one query per prompt.</strong> You need a minimum of 7–8 repetitions, and multiple languages where relevant. One query is an anecdote.</li>
 <li><strong>Silence on language.</strong> Language accounts for 26.5% of the variance — more than model, brand, and prompt combined. A proposal that doesn't mention it hasn't read the evidence.</li>
 <li><strong>No stated baseline.</strong> Without an initial appearance rate measured with a real method, "we improved it" means nothing.</li>
+<li><strong>They sell you an llms.txt, "AI content," chopped-up pages, or mentions as the key.</strong> Google said in July 2026 that its search engine needs none of that. Other engines might use some of those things, but none of them is a strategy on its own.</li>
 </ol>
 
 <p>What a good provider can honestly promise:</p>
 
 <ul>
-<li>Measurement with a <strong>disclosed methodology</strong>: number of repetitions, prompts, languages, engines, dates.</li>
+<li>Measurement with a <strong>disclosed methodology</strong>: number of repetitions, prompts, languages, engines, dates. For Google's AI features there's also a first-hand source: the Generative AI performance report in Search Console.</li>
 <li><strong>Appearance rate</strong> (share of voice) as the metric, not position.</li>
-<li>Work on what's actually within your control: presence and consistency in the sources these systems actually retrieve from, structured data, extractable and citable evidence, and third-party reputation.</li>
+<li>Work on what's actually within your control: content grounded in first-hand experience with extractable, citable evidence, real presence and reputation in the sources these systems retrieve from, and a site that can be crawled and indexed. Structured data helps with rich results, though Google says it isn't required for its AI search.</li>
 <li><strong>Confidence intervals, not point promises.</strong></li>
 </ul>
 
@@ -136,6 +158,7 @@ const article: EnArticle = {
 <h2>Sources</h2>
 
 <ul>
+<li><a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide" target="_blank">Optimizing your website for generative AI features on Google Search — Google Search Central</a> (official guide, July 2026)</li>
 <li><a href="https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076" target="_blank">AI recommendation lists repeat less than 1% of the time — Search Engine Land</a> (study by Rand Fishkin / SparkToro and Patrick O'Donnell / Gumshoe.ai)</li>
 <li><a href="https://arxiv.org/html/2607.13304" target="_blank">Where Does the Noise Come From? A Variance-Components Decomposition of Non-Determinism in LLM Brand Answers — arXiv</a></li>
 <li><a href="https://arxiv.org/html/2607.14035v1" target="_blank">Optimizing Visibility in Generative Engines: A Critical Survey of Generative Engine Optimization (2023–2026) — arXiv</a></li>
