@@ -33,7 +33,7 @@ export function Scene({ layout, className }: { layout: Layout; className?: strin
                 if (!def) return null;
                 const tx = p.flip ? p.x + def.w * p.s : p.x;
                 return (
-                    <g key={`${p.id}-${i}`} transform={`translate(${tx} ${p.y}) scale(${p.flip ? -p.s : p.s} ${p.s})`}>
+                    <g key={`${p.id}-${i}`} data-hw-id={p.id} transform={`translate(${tx} ${p.y}) scale(${p.flip ? -p.s : p.s} ${p.s})`}>
                         <g
                             className={def.interactive ? "hw-monster" : "hw-monster hw-deco"}
                             data-flip={p.flip ? "1" : undefined}

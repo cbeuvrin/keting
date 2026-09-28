@@ -38,6 +38,31 @@
     pointer-events: none;
 }
 
+/* El fantasma y la calabaza que se vienen hacia la pantalla (poster-zoom.tsx).
+   En reposo se ven los del póster; mientras crecen ([data-zoom]), sus copias.
+   Lo que no se ve tampoco se anima: la vid, el parpadeo y la flama de una
+   copia escondida seguirían recalculándose en cada cuadro. Si se agrega un
+   monstruo al zoom, va también aquí. */
+.hw-zoom-copy,
+[data-zoom] .hw-poster-scene [data-hw-id="fantasma-sabana"],
+[data-zoom] .hw-poster-scene [data-hw-id="calabaza-gigante"] {
+    visibility: hidden;
+}
+
+[data-zoom] .hw-zoom-copy {
+    visibility: visible;
+}
+
+.hw-zoom-copy *,
+[data-zoom] .hw-poster-scene [data-hw-id="fantasma-sabana"] *,
+[data-zoom] .hw-poster-scene [data-hw-id="calabaza-gigante"] * {
+    animation-play-state: paused;
+}
+
+[data-zoom] .hw-zoom-copy * {
+    animation-play-state: running;
+}
+
 /* Todo lo que se transforma gira/escala sobre su propia caja. */
 .hw-pop,
 .hw-tongue,
