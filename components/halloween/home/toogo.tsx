@@ -225,7 +225,7 @@ export function HwToogo() {
                                 href="https://www.toogo.store"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Ver Toogo, la plataforma para crear tu tienda en línea"
+                                aria-label={t.halloween.toogoLink}
                                 style={{ rotate: -3 }}
                                 whileHover={reduce ? undefined : { y: -10, scale: 1.03 }}
                                 whileTap={reduce ? undefined : { rotate: 360, scale: 0.95 }}
@@ -243,7 +243,7 @@ export function HwToogo() {
                                 <StickerWeb />
                                 <img
                                     src="/toogo-character.png"
-                                    alt="Mascota de Toogo"
+                                    alt={t.halloween.toogoMascot}
                                     className="relative h-full w-full object-contain pointer-events-none"
                                 />
                             </motion.a>
@@ -259,6 +259,7 @@ export function HwToogo() {
                 etiqueta se oculta a la vista en móvil pero sigue nombrando el enlace. */}
             <HwCornerButton
                 href="https://www.toogo.store"
+                label={t.halloween.dare}
                 className="bottom-6! max-md:left-6! max-md:right-auto! md:bottom-8! md:right-8! max-sm:[&>span:first-child]:sr-only max-sm:[&>span:first-child]:inline"
             />
         </motion.section>

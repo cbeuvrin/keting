@@ -383,7 +383,7 @@ export function HwEventsHome() {
                 </div>
             </div>
 
-            <HwCornerButton href={enHref("/software-para-eventos", isEn)} />
+            <HwCornerButton href={enHref("/software-para-eventos", isEn)} label={t.halloween.dare} />
         </motion.section>
     );
 }

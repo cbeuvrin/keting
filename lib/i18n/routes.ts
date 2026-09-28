@@ -11,6 +11,8 @@ export const EN_MIRRORED = [
     "/portafolio",
     "/aviso-de-privacidad",
     "/terminos-y-condiciones",
+    // De temporada y noindex; tampoco va en el sitemap (app/sitemap.ts es una lista a mano).
+    "/halloween",
 ] as const;
 
 function normalizeEs(pathname: string): string {

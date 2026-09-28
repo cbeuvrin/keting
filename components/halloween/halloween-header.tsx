@@ -88,8 +88,9 @@ export function HalloweenHeader() {
     ];
 
     // El logo es el de Halloween: lleva al inicio de esta página, no al home normal.
+    const halloweenHome = enHref("/halloween", isEn);
     const toTop = (e: MouseEvent) => {
-        if (pathname !== "/halloween") return;
+        if (pathname !== halloweenHome) return;
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
     };
@@ -110,7 +111,7 @@ export function HalloweenHeader() {
             >
                 <div className="mx-auto flex h-16 max-w-[1680px] items-center justify-between gap-4 rounded-[1.6rem_1.1rem_1.8rem_1.2rem] border-2 border-[#f3ecd9]/85 bg-[#1f1b22] pl-4 pr-3 shadow-[5px_5px_0_#d8b36a] md:h-[76px] md:pl-6 md:pr-4">
                     <div className="flex items-center gap-5">
-                        <Link href="/halloween" onClick={toTop} aria-label="Keting Media">
+                        <Link href={halloweenHome} onClick={toTop} aria-label="Keting Media">
                             <HalloweenLogo compact className="h-10 w-auto md:h-12" />
                         </Link>
                         <span aria-hidden="true" className="hidden h-8 border-l-2 border-dashed border-[#f3ecd9]/25 md:block" />
@@ -246,9 +247,7 @@ export function HalloweenHeader() {
                                 </button>
 
                                 <div className="mb-4 flex items-center justify-end gap-3 md:mb-6">
-                                    <span className={cn(HW_FONT, "text-sm text-[#d8b36a] md:text-lg")}>
-                                        {isEn ? "explore, if you dare" : "explora, si te atreves"}
-                                    </span>
+                                    <span className={cn(HW_FONT, "text-sm text-[#d8b36a] md:text-lg")}>{t.halloween.explore}</span>
                                     <span className="block h-px w-10 bg-[#d8b36a]/50" />
                                 </div>
 

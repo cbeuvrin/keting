@@ -373,9 +373,8 @@ export function HwFooter() {
                                     ES
                                 </button>
                                 <span className="text-[#f3ecd9]/25">·</span>
-                                {/* No hay /en/halloween: desde la versión de temporada, EN lleva al home en inglés. */}
                                 <button
-                                    onClick={() => router.push(pathname?.startsWith("/halloween") ? "/en" : toEn(pathname ?? "/"))}
+                                    onClick={() => router.push(toEn(pathname ?? "/"))}
                                     className={`${HW_FONT} rounded-[0.5rem_0.9rem_0.45rem_0.8rem] border-2 px-3 pb-0.5 pt-1.5 text-xs uppercase tracking-wider transition-all ${
                                         isEn
                                             ? "rotate-2 border-[#1c1a1e] bg-[#d8b36a] text-[#1c1a1e] shadow-[3px_3px_0_#8e7cb3]"

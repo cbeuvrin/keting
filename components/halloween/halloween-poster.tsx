@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
+import { contactHref, enHref } from "@/lib/i18n/routes";
 import "./halloween.css";
 import { HalloweenLogo } from "./halloween-logo";
 import { PosterZoom } from "./poster-zoom";
@@ -14,8 +16,12 @@ import { Scene, type Layout } from "./scene";
  * FORMA de la pantalla, no por su ancho: una tablet en vertical mide más de
  * 768 px pero con la composición apaisada recortada vería solo la franja
  * central. Solo se pinta la que corresponde (la otra queda display:none).
+ *
+ * Se pinta en el servidor, así que el idioma llega por `lang` en vez de useLang.
  */
-export function HalloweenPoster({ desktop, mobile }: { desktop: Layout; mobile: Layout }) {
+export function HalloweenPoster({ desktop, mobile, lang }: { desktop: Layout; mobile: Layout; lang: Lang }) {
+    const h = dictionaries[lang].halloween;
+    const isEn = lang === "en";
     return (
         <PosterZoom desktop={desktop} mobile={mobile}>
             <section className="relative isolate min-h-[100svh] overflow-hidden bg-[#141216] text-[#f3ecd9]">
@@ -32,25 +38,23 @@ export function HalloweenPoster({ desktop, mobile }: { desktop: Layout; mobile: 
                     <header className="flex flex-col gap-3 md:flex-row-reverse md:items-start md:justify-between md:gap-5">
                         <h1 className="font-[family-name:var(--font-gluten)] leading-[0.85] text-[#d8b36a] md:text-right">
                             <span className="block text-[clamp(2.6rem,11vw,7.5rem)] font-bold tracking-tight md:text-[clamp(3.2rem,9vw,7.5rem)]">
-                                Software
+                                {h.title}
                             </span>
-                            <span className="mt-1 block text-[clamp(1.4rem,3.2vw,2.75rem)] font-medium text-[#f3ecd9]">
-                                monstruosamente increíble
-                            </span>
+                            <span className="mt-1 block text-[clamp(1.4rem,3.2vw,2.75rem)] font-medium text-[#f3ecd9]">{h.subtitle}</span>
                         </h1>
 
                         {/* En móvil, logo e info van lado a lado para dejar la pantalla a los monstruos. */}
                         <div className="pointer-events-auto relative flex items-center gap-4 font-[family-name:var(--font-gluten)] text-[12px] uppercase leading-relaxed tracking-[0.12em] md:block md:text-[15px]">
                             <Shade className="-inset-x-14 -inset-y-12" />
-                            <Link href="/" aria-label="Keting Media, volver al home" className="-ml-1 shrink-0 md:mb-2 md:inline-block">
+                            <Link href={enHref("/", isEn)} aria-label={h.logoLabel} className="-ml-1 shrink-0 md:mb-2 md:inline-block">
                                 <HalloweenLogo className="h-auto w-[112px] md:w-[190px]" />
                             </Link>
                             <div>
-                                <p>Versión Halloween · 2026</p>
-                                <p className="hidden md:block">Diseño web · Apps · Software</p>
+                                <p>{h.edition}</p>
+                                <p className="hidden md:block">{h.tagline}</p>
                                 <p className="text-[#d8b36a]">
-                                    <span className="hidden [@media(hover:hover)]:inline">Pásales el mouse, si te atreves</span>
-                                    <span className="[@media(hover:hover)]:hidden">Tócalos, si te atreves</span>
+                                    <span className="hidden [@media(hover:hover)]:inline">{h.hoverHint}</span>
+                                    <span className="[@media(hover:hover)]:hidden">{h.tapHint}</span>
                                 </p>
                             </div>
                         </div>
@@ -63,17 +67,17 @@ export function HalloweenPoster({ desktop, mobile }: { desktop: Layout; mobile: 
                         sombra dura de color y un poco chuecos. Al pasar el mouse se
                         enderezan y el icono se asusta. */}
                         <Link
-                            href="/contacto"
+                            href={contactHref(isEn)}
                             className="group relative inline-block w-full max-w-full -rotate-2 sm:w-auto rounded-[1.6rem_1.1rem_1.8rem_1rem] border-2 border-[#1c1a1e] bg-[#f3ecd9] px-6 pb-3.5 pt-3 text-[#141216] shadow-[5px_5px_0_#d8b36a] transition-[rotate,box-shadow,translate] duration-300 hover:rotate-0 hover:-translate-y-0.5 hover:shadow-[7px_8px_0_#d98a4f] motion-reduce:transition-none"
                         >
                             <span className="flex items-center gap-2.5">
                                 <PumpkinIcon />
                                 <span className="flex min-w-0 flex-col leading-none">
                                     <span className="font-[family-name:var(--font-gluten)] text-base font-bold sm:text-lg md:text-xl">
-                                        Cotiza sin miedo
+                                        {h.quote}
                                     </span>
                                     <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#141216]/60">
-                                        no mordemos (mucho)
+                                        {h.quoteNote}
                                     </span>
                                 </span>
                             </span>
@@ -91,18 +95,18 @@ export function HalloweenPoster({ desktop, mobile }: { desktop: Layout; mobile: 
                             </svg>
                         </Link>
                         <Link
-                            href="/"
+                            href={enHref("/", isEn)}
                             className="group inline-block w-full max-w-full rotate-1 sm:w-auto rounded-[1.1rem_1.7rem_1rem_1.5rem] border-2 border-dashed border-[#f3ecd9]/70 bg-[#141216]/70 px-6 pb-3.5 pt-3 text-[#f3ecd9] backdrop-blur-sm transition-[rotate,border-color,translate] duration-300 hover:rotate-0 hover:-translate-y-0.5 hover:border-[#f3ecd9] motion-reduce:transition-none"
                         >
                             <span className="flex items-center gap-2.5">
                                 <GhostIcon />
                                 <span className="flex min-w-0 flex-col leading-none">
                                     <span className="font-[family-name:var(--font-gluten)] text-base font-bold sm:text-lg md:text-xl">
-                                        <span className="sm:hidden">Volver con los vivos</span>
-                                        <span className="hidden sm:inline">Volver al mundo de los vivos</span>
+                                        <span className="sm:hidden">{h.backShort}</span>
+                                        <span className="hidden sm:inline">{h.back}</span>
                                     </span>
                                     <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#f3ecd9]/60">
-                                        la versión normal
+                                        {h.backNote}
                                     </span>
                                 </span>
                             </span>

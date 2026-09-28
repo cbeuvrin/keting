@@ -1,11 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/lang-context";
+import { enHref } from "@/lib/i18n/routes";
 import { cn } from "@/lib/utils";
 
 /** Botón del hero que lleva al póster de Halloween. El fantasmita se asoma al pasar el mouse. */
 export function HalloweenLink({ label, className }: { label: string; className?: string }) {
+    const { lang } = useLang();
     return (
         <Link
-            href="/halloween"
+            href={enHref("/halloween", lang === "en")}
             className={cn(
                 "group inline-flex items-center gap-2.5 w-fit rounded-2xl border border-black/80 px-6 py-4 text-sm font-bold text-black transition-colors hover:bg-black hover:text-white",
                 className,

@@ -241,7 +241,7 @@ export function HwAutomationHome() {
                                 className="absolute bottom-6 z-[-1] hidden h-auto w-[130px] -rotate-6 lg:-left-[72px] lg:block xl:-left-24 xl:w-[150px]"
                             />
 
-                            <Link href={href} aria-label="Conocer el servicio de automatización con IA" className="group relative block">
+                            <Link href={href} aria-label={t.halloween.automationLink} className="group relative block">
                                 <div className="relative flex h-[230px] w-[230px] cursor-pointer items-center justify-center rounded-[2.6rem_2rem_2.8rem_1.8rem] border-[3px] border-[#1c1a1e] bg-[#2f4a3c] shadow-[8px_8px_0_#d8b36a] md:h-[280px] md:w-[280px]">
                                     {/* Órbita exterior: anillo eléctrico con una chispa */}
                                     <motion.div
@@ -307,7 +307,7 @@ export function HwAutomationHome() {
             {/* En móvil y tablet se asoma por la esquina de abajo a la izquierda */}
             <Peek id="frankenstein" width={112} delay="-0.6s" className="absolute -bottom-12 left-[9%] z-10 lg:hidden" />
 
-            <HwCornerButton href={href} className="bottom-4 right-4 md:bottom-8 md:right-8" />
+            <HwCornerButton href={href} label={t.halloween.dare} className="bottom-4 right-4 md:bottom-8 md:right-8" />
         </motion.section>
     );
 }

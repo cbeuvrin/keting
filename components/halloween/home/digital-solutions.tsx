@@ -363,7 +363,7 @@ export function HwDigitalSolutions() {
                     </motion.div>
                 </div>
             </div>
-            <HwCornerButton href={href} />
+            <HwCornerButton href={href} label={t.halloween.dare} />
         </motion.section>
     );
 }

@@ -447,14 +447,14 @@ export function HwBlogCarousel() {
                         </div>
                         <button
                             onClick={handleLeft}
-                            aria-label="Mover hacia la izquierda"
+                            aria-label={t.halloween.carouselPrev}
                             className={`${arrowClass(direction === -1, "-rotate-3")} rounded-[45%_55%_48%_52%]`}
                         >
                             <HandArrow dir="left" className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
                         </button>
                         <button
                             onClick={handleRight}
-                            aria-label="Mover hacia la derecha"
+                            aria-label={t.halloween.carouselNext}
                             className={`${arrowClass(direction === 1, "rotate-2")} rounded-[55%_45%_52%_48%]`}
                         >
                             <HandArrow dir="right" className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />

@@ -206,7 +206,7 @@ export function HwServices() {
                             esquina del teléfono se montaba sobre los botones del póster de arriba. */}
                         <Link
                             href={href}
-                            aria-label="Ver el servicio de diseño y desarrollo web"
+                            aria-label={t.halloween.webDesignLink}
                             className="group relative z-10 -mb-[110px] -mt-[40px] block h-[610px] w-[300px] rotate-6 [@media(max-height:800px)]:h-[520px] [@media(max-height:800px)]:w-[256px] rounded-[3.5rem_3.1rem_3.7rem_3.3rem] shadow-[12px_12px_0_#d98a4f] transition-[rotate,translate,scale] duration-500 hover:-translate-y-2 hover:rotate-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d8b36a] active:scale-[0.98] motion-reduce:transition-none"
                         >
                             {/* Marco: calcomanía con borde de tinta y un filo crema para que se lea sobre la tarjeta */}
@@ -220,7 +220,7 @@ export function HwServices() {
                                         muted
                                         playsInline
                                         className="h-full w-full object-cover"
-                                        aria-label="Demo de diseño web y marketing digital por Keting Media"
+                                        aria-label={t.halloween.webDesignVideo}
                                     />
                                     {/* Reflejo del vidrio */}
                                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
@@ -247,7 +247,7 @@ export function HwServices() {
             {/* Entre md y xl, y en pantallas bajas, el teléfono llega hasta el letrero: ahí queda solo la calabacita. */}
             <HwCornerButton
                 href={href}
-                label="¿te atreves?"
+                label={t.halloween.dareShort}
                 className="max-xl:[&>span:first-child]:hidden [@media(max-height:800px)]:[&>span:first-child]:hidden"
             />
             <HwScrollHint />

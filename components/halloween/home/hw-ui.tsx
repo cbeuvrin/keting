@@ -197,17 +197,10 @@ export function Peek({
 
 /**
  * El "click →" de la esquina de las tarjetas de servicio, en versión
- * calcomanía: una calabacita que se asusta al pasar el mouse.
+ * calcomanía: una calabacita que se asusta al pasar el mouse. El texto lo
+ * pone cada sección desde el diccionario (t.halloween.dare).
  */
-export function HwCornerButton({
-    href,
-    label = "entra, si te atreves",
-    className = "",
-}: {
-    href: string;
-    label?: string;
-    className?: string;
-}) {
+export function HwCornerButton({ href, label, className = "" }: { href: string; label: string; className?: string }) {
     return (
         <Link href={href} className={`group absolute bottom-7 right-7 z-30 flex items-center gap-3 ${className}`}>
             <span className={`${HW_FONT} hidden text-base text-[#f3ecd9] sm:inline`}>{label}</span>
