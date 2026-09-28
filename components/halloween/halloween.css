@@ -40,9 +40,12 @@
 
 /* El fantasma y la calabaza que se vienen hacia la pantalla (poster-zoom.tsx).
    En reposo se ven los del póster; mientras crecen ([data-zoom]), sus copias.
+   Donde hay animaciones ligadas al scroll, este cambio lo hacen ellas (sus
+   reglas las pone poster-zoom.tsx) y lo de aquí queda de respaldo.
    Lo que no se ve tampoco se anima: la vid, el parpadeo y la flama de una
-   copia escondida seguirían recalculándose en cada cuadro. Si se agrega un
-   monstruo al zoom, va también aquí. */
+   copia escondida seguirían recalculándose en cada cuadro. Solo el dibujo
+   (svg *): las capas de la copia llevan las animaciones del zoom.
+   Si se agrega un monstruo al zoom, va también aquí. */
 .hw-zoom-copy,
 [data-zoom] .hw-poster-scene [data-hw-id="fantasma-sabana"],
 [data-zoom] .hw-poster-scene [data-hw-id="calabaza-gigante"] {
@@ -53,13 +56,13 @@
     visibility: visible;
 }
 
-.hw-zoom-copy *,
+.hw-zoom-copy svg *,
 [data-zoom] .hw-poster-scene [data-hw-id="fantasma-sabana"] *,
 [data-zoom] .hw-poster-scene [data-hw-id="calabaza-gigante"] * {
     animation-play-state: paused;
 }
 
-[data-zoom] .hw-zoom-copy * {
+[data-zoom] .hw-zoom-copy svg * {
     animation-play-state: running;
 }
 

@@ -17,8 +17,11 @@ export function HalloweenPage({ lang }: { lang: Lang }) {
     return (
         // PosterStage envuelve TODA la página: así los monstruos que se asoman
         // en las secciones también siguen el cursor y reaccionan al toque.
+        // overflow-x-clip y no -hidden: hidden vuelve al <main> un contenedor de
+        // scroll (que nunca se mueve) y las animaciones ligadas al scroll del
+        // zoom del póster se quedarían congeladas en 0.
         <PosterStage>
-            <main className={`${gluten.variable} overflow-x-hidden bg-[#141216] text-[#f3ecd9]`}>
+            <main className={`${gluten.variable} overflow-x-clip bg-[#141216] text-[#f3ecd9]`}>
                 <HalloweenHeader />
                 <HalloweenPoster desktop={DESKTOP} mobile={MOBILE} lang={lang} />
                 <HalloweenSections />

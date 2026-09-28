@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { INK, P, v } from "./palette";
 
 // La araña que baja por su hilo conforme se hace scroll en la versión
@@ -18,25 +18,100 @@ import { INK, P, v } from "./palette";
 const TOP = -70; // escondida arriba, solo se ve el hilo
 const BOTTOM_GAP = 170; // se detiene antes de la burbuja de WhatsApp
 
+// Balanceo. Se limita por lo que la araña se desplaza de lado, no solo por el
+// ángulo: colgada de un hilo largo, pocos grados ya son media pantalla.
+const SWAY_PX_MOBILE = 40;
+const SWAY_PX_DESKTOP = 110;
+const MAX_ANGLE = 12;
+const DEG_PER_PX_S = 0.005; // 2500 px/s de scroll ≈ 12°
+
+// Resortes (rigidez K, amortiguamiento C = 2·ζ·√K). La posición rebota un
+// poco (ζ 0.7) pero nunca más de MAX_BOUNCE px de donde le toca estar.
+const POS_K = 110;
+const POS_C = 2 * 0.7 * Math.sqrt(POS_K);
+const MAX_BOUNCE = 60;
+const SWING_K = 40;
+const SWING_C = 2 * 0.6 * Math.sqrt(SWING_K);
+
 export function SpiderScroll() {
     const reduced = useReducedMotion();
     const { scrollYProgress, scrollY } = useScroll();
     const [maxY, setMaxY] = useState(600);
+    const swayPx = useRef(SWAY_PX_DESKTOP);
 
     useEffect(() => {
-        const update = () => setMaxY(Math.max(200, window.innerHeight - BOTTOM_GAP));
+        const update = () => {
+            setMaxY(Math.max(200, window.innerHeight - BOTTOM_GAP));
+            swayPx.current = window.innerWidth < 768 ? SWAY_PX_MOBILE : SWAY_PX_DESKTOP;
+        };
         update();
         window.addEventListener("resize", update, { passive: true });
         return () => window.removeEventListener("resize", update);
     }, []);
 
     const target = useTransform(scrollYProgress, [0, 0.04, 1], [TOP, 60, maxY]);
-    const sprung = useSpring(target, { stiffness: 90, damping: 11, mass: 0.8 });
-    const y = reduced ? target : sprung;
 
-    const velocity = useVelocity(scrollY);
-    const swingRaw = useTransform(velocity, [-2500, 0, 2500], [14, 0, -14], { clamp: true });
-    const swing = useSpring(swingRaw, { stiffness: 60, damping: 6 });
+    // Posición y balanceo se integran a mano, cuadro a cuadro. Antes eran dos
+    // useSpring: uno persiguiendo la posición y otro la velocidad del scroll.
+    // En celular esas entradas saltan mucho de un cuadro a otro, cada objetivo
+    // nuevo heredaba la inercia del anterior y los resortes acumulaban energía:
+    // la araña brincaba cientos de píxeles y llegaba a dar vueltas completas.
+    // Aquí la velocidad se suaviza primero, los dos resortes van casi en
+    // amortiguamiento crítico y ninguno puede pasar de su tope.
+    const hang = useMotionValue(TOP);
+    const swing = useMotionValue(0);
+    const sim = useRef({ primed: false, lastY: 0, vel: 0, pos: TOP, posVel: 0, angle: 0, spin: 0 });
+    useAnimationFrame((_, delta) => {
+        if (reduced) return;
+        const s = sim.current;
+        const sy = scrollY.get();
+        const goalY = target.get();
+        if (!s.primed) {
+            s.lastY = sy;
+            s.pos = goalY;
+            hang.set(goalY);
+            s.primed = true;
+            return;
+        }
+        const frame = Math.min(delta, 50) / 1000;
+        if (frame <= 0) return;
+        s.vel += ((sy - s.lastY) / frame - s.vel) * (1 - Math.exp(-frame / 0.15));
+        s.lastY = sy;
+
+        const settled =
+            Math.abs(s.vel) < 1 &&
+            Math.abs(s.angle) < 0.02 &&
+            Math.abs(s.spin) < 0.02 &&
+            Math.abs(goalY - s.pos) < 0.2 &&
+            Math.abs(s.posVel) < 0.5;
+        if (settled) {
+            if (s.angle !== 0 || s.pos !== goalY) {
+                s.angle = s.spin = s.posVel = 0;
+                s.pos = goalY;
+                swing.set(0);
+                hang.set(goalY);
+            }
+            return;
+        }
+
+        const rope = Math.max(80, s.pos + 30);
+        const maxAngle = Math.min(MAX_ANGLE, (Math.asin(Math.min(1, swayPx.current / rope)) * 180) / Math.PI);
+        const goalAngle = Math.max(-maxAngle, Math.min(maxAngle, -s.vel * DEG_PER_PX_S));
+
+        // Pasos cortos: con cuadros largos (celular ocupado) un solo paso grande
+        // se pasaría de largo.
+        const steps = Math.ceil(frame / (1 / 120));
+        const dt = frame / steps;
+        for (let i = 0; i < steps; i++) {
+            s.posVel += (POS_K * (goalY - s.pos) - POS_C * s.posVel) * dt;
+            s.pos = Math.max(goalY - MAX_BOUNCE, Math.min(goalY + MAX_BOUNCE, s.pos + s.posVel * dt));
+            s.spin += (SWING_K * (goalAngle - s.angle) - SWING_C * s.spin) * dt;
+            s.angle = Math.max(-maxAngle * 1.15, Math.min(maxAngle * 1.15, s.angle + s.spin * dt));
+        }
+        hang.set(s.pos);
+        swing.set(s.angle);
+    });
+    const y = reduced ? target : hang;
 
     // La araña se mueve con `y` (puede ser negativo: escondida arriba) y el hilo
     // llega hasta su lomo, que queda a ~30% de la altura del dibujo.
