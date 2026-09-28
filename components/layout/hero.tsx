@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, Variants, useMotionValue, useMotionVal
 import { Fragment, useRef, useEffect, useState } from "react";
 import { ScrollArrow } from "@/components/ui/scroll-arrow";
 import { ContactModal } from "@/components/pricing/contact-modal";
+import { HalloweenLink } from "@/components/halloween/halloween-link";
 import { useLang } from "@/lib/i18n/lang-context";
 
 
@@ -302,6 +303,7 @@ export function Hero() {
                             <br />
                             {t.hero.stats.line2}<br />
                             {t.hero.stats.line3}
+                            <HalloweenLink label={t.hero.halloween} className="mt-6 flex" />
                         </div>
                     </motion.div>
 
@@ -360,12 +362,15 @@ export function Hero() {
                             {t.hero.stats.line3}
                         </p>
 
-                        <button
-                            onClick={() => setIsContactOpen(true)}
-                            className="mt-8 bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-lg hover:bg-zinc-800 transition-colors w-fit"
-                        >
-                            {t.hero.cta}
-                        </button>
+                        <div className="mt-8 flex flex-wrap items-center gap-3">
+                            <button
+                                onClick={() => setIsContactOpen(true)}
+                                className="bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-lg hover:bg-zinc-800 transition-colors w-fit"
+                            >
+                                {t.hero.cta}
+                            </button>
+                            <HalloweenLink label={t.hero.halloween} />
+                        </div>
                     </motion.div>
 
                     <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />

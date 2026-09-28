@@ -1,0 +1,349 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Póster de Halloween — vocabulario de reacciones de los monstruos.
+
+   Cada monstruo es un <g class="hw-monster">. "Reaccionar" = pasar el mouse
+   encima (solo en dispositivos con hover real) o tocarlo en móvil (el JS le
+   pone .is-active un momento). Todo lo estático se resuelve con una sola
+   variable, --act (0 en reposo, 1 reaccionando); solo las animaciones
+   continuas necesitan selectores propios.
+
+   REGLA PARA DIBUJAR: una clase hw-* va en un <g> SIN atributo transform.
+   El transform de CSS pisa el del atributo, y con transform-box: fill-box
+   el origen del atributo también se movería. Si hace falta posicionar,
+   se anida otro <g> adentro.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.hw-scene {
+    --mx: 0;
+    --my: 0;
+}
+
+.hw-monster {
+    --act: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hw-monster.is-active {
+    --act: 1;
+}
+
+@media (hover: hover) {
+    .hw-monster:hover {
+        --act: 1;
+    }
+}
+
+.hw-deco {
+    pointer-events: none;
+}
+
+/* Todo lo que se transforma gira/escala sobre su propia caja. */
+.hw-pop,
+.hw-tongue,
+.hw-squish,
+.hw-stretch,
+.hw-jiggle,
+.hw-wave,
+.hw-flap,
+.hw-hop,
+.hw-shake,
+.hw-float,
+.hw-sway,
+.hw-flicker,
+.hw-buzz,
+.hw-twinkle,
+.hw-pupil {
+    transform-box: fill-box;
+    transform-origin: var(--o, 50% 50%);
+}
+
+/* ── Cambios de estado ─────────────────────────────────────────────────── */
+
+.hw-off {
+    opacity: calc(1 - var(--act));
+    transition: opacity 80ms linear;
+}
+
+.hw-on,
+.hw-tongue {
+    opacity: var(--act);
+    transition: opacity 80ms linear;
+}
+
+.hw-pop,
+.hw-tongue {
+    scale: calc(0.2 + var(--act) * 0.8);
+    transition:
+        opacity 80ms linear,
+        scale 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hw-tongue {
+    --o: 50% 0%;
+}
+
+.hw-glow {
+    transition: opacity 420ms ease-out;
+}
+
+/* ── Poses (transición con rebote al entrar y al salir) ────────────────── */
+
+.hw-squish {
+    --o: 50% 100%;
+    scale: calc(1 + var(--act) * 0.07) calc(1 - var(--act) * 0.09);
+    transition: scale 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hw-stretch {
+    --o: 50% 100%;
+    scale: calc(1 - var(--act) * 0.05) calc(1 + var(--act) * 0.08);
+    transition: scale 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hw-hop {
+    translate: 0 calc(var(--act) * var(--hop, -14px));
+    transition: translate 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Movimiento continuo mientras reacciona ────────────────────────────── */
+
+@keyframes hw-wave {
+    0%,
+    100% {
+        rotate: 0deg;
+    }
+    50% {
+        rotate: var(--wave, 18deg);
+    }
+}
+
+@keyframes hw-jiggle {
+    0%,
+    100% {
+        rotate: -4deg;
+    }
+    50% {
+        rotate: 4deg;
+    }
+}
+
+@keyframes hw-flap {
+    0%,
+    100% {
+        scale: 1 1;
+    }
+    50% {
+        scale: 1 0.45;
+    }
+}
+
+@keyframes hw-shake {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+    25% {
+        translate: -2px 0;
+    }
+    75% {
+        translate: 2px 0;
+    }
+}
+
+@keyframes hw-wag {
+    0%,
+    100% {
+        rotate: -7deg;
+    }
+    50% {
+        rotate: 7deg;
+    }
+}
+
+.hw-monster.is-active .hw-wave {
+    animation: hw-wave 520ms ease-in-out infinite;
+}
+.hw-monster.is-active .hw-jiggle {
+    animation: hw-jiggle 360ms ease-in-out infinite;
+}
+.hw-monster.is-active .hw-flap {
+    animation: hw-flap 160ms ease-in-out infinite;
+}
+.hw-monster.is-active .hw-shake {
+    animation: hw-shake 90ms linear infinite;
+}
+.hw-monster.is-active .hw-tongue {
+    animation: hw-wag 420ms ease-in-out 200ms infinite;
+}
+
+@media (hover: hover) {
+    .hw-monster:hover .hw-wave {
+        animation: hw-wave 520ms ease-in-out infinite;
+    }
+    .hw-monster:hover .hw-jiggle {
+        animation: hw-jiggle 360ms ease-in-out infinite;
+    }
+    .hw-monster:hover .hw-flap {
+        animation: hw-flap 160ms ease-in-out infinite;
+    }
+    .hw-monster:hover .hw-shake {
+        animation: hw-shake 90ms linear infinite;
+    }
+    .hw-monster:hover .hw-tongue {
+        animation: hw-wag 420ms ease-in-out 200ms infinite;
+    }
+}
+
+/* ── Vida en reposo ────────────────────────────────────────────────────── */
+
+/* Parpadeo: .hw-eye (ojos abiertos) se apaga y .hw-blink (párpados) se
+   enciende un instante. Cada monstruo trae su propio retraso en --bd para
+   que no parpadeen todos a la vez. Mientras reacciona, el parpadeo se para
+   y mandan hw-off / hw-on. */
+@keyframes hw-blink-open {
+    0%,
+    95%,
+    100% {
+        opacity: 1;
+    }
+    96%,
+    98.5% {
+        opacity: 0;
+    }
+}
+
+@keyframes hw-blink-lid {
+    0%,
+    95%,
+    100% {
+        opacity: 0;
+    }
+    96%,
+    98.5% {
+        opacity: 1;
+    }
+}
+
+.hw-blink {
+    opacity: 0;
+}
+
+.hw-monster:has(.hw-blink) .hw-eye {
+    animation: hw-blink-open var(--bp, 6.5s) linear var(--bd, 0s) infinite;
+}
+.hw-monster .hw-blink {
+    animation: hw-blink-lid var(--bp, 6.5s) linear var(--bd, 0s) infinite;
+}
+
+.hw-monster.is-active .hw-eye,
+.hw-monster.is-active .hw-blink {
+    animation: none;
+}
+.hw-monster.is-active .hw-blink {
+    opacity: 0;
+}
+@media (hover: hover) {
+    .hw-monster:hover .hw-eye,
+    .hw-monster:hover .hw-blink {
+        animation: none;
+    }
+    .hw-monster:hover .hw-blink {
+        opacity: 0;
+    }
+}
+
+/* Las pupilas siguen al cursor. --mx/--my (−1..1) los pone el JS de la
+   escena; --pr es cuánto se pueden mover, en unidades del monstruo. */
+.hw-pupil {
+    translate: calc(var(--mx) * var(--pr, 3px)) calc(var(--my) * var(--pr, 3px));
+    transition: translate 140ms ease-out;
+}
+
+@keyframes hw-float {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 var(--fa, -6px);
+    }
+}
+.hw-float {
+    animation: hw-float var(--fd, 3.4s) ease-in-out var(--bd, 0s) infinite;
+}
+
+@keyframes hw-sway {
+    0%,
+    100% {
+        rotate: calc(var(--sw, 3deg) * -1);
+    }
+    50% {
+        rotate: var(--sw, 3deg);
+    }
+}
+.hw-sway {
+    animation: hw-sway var(--sd, 4.6s) ease-in-out var(--bd, 0s) infinite;
+}
+
+@keyframes hw-flicker {
+    0%,
+    100% {
+        scale: 1 1;
+    }
+    30% {
+        scale: 0.92 1.08;
+    }
+    60% {
+        scale: 1.06 0.94;
+    }
+}
+.hw-flicker {
+    --o: 50% 100%;
+    animation: hw-flicker 900ms ease-in-out infinite;
+}
+
+@keyframes hw-buzz {
+    0%,
+    100% {
+        scale: 1 1;
+    }
+    50% {
+        scale: 1 0.6;
+    }
+}
+.hw-buzz {
+    animation: hw-buzz 110ms linear infinite;
+}
+
+@keyframes hw-twinkle {
+    0%,
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+    50% {
+        opacity: 0.35;
+        scale: 0.7;
+    }
+}
+.hw-twinkle {
+    animation: hw-twinkle var(--td, 2.8s) ease-in-out var(--bd, 0s) infinite;
+}
+
+/* ── Movimiento reducido: sin animaciones ni seguimiento; los cambios de
+   estado siguen funcionando, solo que instantáneos. ──────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .hw-scene *,
+    .hw-scene *::before,
+    .hw-scene *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    .hw-pupil {
+        translate: none !important;
+    }
+    .hw-blink {
+        opacity: 0 !important;
+    }
+}

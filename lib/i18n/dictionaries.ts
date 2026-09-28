@@ -86,6 +86,7 @@ const es = {
             line3: "nuestro trabajo y compromiso.",
         },
         cta: "Hablemos",
+        halloween: "Versión Halloween",
     },
     services: {
         eyebrow: "01 · Servicio",
@@ -1298,6 +1299,7 @@ const en: typeof es = {
             line3: "our craft and commitment.",
         },
         cta: "Let's Talk",
+        halloween: "Halloween version",
     },
     services: {
         eyebrow: "01 · Service",
