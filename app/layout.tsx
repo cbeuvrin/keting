@@ -114,6 +114,11 @@ const organizationJsonLd = {
   "@type": ["Organization", "ProfessionalService"],
   "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
+  // "Keting" a secas es como se busca la marca, y Google no siempre lo ligaba a
+  // Keting Media: fuera de México lo lee como otra cosa o como error de
+  // "marketing". La razón social es la del aviso de privacidad.
+  alternateName: "Keting",
+  legalName: "Keting Media, S.A. de C.V.",
   url: SITE_URL,
   logo: `${SITE_URL}/keting-logo.png`,
   // LocalBusiness espera `image`; sin ella Google descarta parte del bloque.
@@ -182,10 +187,17 @@ const organizationJsonLd = {
     // "es" y contradecía a las propias páginas inglesas.
     availableLanguage: ["es", "en"],
   },
+  // Perfiles que confirman que son la misma entidad. El de Google va con su
+  // `cid` (forma estable; el enlace corto de "Compartir" puede cambiar), y el
+  // GitHub es el de la organización, no el personal de Carlos.
   sameAs: [
     "https://www.linkedin.com/company/ketingmedia",
     "https://www.instagram.com/keting_media/",
     "https://www.facebook.com/ketingmedia/",
+    "https://www.google.com/maps?cid=10744026976244037767",
+    "https://clutch.co/profile/keting-media",
+    "https://www.sortlist.com/es/agency/keting-media",
+    "https://github.com/KetingMedia",
   ],
 };
 
@@ -193,6 +205,7 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE_NAME,
+  alternateName: "Keting",
   url: SITE_URL,
   potentialAction: {
     "@type": "SearchAction",
