@@ -2,57 +2,106 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink, BarChart3, Users, FolderKanban, Wallet } from "lucide-react";
 
-// Barra lateral fija del panel. En móvil se reparte en cinco columnas iguales
-// con el icono sobre la etiqueta: en fila los cinco enlaces medían 544 px en
-// una pantalla de 390 y arrastraban toda la página de lado.
+// Barra lateral fija del panel ADM, con dos grupos: CRM (prospección) y
+// CLIENTES (cobranza). En escritorio se ven los dos grupos apilados. En móvil
+// arriba va un selector CRM | CLIENTES y debajo solo las pestañas del grupo
+// actual, repartidas en columnas iguales con el icono sobre la etiqueta: en
+// fila los enlaces medían 544 px en una pantalla de 390 y arrastraban toda la
+// página de lado.
 
-const NAV = [
-    { href: "/admin", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
-    { href: "/admin/contactos", label: "Contactos", short: "Contactos", icon: Table2 },
-    { href: "/admin/networking", label: "Networking", short: "Evento", icon: ScanLine },
-    { href: "/admin/campana", label: "Campaña", short: "Campaña", icon: Send },
-    { href: "/admin/plantilla", label: "Plantilla", short: "Plantilla", icon: FileText },
+const GROUPS = [
+    {
+        key: "crm",
+        title: "CRM",
+        home: "/admin",
+        items: [
+            { href: "/admin", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
+            { href: "/admin/contactos", label: "Contactos", short: "Contactos", icon: Table2 },
+            { href: "/admin/networking", label: "Networking", short: "Evento", icon: ScanLine },
+            { href: "/admin/campana", label: "Campaña", short: "Campaña", icon: Send },
+            { href: "/admin/plantilla", label: "Plantilla", short: "Plantilla", icon: FileText },
+        ],
+    },
+    {
+        key: "clientes",
+        title: "CLIENTES",
+        home: "/admin/clientes",
+        items: [
+            { href: "/admin/clientes", label: "Resumen", short: "Resumen", icon: BarChart3 },
+            { href: "/admin/clientes/lista", label: "Clientes", short: "Clientes", icon: Users },
+            { href: "/admin/clientes/proyectos", label: "Proyectos", short: "Proyectos", icon: FolderKanban },
+            { href: "/admin/clientes/pagos", label: "Pagos", short: "Pagos", icon: Wallet },
+        ],
+    },
 ];
+
+// Las portadas de grupo solo se marcan en su ruta exacta; si no, "/admin"
+// quedaría activo en todo el panel.
+const EXACT = new Set(GROUPS.map((g) => g.home));
 
 export function Sidebar() {
     const pathname = usePathname() ?? "";
 
-    const isActive = (href: string) =>
-        href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+    const isActive = (href: string) => (EXACT.has(href) ? pathname === href : pathname.startsWith(href));
+    const current = pathname.startsWith("/admin/clientes") ? "clientes" : "crm";
+    const currentGroup = GROUPS.find((g) => g.key === current)!;
+
+    const linkCls = (active: boolean) =>
+        `flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-2.5 px-1 md:px-3 py-2 md:py-2.5 rounded-md text-[11px] md:text-sm transition-colors ${
+            active ? "bg-[#111111] text-white" : "text-[#1d1d1f]/70 hover:bg-[#1d1d1f]/[0.05] hover:text-[#1d1d1f]"
+        }`;
+
+    const renderItem = ({ href, label, short, icon: Icon }: (typeof GROUPS)[number]["items"][number]) => (
+        <Link key={href} href={href} className={linkCls(isActive(href))}>
+            <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.75} />
+            <span className="max-w-full truncate leading-none md:leading-normal">{short}</span>
+            <span className="sr-only">{label}</span>
+        </Link>
+    );
 
     return (
         <aside className="md:w-[220px] md:shrink-0 md:min-h-screen sticky top-0 z-30 md:z-auto bg-white border-b md:border-b-0 md:border-r border-[#1d1d1f]/10">
-            <div className="hidden md:block px-6 pt-7 pb-8">
+            <div className="hidden md:block px-6 pt-7 pb-6">
                 <Link href="/admin" className="flex items-baseline gap-2">
-                    <span className="font-bold tracking-tight text-lg">CRM</span>
+                    <span className="font-bold tracking-tight text-lg">ADM</span>
                     <span className="text-[#1d1d1f]/25">·</span>
-                    <span className="font-[family-name:var(--font-playfair)] italic text-[#1d1d1f]/70">
-                        Keting
-                    </span>
+                    <span className="font-[family-name:var(--font-playfair)] italic text-[#1d1d1f]/70">Keting</span>
                 </Link>
             </div>
 
-            <nav className="grid grid-cols-5 md:flex md:flex-col gap-0.5 md:gap-1 px-1.5 md:px-3 py-1.5 md:py-0">
-                {NAV.map(({ href, label, short, icon: Icon }) => {
-                    const active = isActive(href);
-                    return (
+            {/* Móvil: selector de grupo + pestañas del grupo actual. */}
+            <div className="md:hidden">
+                <div className="flex gap-1 px-1.5 pt-1.5">
+                    {GROUPS.map((g) => (
                         <Link
-                            key={href}
-                            href={href}
-                            className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-2.5 px-1 md:px-3 py-2 md:py-2.5 rounded-md text-[11px] md:text-sm transition-colors ${
-                                active
-                                    ? "bg-[#111111] text-white"
-                                    : "text-[#1d1d1f]/70 hover:bg-[#1d1d1f]/[0.05] hover:text-[#1d1d1f]"
+                            key={g.key}
+                            href={g.home}
+                            className={`flex-1 text-center py-1.5 rounded-md text-[11px] font-medium tracking-[0.12em] transition-colors ${
+                                g.key === current ? "bg-[#1d1d1f]/[0.07] text-[#1d1d1f]" : "text-[#1d1d1f]/45"
                             }`}
                         >
-                            <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.75} />
-                            <span className="max-w-full truncate leading-none md:leading-normal">{short}</span>
-                            <span className="sr-only">{label}</span>
+                            {g.title}
                         </Link>
-                    );
-                })}
+                    ))}
+                </div>
+                <nav
+                    className="grid gap-0.5 px-1.5 py-1.5"
+                    style={{ gridTemplateColumns: `repeat(${currentGroup.items.length}, minmax(0, 1fr))` }}
+                >
+                    {currentGroup.items.map(renderItem)}
+                </nav>
+            </div>
+
+            {/* Escritorio: los dos grupos apilados. */}
+            <nav className="hidden md:flex md:flex-col gap-6 px-3 pb-24">
+                {GROUPS.map((g) => (
+                    <div key={g.key} className="flex flex-col gap-1">
+                        <p className="px-3 pb-1 text-[11px] font-medium tracking-[0.14em] text-[#1d1d1f]/40">{g.title}</p>
+                        {g.items.map(renderItem)}
+                    </div>
+                ))}
             </nav>
 
             <div className="hidden md:block absolute bottom-0 w-[220px] p-3">
