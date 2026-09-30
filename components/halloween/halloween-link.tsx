@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 export function HalloweenLink({ label, className }: { label: string; className?: string }) {
     const { lang } = useLang();
     return (
+        // Sin prefetch: el botón está en el hero, así que Next bajaba la página
+        // entera de Halloween (~140 KB) en cada visita al home, aunque nadie la abriera.
         <Link
             href={enHref("/halloween", lang === "en")}
+            prefetch={false}
             className={cn(
                 "group inline-flex items-center gap-2.5 w-fit rounded-2xl border border-black/80 px-6 py-4 text-sm font-bold text-black transition-colors hover:bg-black hover:text-white",
                 className,

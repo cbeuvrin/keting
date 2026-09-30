@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { articles } from "@/lib/blog-data";
-import { optimizeImageUrl } from "@/lib/blog-utils";
+import { getCategoryImage } from "@/lib/blog-utils";
 import { useLang } from "@/lib/i18n/lang-context";
 import { EN_ARTICLES } from "@/lib/blog-en";
 import { Cobweb, HW, HW_FONT, HwEyebrow, Peek } from "./hw-ui";
@@ -188,7 +188,7 @@ function HwBlogCard({
                     <div
                         className="absolute inset-0 opacity-15 grayscale transition-all duration-700 group-hover:opacity-30 group-hover:grayscale-0"
                         style={{
-                            backgroundImage: `url(${optimizeImageUrl(article.image || "/images/blog/placeholder.png", 700)})`,
+                            backgroundImage: `url(${getCategoryImage(article, 700)})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                         }}

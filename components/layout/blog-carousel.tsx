@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { articles } from "@/lib/blog-data";
-import { optimizeImageUrl } from "@/lib/blog-utils";
+import { getCategoryImage } from "@/lib/blog-utils";
 import { useLang } from "@/lib/i18n/lang-context";
 import { EN_ARTICLES } from "@/lib/blog-en";
 
@@ -59,7 +59,7 @@ function BlogCard({
                 <div
                     className="absolute inset-0 opacity-15 grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-700"
                     style={{
-                        backgroundImage: `url(${optimizeImageUrl(article.image || '/images/blog/placeholder.png', 700)})`,
+                        backgroundImage: `url(${getCategoryImage(article, 700)})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center'
                     }}
