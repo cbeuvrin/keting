@@ -1,4 +1,5 @@
-.board { --line: #e3e5e4; --muted: #6d7470; --green: #326b54; height: 100dvh; display: flex; flex-direction: column; padding: 16px 20px 12px; color: #242b27; background: #fbfcfa; min-width: 0; font-size: 13px; }
+.board, .viewport { --line: #e3e5e4; --muted: #6d7470; --green: #326b54; }
+.board { height: 100dvh; display: flex; flex-direction: column; padding: 16px 20px 12px; color: #242b27; background: #fbfcfa; min-width: 0; font-size: 13px; }
 .header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-bottom: 10px; }
 .header h1 { font-size: 22px; font-weight: 650; letter-spacing: -.7px; }
 .header small { color: var(--muted); font-size: 12px; margin-left: 10px; }
@@ -17,13 +18,13 @@
 .search { width: 205px; padding: 6px 9px; border: 1px solid var(--line); background: white; border-radius: 5px; font-size: 12px; }
 .viewport { flex: 1; min-height: 160px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: white; position: relative; overscroll-behavior: contain; }
 .table { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12px; width: 100%; }
-.table th { position: sticky; top: 0; z-index: 4; background: #f0f3f0; text-align: left; height: 34px; color: #626b65; font-weight: 500; border-bottom: 1px solid #d7ded8; border-right: 1px solid var(--line); padding: 0 8px; white-space: nowrap; }
+.table th { text-transform: none; letter-spacing: normal; position: sticky; top: 0; z-index: 4; background: #f0f3f0; text-align: left; height: 34px; color: #626b65; font-weight: 500; border-bottom: 1px solid #d7ded8; border-right: 1px solid var(--line); padding: 0 8px; white-space: nowrap; }
 .table td { background: white; border-bottom: 1px solid #edf0ed; border-right: 1px solid #edf0ed; padding: 0 5px; height: 43px; vertical-align: middle; }
 .table tr:hover > td { background: #f7faf7; }
 .table .fixed { position: sticky; z-index: 2; background: white; }
 .table th.fixed { z-index: 6; background: #f0f3f0; }
 .table td.fixedLast { border-right: 1px solid #c8d2ca; }
-.table tfoot td { position: sticky; bottom: 0; z-index: 3; height: 33px; background: #f0f3f0; border-top: 1px solid var(--line); font-weight: 600; }
+.table tfoot td { text-transform: none; letter-spacing: normal; font-size: 11px; position: sticky; bottom: 0; z-index: 3; height: 33px; background: #f0f3f0; border-top: 1px solid var(--line); font-weight: 600; }
 .cell { width: 100%; min-width: 0; height: 30px; padding: 4px 5px; border: 1px solid transparent; border-radius: 3px; background: transparent; font-size: 12px; outline: none; text-overflow: ellipsis; color: inherit; }
 .cell:hover { border-color: #ced9d0; background: white; }
 .cell:focus { border-color: #4b8064; box-shadow: 0 0 0 1px #4b8064; background: white; }
@@ -45,7 +46,7 @@
 .project { display: flex; align-items: center; gap: 2px; }
 .icon { width: 22px; height: 26px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; }
 .icon:hover { background: #e5ece6; }
-.client { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 6px 4px; font-weight: 550; }
+.client { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 4px; font-weight: 550; }
 .client:hover { text-decoration: underline; text-underline-offset: 3px; }
 .group td { height: 30px; background: #edf3ee !important; color: #42604c; font-weight: 600; }
 .resize { position: absolute; right: -3px; top: 0; height: 100%; width: 7px; cursor: col-resize; z-index: 7; touch-action: none; }
@@ -84,3 +85,11 @@
     .table th.fixed { position: sticky; left: auto !important; }
     .footer span:last-child { display: none; }
 }
+
+.button[aria-current=page] { background: #edf3ee; border-color: #a9b8af; color: #2e5947; font-weight: 600; }
+.embedded { flex: none; min-height: 0; }
+.capture, .capturePanel { flex-shrink: 0; padding: 12px; margin: 10px 0 0; border: 1px solid var(--line); border-radius: 5px; background: white; }
+.capture { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.capture .search { flex: 1 1 150px; min-width: 0; }
+.capturePanel { max-height: 45dvh; overflow: auto; }
+.capturePanel input, .capturePanel select { font-size: 12px; }

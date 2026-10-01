@@ -14,6 +14,7 @@ import { Cell } from "./Cell";
 import { Details, parseAmount } from "./Details";
 import { useSheet, type SheetChange } from "./useSheet";
 import { usePreferences } from "./preferences";
+import { SheetHeader } from "./SheetHeader";
 import { RetainersSheet } from "./RetainersSheet";
 import styles from "./sheet.module.css";
 
@@ -171,7 +172,7 @@ export function FinancialBoard({ data: source, initialView = "todos", initialQue
     };
 
     return <main className={styles.board}>
-        <header className={styles.header}><div className="flex items-baseline"><h1>{monthly ? "Fijos y recurrentes" : "Finanzas"}</h1></div><div className={styles.actions}><nav aria-label="Secciones financieras" className={styles.actions}><Link href="/admin/clientes/lista" className={styles.button}>Clientes</Link><Link href="/admin/clientes/proyectos" className={styles.button}>Proyectos</Link><Link href="/admin/clientes/pagos" className={styles.button}>Pagos</Link></nav><Link href="/admin/clientes/evolucion" className={styles.button}><ChartNoAxesCombined size={14} /> Evolución</Link><button type="button" className={`${styles.button} ${styles.primary}`} onClick={() => setCreating(!creating)}><Plus size={14} /> {monthly ? "Servicio recurrente" : "Proyecto"}</button></div></header>
+        <SheetHeader title={monthly ? "Fijos y recurrentes" : "Finanzas"}><Link href="/admin/clientes/evolucion" className={styles.button}><ChartNoAxesCombined size={14} /> Evolución</Link><button type="button" className={`${styles.button} ${styles.primary}`} onClick={() => setCreating(!creating)}><Plus size={14} /> {monthly ? "Servicio recurrente" : "Proyecto"}</button></SheetHeader>
         <div className={styles.strip}><span>Cobrado este mes<strong>{formatMoney(collected)}</strong></span><span>Proyectos por cobrar<strong>{formatMoney(pending)}</strong></span><Link href="/admin/clientes/recurrentes" className="underline underline-offset-4">Fijos y recurrentes · {data.retainers.length}<strong>{formatMoney(recurring)} por cobrar</strong></Link><span className="ml-auto text-[10px]">Totales MXN</span></div>
         <div className={styles.tabs} role="group" aria-label="Vistas financieras">{VIEWS.map((v) => <button key={v.id} type="button" className={styles.tab} aria-pressed={view === v.id} onClick={() => { setView(v.id); setCreating(false); setQuery(""); setStatus(""); }}>{v.label}<span className="ml-1.5 opacity-55">{v.id === "mensualidades" ? data.retainers.length : rows.filter((r) => matchesView(r, v.id)).length}</span></button>)}</div>
         <div className={styles.toolbar}>

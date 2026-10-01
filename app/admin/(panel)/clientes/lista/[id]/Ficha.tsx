@@ -1,4 +1,5 @@
 "use client";
+import styles from "../../sheet/sheet.module.css";
 import { QuincenalSummary } from "../../sheet/RecurringSchedule";
 
 import { useState } from "react";
@@ -161,8 +162,8 @@ function ProjectsSection({ clientId, summary, quotes }: { clientId: string; summ
         <section className={`${cardCls} p-5 mb-6`}>
             <h2 className="font-bold tracking-tight mb-4">Proyectos</h2>
             {summary.projects.length > 0 && (
-                <div className="overflow-x-auto mb-5 -mx-2">
-                    <table className="w-full text-sm min-w-[1060px]">
+                <div className={`${styles.viewport} ${styles.embedded} mb-5`}>
+                    <table className={styles.table} style={{ minWidth: 1160 }} aria-label="Proyectos del cliente"><colgroup>{[210, 130, 105, 105, 105, 135, 170, 160, 40].map((width, i) => <col key={i} style={{ width }} />)}</colgroup>
                         <thead>
                             <tr>
                                 <th className={`${thCls} min-w-[200px]`}>Proyecto</th>
@@ -180,10 +181,10 @@ function ProjectsSection({ clientId, summary, quotes }: { clientId: string; summ
                             {summary.projects.map(({ project: p, balance: b }) => (
                                 <tr key={p.id} className="border-t border-[#1d1d1f]/[0.06]">
                                     <td className="px-1 py-1">
-                                        <input key={p.name} defaultValue={p.name} onBlur={(ev) => save(p.id, "name", ev.target.value, p.name)} className={cellInputCls} />
+                                        <input key={p.name} defaultValue={p.name} onBlur={(ev) => save(p.id, "name", ev.target.value, p.name)} className={styles.cell} />
                                     </td>
                                     <td className="px-1 py-1">
-                                        <select value={p.status} onChange={(ev) => run(`projects/${p.id}`, "PATCH", { status: ev.target.value })} className={`${cellInputCls} pr-6`}>
+                                        <select value={p.status} onChange={(ev) => run(`projects/${p.id}`, "PATCH", { status: ev.target.value })} className={`${styles.cell} pr-6`}>
                                             {PROJECT_STATUSES.map((st) => (
                                                 <option key={st} value={st}>
                                                     {STATUS_LABELS[st]}
@@ -197,7 +198,7 @@ function ProjectsSection({ clientId, summary, quotes }: { clientId: string; summ
                                             defaultValue={p.total}
                                             inputMode="decimal"
                                             onBlur={(ev) => save(p.id, "total", ev.target.value, p.total)}
-                                            className={`${cellInputCls} text-right tabular-nums`}
+                                            className={`${styles.cell} text-right tabular-nums`}
                                         />
                                     </td>
                                     <td className="px-3 py-1 text-right">
@@ -212,11 +213,11 @@ function ProjectsSection({ clientId, summary, quotes }: { clientId: string; summ
                                             type="date"
                                             defaultValue={p.delivery_date ?? ""}
                                             onBlur={(ev) => save(p.id, "delivery_date", ev.target.value, p.delivery_date)}
-                                            className={cellInputCls}
+                                            className={styles.cell}
                                         />
                                     </td>
                                     <td className="px-1 py-1">
-                                        <input key={p.notes ?? ""} defaultValue={p.notes ?? ""} onBlur={(ev) => save(p.id, "notes", ev.target.value, p.notes)} className={cellInputCls} />
+                                        <input key={p.notes ?? ""} defaultValue={p.notes ?? ""} onBlur={(ev) => save(p.id, "notes", ev.target.value, p.notes)} className={styles.cell} />
                                     </td>
                                     <td className="px-3 py-1">
                                         <FileCell apiPath={`projects/${p.id}/quote`} has={withQuote.has(p.id)} accept={QUOTE_ACCEPT} maxMb={25} label="la cotización de este proyecto" />
