@@ -357,10 +357,10 @@ export function PaymentForm({
                         </optgroup>
                     )}
                     {clientRetainers.length > 0 && (
-                        <optgroup label="Mensualidades">
+                        <optgroup label="Servicios recurrentes">
                             {clientRetainers.map((r) => (
                                 <option key={r.id} value={`r:${r.id}`}>
-                                    {r.concept} · {formatMoney(r.monthly_amount, cur)}/mes
+                                    {r.concept} · {formatMoney(r.monthly_amount, cur)}/{r.frequency === "quincenal" ? "quincena" : "mes"}
                                 </option>
                             ))}
                         </optgroup>
@@ -410,5 +410,5 @@ export function clientName(clients: Client[], id: string): string {
 export function paymentTarget(payment: Payment, projects: Project[], retainers: Retainer[]): string {
     if (payment.project_id) return projects.find((p) => p.id === payment.project_id)?.name ?? "Proyecto";
     const r = retainers.find((x) => x.id === payment.retainer_id);
-    return r ? `Mensualidad · ${r.concept}` : "Mensualidad";
+    return r ? `${r.frequency === "quincenal" ? "Quincena" : "Mensualidad"} · ${r.concept}` : "Servicio recurrente";
 }

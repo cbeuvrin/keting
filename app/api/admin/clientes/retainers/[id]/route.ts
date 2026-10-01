@@ -1,5 +1,6 @@
+import { frequencyKey } from "@/lib/retainer-frequency";
 import { addMonths } from "@/lib/clientes";
-import { bad, conflict, db, fail, guard, INVALID, money, month, ok, readBody, text } from "@/lib/clientes-api";
+import { bad, conflict, date, db, fail, guard, INVALID, money, month, ok, readBody, text } from "@/lib/clientes-api";
 
 export const runtime = "nodejs";
 
@@ -18,8 +19,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     const { data: current, error: readErr } = await client.from("cli_retainers").select("*").eq("id", id).single();
     if (readErr) return fail(readErr);
+    const { data: config, error: configError } = await client.from("crm_settings").select("value").eq("key", frequencyKey(id)).maybeSingle();
+    if (configError) return fail(configError);
+    const fortnightly = config?.value?.frequency === "quincenal";
 
     if (body.new_amount !== undefined) {
+        if (fortnightly) return bad("Para una tarifa quincenal nueva, termina el servicio actual y crea otro desde la fecha del cambio. Puedes corregir el importe original en Recurrentes.");
         const amount = money(body.new_amount);
         const from = month(body.from_month);
         if (amount === INVALID || !amount) return bad("El monto nuevo debe ser mayor a cero");
@@ -49,14 +54,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         if (!concept) return bad("El concepto no puede quedar vacío");
         patch.concept = concept;
     }
-    const start = month(body.start_month);
-    if (start === INVALID || start === null) return bad("Indica un mes de inicio válido");
+    const start = fortnightly ? date(body.start_month) : month(body.start_month);
+    if (start === INVALID || start === null) return bad("Indica un inicio válido");
     if (start !== undefined) patch.start_month = start;
     const correctedAmount = money(body.monthly_amount);
-    if (correctedAmount === INVALID || correctedAmount === 0) return bad("El importe mensual debe ser mayor a cero");
+    if (correctedAmount === INVALID || correctedAmount === 0) return bad("El importe por cobro debe ser mayor a cero");
     if (correctedAmount !== undefined) patch.monthly_amount = correctedAmount;
-    const end = month(body.end_month);
-    if (end === INVALID) return bad("El mes de fin no es válido");
+    const end = fortnightly ? date(body.end_month) : month(body.end_month);
+    if (end === INVALID) return bad("La fecha de fin no es válida");
     if (end !== undefined) patch.end_month = end;
     const nextStart = start ?? current.start_month;
     const nextEnd = end === undefined ? current.end_month : end;
@@ -81,5 +86,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
     const { error } = await client.from("cli_retainers").delete().eq("id", id);
     if (error) return fail(error);
+    await client.from("crm_settings").delete().eq("key", frequencyKey(id));
     return ok();
 }

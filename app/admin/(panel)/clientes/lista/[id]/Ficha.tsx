@@ -1,4 +1,5 @@
 "use client";
+import { QuincenalSummary } from "../../sheet/RecurringSchedule";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -278,10 +279,10 @@ function RetainersSection({ clientId, summary, today }: { clientId: string; summ
 
     return (
         <section className={`${cardCls} p-5 mb-6`}>
-            <h2 className="font-bold tracking-tight mb-4">Mensualidades</h2>
+            <h2 className="font-bold tracking-tight mb-4">Servicios recurrentes</h2>
             {summary.retainers.length > 0 && (
                 <div className="grid gap-3 mb-5">
-                    {summary.retainers.map(({ retainer: r, balance: b }) => (
+                    {summary.retainers.map(({ retainer: r, balance: b }) => r.frequency === "quincenal" ? <QuincenalSummary key={r.id} retainer={r} balance={b} /> : (
                         <div key={r.id} className="border border-[#1d1d1f]/10 rounded-md p-4 flex flex-wrap items-center justify-between gap-4">
                             <div className="min-w-0">
                                 <div className="font-medium">
@@ -339,6 +340,7 @@ function RetainersSection({ clientId, summary, today }: { clientId: string; summ
                     ))}
                 </div>
             )}
+            <Link href="/admin/clientes/cobros?tipo=mensualidad" className="text-sm underline block mb-4">Agregar o editar cobros quincenales</Link>
             <form onSubmit={create} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_auto] items-end">
                 <input required value={draft.concept} onChange={(ev) => setDraft({ ...draft, concept: ev.target.value })} placeholder="Concepto" className={inputCls} />
                 <input required inputMode="decimal" value={draft.monthly_amount} onChange={(ev) => setDraft({ ...draft, monthly_amount: ev.target.value })} placeholder="Monto por mes $" className={inputCls} />

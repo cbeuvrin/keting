@@ -16,7 +16,7 @@ import { usePreferences } from "./preferences";
 import { RetainersSheet } from "./RetainersSheet";
 import styles from "./sheet.module.css";
 
-const VIEWS = [{ id: "todos", label: "Todos los proyectos" }, { id: "anticipo", label: "Falta anticipo" }, { id: "finiquito", label: "Falta finiquito" }, { id: "entregados", label: "Entregados sin liquidar" }, { id: "por-cobrar", label: "Por cobrar" }, { id: "mensualidades", label: "Mensualidades" }];
+const VIEWS = [{ id: "todos", label: "Todos los proyectos" }, { id: "anticipo", label: "Falta anticipo" }, { id: "finiquito", label: "Falta finiquito" }, { id: "entregados", label: "Entregados sin liquidar" }, { id: "por-cobrar", label: "Por cobrar" }, { id: "mensualidades", label: "Recurrentes" }];
 const COLUMNS = [
     { id: "client", label: "Cliente", width: 132, fixed: true },
     { id: "name", label: "Proyecto", width: 185, fixed: true },
@@ -55,7 +55,7 @@ export function FinancialBoard({ data: source, initialView = "todos", initialQue
     const data = useMemo<ClientesData>(() => ({ ...source,
         projects: source.projects.map((p) => ({ ...p, ...sheet.overrides[`projects/${p.id}`] })),
         payments: source.payments.map((p) => ({ ...p, ...sheet.overrides[`payments/${p.id}`] })),
-        retainers: source.retainers.map((r) => ({ ...r, ...sheet.overrides[`retainers/${r.id}`] })),
+        retainers: source.retainers.map((r) => ({ ...r, ...sheet.overrides[`retainers/${r.id}`], ...sheet.overrides[`retainers/${r.id}/frequency`] })),
     }), [source, sheet.overrides]);
     const rows = useMemo<ProjectRow[]>(() => data.projects.map((project) => {
         const plan = (sheet.overrides[`projects/${project.id}/plan`] as PaymentPlan | undefined) ?? data.paymentPlans?.[project.id] ?? defaultPaymentPlan();
@@ -170,8 +170,8 @@ export function FinancialBoard({ data: source, initialView = "todos", initialQue
     };
 
     return <main className={styles.board}>
-        <header className={styles.header}><div className="flex items-baseline"><h1>Finanzas</h1><small>Tu mesa de trabajo</small></div><div className={styles.actions}><Link href="/admin/clientes/evolucion" className={styles.button}><ChartNoAxesCombined size={14} /> Evolución</Link><button type="button" className={`${styles.button} ${styles.primary}`} onClick={() => setCreating(!creating)}><Plus size={14} /> {monthly ? "Mensualidad" : "Proyecto"}</button></div></header>
-        <div className={styles.strip}><span>Cobrado este mes<strong>{formatMoney(collected)}</strong></span><span>Proyectos por cobrar<strong>{formatMoney(pending)}</strong></span><span>Mensualidades<strong>{formatMoney(recurring)}</strong></span><span className="ml-auto text-[10px]">Totales MXN</span></div>
+        <header className={styles.header}><div className="flex items-baseline"><h1>Finanzas</h1><small>Tu mesa de trabajo</small></div><div className={styles.actions}><Link href="/admin/clientes/evolucion" className={styles.button}><ChartNoAxesCombined size={14} /> Evolución</Link><button type="button" className={`${styles.button} ${styles.primary}`} onClick={() => setCreating(!creating)}><Plus size={14} /> {monthly ? "Servicio recurrente" : "Proyecto"}</button></div></header>
+        <div className={styles.strip}><span>Cobrado este mes<strong>{formatMoney(collected)}</strong></span><span>Proyectos por cobrar<strong>{formatMoney(pending)}</strong></span><span>Recurrentes por cobrar<strong>{formatMoney(recurring)}</strong></span><span className="ml-auto text-[10px]">Totales MXN</span></div>
         <div className={styles.tabs} role="group" aria-label="Vistas financieras">{VIEWS.map((v) => <button key={v.id} type="button" className={styles.tab} aria-pressed={view === v.id} onClick={() => { setView(v.id); setCreating(false); }}>{v.label}<span className="ml-1.5 opacity-55">{v.id === "mensualidades" ? data.retainers.length : rows.filter((r) => matchesView(r, v.id)).length}</span></button>)}</div>
         <div className={styles.toolbar}>
             <div className={styles.actions}><input type="search" aria-label="Buscar cliente o proyecto" placeholder="Buscar cliente o proyecto…" className={styles.search} value={query} onChange={(ev) => setQuery(ev.target.value)} />
@@ -186,7 +186,7 @@ export function FinancialBoard({ data: source, initialView = "todos", initialQue
             </div>
         </div>
         {saveViewOpen && <form className={`${styles.actions} mb-2`} onSubmit={(ev) => { ev.preventDefault(); if (!viewName.trim()) return; update({ views: [...preferences.views.filter((v) => v.name !== viewName.trim()), { name: viewName.trim(), view, query, status, group, hidden: preferences.hidden }].slice(-20) }); setSaveViewOpen(false); setViewName(""); sheet.setMessage("Vista guardada en este navegador"); }}><input className={styles.search} required maxLength={60} aria-label="Nombre de la vista" placeholder="Nombre de la vista" value={viewName} onChange={(ev) => setViewName(ev.target.value)} /><button className={styles.button} type="submit">Guardar</button><button className={styles.button} type="button" onClick={() => setSaveViewOpen(false)}>Cancelar</button></form>}
-        {creating && <CreateRow data={data} monthly={monthly} onDone={() => { setCreating(false); sheet.setMessage(monthly ? "Mensualidad creada" : "Proyecto creado"); }} onError={sheet.setError} onCancel={() => setCreating(false)} />}
+        {creating && <CreateRow data={data} monthly={monthly} onDone={() => { setCreating(false); sheet.setMessage(monthly ? "Servicio recurrente creado" : "Proyecto creado"); }} onError={sheet.setError} onCancel={() => setCreating(false)} />}
         {sheet.error && <div role="alert" className={`${styles.notice} ${styles.error}`}><span>{sheet.error}</span><button type="button" className="ml-3 underline" onClick={() => sheet.setError("")}>Cerrar</button></div>}
         {monthly ? <RetainersSheet data={data} sheet={sheet} query={query} /> : <div className={styles.viewport}>
             <table ref={tableRef} className={styles.table} style={{ minWidth: cols.reduce((n, c) => n + width(c.id), 0) }} aria-label="Proyectos y plan de cobro">
@@ -212,6 +212,7 @@ function CreateRow({ data, monthly, onDone, onError, onCancel }: { data: Cliente
     const [client, setClient] = useState("");
     const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
+    const [frequency, setFrequency] = useState("mensual");
     const [date, setDate] = useState(monthly ? data.today.slice(0, 7) : "");
     // router.refresh trae el registro nuevo sin salir de la tabla.
     const router = useRouter();
@@ -219,16 +220,18 @@ function CreateRow({ data, monthly, onDone, onError, onCancel }: { data: Cliente
         ev.preventDefault(); if (busy) return; const total = parseAmount(amount); if (total === null || (monthly && total === 0)) { onError("Introduce un importe válido."); return; }
         setBusy(true); onError("");
         try {
-            const response = await fetch(`/api/admin/clientes/${monthly ? "retainers" : "projects"}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(monthly ? { client_id: client, concept: name, monthly_amount: total, start_month: date } : { client_id: client, name, total, delivery_date: date || null, status: "aprobado" }) });
+            const response = await fetch(`/api/admin/clientes/${monthly ? "retainers" : "projects"}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(monthly ? { client_id: client, concept: name, monthly_amount: total, start_month: date, frequency } : { client_id: client, name, total, delivery_date: date || null, status: "aprobado" }) });
             const body = await response.json().catch(() => ({})); if (!response.ok) { onError(body.error ?? "No se pudo crear."); return; }
             router.refresh(); onDone();
         } catch { onError("Se perdió la conexión. Revisa si se creó el registro antes de volver a enviarlo."); } finally { setBusy(false); }
     }}>
         <select disabled={busy} className={styles.button} aria-label="Cliente del nuevo registro" required value={client} onChange={(ev) => setClient(ev.target.value)}><option value="">Seleccionar cliente…</option>{data.clients.filter((c) => !c.archived).map((c) => <option key={c.id} value={c.id}>{c.company || c.name}</option>)}</select>
-        <input disabled={busy} className={styles.search} aria-label="Nombre del nuevo registro" required placeholder={monthly ? "Concepto mensual" : "Nombre del proyecto"} value={name} onChange={(ev) => setName(ev.target.value)} />
-        <input disabled={busy} className={`${styles.search} !w-28`} aria-label="Importe del nuevo registro" inputMode="decimal" required placeholder={`Total ${currencyOf(data.clients, client)}`} value={amount} onChange={(ev) => setAmount(ev.target.value)} />
-        <label className="flex items-center gap-2 text-xs">{monthly ? "Inicio" : "Entrega"}<input disabled={busy} className={styles.button} type={monthly ? "month" : "date"} required={monthly} value={date} onChange={(ev) => setDate(ev.target.value)} /></label>
+        <input disabled={busy} className={styles.search} aria-label="Nombre del nuevo registro" required placeholder={monthly ? "Concepto del servicio" : "Nombre del proyecto"} value={name} onChange={(ev) => setName(ev.target.value)} />
+        <input disabled={busy} className={`${styles.search} !w-28`} aria-label="Importe del nuevo registro" inputMode="decimal" required placeholder={`${monthly ? "Por cobro" : "Total"} ${currencyOf(data.clients, client)}`} value={amount} onChange={(ev) => setAmount(ev.target.value)} />
+        {monthly && <select disabled={busy} className={styles.button} aria-label="Frecuencia del nuevo servicio" value={frequency} onChange={(ev) => { const next = ev.target.value; setFrequency(next); setDate(next === "quincenal" ? data.today : data.today.slice(0, 7)); }}><option value="mensual">Mensual</option><option value="quincenal">Quincenal · 15 y fin de mes</option></select>}
+        <label className="flex items-center gap-2 text-xs">{monthly ? "Inicio" : "Entrega"}<input disabled={busy} className={styles.button} type={monthly && frequency === "mensual" ? "month" : "date"} required={monthly} value={date} onChange={(ev) => setDate(ev.target.value)} /></label>
         <button disabled={busy} type="submit" className={`${styles.button} ${styles.primary}`}>{busy ? "Guardando…" : "Crear"}</button><button disabled={busy} type="button" className={styles.button} onClick={onCancel}>Cancelar</button>
+        {monthly && <p className="w-full text-xs text-[#6d7470]">{frequency === "quincenal" ? "Importe por quincena. Se cobra el día 15 y el último día del mes, a partir de la fecha de inicio." : "Importe por mes. Cada mensualidad se genera desde el día 1."}</p>}
         {!data.clients.some((c) => !c.archived) && <Link className="text-xs underline" href="/admin/clientes/lista">Primero da de alta un cliente</Link>}
     </form>;
 }

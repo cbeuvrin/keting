@@ -48,15 +48,19 @@ export type Project = {
     notes: string | null;
 };
 
+export type BillingFrequency = "mensual" | "quincenal";
+
 export type Retainer = {
     id: string;
     created_at: string;
     client_id: string;
     concept: string;
+    /** Importe de cada cobro, mensual o quincenal. Nombre de columna histórico. */
     monthly_amount: number;
-    /** Primer mes que se cobra, "YYYY-MM-01" */
+    frequency?: BillingFrequency;
+    /** Inicio: primer mes mensual (día 1), o fecha exacta quincenal. */
     start_month: string;
-    /** Último mes que se cobra, "YYYY-MM-01"; null mientras siga activa */
+    /** Fin inclusivo: último mes mensual o fecha exacta quincenal; null si sigue activo. */
     end_month: string | null;
 };
 
@@ -142,46 +146,56 @@ export function projectBalance(project: Project, payments: Payment[]): ProjectBa
 // ── Mensualidades ───────────────────────────────────────────────────────────
 
 export type RetainerBalance = {
-    /** Meses que ya se deben: del inicio al mes actual (o al fin, si terminó) */
     dueMonths: string[];
+    dueDates: string[];
     due: number;
     paid: number;
-    /** Lo que se debe; 0 si está al corriente */
     debt: number;
-    /** Pagado por adelantado */
     credit: number;
-    /** Meses aún no cubiertos, del más viejo al más nuevo (los pagos cubren primero el más viejo) */
     pendingMonths: string[];
+    pendingDates: string[];
+    nextDueOn: string | null;
     active: boolean;
 };
 
-/**
- * Cada mes cuenta como debido desde su día 1. Los pagos no llevan mes: se
- * aplican al mes pendiente más viejo, que es como se cobra en la práctica.
- */
+/** Último día real del mes: incluye febrero y años bisiestos. */
+export function lastDayOfMonth(month: string): string {
+    const next = new Date(`${addMonths(month, 1)}-01T12:00:00Z`);
+    next.setUTCDate(next.getUTCDate() - 1);
+    return next.toISOString().slice(0, 10);
+}
+
+/** Las mensualidades existentes conservan su cargo desde el día 1. */
+export function recurringDates(retainer: Retainer, through: string): string[] {
+    if (retainer.frequency !== "quincenal") {
+        const last = retainer.end_month && retainer.end_month < through ? monthOf(retainer.end_month) : monthOf(through);
+        return monthRange(monthOf(retainer.start_month), last).map((m) => `${m}-01`);
+    }
+    const limit = retainer.end_month && retainer.end_month < through ? retainer.end_month : through;
+    return monthRange(monthOf(retainer.start_month), monthOf(limit))
+        .flatMap((m) => [`${m}-15`, lastDayOfMonth(m)])
+        .filter((date) => date >= retainer.start_month && date <= limit);
+}
+
+/** Cada abono cubre primero el periodo pendiente más antiguo. */
 export function retainerBalance(retainer: Retainer, payments: Payment[], today: string): RetainerBalance {
-    const current = monthOf(today);
-    const start = monthOf(retainer.start_month);
-    const end = retainer.end_month ? monthOf(retainer.end_month) : null;
-    const lastDue = end && end < current ? end : current;
-    const dueMonths = monthRange(start, lastDue);
-    const due = cents(dueMonths.length * retainer.monthly_amount);
-
-    let paid = 0;
-    for (const p of payments) if (p.retainer_id === retainer.id) paid += p.amount;
-    paid = cents(paid);
-
-    const covered = retainer.monthly_amount > 0 ? Math.floor(cents(paid / retainer.monthly_amount) + 1e-9) : 0;
-    const pendingMonths = dueMonths.slice(Math.min(covered, dueMonths.length));
-
+    const dueDates = recurringDates(retainer, today);
+    const dueMonths = [...new Set(dueDates.map(monthOf))];
+    const due = cents(dueDates.length * retainer.monthly_amount);
+    const paid = cents(payments.filter((p) => p.retainer_id === retainer.id).reduce((sum, p) => sum + p.amount, 0));
+    // División en centavos: un abono casi completo no liquida el periodo.
+    const covered = retainer.monthly_amount > 0 ? Math.floor(Math.round(paid * 100) / Math.round(retainer.monthly_amount * 100)) : 0;
+    const pendingDates = dueDates.slice(Math.min(covered, dueDates.length));
+    const nextMonth = addMonths(monthOf(retainer.start_month > today ? retainer.start_month : today), 1);
+    const nextDueOn = recurringDates(retainer, lastDayOfMonth(nextMonth)).find((day) => day > today) ?? null;
     return {
-        dueMonths,
-        due,
-        paid,
+        dueMonths, dueDates, due, paid,
         debt: Math.max(0, cents(due - paid)),
         credit: Math.max(0, cents(paid - due)),
-        pendingMonths,
-        active: start <= current && (!end || end >= current),
+        pendingMonths: [...new Set(pendingDates.map(monthOf))], pendingDates, nextDueOn,
+        active: retainer.frequency === "quincenal"
+            ? retainer.start_month <= today && (!retainer.end_month || retainer.end_month >= today)
+            : monthOf(retainer.start_month) <= monthOf(today) && (!retainer.end_month || monthOf(retainer.end_month) >= monthOf(today)),
     };
 }
 

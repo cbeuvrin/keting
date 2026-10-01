@@ -161,3 +161,43 @@ test("cobros: conserva moneda original y el total convertido coincide con el res
     assert.equal(total, 2850);
     assert.equal(total, clients.reduce((s, c) => s + summarizeClient(c, mx.projects, [], [], "2026-10-01").owed, 0));
 });
+
+const quincenal = (start = "2026-10-01", end = null) => ({ ...retainer("q", 3000, start, end), frequency: "quincenal" });
+test("quincenal: dos cargos el 15 y último día, sin anticipar deuda", () => {
+    assert.equal(retainerBalance(quincenal(), [], "2026-10-14").due, 0);
+    const first = retainerBalance(quincenal(), [], "2026-10-15");
+    assert.equal(first.due, 3000);
+    assert.equal(first.nextDueOn, "2026-10-31");
+    const end = retainerBalance(quincenal(), [], "2026-10-31");
+    assert.deepEqual(end.dueDates, ["2026-10-15", "2026-10-31"]);
+    assert.equal(end.due, 6000);
+    assert.equal(end.nextDueOn, "2026-11-15");
+});
+test("quincenal: febrero normal, bisiesto y meses de 30 días", () => {
+    for (const [month, last] of [["2026-02", "28"], ["2028-02", "29"], ["2026-04", "30"]]) {
+        assert.deepEqual(retainerBalance(quincenal(`${month}-01`), [], `${month}-${last}`).dueDates, [`${month}-15`, `${month}-${last}`]);
+    }
+});
+test("quincenal: inicio y fin exactos delimitan los cargos", () => {
+    assert.deepEqual(retainerBalance(quincenal("2026-10-16"), [], "2026-10-31").dueDates, ["2026-10-31"]);
+    const ended = retainerBalance(quincenal("2026-10-01", "2026-10-20"), [], "2026-11-15");
+    assert.deepEqual(ended.dueDates, ["2026-10-15"]);
+    assert.equal(ended.nextDueOn, null);
+    assert.equal(ended.active, false);
+    assert.equal(retainerBalance(quincenal("2027-01-20"), [], "2026-10-01").nextDueOn, "2027-01-31");
+});
+test("quincenal: abonos parciales cubren la quincena más antigua", () => {
+    const payments = [pay("1", 1000, "2026-10-15", { retainer_id: "q" }), pay("2", 2500, "2026-10-20", { retainer_id: "q" })];
+    const b = retainerBalance(quincenal(), payments, "2026-10-31");
+    assert.equal(b.debt, 2500);
+    assert.deepEqual(b.pendingDates, ["2026-10-31"]);
+    const partial = retainerBalance(quincenal(), [pay("p", 2999, "2026-10-15", { retainer_id: "q" })], "2026-10-15");
+    assert.equal(partial.debt, 1);
+    assert.deepEqual(partial.pendingDates, ["2026-10-15"]);
+});
+test("quincenal: anticipos dejan saldo a favor hasta generar el cargo", () => {
+    const b = retainerBalance(quincenal(), [pay("p", 7000, "2026-10-01", { retainer_id: "q" })], "2026-10-31");
+    assert.equal(b.credit, 1000);
+    assert.equal(b.debt, 0);
+    assert.deepEqual(b.pendingDates, []);
+});

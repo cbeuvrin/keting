@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Plus, X } from "lucide-react";
-import { currencyOf, formatMoney, type Project, type Retainer } from "@/lib/clientes";
+import { currencyOf, formatMoney, retainerBalance, type Project, type Retainer } from "@/lib/clientes";
 import { defaultPaymentPlan, planError, stageBalances, validDay, type PaymentPlan } from "@/lib/payment-plan";
 import type { ClientesData } from "@/lib/clientes-rows";
 import { FileCell, PaymentForm, QUOTE_ACCEPT, RECEIPT_ACCEPT } from "../ui";
+import { RecurringSchedule } from "./RecurringSchedule";
 import { Cell } from "./Cell";
 import type { Sheet } from "./useSheet";
 import styles from "./sheet.module.css";
@@ -31,6 +32,7 @@ export function Details({ project, retainer, plan = defaultPaymentPlan(), data, 
                 <button type="button" className={`${styles.button} ${styles.primary}`} onClick={() => setAdding(!adding)}><Plus size={13} /> Registrar abono</button>
             </div>
         </div>
+        {retainer && <RecurringSchedule retainer={retainer} balance={retainerBalance(retainer, data.payments, data.today)} currency={currency} />}
         {showPlan && project && <PlanEditor key={JSON.stringify(plan)} project={project} plan={plan} currency={currency} sheet={sheet} onDone={onTogglePlan} />}
         {own.length > 0 ? <div className="overflow-x-auto"><table className={styles.subtable} aria-label={`Abonos de ${project?.name ?? retainer?.concept}`} style={{ minWidth: 580 }}>
             <thead><tr><th scope="col" style={{ width: 150 }}>Fecha cobrada · editable</th><th scope="col" style={{ width: 115 }}>Importe · {currency}</th><th scope="col" style={{ width: 150 }}>Etapa cubierta</th><th scope="col">Nota</th><th scope="col" style={{ width: 150 }}>Comprobante</th></tr></thead>
@@ -44,7 +46,7 @@ export function Details({ project, retainer, plan = defaultPaymentPlan(), data, 
                     if (amount === null || amount <= 0) { sheet.setError("El importe debe ser mayor que cero."); return false; }
                     return sheet.save([{ path: `payments/${p.id}`, before: { amount: p.amount }, after: { amount }, label: "Importe del abono" }]);
                 }} /></td>
-                <td className={styles.muted}>{project ? stages.filter((s) => s.contributions.some((c) => c.payment.id === p.id)).map((s) => s.label).join(" + ") || "Saldo a favor" : "Mensualidad"}</td>
+                <td className={styles.muted}>{project ? stages.filter((s) => s.contributions.some((c) => c.payment.id === p.id)).map((s) => s.label).join(" + ") || "Saldo a favor" : retainer?.frequency === "quincenal" ? "Quincena" : "Mensualidad"}</td>
                 <td><Cell value={p.note} label={`Nota del abono ${index + 1}`} row={index} column="note" onSave={(note) => sheet.save([{ path: `payments/${p.id}`, before: { note: p.note }, after: { note: note.trim() || null }, label: "Nota del abono" }])} /></td>
                 <td><FileCell apiPath={`payments/${p.id}/receipt`} has={data.receipts.includes(p.id)} accept={RECEIPT_ACCEPT} label="el comprobante" /></td>
             </tr>)}</tbody>
