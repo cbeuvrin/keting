@@ -1,5 +1,5 @@
 import { bad, date, db, fail, guard, INVALID, money, ok, readBody, text } from "@/lib/clientes-api";
-import { RECEIPTS_BUCKET } from "@/lib/clientes-rows";
+import { RECEIPTS_BUCKET, removeFiles } from "@/lib/clientes-files";
 
 export const runtime = "nodejs";
 
@@ -34,6 +34,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     const { error } = await db().from("cli_payments").delete().eq("id", id);
     if (error) return fail(error);
     // Su comprobante se va con él (si no tenía, no pasa nada).
-    await db().storage.from(RECEIPTS_BUCKET).remove([id]);
+    await removeFiles(RECEIPTS_BUCKET, [id]);
     return ok();
 }

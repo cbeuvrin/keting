@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { OWED_STATUSES, PROJECT_STATUSES, projectBalance, STATUS_LABELS, type ProjectStatus } from "@/lib/clientes";
 import type { ClientesData } from "@/lib/clientes-rows";
-import { buttonCls, cardCls, cellInputCls, inputCls, Money, PageHeader, Remaining, thCls, useMutate } from "../ui";
+import { buttonCls, cardCls, cellInputCls, FileCell, inputCls, Money, PageHeader, QUOTE_ACCEPT, Remaining, thCls, useMutate } from "../ui";
 
 // Todos los proyectos de todos los clientes, como hoja de cálculo: nombre,
 // estado, total, entrega y notas se editan en la celda; pagado y falta salen
@@ -12,6 +12,7 @@ import { buttonCls, cardCls, cellInputCls, inputCls, Money, PageHeader, Remainin
 
 export function ProyectosTable({ data, initialEstado, initialVista }: { data: ClientesData; initialEstado: string; initialVista: string }) {
     const { clients, projects, payments } = data;
+    const withQuote = new Set(data.quotes);
     const { run, busy } = useMutate();
     const [estado, setEstado] = useState(initialEstado);
     const [porCobrar, setPorCobrar] = useState(initialVista === "por-cobrar");
@@ -112,7 +113,7 @@ export function ProyectosTable({ data, initialEstado, initialVista }: { data: Cl
             </div>
 
             <div className={`${cardCls} overflow-x-auto`}>
-                <table className="w-full text-sm min-w-[980px]">
+                <table className="w-full text-sm min-w-[1280px]">
                     <thead className="border-b border-[#1d1d1f]/10">
                         <tr>
                             <th className={thCls}>Cliente</th>
@@ -122,7 +123,8 @@ export function ProyectosTable({ data, initialEstado, initialVista }: { data: Cl
                             <th className={`${thCls} text-right`}>Pagado</th>
                             <th className={`${thCls} text-right`}>Falta</th>
                             <th className={thCls}>Entrega</th>
-                            <th className={thCls}>Notas</th>
+                            <th className={`${thCls} min-w-[160px]`}>Notas</th>
+                                <th className={thCls}>Cotización</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,11 +162,14 @@ export function ProyectosTable({ data, initialEstado, initialVista }: { data: Cl
                                 <td className="px-1 py-1">
                                     <input key={p.notes ?? ""} defaultValue={p.notes ?? ""} onBlur={(ev) => save(p.id, "notes", ev.target.value, p.notes)} className={cellInputCls} />
                                 </td>
+                                    <td className="px-3 py-1">
+                                        <FileCell apiPath={`projects/${p.id}/quote`} has={withQuote.has(p.id)} accept={QUOTE_ACCEPT} maxMb={25} label="la cotización de este proyecto" />
+                                    </td>
                             </tr>
                         ))}
                         {rows.length === 0 && (
                             <tr>
-                                <td colSpan={8} className="px-3 py-10 text-center text-[#1d1d1f]/45">
+                                <td colSpan={9} className="px-3 py-10 text-center text-[#1d1d1f]/45">
                                     {projects.length === 0 ? "Todavía no hay proyectos." : "Ningún proyecto en esta vista."}
                                 </td>
                             </tr>
@@ -186,7 +191,7 @@ export function ProyectosTable({ data, initialEstado, initialVista }: { data: Cl
                                     <Money value={totals.remaining} />
                                     <div className="text-[10px] font-normal uppercase tracking-[0.12em] text-[#1d1d1f]/45">por cobrar</div>
                                 </td>
-                                <td colSpan={2} />
+                                <td colSpan={3} />
                             </tr>
                         </tfoot>
                     )}

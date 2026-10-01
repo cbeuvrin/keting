@@ -1,4 +1,5 @@
 import { bad, conflict, db, fail, guard, ok, readBody, text } from "@/lib/clientes-api";
+import { QUOTES_BUCKET, removeFiles } from "@/lib/clientes-files";
 
 export const runtime = "nodejs";
 
@@ -37,9 +38,12 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     if (countErr) return fail(countErr);
     if ((count ?? 0) > 0) return conflict("Este cliente tiene pagos registrados: archívalo en lugar de borrarlo.");
 
+    // Las cotizaciones de sus proyectos se van con ellos.
+    const { data: projects } = await client.from("cli_projects").select("id").eq("client_id", id);
     for (const table of ["cli_projects", "cli_retainers", "cli_clients"] as const) {
         const { error } = await client.from(table).delete().eq(table === "cli_clients" ? "id" : "client_id", id);
         if (error) return fail(error);
     }
+    await removeFiles(QUOTES_BUCKET, (projects ?? []).map((p) => p.id));
     return ok();
 }

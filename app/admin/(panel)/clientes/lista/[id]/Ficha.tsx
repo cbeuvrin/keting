@@ -11,10 +11,12 @@ import {
     buttonCls,
     cardCls,
     cellInputCls,
+    FileCell,
     ghostButtonCls,
     inputCls,
     Money,
     PaymentForm,
+    QUOTE_ACCEPT,
     Remaining,
     thCls,
     useMutate,
@@ -120,7 +122,7 @@ export function Ficha({ client, data }: { client: Client; data: ClientesData }) 
                 </div>
             </section>
 
-            <ProjectsSection clientId={client.id} summary={s} />
+            <ProjectsSection clientId={client.id} summary={s} quotes={data.quotes} />
             <RetainersSection clientId={client.id} summary={s} today={today} />
 
             {/* Pagos */}
@@ -139,7 +141,8 @@ export function Ficha({ client, data }: { client: Client; data: ClientesData }) 
     );
 }
 
-function ProjectsSection({ clientId, summary }: { clientId: string; summary: ReturnType<typeof summarizeClient> }) {
+function ProjectsSection({ clientId, summary, quotes }: { clientId: string; summary: ReturnType<typeof summarizeClient>; quotes: string[] }) {
+    const withQuote = new Set(quotes);
     const { run, busy } = useMutate();
     const [draft, setDraft] = useState({ name: "", total: "", status: "aprobado" as ProjectStatus, delivery_date: "" });
 
@@ -158,7 +161,7 @@ function ProjectsSection({ clientId, summary }: { clientId: string; summary: Ret
             <h2 className="font-bold tracking-tight mb-4">Proyectos</h2>
             {summary.projects.length > 0 && (
                 <div className="overflow-x-auto mb-5 -mx-2">
-                    <table className="w-full text-sm min-w-[760px]">
+                    <table className="w-full text-sm min-w-[1060px]">
                         <thead>
                             <tr>
                                 <th className={`${thCls} min-w-[200px]`}>Proyecto</th>
@@ -167,7 +170,8 @@ function ProjectsSection({ clientId, summary }: { clientId: string; summary: Ret
                                 <th className={`${thCls} text-right`}>Pagado</th>
                                 <th className={`${thCls} text-right`}>Falta</th>
                                 <th className={thCls}>Entrega</th>
-                                <th className={thCls}>Notas</th>
+                                <th className={`${thCls} min-w-[160px]`}>Notas</th>
+                                <th className={thCls}>Cotización</th>
                                 <th className={thCls} />
                             </tr>
                         </thead>
@@ -212,6 +216,9 @@ function ProjectsSection({ clientId, summary }: { clientId: string; summary: Ret
                                     </td>
                                     <td className="px-1 py-1">
                                         <input key={p.notes ?? ""} defaultValue={p.notes ?? ""} onBlur={(ev) => save(p.id, "notes", ev.target.value, p.notes)} className={cellInputCls} />
+                                    </td>
+                                    <td className="px-3 py-1">
+                                        <FileCell apiPath={`projects/${p.id}/quote`} has={withQuote.has(p.id)} accept={QUOTE_ACCEPT} maxMb={25} label="la cotización de este proyecto" />
                                     </td>
                                     <td className="px-1 py-1 text-right">
                                         {b.paid === 0 && (

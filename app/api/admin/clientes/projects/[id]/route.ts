@@ -1,4 +1,5 @@
 import { bad, conflict, date, db, fail, guard, INVALID, money, ok, readBody, status, text } from "@/lib/clientes-api";
+import { QUOTES_BUCKET, removeFiles } from "@/lib/clientes-files";
 
 export const runtime = "nodejs";
 
@@ -46,5 +47,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
     const { error } = await client.from("cli_projects").delete().eq("id", id);
     if (error) return fail(error);
+    await removeFiles(QUOTES_BUCKET, [id]);
     return ok();
 }

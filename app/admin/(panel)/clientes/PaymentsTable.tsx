@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { ClientesData } from "@/lib/clientes-rows";
-import { cellInputCls, formatDate, Money, paymentTarget, RECEIPT_ACCEPT, thCls, uploadReceipt, useMutate } from "./ui";
+import { cellInputCls, FileCell, formatDate, Money, paymentTarget, RECEIPT_ACCEPT, thCls, useMutate } from "./ui";
 
 // Tabla de pagos editable. La usan la ficha del cliente (sus pagos) y la
 // pestaña Pagos (todos, con la columna de cliente).
@@ -22,7 +20,7 @@ export function PaymentsTable({ payments, data, showClient = false }: { payments
 
     return (
         <div className="overflow-x-auto -mx-2">
-            <table className="w-full text-sm min-w-[760px]">
+            <table className="w-full text-sm min-w-[860px]">
                 <thead>
                     <tr>
                         <th className={thCls}>Fecha</th>
@@ -57,7 +55,7 @@ export function PaymentsTable({ payments, data, showClient = false }: { payments
                                     <input key={p.note ?? ""} defaultValue={p.note ?? ""} onBlur={(ev) => save(p.id, "note", ev.target.value, p.note)} className={cellInputCls} />
                                 </td>
                                 <td className="px-3 py-1 whitespace-nowrap">
-                                    <ReceiptCell paymentId={p.id} has={withReceipt.has(p.id)} />
+                                    <FileCell apiPath={`payments/${p.id}/receipt`} has={withReceipt.has(p.id)} accept={RECEIPT_ACCEPT} label="el comprobante de este pago" />
                                 </td>
                                 <td className="px-1 py-1 text-right">
                                     <button
@@ -89,47 +87,3 @@ export function PaymentsTable({ payments, data, showClient = false }: { payments
     );
 }
 
-/** Ver, subir, cambiar o quitar el comprobante de un pago. */
-function ReceiptCell({ paymentId, has }: { paymentId: string; has: boolean }) {
-    const router = useRouter();
-    const { run, busy } = useMutate();
-    const [uploading, setUploading] = useState(false);
-
-    const pick = async (ev: React.ChangeEvent<HTMLInputElement>) => {
-        const file = ev.target.files?.[0];
-        ev.target.value = "";
-        if (!file) return;
-        setUploading(true);
-        const error = await uploadReceipt(paymentId, file);
-        setUploading(false);
-        if (error) return window.alert(error);
-        router.refresh();
-    };
-
-    const linkCls = "text-xs underline underline-offset-2 text-[#1d1d1f]/70 hover:text-[#1d1d1f] cursor-pointer";
-    if (uploading) return <span className="text-xs text-[#1d1d1f]/45">Subiendo…</span>;
-
-    return (
-        <span className="inline-flex items-center gap-3">
-            {has && (
-                <a href={`/api/admin/clientes/payments/${paymentId}/receipt`} target="_blank" rel="noopener" className={`${linkCls} font-medium text-[#1d1d1f]`}>
-                    Ver
-                </a>
-            )}
-            <label className={linkCls}>
-                {has ? "Cambiar" : "+ Subir"}
-                <input type="file" accept={RECEIPT_ACCEPT} onChange={pick} className="sr-only" />
-            </label>
-            {has && (
-                <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => window.confirm("¿Quitar el comprobante de este pago?") && run(`payments/${paymentId}/receipt`, "DELETE")}
-                    className="text-xs text-[#1d1d1f]/35 hover:text-[#b4472f]"
-                >
-                    Quitar
-                </button>
-            )}
-        </span>
-    );
-}

@@ -86,15 +86,16 @@ export async function api(path: string, method: "POST" | "PATCH" | "DELETE", bod
 }
 
 export const RECEIPT_ACCEPT = "image/*,application/pdf";
-const RECEIPT_MAX_MB = 15;
+export const QUOTE_ACCEPT = "application/pdf,image/*,.doc,.docx,.xls,.xlsx";
 
 /**
- * Sube (o reemplaza) el comprobante de un pago. Pide al servidor una URL
- * firmada y manda el archivo directo a Supabase. Devuelve el error o null.
+ * Sube (o reemplaza) un archivo: `apiPath` es la ruta del archivo, p. ej.
+ * "payments/<id>/receipt". Pide al servidor una URL firmada y manda el archivo
+ * directo a Supabase. Devuelve el error o null.
  */
-export async function uploadReceipt(paymentId: string, file: File): Promise<string | null> {
-    if (file.size > RECEIPT_MAX_MB * 1024 * 1024) return `El comprobante pesa más de ${RECEIPT_MAX_MB} MB`;
-    const res = await fetch(`/api/admin/clientes/payments/${paymentId}/receipt`, { method: "POST" });
+export async function uploadFile(apiPath: string, file: File, maxMb = 15): Promise<string | null> {
+    if (file.size > maxMb * 1024 * 1024) return `El archivo pesa más de ${maxMb} MB`;
+    const res = await fetch(`/api/admin/clientes/${apiPath}`, { method: "POST" });
     const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
     if (!res.ok || !data.url) return data.error ?? "No se pudo preparar la subida";
     const up = await fetch(data.url, {
@@ -104,7 +105,58 @@ export async function uploadReceipt(paymentId: string, file: File): Promise<stri
     });
     if (up.ok) return null;
     const err = (await up.json().catch(() => ({}))) as { message?: string; error?: string };
-    return `No se subió el comprobante: ${err.message ?? err.error ?? up.status}`;
+    return `No se subió el archivo: ${err.message ?? err.error ?? up.status}`;
+}
+
+/** Celda de archivo de un registro: ver, descargar, cambiar o quitar; o subirlo si no hay. */
+export function FileCell({ apiPath, has, accept, maxMb = 15, label }: { apiPath: string; has: boolean; accept: string; maxMb?: number; label: string }) {
+    const router = useRouter();
+    const { run, busy } = useMutate();
+    const [uploading, setUploading] = useState(false);
+
+    const pick = async (ev: React.ChangeEvent<HTMLInputElement>) => {
+        const file = ev.target.files?.[0];
+        ev.target.value = "";
+        if (!file) return;
+        setUploading(true);
+        const error = await uploadFile(apiPath, file, maxMb);
+        setUploading(false);
+        if (error) return window.alert(error);
+        router.refresh();
+    };
+
+    const linkCls = "text-xs underline underline-offset-2 text-[#1d1d1f]/70 hover:text-[#1d1d1f] cursor-pointer";
+    if (uploading) return <span className="text-xs text-[#1d1d1f]/45">Subiendo…</span>;
+    const url = `/api/admin/clientes/${apiPath}`;
+
+    return (
+        <span className="inline-flex items-center gap-3 whitespace-nowrap">
+            {has && (
+                <>
+                    <a href={url} target="_blank" rel="noopener" className={`${linkCls} font-medium text-[#1d1d1f]`}>
+                        Ver
+                    </a>
+                    <a href={`${url}?descargar=1`} className={linkCls}>
+                        Descargar
+                    </a>
+                </>
+            )}
+            <label className={linkCls}>
+                {has ? "Cambiar" : "+ Subir"}
+                <input type="file" accept={accept} onChange={pick} className="sr-only" />
+            </label>
+            {has && (
+                <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => window.confirm(`¿Quitar ${label}?`) && run(apiPath, "DELETE")}
+                    className="text-xs text-[#1d1d1f]/35 hover:text-[#b4472f]"
+                >
+                    Quitar
+                </button>
+            )}
+        </span>
+    );
 }
 
 /** Ejecuta un cambio y refresca la página; si falla, lo avisa. */
@@ -188,7 +240,7 @@ export function PaymentForm({
             return;
         }
         // El pago ya quedó; si el comprobante falla se avisa y se puede subir después desde la tabla.
-        const receiptError = file ? await uploadReceipt(data.id, file) : null;
+        const receiptError = file ? await uploadFile(`payments/${data.id}/receipt`, file) : null;
         setSaving(false);
         if (receiptError) window.alert(`El pago se registró, pero ${receiptError.charAt(0).toLowerCase()}${receiptError.slice(1)}. Súbelo desde la tabla.`);
         setAmount("");
