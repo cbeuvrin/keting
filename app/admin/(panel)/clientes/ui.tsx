@@ -85,6 +85,28 @@ export async function api(path: string, method: "POST" | "PATCH" | "DELETE", bod
     return (data as { error?: string }).error ?? `Error ${res.status}`;
 }
 
+export const RECEIPT_ACCEPT = "image/*,application/pdf";
+const RECEIPT_MAX_MB = 15;
+
+/**
+ * Sube (o reemplaza) el comprobante de un pago. Pide al servidor una URL
+ * firmada y manda el archivo directo a Supabase. Devuelve el error o null.
+ */
+export async function uploadReceipt(paymentId: string, file: File): Promise<string | null> {
+    if (file.size > RECEIPT_MAX_MB * 1024 * 1024) return `El comprobante pesa más de ${RECEIPT_MAX_MB} MB`;
+    const res = await fetch(`/api/admin/clientes/payments/${paymentId}/receipt`, { method: "POST" });
+    const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+    if (!res.ok || !data.url) return data.error ?? "No se pudo preparar la subida";
+    const up = await fetch(data.url, {
+        method: "PUT",
+        headers: { "Content-Type": file.type || "application/octet-stream", "x-upsert": "true" },
+        body: file,
+    });
+    if (up.ok) return null;
+    const err = (await up.json().catch(() => ({}))) as { message?: string; error?: string };
+    return `No se subió el comprobante: ${err.message ?? err.error ?? up.status}`;
+}
+
 /** Ejecuta un cambio y refresca la página; si falla, lo avisa. */
 export function useMutate() {
     const router = useRouter();
@@ -130,12 +152,16 @@ export function PaymentForm({
     clientId?: string;
     onDone?: () => void;
 }) {
-    const { run, busy } = useMutate();
+    const router = useRouter();
+    const [saving, setSaving] = useState(false);
     const [client, setClient] = useState(clientId ?? "");
     const [target, setTarget] = useState("");
     const [amount, setAmount] = useState("");
     const [paidOn, setPaidOn] = useState(today);
     const [note, setNote] = useState("");
+    const [file, setFile] = useState<File | null>(null);
+    // Cambiar la key vacía el input de archivo después de registrar.
+    const [fileKey, setFileKey] = useState(0);
 
     const clientProjects = projects.filter((p) => p.client_id === client && p.status !== "cancelado");
     const clientRetainers = retainers.filter((r) => r.client_id === client);
@@ -143,25 +169,41 @@ export function PaymentForm({
     const submit = async (ev: React.FormEvent) => {
         ev.preventDefault();
         const [kind, id] = target.split(":");
-        const done = await run("payments", "POST", {
-            project_id: kind === "p" ? id : undefined,
-            retainer_id: kind === "r" ? id : undefined,
-            amount,
-            paid_on: paidOn,
-            note,
+        setSaving(true);
+        const res = await fetch("/api/admin/clientes/payments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                project_id: kind === "p" ? id : undefined,
+                retainer_id: kind === "r" ? id : undefined,
+                amount,
+                paid_on: paidOn,
+                note,
+            }),
         });
-        if (done) {
-            setAmount("");
-            setNote("");
-            setTarget("");
-            onDone?.();
+        const data = (await res.json().catch(() => ({}))) as { id?: string; error?: string };
+        if (!res.ok || !data.id) {
+            setSaving(false);
+            window.alert(data.error ?? `Error ${res.status}`);
+            return;
         }
+        // El pago ya quedó; si el comprobante falla se avisa y se puede subir después desde la tabla.
+        const receiptError = file ? await uploadReceipt(data.id, file) : null;
+        setSaving(false);
+        if (receiptError) window.alert(`El pago se registró, pero ${receiptError.charAt(0).toLowerCase()}${receiptError.slice(1)}. Súbelo desde la tabla.`);
+        setAmount("");
+        setNote("");
+        setTarget("");
+        setFile(null);
+        setFileKey((k) => k + 1);
+        router.refresh();
+        onDone?.();
     };
 
     return (
         <form
             onSubmit={submit}
-            className={`grid gap-3 sm:grid-cols-2 items-end ${clientId ? "lg:grid-cols-[1.6fr_1fr_1fr_1.4fr_auto]" : "lg:grid-cols-[1.3fr_1.6fr_1fr_1fr_1.2fr_auto]"}`}
+            className={`grid gap-3 sm:grid-cols-2 items-end ${clientId ? "lg:grid-cols-[1.5fr_1fr_1fr_1.3fr_1.3fr_auto]" : "lg:grid-cols-[1.2fr_1.5fr_0.9fr_1fr_1.1fr_1.2fr_auto]"}`}
         >
             {!clientId && (
                 <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
@@ -222,8 +264,15 @@ export function PaymentForm({
                 Nota
                 <input placeholder="Transferencia, anticipo…" value={note} onChange={(ev) => setNote(ev.target.value)} className={`${inputCls} w-full min-w-0`} />
             </label>
-            <button type="submit" disabled={busy} className={buttonCls}>
-                Registrar pago
+            <div className="grid gap-1 text-xs text-[#1d1d1f]/60">
+                Comprobante
+                <label className={`${inputCls} w-full min-w-0 cursor-pointer truncate ${file ? "text-[#1d1d1f]" : "text-[#1d1d1f]/45"}`} title={file?.name}>
+                    {file ? file.name : "Adjuntar foto o PDF"}
+                    <input key={fileKey} type="file" accept={RECEIPT_ACCEPT} onChange={(ev) => setFile(ev.target.files?.[0] ?? null)} className="sr-only" />
+                </label>
+            </div>
+            <button type="submit" disabled={saving} className={buttonCls}>
+                {saving ? "Guardando…" : "Registrar pago"}
             </button>
         </form>
     );
