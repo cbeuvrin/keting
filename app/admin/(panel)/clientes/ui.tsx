@@ -318,7 +318,7 @@ export function PaymentForm({
         <form onSubmit={submit} aria-busy={saving}>
             {error && <p role="alert" className="mb-4 rounded-md bg-[#b4472f]/10 p-3 text-sm text-[#923822]">{error}</p>}
             {notice && <p role="status" className="mb-4 rounded-md bg-[#1d1d1f]/5 p-3 text-sm">{notice}</p>}
-            <fieldset disabled={saving} className={`grid min-w-0 gap-4 items-end ${stacked ? "grid-cols-1" : `sm:grid-cols-2 ${clientId ? "lg:grid-cols-[1.5fr_1fr_1fr_1.3fr_1.3fr_auto]" : "lg:grid-cols-[1.2fr_1.5fr_0.9fr_1fr_1.1fr_1.2fr_auto]"}`}`}>
+            <fieldset disabled={saving} className={`grid min-w-0 gap-4 items-end ${stacked ? "grid-cols-1" : `sm:grid-cols-2 ${initialTarget ? "lg:grid-cols-[1fr_1fr_1.4fr_1.4fr_auto]" : clientId ? "lg:grid-cols-[1.5fr_1fr_1fr_1.3fr_1.3fr_auto]" : "lg:grid-cols-[1.2fr_1.5fr_0.9fr_1fr_1.1fr_1.2fr_auto]"}`}`}>
 
             {!clientId && (
                 <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
@@ -343,7 +343,7 @@ export function PaymentForm({
                     </select>
                 </label>
             )}
-            {!(stacked && initialTarget) && <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
+            {!initialTarget && <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
                 A qué va
                 <select required value={target} onChange={(ev) => setTarget(ev.target.value)} className={`${inputCls} w-full min-w-0`} disabled={!client}>
                     <option value="">{client ? "Elige…" : "Primero el cliente"}</option>

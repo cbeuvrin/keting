@@ -1,3 +1,4 @@
+import { planError, planKey } from "@/lib/payment-plan";
 import { bad, conflict, date, db, fail, guard, INVALID, money, ok, readBody, status, text } from "@/lib/clientes-api";
 import { QUOTES_BUCKET, removeFiles } from "@/lib/clientes-files";
 
@@ -19,7 +20,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
     const total = money(body.total);
     if (total === INVALID) return bad("El total no es un monto válido");
-    if (total !== undefined) patch.total = total;
+    if (total !== undefined) {
+        const { data: stored, error: readError } = await db().from("crm_settings").select("value").eq("key", planKey(id)).maybeSingle();
+        if (readError) return fail(readError);
+        const error = stored ? planError(stored.value, total) : null;
+        if (error) return bad(error);
+        patch.total = total;
+    }
     const st = status(body.status);
     if (st === INVALID) return bad("Estado inválido");
     if (st !== undefined) patch.status = st;

@@ -1,4 +1,5 @@
-import { selectAll } from "@/lib/crm";
+import { planError, planKey, type PaymentPlan } from "@/lib/payment-plan";
+import { crmAdmin, selectAll } from "@/lib/crm";
 import { listFileIds, QUOTES_BUCKET, RECEIPTS_BUCKET } from "@/lib/clientes-files";
 import { usdRate, type UsdRate } from "@/lib/clientes-fx";
 import { todayMx, type Client, type Payment, type Project, type Retainer } from "@/lib/clientes";
@@ -8,6 +9,7 @@ import { todayMx, type Client, type Payment, type Project, type Retainer } from 
 // pantalla, y todas las pestañas cuentan exactamente lo mismo.
 
 export type ClientesData = {
+    paymentPlans?: Record<string, PaymentPlan>;
     clients: Client[];
     projects: Project[];
     retainers: Retainer[];
@@ -42,8 +44,20 @@ export async function loadClientesData(): Promise<ClientesData> {
             listFileIds(RECEIPTS_BUCKET),
             listFileIds(QUOTES_BUCKET),
         ]);
+        const paymentPlans: Record<string, PaymentPlan> = {};
+        if (projects.length) {
+            const { data: settings, error: settingsError } = await crmAdmin().from("crm_settings").select("key,value").in("key", projects.map((p) => planKey(p.id)));
+            if (settingsError) throw settingsError;
+            for (const setting of settings ?? []) {
+                const id = setting.key.slice("cli_payment_plan:".length);
+                const project = projects.find((p) => p.id === id);
+                if (!project || planError(setting.value, Number(project.total))) throw new Error("No se pudo leer un plan de cobro. Revisa el total y las etapas del proyecto.");
+                paymentPlans[id] = setting.value as PaymentPlan;
+            }
+        }
         const rate = clients.some((client) => client.currency === "USD") ? await usdRate().catch(() => null) : null;
         return {
+            paymentPlans,
             clients,
             projects: projects.map((p) => ({ ...p, total: num(p.total) })),
             retainers: retainers.map((r) => ({

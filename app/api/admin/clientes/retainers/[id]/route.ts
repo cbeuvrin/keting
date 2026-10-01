@@ -49,12 +49,18 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         if (!concept) return bad("El concepto no puede quedar vacío");
         patch.concept = concept;
     }
+    const start = month(body.start_month);
+    if (start === INVALID || start === null) return bad("Indica un mes de inicio válido");
+    if (start !== undefined) patch.start_month = start;
+    const correctedAmount = money(body.monthly_amount);
+    if (correctedAmount === INVALID || correctedAmount === 0) return bad("El importe mensual debe ser mayor a cero");
+    if (correctedAmount !== undefined) patch.monthly_amount = correctedAmount;
     const end = month(body.end_month);
     if (end === INVALID) return bad("El mes de fin no es válido");
-    if (end !== undefined) {
-        if (end && end < current.start_month) return bad("No puede terminar antes de empezar");
-        patch.end_month = end;
-    }
+    if (end !== undefined) patch.end_month = end;
+    const nextStart = start ?? current.start_month;
+    const nextEnd = end === undefined ? current.end_month : end;
+    if (nextEnd && nextEnd < nextStart) return bad("No puede terminar antes de empezar");
     if (Object.keys(patch).length === 0) return ok();
 
     const { error } = await client.from("cli_retainers").update(patch).eq("id", id);
