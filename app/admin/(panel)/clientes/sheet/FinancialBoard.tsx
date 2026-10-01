@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, Columns3, Download, Plus, RotateCcw, X } from "lucide-react";
 import { currencyOf, formatMoney, monthOf, OWED_STATUSES, PROJECT_STATUSES, projectBalance, retainerBalance, STATUS_LABELS, type Project } from "@/lib/clientes";
+import { readBillingDays } from "@/lib/retainer-frequency";
 import { defaultPaymentPlan, planError, singleStagePayment, stageBalances, validDay, type PaymentPlan, type StageBalance } from "@/lib/payment-plan";
 import type { ClientesData } from "@/lib/clientes-rows";
 import { clientName, FileCell, FxNote, Money, QUOTE_ACCEPT } from "../ui";
@@ -213,14 +214,18 @@ function CreateRow({ data, monthly, onDone, onError, onCancel }: { data: Cliente
     const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
     const [frequency, setFrequency] = useState("mensual");
+    const [firstDay, setFirstDay] = useState("1");
+    const [secondDay, setSecondDay] = useState("31");
     const [date, setDate] = useState(monthly ? data.today.slice(0, 7) : "");
     // router.refresh trae el registro nuevo sin salir de la tabla.
     const router = useRouter();
     return <form className={`${styles.actions} mb-3 rounded border border-[#d7ded8] bg-white p-3`} onSubmit={async (ev) => {
         ev.preventDefault(); if (busy) return; const total = parseAmount(amount); if (total === null || (monthly && total === 0)) { onError("Introduce un importe válido."); return; }
+        const billing_days = readBillingDays(frequency === "quincenal" ? [Number(firstDay), Number(secondDay)] : [Number(firstDay)], frequency === "quincenal" ? "quincenal" : "mensual");
+        if (monthly && !billing_days) { onError("Elige días del 1 al 31 que no coincidan, incluso en febrero."); return; }
         setBusy(true); onError("");
         try {
-            const response = await fetch(`/api/admin/clientes/${monthly ? "retainers" : "projects"}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(monthly ? { client_id: client, concept: name, monthly_amount: total, start_month: date, frequency } : { client_id: client, name, total, delivery_date: date || null, status: "aprobado" }) });
+            const response = await fetch(`/api/admin/clientes/${monthly ? "retainers" : "projects"}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(monthly ? { client_id: client, concept: name, monthly_amount: total, start_month: date, frequency, billing_days } : { client_id: client, name, total, delivery_date: date || null, status: "aprobado" }) });
             const body = await response.json().catch(() => ({})); if (!response.ok) { onError(body.error ?? "No se pudo crear."); return; }
             router.refresh(); onDone();
         } catch { onError("Se perdió la conexión. Revisa si se creó el registro antes de volver a enviarlo."); } finally { setBusy(false); }
@@ -228,10 +233,11 @@ function CreateRow({ data, monthly, onDone, onError, onCancel }: { data: Cliente
         <select disabled={busy} className={styles.button} aria-label="Cliente del nuevo registro" required value={client} onChange={(ev) => setClient(ev.target.value)}><option value="">Seleccionar cliente…</option>{data.clients.filter((c) => !c.archived).map((c) => <option key={c.id} value={c.id}>{c.company || c.name}</option>)}</select>
         <input disabled={busy} className={styles.search} aria-label="Nombre del nuevo registro" required placeholder={monthly ? "Concepto del servicio" : "Nombre del proyecto"} value={name} onChange={(ev) => setName(ev.target.value)} />
         <input disabled={busy} className={`${styles.search} !w-28`} aria-label="Importe del nuevo registro" inputMode="decimal" required placeholder={`${monthly ? "Por cobro" : "Total"} ${currencyOf(data.clients, client)}`} value={amount} onChange={(ev) => setAmount(ev.target.value)} />
-        {monthly && <select disabled={busy} className={styles.button} aria-label="Frecuencia del nuevo servicio" value={frequency} onChange={(ev) => { const next = ev.target.value; setFrequency(next); setDate(next === "quincenal" ? data.today : data.today.slice(0, 7)); }}><option value="mensual">Mensual</option><option value="quincenal">Quincenal · 15 y fin de mes</option></select>}
+        {monthly && <select disabled={busy} className={styles.button} aria-label="Frecuencia del nuevo servicio" value={frequency} onChange={(ev) => { const next = ev.target.value; setFrequency(next); setFirstDay(next === "quincenal" ? "15" : "1"); setSecondDay("31"); setDate(next === "quincenal" ? data.today : data.today.slice(0, 7)); }}><option value="mensual">Mensual</option><option value="quincenal">Quincenal · 2 cobros al mes</option></select>}
+        {monthly && <div className="flex items-center gap-2 text-xs"><label className="flex items-center gap-1">{frequency === "quincenal" ? "Día 1" : "Día de cobro"}<input disabled={busy} className={`${styles.button} !w-16`} aria-label="Primer día de cobro" type="number" min="1" max="31" required value={firstDay} onChange={(ev) => setFirstDay(ev.target.value)} /></label>{frequency === "quincenal" && <label className="flex items-center gap-1">Día 2<input disabled={busy} className={`${styles.button} !w-16`} aria-label="Segundo día de cobro" type="number" min="1" max="31" required value={secondDay} onChange={(ev) => setSecondDay(ev.target.value)} /></label>}</div>}
         <label className="flex items-center gap-2 text-xs">{monthly ? "Inicio" : "Entrega"}<input disabled={busy} className={styles.button} type={monthly && frequency === "mensual" ? "month" : "date"} required={monthly} value={date} onChange={(ev) => setDate(ev.target.value)} /></label>
         <button disabled={busy} type="submit" className={`${styles.button} ${styles.primary}`}>{busy ? "Guardando…" : "Crear"}</button><button disabled={busy} type="button" className={styles.button} onClick={onCancel}>Cancelar</button>
-        {monthly && <p className="w-full text-xs text-[#6d7470]">{frequency === "quincenal" ? "Importe por quincena. Se cobra el día 15 y el último día del mes, a partir de la fecha de inicio." : "Importe por mes. Cada mensualidad se genera desde el día 1."}</p>}
+        {monthly && <p className="w-full text-xs text-[#6d7470]">Importe por cobro. Elige los días acordados con este cliente; si el mes no tiene ese día, se usa el último disponible. La fecha del pago recibido se registra por separado.</p>}
         {!data.clients.some((c) => !c.archived) && <Link className="text-xs underline" href="/admin/clientes/lista">Primero da de alta un cliente</Link>}
     </form>;
 }

@@ -201,3 +201,27 @@ test("quincenal: anticipos dejan saldo a favor hasta generar el cargo", () => {
     assert.equal(b.debt, 0);
     assert.deepEqual(b.pendingDates, []);
 });
+
+test("mensual: cada cliente elige su día, sin adelantar deuda", () => {
+    const r = { ...retainer("m", 2000, "2026-10-01"), billing_days: [10] };
+    assert.equal(retainerBalance(r, [], "2026-10-09").due, 0);
+    assert.equal(retainerBalance(r, [], "2026-10-09").nextDueOn, "2026-10-10");
+    assert.deepEqual(retainerBalance(r, [], "2026-10-10").dueDates, ["2026-10-10"]);
+    assert.equal(retainerBalance({ ...r, end_month: "2026-10-01" }, [], "2026-11-01").due, 2000);
+});
+test("mensual: día 31 y día 30 se ajustan al último disponible", () => {
+    for (const day of [30, 31]) for (const [year, last] of [[2026, 28], [2028, 29]]) {
+        const r = { ...retainer("m", 2000, `${year}-02-01`), billing_days: [day] };
+        assert.deepEqual(retainerBalance(r, [], `${year}-02-${last}`).dueDates, [`${year}-02-${last}`]);
+    }
+});
+test("quincenal: días personalizados, límites y abonos parciales", () => {
+    const r = { ...quincenal(), billing_days: [10, 25] };
+    assert.equal(retainerBalance(r, [], "2026-10-09").due, 0);
+    assert.equal(retainerBalance(r, [], "2026-10-10").nextDueOn, "2026-10-25");
+    const b = retainerBalance(r, [pay("a", 3500, "2026-10-15", { retainer_id: "q" })], "2026-10-31");
+    assert.deepEqual(b.dueDates, ["2026-10-10", "2026-10-25"]);
+    assert.deepEqual(b.pendingDates, ["2026-10-25"]);
+    assert.equal(b.debt, 2500);
+    assert.deepEqual(retainerBalance({ ...r, start_month: "2026-10-11", end_month: "2026-10-24" }, [], "2026-11-01").dueDates, []);
+});

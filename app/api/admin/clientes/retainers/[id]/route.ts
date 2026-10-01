@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { frequencyKey } from "@/lib/retainer-frequency";
 import { addMonths } from "@/lib/clientes";
 import { bad, conflict, date, db, fail, guard, INVALID, money, month, ok, readBody, text } from "@/lib/clientes-api";
@@ -39,12 +40,24 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         const lastOld = `${addMonths(from.slice(0, 7), -1)}-01`;
         const { error: closeErr } = await client.from("cli_retainers").update({ end_month: lastOld }).eq("id", id);
         if (closeErr) return fail(closeErr);
+        const newId = randomUUID();
+        if (config?.value) {
+            const { error: scheduleError } = await client.from("crm_settings").insert({ key: frequencyKey(newId), value: config.value });
+            if (scheduleError) {
+                await client.from("cli_retainers").update({ end_month: current.end_month }).eq("id", id);
+                return fail(scheduleError);
+            }
+        }
         const { data, error } = await client
             .from("cli_retainers")
-            .insert({ client_id: current.client_id, concept: current.concept, monthly_amount: amount, start_month: from, end_month: current.end_month })
+            .insert({ id: newId, client_id: current.client_id, concept: current.concept, monthly_amount: amount, start_month: from, end_month: current.end_month })
             .select("id")
             .single();
-        if (error) return fail(error);
+        if (error) {
+            await client.from("cli_retainers").update({ end_month: current.end_month }).eq("id", id);
+            if (config?.value) await client.from("crm_settings").delete().eq("key", frequencyKey(newId));
+            return fail(error);
+        }
         return ok({ id: data.id });
     }
 

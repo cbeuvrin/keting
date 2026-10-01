@@ -1,4 +1,4 @@
-import { frequencyKey, readFrequency } from "@/lib/retainer-frequency";
+import { frequencyKey, readBillingDays, readFrequency } from "@/lib/retainer-frequency";
 import { planError, planKey, type PaymentPlan } from "@/lib/payment-plan";
 import { crmAdmin, selectAll } from "@/lib/crm";
 import { listFileIds, QUOTES_BUCKET, RECEIPTS_BUCKET } from "@/lib/clientes-files";
@@ -56,14 +56,16 @@ export async function loadClientesData(): Promise<ClientesData> {
                 paymentPlans[id] = setting.value as PaymentPlan;
             }
         }
-        const frequencies = new Map<string, NonNullable<Retainer["frequency"]>>();
+        const frequencies = new Map<string, Pick<Retainer, "frequency" | "billing_days">>();
         if (retainers.length) {
             const { data: settings, error: readError } = await crmAdmin().from("crm_settings").select("key,value").in("key", retainers.map((r) => frequencyKey(r.id)));
             if (readError) throw readError;
             for (const setting of settings ?? []) {
                 const frequency = readFrequency(setting.value?.frequency);
                 if (!frequency) throw new Error("No se pudo leer la frecuencia de un servicio recurrente.");
-                frequencies.set(setting.key.slice("cli_retainer_frequency:".length), frequency);
+                const billing_days = readBillingDays(setting.value?.billing_days, frequency);
+                if (!billing_days) throw new Error("Los días de cobro de un servicio no son válidos.");
+                frequencies.set(setting.key.slice("cli_retainer_frequency:".length), { frequency, billing_days });
             }
         }
         const rate = clients.some((client) => client.currency === "USD") ? await usdRate().catch(() => null) : null;
@@ -74,7 +76,7 @@ export async function loadClientesData(): Promise<ClientesData> {
             retainers: retainers.map((r) => ({
                 ...r,
                 monthly_amount: num(r.monthly_amount),
-                frequency: frequencies.get(r.id) ?? "mensual",
+                ...(frequencies.get(r.id) ?? { frequency: "mensual" as const }),
             })),
             payments: payments.map((p) => ({ ...p, amount: num(p.amount) })),
             receipts,

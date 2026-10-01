@@ -58,6 +58,8 @@ export type Retainer = {
     /** Importe de cada cobro, mensual o quincenal. Nombre de columna histórico. */
     monthly_amount: number;
     frequency?: BillingFrequency;
+    /** Días pactados (1–31); 31 se ajusta al último día disponible. */
+    billing_days?: number[];
     /** Inicio: primer mes mensual (día 1), o fecha exacta quincenal. */
     start_month: string;
     /** Fin inclusivo: último mes mensual o fecha exacta quincenal; null si sigue activo. */
@@ -165,16 +167,23 @@ export function lastDayOfMonth(month: string): string {
     return next.toISOString().slice(0, 10);
 }
 
-/** Las mensualidades existentes conservan su cargo desde el día 1. */
+export function billingDays(retainer: Pick<Retainer, "frequency" | "billing_days">): number[] {
+    return retainer.billing_days ?? (retainer.frequency === "quincenal" ? [15, 31] : [1]);
+}
+
+export function billingLabel(retainer: Pick<Retainer, "frequency" | "billing_days">): string {
+    return billingDays(retainer).map((day) => day === 31 ? "fin de mes" : String(day)).join(" y ");
+}
+
+/** Días pactados por servicio; las mensualidades conservan inicio y fin por mes. */
 export function recurringDates(retainer: Retainer, through: string): string[] {
-    if (retainer.frequency !== "quincenal") {
-        const last = retainer.end_month && retainer.end_month < through ? monthOf(retainer.end_month) : monthOf(through);
-        return monthRange(monthOf(retainer.start_month), last).map((m) => `${m}-01`);
-    }
-    const limit = retainer.end_month && retainer.end_month < through ? retainer.end_month : through;
-    return monthRange(monthOf(retainer.start_month), monthOf(limit))
-        .flatMap((m) => [`${m}-15`, lastDayOfMonth(m)])
-        .filter((date) => date >= retainer.start_month && date <= limit);
+    const monthly = retainer.frequency !== "quincenal";
+    const start = monthly ? `${monthOf(retainer.start_month)}-01` : retainer.start_month;
+    const end = retainer.end_month && (monthly ? lastDayOfMonth(monthOf(retainer.end_month)) : retainer.end_month);
+    const limit = end && end < through ? end : through;
+    return monthRange(monthOf(start), monthOf(limit))
+        .flatMap((month) => billingDays(retainer).map((day) => `${month}-${String(Math.min(day, Number(lastDayOfMonth(month).slice(-2)))).padStart(2, "0")}`))
+        .filter((date) => date >= start && date <= limit).sort();
 }
 
 /** Cada abono cubre primero el periodo pendiente más antiguo. */

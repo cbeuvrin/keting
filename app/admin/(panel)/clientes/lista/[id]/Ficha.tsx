@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { monthLabel, monthOf, PROJECT_STATUSES, STATUS_LABELS, summarizeClient, type Client, type ProjectStatus } from "@/lib/clientes";
+import { billingLabel, monthLabel, monthOf, PROJECT_STATUSES, STATUS_LABELS, summarizeClient, type Client, type ProjectStatus } from "@/lib/clientes";
 import type { ClientesData } from "@/lib/clientes-rows";
 import {
     api,
@@ -287,7 +287,7 @@ function RetainersSection({ clientId, summary, today }: { clientId: string; summ
                             <div className="min-w-0">
                                 <div className="font-medium">
                                     {r.concept} · <Money value={r.monthly_amount} />
-                                    <span className="text-[#1d1d1f]/45 font-normal">/mes</span>
+                                    <span className="text-[#1d1d1f]/45 font-normal">/mes · día {billingLabel(r)}</span>
                                     {!b.active && <span className="ml-2 text-xs text-[#1d1d1f]/45">{r.start_month > today ? "empieza después" : "terminada"}</span>}
                                 </div>
                                 <div className="text-xs text-[#1d1d1f]/55 mt-0.5">
