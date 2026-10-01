@@ -1,5 +1,6 @@
 import { selectAll } from "@/lib/crm";
 import { listFileIds, QUOTES_BUCKET, RECEIPTS_BUCKET } from "@/lib/clientes-files";
+import { usdRate, type UsdRate } from "@/lib/clientes-fx";
 import { todayMx, type Client, type Payment, type Project, type Retainer } from "@/lib/clientes";
 
 // Carga todo el módulo CLIENTES de una vez. Son decenas de filas, no miles:
@@ -15,6 +16,8 @@ export type ClientesData = {
     receipts: string[];
     /** Ids de los proyectos que tienen su cotización subida. */
     quotes: string[];
+    /** USD→MXN del día; null si no hubo forma de obtenerlo. */
+    usdRate: UsdRate | null;
     today: string;
     error: string | null;
 };
@@ -27,24 +30,45 @@ export async function loadClientesData(): Promise<ClientesData> {
     try {
         const [clients, projects, retainers, payments, receipts, quotes] = await Promise.all([
             selectAll<Client>("cli_clients", "*", { campo: "name" }),
-            selectAll<Project>("cli_projects", "*", { campo: "created_at", ascendente: false }),
+            selectAll<Project>("cli_projects", "*", {
+                campo: "created_at",
+                ascendente: false,
+            }),
             selectAll<Retainer>("cli_retainers", "*", { campo: "start_month" }),
-            selectAll<Payment>("cli_payments", "*", { campo: "paid_on", ascendente: false }),
+            selectAll<Payment>("cli_payments", "*", {
+                campo: "paid_on",
+                ascendente: false,
+            }),
             listFileIds(RECEIPTS_BUCKET),
             listFileIds(QUOTES_BUCKET),
         ]);
+        const rate = clients.some((client) => client.currency === "USD") ? await usdRate().catch(() => null) : null;
         return {
             clients,
             projects: projects.map((p) => ({ ...p, total: num(p.total) })),
-            retainers: retainers.map((r) => ({ ...r, monthly_amount: num(r.monthly_amount) })),
+            retainers: retainers.map((r) => ({
+                ...r,
+                monthly_amount: num(r.monthly_amount),
+            })),
             payments: payments.map((p) => ({ ...p, amount: num(p.amount) })),
             receipts,
             quotes,
+            usdRate: rate,
             today,
             error: null,
         };
     } catch (err) {
         const message = err instanceof Error ? err.message : typeof err === "object" && err && "message" in err ? String(err.message) : String(err);
-        return { clients: [], projects: [], retainers: [], payments: [], receipts: [], quotes: [], today, error: message };
+        return {
+            clients: [],
+            projects: [],
+            retainers: [],
+            payments: [],
+            receipts: [],
+            quotes: [],
+            usdRate: null,
+            today,
+            error: message,
+        };
     }
 }

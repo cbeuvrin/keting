@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { formatMoney, STATUS_LABELS, type Client, type Payment, type Project, type ProjectStatus, type Retainer } from "@/lib/clientes";
+import { currencyOf, formatMoney, inMxn, STATUS_LABELS, type Client, type Currency, type Payment, type Project, type ProjectStatus, type Retainer } from "@/lib/clientes";
+import type { ClientesData } from "@/lib/clientes-rows";
 
 // Piezas compartidas de las pestañas de CLIENTES. Mismo lenguaje visual que el
 // CRM: tarjetas blancas con borde fino, tinta #1d1d1f y acento en Playfair.
@@ -16,8 +17,34 @@ export const cellInputCls =
     "w-full min-w-0 bg-transparent px-2 py-1.5 rounded border border-transparent hover:border-[#1d1d1f]/15 focus:border-[#1d1d1f] focus:bg-white outline-none";
 export const thCls = "px-3 py-2.5 text-left text-[11px] font-medium tracking-[0.12em] uppercase text-[#1d1d1f]/45 whitespace-nowrap";
 
-export function Money({ value, muted = false }: { value: number; muted?: boolean }) {
-    return <span className={`tabular-nums whitespace-nowrap ${muted ? "text-[#1d1d1f]/45" : ""}`}>{formatMoney(value)}</span>;
+/**
+ * Moneda de lo que se está mostrando. La ficha de un cliente en dólares y cada
+ * fila de un cliente en dólares la ponen en USD; los totales que mezclan
+ * clientes van en pesos (ya convertidos con `mxn`).
+ */
+export const CurrencyContext = createContext<Currency>("MXN");
+
+export function Money({ value, muted = false, currency }: { value: number; muted?: boolean; currency?: Currency }) {
+    const fromContext = useContext(CurrencyContext);
+    return <span className={`tabular-nums whitespace-nowrap ${muted ? "text-[#1d1d1f]/45" : ""}`}>{formatMoney(value, currency ?? fromContext)}</span>;
+}
+
+/** Los datos con los dólares pasados a pesos, para sumar entre clientes. Sin tipo de cambio, los dólares no suman. */
+export function mxn(data: ClientesData): ClientesData {
+    return inMxn(data, data.usdRate?.rate ?? 0);
+}
+
+/** "US$1 = $18.17 · tipo de cambio del 1 oct 2026", solo si hay clientes en dólares. */
+export function FxNote({ data, className = "" }: { data: ClientesData; className?: string }) {
+    if (!data.clients.some((c) => c.currency === "USD")) return null;
+    const fx = data.usdRate;
+    return (
+        <p className={`text-xs text-[#1d1d1f]/45 ${className}`}>
+            {fx
+                ? `Dólares sumados en pesos a US$1 = ${formatMoney(fx.rate)} · tipo de cambio del ${formatDate(fx.date)}${fx.stale ? " (último disponible)" : ""}`
+                : "Sin tipo de cambio por ahora: los montos en dólares no se están sumando a los totales en pesos."}
+        </p>
+    );
 }
 
 const STATUS_STYLE: Record<ProjectStatus, string> = {
@@ -196,18 +223,29 @@ export function PaymentForm({
     today,
     clientId,
     onDone,
+    initialTarget = "",
+    suggestedAmount,
+    stacked = false,
+    onBusyChange,
 }: {
     clients: Client[];
     projects: Project[];
     retainers: Retainer[];
     today: string;
     clientId?: string;
-    onDone?: () => void;
+    onDone?: (warning: string | null) => void;
+    initialTarget?: string;
+    suggestedAmount?: number;
+    stacked?: boolean;
+    onBusyChange?: (busy: boolean) => void;
 }) {
     const router = useRouter();
     const [saving, setSaving] = useState(false);
     const [client, setClient] = useState(clientId ?? "");
-    const [target, setTarget] = useState("");
+    const [target, setTarget] = useState(initialTarget);
+    const submitting = useRef(false);
+    const [error, setError] = useState("");
+    const [notice, setNotice] = useState("");
     const [amount, setAmount] = useState("");
     const [paidOn, setPaidOn] = useState(today);
     const [note, setNote] = useState("");
@@ -215,48 +253,73 @@ export function PaymentForm({
     // Cambiar la key vacía el input de archivo después de registrar.
     const [fileKey, setFileKey] = useState(0);
 
+    const cur = currencyOf(clients, client);
     const clientProjects = projects.filter((p) => p.client_id === client && p.status !== "cancelado");
     const clientRetainers = retainers.filter((r) => r.client_id === client);
 
     const submit = async (ev: React.FormEvent) => {
         ev.preventDefault();
-        const [kind, id] = target.split(":");
-        setSaving(true);
-        const res = await fetch("/api/admin/clientes/payments", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                project_id: kind === "p" ? id : undefined,
-                retainer_id: kind === "r" ? id : undefined,
-                amount,
-                paid_on: paidOn,
-                note,
-            }),
-        });
-        const data = (await res.json().catch(() => ({}))) as { id?: string; error?: string };
-        if (!res.ok || !data.id) {
-            setSaving(false);
-            window.alert(data.error ?? `Error ${res.status}`);
+        if (submitting.current) return;
+        if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+            setError("Introduce un monto mayor a cero.");
             return;
         }
-        // El pago ya quedó; si el comprobante falla se avisa y se puede subir después desde la tabla.
-        const receiptError = file ? await uploadFile(`payments/${data.id}/receipt`, file) : null;
-        setSaving(false);
-        if (receiptError) window.alert(`El pago se registró, pero ${receiptError.charAt(0).toLowerCase()}${receiptError.slice(1)}. Súbelo desde la tabla.`);
-        setAmount("");
-        setNote("");
-        setTarget("");
-        setFile(null);
-        setFileKey((k) => k + 1);
-        router.refresh();
-        onDone?.();
+        const [kind, id] = target.split(":");
+        submitting.current = true;
+        setSaving(true);
+        onBusyChange?.(true);
+        setError("");
+        setNotice("");
+        try {
+            const res = await fetch("/api/admin/clientes/payments", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    project_id: kind === "p" ? id : undefined,
+                    retainer_id: kind === "r" ? id : undefined,
+                    amount,
+                    paid_on: paidOn,
+                    note,
+                }),
+            });
+            const data = (await res.json().catch(() => ({}))) as { id?: string; error?: string };
+            if (!res.ok || !data.id) {
+                setError(data.error ?? `No se pudo registrar el pago (error ${res.status}).`);
+                return;
+            }
+            // Un fallo al subir el archivo nunca vuelve a enviar el pago ya registrado.
+            let receiptError: string | null = null;
+            if (file) {
+                try {
+                    receiptError = await uploadFile(`payments/${data.id}/receipt`, file);
+                } catch {
+                    receiptError = "Se perdió la conexión al subir el comprobante.";
+                }
+            }
+            const warning = receiptError ? `El pago se registró. El comprobante no se pudo subir: ${receiptError} Puedes adjuntarlo en Pagos.` : null;
+            setAmount("");
+            setNote("");
+            setTarget(initialTarget);
+            setFile(null);
+            setFileKey((k) => k + 1);
+            setNotice(warning ?? "Pago registrado.");
+            router.refresh();
+            onDone?.(warning);
+        } catch {
+            setError("Se perdió la conexión. Revisa el historial de Pagos antes de volver a enviarlo para evitar duplicados.");
+        } finally {
+            submitting.current = false;
+            setSaving(false);
+            onBusyChange?.(false);
+        }
     };
 
     return (
-        <form
-            onSubmit={submit}
-            className={`grid gap-3 sm:grid-cols-2 items-end ${clientId ? "lg:grid-cols-[1.5fr_1fr_1fr_1.3fr_1.3fr_auto]" : "lg:grid-cols-[1.2fr_1.5fr_0.9fr_1fr_1.1fr_1.2fr_auto]"}`}
-        >
+        <form onSubmit={submit} aria-busy={saving}>
+            {error && <p role="alert" className="mb-4 rounded-md bg-[#b4472f]/10 p-3 text-sm text-[#923822]">{error}</p>}
+            {notice && <p role="status" className="mb-4 rounded-md bg-[#1d1d1f]/5 p-3 text-sm">{notice}</p>}
+            <fieldset disabled={saving} className={`grid min-w-0 gap-4 items-end ${stacked ? "grid-cols-1" : `sm:grid-cols-2 ${clientId ? "lg:grid-cols-[1.5fr_1fr_1fr_1.3fr_1.3fr_auto]" : "lg:grid-cols-[1.2fr_1.5fr_0.9fr_1fr_1.1fr_1.2fr_auto]"}`}`}>
+
             {!clientId && (
                 <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
                     Cliente
@@ -280,7 +343,7 @@ export function PaymentForm({
                     </select>
                 </label>
             )}
-            <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
+            {!(stacked && initialTarget) && <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
                 A qué va
                 <select required value={target} onChange={(ev) => setTarget(ev.target.value)} className={`${inputCls} w-full min-w-0`} disabled={!client}>
                     <option value="">{client ? "Elige…" : "Primero el cliente"}</option>
@@ -297,28 +360,33 @@ export function PaymentForm({
                         <optgroup label="Mensualidades">
                             {clientRetainers.map((r) => (
                                 <option key={r.id} value={`r:${r.id}`}>
-                                    {r.concept} · {formatMoney(r.monthly_amount)}/mes
+                                    {r.concept} · {formatMoney(r.monthly_amount, cur)}/mes
                                 </option>
                             ))}
                         </optgroup>
                     )}
                 </select>
+            </label>}
+            <div className="grid gap-1 text-xs text-[#1d1d1f]/60">
+            <label className="grid gap-1">
+                {cur === "USD" ? "Monto (US$)" : "Monto"}
+                <input required type="number" min="0.01" step="0.01" inputMode="decimal" placeholder={cur === "USD" ? "US$0" : "$0"} value={amount} onChange={(ev) => setAmount(ev.target.value)} className={`${inputCls} w-full min-w-0`} />
             </label>
-            <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
-                Monto
-                <input required inputMode="decimal" placeholder="$0" value={amount} onChange={(ev) => setAmount(ev.target.value)} className={`${inputCls} w-full min-w-0`} />
-            </label>
+                {suggestedAmount !== undefined && target === initialTarget && (
+                    <button type="button" onClick={() => setAmount(String(suggestedAmount))} className="justify-self-start py-1 text-xs underline underline-offset-4 hover:text-[#1d1d1f]">Usar saldo completo: {formatMoney(suggestedAmount, cur)}</button>
+                )}
+            </div>
             <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
                 Fecha
                 <input required type="date" value={paidOn} onChange={(ev) => setPaidOn(ev.target.value)} className={`${inputCls} w-full min-w-0`} />
             </label>
             <label className="grid gap-1 text-xs text-[#1d1d1f]/60">
-                Nota
+                Nota (opcional)
                 <input placeholder="Transferencia, anticipo…" value={note} onChange={(ev) => setNote(ev.target.value)} className={`${inputCls} w-full min-w-0`} />
             </label>
             <div className="grid gap-1 text-xs text-[#1d1d1f]/60">
-                Comprobante
-                <label className={`${inputCls} w-full min-w-0 cursor-pointer truncate ${file ? "text-[#1d1d1f]" : "text-[#1d1d1f]/45"}`} title={file?.name}>
+                Comprobante (opcional)
+                <label className={`${inputCls} w-full min-w-0 cursor-pointer truncate focus-within:ring-2 focus-within:ring-[#1d1d1f] ${file ? "text-[#1d1d1f]" : "text-[#1d1d1f]/45"}`} title={file?.name}>
                     {file ? file.name : "Adjuntar foto o PDF"}
                     <input key={fileKey} type="file" accept={RECEIPT_ACCEPT} onChange={(ev) => setFile(ev.target.files?.[0] ?? null)} className="sr-only" />
                 </label>
@@ -326,6 +394,7 @@ export function PaymentForm({
             <button type="submit" disabled={saving} className={buttonCls}>
                 {saving ? "Guardando…" : "Registrar pago"}
             </button>
+            </fieldset>
         </form>
     );
 }

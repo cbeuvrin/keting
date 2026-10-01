@@ -20,6 +20,10 @@ export const STATUS_LABELS: Record<ProjectStatus, string> = {
 /** Estados en los que lo que falta ya se debe. "Esperando" es cotización y "Cancelado" no cuenta. */
 export const OWED_STATUSES: readonly ProjectStatus[] = ["aprobado", "entregado", "en_pausa"];
 
+/** Moneda en la que se le cobra a un cliente. Todo lo suyo (totales, mensualidades, pagos) va en esa moneda. */
+export type Currency = "MXN" | "USD";
+export const CURRENCIES: readonly Currency[] = ["MXN", "USD"];
+
 export type Client = {
     id: string;
     created_at: string;
@@ -29,6 +33,8 @@ export type Client = {
     phone: string | null;
     notes: string | null;
     archived: boolean;
+    /** Puede faltar si la columna aún no existe en la base: entonces es MXN. */
+    currency?: Currency | null;
 };
 
 export type Project = {
@@ -72,7 +78,9 @@ export type Payment = {
 
 /** "YYYY-MM-DD" de hoy en Ciudad de México. */
 export function todayMx(now: Date = new Date()): string {
-    return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Mexico_City" }).format(now);
+    return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Mexico_City",
+    }).format(now);
 }
 
 /** "2026-09-14" → "2026-09" */
@@ -192,16 +200,15 @@ export type ClientSummary = {
     isFixed: boolean;
 };
 
-export function summarizeClient(
-    client: Client,
-    projects: Project[],
-    retainers: Retainer[],
-    payments: Payment[],
-    today: string,
-): ClientSummary {
+export function summarizeClient(client: Client, projects: Project[], retainers: Retainer[], payments: Payment[], today: string): ClientSummary {
     const own = payments.filter((p) => p.client_id === client.id);
     const ps = projects.filter((p) => p.client_id === client.id).map((project) => ({ project, balance: projectBalance(project, own) }));
-    const rs = retainers.filter((r) => r.client_id === client.id).map((retainer) => ({ retainer, balance: retainerBalance(retainer, own, today) }));
+    const rs = retainers
+        .filter((r) => r.client_id === client.id)
+        .map((retainer) => ({
+            retainer,
+            balance: retainerBalance(retainer, own, today),
+        }));
 
     let owed = 0;
     let quoted = 0;
@@ -251,17 +258,85 @@ export function monthlySeries(projects: Project[], payments: Payment[], today: s
         const point = firstPaidOn ? points.get(monthOf(firstPaidOn)) : undefined;
         if (!point) continue;
         point.sales = cents(point.sales + project.total);
-        point.soldProjects.push({ id: project.id, name: project.name, total: project.total });
+        point.soldProjects.push({
+            id: project.id,
+            name: project.name,
+            total: project.total,
+        });
     }
     return range.map((m) => points.get(m)!);
 }
 
-export function formatMoney(n: number): string {
+export function formatMoney(n: number, currency: Currency = "MXN"): string {
     const hasCents = Math.round(n * 100) % 100 !== 0;
-    return new Intl.NumberFormat("es-MX", {
+    const text = new Intl.NumberFormat("es-MX", {
         style: "currency",
         currency: "MXN",
         minimumFractionDigits: hasCents ? 2 : 0,
         maximumFractionDigits: 2,
-    }).format(n);
+    }).format(Math.abs(n));
+    return (n < 0 ? "-" : "") + (currency === "USD" ? `US${text}` : text);
+}
+
+/** Un pendiente por concepto, siempre en la moneda original del cliente. */
+export type PendingCollection = {
+    target: string;
+    clientId: string;
+    name: string;
+    kind: "proyecto" | "mensualidad";
+    remaining: number;
+    status?: ProjectStatus;
+    pendingMonths: string[];
+};
+
+export function pendingCollections(projects: Project[], retainers: Retainer[], payments: Payment[], today: string): PendingCollection[] {
+    const rows: PendingCollection[] = [];
+    for (const project of projects) {
+        if (!OWED_STATUSES.includes(project.status)) continue;
+        const { remaining } = projectBalance(project, payments);
+        if (remaining > 0) rows.push({ target: `p:${project.id}`, clientId: project.client_id, name: project.name, kind: "proyecto", remaining, status: project.status, pendingMonths: [] });
+    }
+    for (const retainer of retainers) {
+        const { debt, pendingMonths } = retainerBalance(retainer, payments, today);
+        if (debt > 0) rows.push({ target: `r:${retainer.id}`, clientId: retainer.client_id, name: retainer.concept, kind: "mensualidad", remaining: debt, pendingMonths });
+    }
+    return rows;
+}
+
+/** Moneda del cliente (MXN si no tiene). */
+export function currencyOf(clients: Client[], clientId: string): Currency {
+    return clients.find((c) => c.id === clientId)?.currency === "USD" ? "USD" : "MXN";
+}
+
+/**
+ * Pasa a pesos todo lo de los clientes en dólares, con un solo tipo de cambio,
+ * para que los totales y la gráfica sumen peras con peras. Lo de cada cliente
+ * se sigue mostrando en su moneda; esto es solo para sumar.
+ */
+export function inMxn<
+    T extends {
+        clients: Client[];
+        projects: Project[];
+        retainers: Retainer[];
+        payments: Payment[];
+    },
+>(data: T, usdRate: number): T {
+    const usd = new Set(data.clients.filter((c) => c.currency === "USD").map((c) => c.id));
+    if (usd.size === 0) return data;
+    const fx = (clientId: string, n: number) => (usd.has(clientId) ? cents(n * usdRate) : n);
+    return {
+        ...data,
+        projects: data.projects.map((p) => ({
+            ...p,
+            total: fx(p.client_id, p.total),
+        })),
+        retainers: data.retainers.map((r) => ({
+            ...r,
+            monthly_amount: fx(r.client_id, r.monthly_amount),
+        })),
+        payments: data.payments.map((p) => ({
+            ...p,
+            amount: fx(p.client_id, p.amount),
+        })),
+    };
 }

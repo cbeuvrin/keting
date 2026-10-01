@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink, BarChart3, Users, FolderKanban, Wallet } from "lucide-react";
+import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink, BarChart3, Users, FolderKanban, Wallet, CircleDollarSign } from "lucide-react";
 
 // Barra lateral fija del panel ADM, con dos grupos: CRM (prospección) y
 // CLIENTES (cobranza). En escritorio se ven los dos grupos apilados. En móvil
@@ -29,7 +29,8 @@ const GROUPS = [
         title: "CLIENTES",
         home: "/admin/clientes",
         items: [
-            { href: "/admin/clientes", label: "Resumen", short: "Resumen", icon: BarChart3 },
+            { href: "/admin/clientes", label: "Mi negocio", short: "Mi negocio", icon: BarChart3 },
+            { href: "/admin/clientes/cobros", label: "Cobros", short: "Cobros", icon: CircleDollarSign },
             { href: "/admin/clientes/lista", label: "Clientes", short: "Clientes", icon: Users },
             { href: "/admin/clientes/proyectos", label: "Proyectos", short: "Proyectos", icon: FolderKanban },
             { href: "/admin/clientes/pagos", label: "Pagos", short: "Pagos", icon: Wallet },
@@ -54,7 +55,7 @@ export function Sidebar() {
         }`;
 
     const renderItem = ({ href, label, short, icon: Icon }: (typeof GROUPS)[number]["items"][number]) => (
-        <Link key={href} href={href} className={linkCls(isActive(href))}>
+        <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined} className={linkCls(isActive(href))}>
             <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.75} />
             <span className="max-w-full truncate leading-none md:leading-normal">{short}</span>
             <span className="sr-only">{label}</span>
@@ -105,13 +106,13 @@ export function Sidebar() {
             </nav>
 
             <div className="hidden md:block absolute bottom-0 w-[220px] p-3">
-                <a
+                <Link
                     href="/"
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-md text-sm text-[#1d1d1f]/45 hover:text-[#1d1d1f] hover:bg-[#1d1d1f]/[0.05] transition-colors"
                 >
                     <ExternalLink className="w-[18px] h-[18px]" strokeWidth={1.75} />
                     Ver sitio
-                </a>
+                </Link>
             </div>
         </aside>
     );

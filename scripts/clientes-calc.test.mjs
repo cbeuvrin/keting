@@ -10,7 +10,10 @@ import {
     summarizeClient,
     monthlySeries,
     todayMx,
+    inMxn,
+    currencyOf,
     formatMoney,
+    pendingCollections,
 } from "../lib/clientes.ts";
 
 const client = { id: "c1", created_at: "", name: "Toogo", company: null, email: null, phone: null, notes: null, archived: false };
@@ -103,4 +106,58 @@ test("gráfica: venta = proyectos aprobados en el mes de su primer pago; ingreso
 test("formato de dinero en pesos", () => {
     assert.equal(formatMoney(40000).replace(/\s/g, " "), "$40,000");
     assert.equal(formatMoney(1500.5).replace(/\s/g, " "), "$1,500.50");
+});
+
+test("dólares: formato US$ y conversión a pesos solo de los clientes en USD", () => {
+    assert.equal(formatMoney(800, "USD"), "US$800");
+    assert.equal(formatMoney(-50.5, "USD"), "-US$50.50");
+    const clients = [
+        { id: "n", name: "Nelson", currency: "USD" },
+        { id: "k", name: "Keting" },
+    ];
+    assert.equal(currencyOf(clients, "n"), "USD");
+    assert.equal(currencyOf(clients, "k"), "MXN");
+    const data = {
+        clients,
+        projects: [project("pn", "aprobado", 1000, { client_id: "n" }), project("pk", "aprobado", 1000, { client_id: "k" })],
+        retainers: [{ ...retainer("rn", 800, "2026-09-01"), client_id: "n" }],
+        payments: [pay("1", 100.5, "2026-09-02", { project_id: "pn", client_id: "n" }), pay("2", 100, "2026-09-02", { project_id: "pk", client_id: "k" })],
+    };
+    const mx = inMxn(data, 18.25);
+    assert.equal(mx.projects[0].total, 18250);
+    assert.equal(mx.projects[1].total, 1000);
+    assert.equal(mx.retainers[0].monthly_amount, 14600);
+    assert.equal(mx.payments[0].amount, 1834.13);
+    assert.equal(mx.payments[1].amount, 100);
+    assert.equal(data.projects[0].total, 1000, "no toca los datos originales");
+});
+
+
+test("cobros: reúne proyectos y mensualidades sin cotizaciones, cancelados ni saldos a favor", () => {
+    const ps = [project("p1", "aprobado", 5000), project("p2", "entregado", 800), project("p3", "esperando", 9000), project("p4", "cancelado", 4000), project("p5", "en_pausa", 2000)];
+    const rs = [retainer("r1", 1000, "2026-08-01"), retainer("r2", 500, "2026-08-01", "2026-08-01")];
+    const pays = [pay("a", 1500, "2026-09-01", {project_id: "p1"}), pay("b", 900, "2026-09-01", {project_id: "p2"}), pay("c", 600, "2026-09-01", {retainer_id: "r1"})];
+    const rows = pendingCollections(ps, rs, pays, "2026-09-15");
+    assert.deepEqual(rows.map(r => [r.target, r.remaining]), [["p:p1", 3500], ["p:p5", 2000], ["r:r1", 1400], ["r:r2", 500]]);
+    assert.deepEqual(rows.find(r => r.target === "r:r1").pendingMonths, ["2026-08", "2026-09"]);
+    assert.equal(rows.reduce((s, r) => s + r.remaining, 0), summarizeClient(client, ps, rs, pays, "2026-09-15").owed);
+});
+
+test("cobros: los pagos parciales reducen el pendiente y liquidarlo lo elimina", () => {
+    const ps = [project("p", "aprobado", 200)];
+    const rows = payments => pendingCollections(ps, [], payments, "2026-10-01");
+    const partial = pay("a", 75, "2026-10-01", {project_id: "p"});
+    assert.equal(rows([partial])[0].remaining, 125);
+    assert.deepEqual(rows([partial, pay("b", 125, "2026-10-01", {project_id: "p"})]), []);
+});
+
+test("cobros: conserva moneda original y el total convertido coincide con el resumen", () => {
+    const clients = [client, {...client, id: "usd", currency: "USD"}];
+    const projects = [project("mx", "aprobado", 1000), project("us", "aprobado", 100, {client_id: "usd"})];
+    const data = {clients, projects, retainers: [], payments: []};
+    assert.equal(pendingCollections(projects, [], [], "2026-10-01")[1].remaining, 100);
+    const mx = inMxn(data, 18.5);
+    const total = pendingCollections(mx.projects, [], [], "2026-10-01").reduce((s, r) => s + r.remaining, 0);
+    assert.equal(total, 2850);
+    assert.equal(total, clients.reduce((s, c) => s + summarizeClient(c, mx.projects, [], [], "2026-10-01").owed, 0));
 });
