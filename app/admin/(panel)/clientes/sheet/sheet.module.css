@@ -1,5 +1,5 @@
 .board { --line: #e3e5e4; --muted: #6d7470; --green: #326b54; height: 100dvh; display: flex; flex-direction: column; padding: 16px 20px 12px; color: #242b27; background: #fbfcfa; min-width: 0; font-size: 13px; }
-.header { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-bottom: 10px; }
+.header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-bottom: 10px; }
 .header h1 { font-size: 22px; font-weight: 650; letter-spacing: -.7px; }
 .header small { color: var(--muted); font-size: 12px; margin-left: 10px; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }

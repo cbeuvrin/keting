@@ -12,7 +12,7 @@ import { Details, parseAmount } from "./Details";
 import type { Sheet } from "./useSheet";
 import styles from "./sheet.module.css";
 
-export function RetainersSheet({ data, sheet, query }: { data: ClientesData; sheet: Sheet; query: string }) {
+export function RetainersSheet({ data, sheet, query, onClearQuery }: { data: ClientesData; sheet: Sheet; query: string; onClearQuery: () => void }) {
     const [expanded, setExpanded] = useState<string | null>(null);
     const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     const rows = data.retainers.filter((r) => normalize(`${r.concept} ${clientName(data.clients, r.client_id)} ${r.frequency ?? "mensual"}`).includes(normalize(query.trim())));
@@ -50,7 +50,7 @@ export function RetainersSheet({ data, sheet, query }: { data: ClientesData; she
                 <td className={styles.money}><Money value={balance.paid} currency={currency} /></td><td className={styles.money}><Money value={balance.debt} currency={currency} />{balance.credit > 0 && <div className={styles.small}>A favor <Money value={balance.credit} currency={currency} /></div>}</td>
                 <td><span className={balance.debt > 0 ? styles.orange : styles.green}>{balance.debt > 0 ? "Por cobrar" : "Al corriente"}</span><div className={styles.small}>{balance.active ? "Activo" : r.start_month > data.today ? "Aún no inicia" : "Terminado"}</div></td>
             </tr>{expanded === r.id && <tr><td colSpan={11} className={styles.details}><Details retainer={r} data={data} sheet={sheet} showPlan={false} onTogglePlan={() => {}} /></td></tr>}</Fragment>;
-        })}{rows.length === 0 && <tr><td colSpan={11} className={styles.empty}>Agrega un servicio mensual o quincenal para empezar.</td></tr>}</tbody>
+        })}{rows.length === 0 && <tr><td colSpan={11} className={styles.empty}>{data.retainers.length ? <><p>No hay servicios que coincidan con «{query}».</p><button type="button" className={`${styles.button} mt-3`} onClick={onClearQuery}>Ver todos los fijos ({data.retainers.length})</button></> : "Agrega un servicio mensual o quincenal para empezar."}</td></tr>}</tbody>
         <tfoot><tr><td colSpan={11} className="text-left text-[10px]">{rows.length} servicios · Días: mensual «10» · quincenal «10, 25». El 31 se ajusta a fin de mes. El importe es por cobro. Corregir fechas o importes recalcula el periodo completo.</td></tr></tfoot>
     </table></div>;
 }

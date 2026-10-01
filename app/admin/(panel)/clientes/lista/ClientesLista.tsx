@@ -60,6 +60,7 @@ export function ClientesLista({ data }: { data: ClientesData }) {
             </form>
 
             <div className="flex flex-wrap items-center gap-3 mb-4">
+                <Link href="/admin/clientes/recurrentes" className={buttonCls}>Ver fijos mensuales y quincenales ({retainers.length})</Link>
                 <input value={query} onChange={(ev) => setQuery(ev.target.value)} placeholder="Buscar cliente…" className={`${inputCls} w-full sm:w-72`} />
                 {archivedCount > 0 && (
                     <label className="flex items-center gap-2 text-sm text-[#1d1d1f]/60">
@@ -76,7 +77,7 @@ export function ClientesLista({ data }: { data: ClientesData }) {
                             <th className={thCls}>Cliente</th>
                             <th className={thCls}>Tipo</th>
                             <th className={`${thCls} text-right`}>Proyectos activos</th>
-                            <th className={`${thCls} text-right`}>Mensualidad</th>
+                            <th className={`${thCls} text-right`}>Tarifa recurrente / mes</th>
                             <th className={`${thCls} text-right`}>Pagado</th>
                             <th className={`${thCls} text-right`}>Debe</th>
                         </tr>
@@ -84,7 +85,7 @@ export function ClientesLista({ data }: { data: ClientesData }) {
                     <tbody>
                         {rows.map((s) => {
                             const active = s.projects.filter((p) => OWED_STATUSES.includes(p.project.status) || p.project.status === "esperando").length;
-                            const monthly = s.retainers.filter((r) => r.balance.active).reduce((sum, r) => sum + r.retainer.monthly_amount, 0);
+                            const monthly = s.retainers.filter((r) => r.balance.active).reduce((sum, r) => sum + r.retainer.monthly_amount * (r.retainer.frequency === "quincenal" ? 2 : 1), 0);
                             return (
                                 <tr key={s.client.id} className="border-b border-[#1d1d1f]/[0.06] last:border-0 hover:bg-[#1d1d1f]/[0.02]">
                                     <td className="px-3 py-3">

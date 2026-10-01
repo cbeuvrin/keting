@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink, BarChart3, Users, FolderKanban, Wallet, CircleDollarSign, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { LayoutDashboard, Table2, Send, FileText, ScanLine, ExternalLink, BarChart3, Users, FolderKanban, Wallet, CircleDollarSign, CalendarDays, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
 // Barra lateral fija del panel ADM, con dos grupos: CRM (prospección) y
 // CLIENTES (cobranza). En escritorio se ven los dos grupos apilados. En móvil
@@ -31,6 +31,7 @@ const GROUPS = [
         home: "/admin/clientes",
         items: [
             { href: "/admin/clientes", label: "Finanzas", short: "Finanzas", icon: BarChart3 },
+            { href: "/admin/clientes/recurrentes", label: "Fijos mensuales y quincenales", short: "Fijos", icon: CalendarDays },
             { href: "/admin/clientes/cobros", label: "Cobros", short: "Cobros", icon: CircleDollarSign },
             { href: "/admin/clientes/lista", label: "Clientes", short: "Clientes", icon: Users },
             { href: "/admin/clientes/proyectos", label: "Proyectos", short: "Proyectos", icon: FolderKanban },
