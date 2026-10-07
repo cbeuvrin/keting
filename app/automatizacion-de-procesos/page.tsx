@@ -1,13 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { FaqSection } from "@/components/seo/faq-section";
-import { ContactModal } from "@/components/pricing/contact-modal";
 import { useLang } from "@/lib/i18n/lang-context";
 import { enHref } from "@/lib/i18n/routes";
 
@@ -151,7 +150,7 @@ export default function AutomatizacionPage() {
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
     const softwareHref = enHref("/desarrollo-de-software", isEn);
-    const [isContactOpen, setIsContactOpen] = useState(false);
+    const eventsHref = enHref("/software-para-eventos", isEn);
     const heroRef = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
     const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
@@ -256,18 +255,20 @@ export default function AutomatizacionPage() {
                         transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
                         className="mt-10 md:mt-12"
                     >
-                        <button
-                            onClick={() => setIsContactOpen(true)}
-                            className="group inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-zinc-800 transition-colors"
+                        <a
+                            href="https://wa.me/525543830150"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-zinc-800 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
                         >
                             {a.hero.ctaLabel}
-                            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        </button>
+                            <ArrowUpRight aria-hidden="true" className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </a>
                     </motion.div>
                 </div>
             </section>
 
-            {/* ── CÓMO TRABAJAMOS (4 pasos) ── */}
+            {/* ── QUÉ INCLUYE ── */}
             <section className="relative bg-white py-20 md:py-28 px-6 md:px-12 lg:px-24 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...reveal} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="flex items-center gap-3 mb-12 md:mb-16">
@@ -293,6 +294,27 @@ export default function AutomatizacionPage() {
                             </motion.div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* ── CÓMO TRABAJAMOS ── */}
+            <section aria-labelledby="como-trabajamos" className="py-20 md:py-28 px-6 md:px-12 lg:px-24">
+                <div className="max-w-7xl mx-auto">
+                    <motion.h2 {...reveal} transition={{ duration: 0.7 }} id="como-trabajamos" className="text-3xl md:text-5xl font-bold tracking-tight mb-12 md:mb-16">
+                        {a.workflow.title}
+                    </motion.h2>
+                    <ol className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+                        {a.workflow.items.map((step, i) => (
+                            <motion.li key={step.title} {...reveal} transition={{ duration: 0.7, delay: i * 0.08 }} className="border-t border-[#1d1d1f]/12 pt-6">
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight">
+                                    <span className="font-serif italic font-normal text-[#1d1d1f]/40">{PASOS_N[i]} · </span>
+                                    {step.title}
+                                </h3>
+                                {step.price && <p className="mt-3 text-base font-medium">{step.price}</p>}
+                                <p className="mt-5 text-base text-[#1d1d1f]/65 font-light leading-relaxed">{step.description}</p>
+                            </motion.li>
+                        ))}
+                    </ol>
                 </div>
             </section>
 
@@ -332,16 +354,14 @@ export default function AutomatizacionPage() {
                             <strong className="font-semibold text-white">{a.darkSection.paraBold2}</strong>
                             {a.darkSection.paraEnd}
                         </p>
-                        <div className="flex flex-wrap gap-2">
-                            {a.darkSection.procesos.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="text-[11px] md:text-xs font-medium tracking-wide text-white/70 border border-white/15 rounded-full px-3 py-1.5"
-                                >
-                                    {tag}
-                                </span>
+                        <ul className="space-y-5">
+                            {a.darkSection.procesos.map((process) => (
+                                <li key={process.title} className="border-t border-white/15 pt-5 text-base text-white/70 font-light leading-relaxed">
+                                    <strong className="font-semibold text-white">{process.title}:</strong>{" "}
+                                    {process.description}
+                                </li>
                             ))}
-                        </div>
+                        </ul>
                     </motion.div>
 
                     <motion.div
@@ -444,6 +464,19 @@ export default function AutomatizacionPage() {
             {/* ── STATEMENT gigante con scrub de scroll ── */}
             <FraseImpactoIA />
 
+            {/* ── AGENCIAS DE EVENTOS ── */}
+            <section aria-labelledby="agencias-eventos" className="py-20 md:py-28 px-6 md:px-12 lg:px-24 border-y border-[#1d1d1f]/10">
+                <motion.div {...reveal} transition={{ duration: 0.7 }} className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                    <h2 id="agencias-eventos" className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.1]">{a.events.title}</h2>
+                    <div>
+                        <p className="text-base md:text-lg text-[#1d1d1f]/65 font-light leading-relaxed">{a.events.description}</p>
+                        <a href={eventsHref} className="inline-flex items-center gap-2 mt-8 font-semibold underline underline-offset-4 hover:opacity-70 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-4">
+                            {a.events.linkLabel} <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </motion.div>
+            </section>
+
             {/* ── FAQ (con schema FAQPage) ── */}
             <FaqSection
                 items={a.faq}
@@ -453,7 +486,6 @@ export default function AutomatizacionPage() {
             />
 
             <Footer />
-            <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
         </main>
     );
 }

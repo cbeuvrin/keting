@@ -937,7 +937,7 @@ const es = {
             h1c: "con ",
             h1accent: "IA",
             h1dot: ".",
-            ctaLabel: "Cotiza tu automatización",
+            ctaLabel: "Agenda un diagnóstico de 20 minutos",
             subBold: "Automatización de procesos e implementación de IA",
             subMid1: " para tu empresa en Ciudad de México y todo el país: tu equipo pierde horas cada semana en tareas repetitivas y nosotros las ",
             subItalic: "automatizamos",
@@ -964,6 +964,31 @@ const es = {
                 },
             ],
         },
+        workflow: {
+            title: "Cómo trabajamos",
+            items: [
+                {
+                    title: "Diagnóstico",
+                    price: "desde $11,000 MXN",
+                    description: "En una semana revisamos tu operación con tu equipo y te entregamos las 3 tareas que más conviene automatizar, con las horas que recuperarían. Si decides implementar, se descuenta del proyecto.",
+                },
+                {
+                    title: "Implementación",
+                    price: "precio fijo tras el diagnóstico",
+                    description: "Automatizamos un proceso de punta a punta, conectado a tus herramientas, y lo probamos con datos reales antes de entregarlo. Listo en 3 a 4 semanas.",
+                },
+                {
+                    title: "Acompañamiento mensual",
+                    price: "",
+                    description: "Monitoreamos que todo funcione, hacemos ajustes y cada mes te mostramos cuántas horas recuperó tu equipo. Cuando estés listo, pasamos al siguiente proceso.",
+                },
+            ],
+        },
+        events: {
+            title: "¿Tienes una agencia de eventos?",
+            description: "Venimos de producir eventos, así que conocemos la operación desde dentro. Automatizamos cotizaciones, registro de asistentes y reportes post-evento para que tu equipo atienda más eventos con el mismo tiempo.",
+            linkLabel: "Ver software para eventos",
+        },
         darkSection: {
             eyebrow: "Dónde aplica",
             h2pre: "Procesos que ya ",
@@ -976,12 +1001,22 @@ const es = {
             imgAlt: "Gobernia · Agentes de IA automatizando el análisis de negocio",
             badge: "Agentes IA en producción",
             procesos: [
-                "Ventas y cotizaciones",
-                "Atención a clientes",
-                "Facturación y administración",
-                "Reportes y tableros",
-                "Inventarios y pedidos",
-                "Onboarding y RH",
+                {
+                    title: "Cotizaciones por WhatsApp",
+                    description: "el cliente pide precio y recibe una propuesta armada en minutos, con tu catálogo.",
+                },
+                {
+                    title: "Confirmación de asistentes",
+                    description: "invitaciones, recordatorios y QR de acceso por WhatsApp, con la lista actualizada en tiempo real.",
+                },
+                {
+                    title: "Atención a clientes 24/7",
+                    description: "responde preguntas frecuentes y agenda citas; los casos complejos pasan a tu equipo.",
+                },
+                {
+                    title: "Reportes automáticos",
+                    description: "los datos se juntan solos y el reporte llega redactado, listo para enviar.",
+                },
             ],
         },
         implementacion: {
@@ -1041,7 +1076,7 @@ const es = {
             },
             {
                 q: "¿Cuánto cuesta automatizar un proceso?",
-                a: "Automatizar un proceso arranca desde $11,000 MXN. El precio final depende de cuántos procesos automatices, de las integraciones con los sistemas que ya usas (ERP, CRM, WhatsApp) y del volumen de operaciones. Tras un diagnóstico corto te damos alcance y precio fijo, sin sorpresas.",
+                a: "El diagnóstico arranca desde $11,000 MXN y se descuenta si implementas. Después te damos un precio fijo por la implementación, que depende de cuántos sistemas hay que conectar y del volumen de uso. El acompañamiento mensual incluye mantenimiento, ajustes y el costo de la IA dentro de un tope de uso. Sin sorpresas.",
             },
             {
                 q: "¿Se integra con los sistemas que ya uso?",
@@ -2163,7 +2198,7 @@ const en: typeof es = {
             h1c: "with ",
             h1accent: "AI",
             h1dot: ".",
-            ctaLabel: "Get an automation quote",
+            ctaLabel: "Book a 20-minute diagnostic call",
             subBold: "Process automation and AI implementation",
             subMid1: " for your company: your team loses hours every week on repetitive tasks, and we ",
             subItalic: "automate",
@@ -2190,6 +2225,31 @@ const en: typeof es = {
                 },
             ],
         },
+        workflow: {
+            title: "How we work",
+            items: [
+                {
+                    title: "Diagnosis",
+                    price: "from $11,000 MXN",
+                    description: "In one week, we review your operation with your team and identify the 3 tasks most worth automating, along with the hours they would save. If you move forward with implementation, the diagnostic fee is credited toward the project.",
+                },
+                {
+                    title: "Implementation",
+                    price: "fixed price after diagnosis",
+                    description: "We automate one process end to end, connected to your tools, and test it with real data before handing it over. Ready in 3 to 4 weeks.",
+                },
+                {
+                    title: "Monthly support",
+                    price: "",
+                    description: "We monitor everything, make adjustments, and show you how many hours your team saved each month. When you're ready, we move on to the next process.",
+                },
+            ],
+        },
+        events: {
+            title: "Do you run an event agency?",
+            description: "We come from event production, so we know the operation from the inside. We automate quotes, attendee registration, and post-event reports so your team can handle more events in the same amount of time.",
+            linkLabel: "Explore event software",
+        },
         darkSection: {
             eyebrow: "Where it applies",
             h2pre: "Processes we already ",
@@ -2202,12 +2262,22 @@ const en: typeof es = {
             imgAlt: "Gobernia · AI agents automating business analysis",
             badge: "AI agents in production",
             procesos: [
-                "Sales and quotes",
-                "Customer support",
-                "Billing and admin",
-                "Reports and dashboards",
-                "Inventory and orders",
-                "Onboarding and HR",
+                {
+                    title: "WhatsApp quotes",
+                    description: "a customer asks for a price and receives a proposal built from your catalog in minutes.",
+                },
+                {
+                    title: "Attendee confirmation",
+                    description: "invitations, reminders, and entry QR codes via WhatsApp, with the attendee list updated in real time.",
+                },
+                {
+                    title: "24/7 customer support",
+                    description: "answers common questions and books appointments; complex cases go to your team.",
+                },
+                {
+                    title: "Automatic reports",
+                    description: "data is collected automatically and the report arrives already written, ready to send.",
+                },
             ],
         },
         implementacion: {
@@ -2267,7 +2337,7 @@ const en: typeof es = {
             },
             {
                 q: "How much does it cost to automate a process?",
-                a: "Automating a process starts at around $600 USD. The final price depends on how many processes you automate, the integrations with the systems you already use (ERP, CRM, WhatsApp) and your operating volume. After a short diagnosis we give you scope and a fixed price, no surprises.",
+                a: "Diagnosis starts at $11,000 MXN and is credited toward implementation if you proceed. We then give you a fixed implementation price based on how many systems need connecting and your usage volume. Monthly support includes maintenance, adjustments, and AI costs within a usage cap. No surprises.",
             },
             {
                 q: "Does it integrate with the systems I already use?",
