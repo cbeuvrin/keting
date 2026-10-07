@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
 
+const title = "Automatización de procesos con IA en CDMX · Keting Media";
+const description = "Automatizamos procesos con IA y WhatsApp conectados a tus sistemas. Diagnóstico desde $11,000 MXN y precio fijo. Tu equipo recupera horas cada semana.";
+
 export const metadata: Metadata = {
-    title: "Automatización de procesos con IA en CDMX y México",
-    description:
-        "Automatización de procesos con IA en Ciudad de México (CDMX) y todo el país: flujos, agentes y chatbots conectados a tus sistemas (ERP, CRM, WhatsApp).",
+    title: { absolute: title },
+    description,
     keywords: [
         "automatización de procesos",
         "automatización con ia",
@@ -25,16 +27,15 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: "Automatización de procesos con IA · Keting Media",
-        description:
-            "Flujos, agentes y chatbots conectados a tus sistemas. Recupera horas de trabajo manual.",
+        title,
+        description,
         url: "/automatizacion-de-procesos",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Automatización de procesos con IA · Keting Media",
-        description: "Flujos, agentes y chatbots conectados a tus sistemas (ERP, CRM, WhatsApp).",
+        title,
+        description,
     },
 };
 
