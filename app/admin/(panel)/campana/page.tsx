@@ -1,7 +1,7 @@
 import { selectAll, type Lead } from "@/lib/crm";
 import { Campana } from "./Campana";
 import { SeguimientoEditor } from "./SeguimientoEditor";
-import { loadPrototipoCopy, loadAllPersonalCopies, loadAllSeguimientoCopies } from "@/lib/crm-settings";
+import { loadPrototipoCopy, loadAllPersonalCopies, loadAllSeguimientoCopies, SEGUIMIENTO_ACTIVO } from "@/lib/crm-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +58,7 @@ export default async function CampanaPage() {
                 personales={personales}
                 resendReady={Boolean(process.env.RESEND_KETING_API_KEY && process.env.RESEND_KETING_FROM)}
             />
-            <SeguimientoEditor seguimientos={seguimientos} elegiblesHoy={elegiblesSeguimiento} />
+            <SeguimientoEditor seguimientos={seguimientos} elegiblesHoy={elegiblesSeguimiento} activo={SEGUIMIENTO_ACTIVO} />
         </>
     );
 }

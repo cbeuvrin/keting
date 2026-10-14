@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { esCorreoEnviable, selectAll, crmAdmin, SERVICE_LABELS } from "@/lib/crm";
-import { loadPersonalCopy, loadSeguimientoCopy, type PersonalCopy } from "@/lib/crm-settings";
+import { loadPersonalCopy, loadSeguimientoCopy, SEGUIMIENTO_ACTIVO, type PersonalCopy } from "@/lib/crm-settings";
 import type { Lead, LeadService } from "@/lib/crm";
 import { personalEmail } from "@/lib/email-templates/personal";
 import { unsubscribeHeaders } from "@/lib/email-html";
@@ -139,9 +139,9 @@ export async function GET(request: Request) {
     // Candidatos a seguimiento: abrieron su inicial hace SEGUIMIENTO_DIAS o
     // más, nunca recibieron ya uno, y el trato no está cerrado a mano en el
     // panel. Ordenados por apertura más vieja primero — quien lleva más
-    // tiempo esperando pasa antes.
+    // tiempo esperando pasa antes. Con SEGUIMIENTO_ACTIVO apagado, nadie.
     const corteSeguimiento = arranque - SEGUIMIENTO_DIAS * 24 * 60 * 60 * 1000;
-    const tandaSeguimiento: Lead[] = todos
+    const tandaSeguimiento: Lead[] = !SEGUIMIENTO_ACTIVO ? [] : todos
         .filter((l) => {
             if (yaSeguimiento.has(l.id) || l.stage !== SEGUIMIENTO_SOLO_ETAPA) return false;
             if (!esCorreoEnviable(l.email)) return false;

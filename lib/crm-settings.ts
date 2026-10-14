@@ -116,6 +116,11 @@ export function seguimientoKey(service?: LeadService | null): string {
     return service ? `${SEGUIMIENTO_SETTINGS_KEY}:${service}` : SEGUIMIENTO_SETTINGS_KEY;
 }
 
+// Interruptor de la segunda pasada del cron. En `false` no sale ningún
+// seguimiento —solo los correos iniciales— y el panel lo muestra como pausado.
+// Los textos guardados no se tocan: al volver a `true` sale lo que haya.
+export const SEGUIMIENTO_ACTIVO = false;
+
 // El recordatorio que sale solo cuando alguien abrió el correo inicial y no
 // respondió: corto, sin repetir el argumento completo, una sola pregunta
 // abierta y el teléfono en el cuerpo (no solo en el pie gris) — mismo criterio

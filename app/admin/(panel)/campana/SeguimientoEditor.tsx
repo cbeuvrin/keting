@@ -13,9 +13,11 @@ import type { PersonalCopy } from "@/lib/crm-settings";
 export function SeguimientoEditor({
     seguimientos,
     elegiblesHoy,
+    activo,
 }: {
     seguimientos: Record<string, PersonalCopy>;
     elegiblesHoy: number;
+    activo: boolean;
 }) {
     const [servicio, setServicio] = useState("");
     const copyActual = seguimientos[servicio] ?? seguimientos[""];
@@ -66,16 +68,27 @@ export function SeguimientoEditor({
                         a quien abrió y no respondió
                     </span>
                 </h2>
-                <p className="text-sm text-[#1d1d1f]/60 mb-6 max-w-2xl">
-                    Cada mañana, después de los correos nuevos, el cron manda este recordatorio a quien
-                    abrió su correo inicial hace 4 días o más y todavía no recibió uno — como máximo
-                    diez al día, uno por contacto para siempre. Esto solo edita el texto; no envía nada.
-                    {elegiblesHoy > 0 ? (
-                        <> Ahora mismo hay <strong>{elegiblesHoy}</strong> que calificarían.</>
-                    ) : (
-                        <> Ahora mismo no hay ninguno que califique.</>
-                    )}
-                </p>
+                {activo ? (
+                    <p className="text-sm text-[#1d1d1f]/60 mb-6 max-w-2xl">
+                        Cada mañana, después de los correos nuevos, el cron manda este recordatorio a quien
+                        abrió su correo inicial hace 4 días o más y todavía no recibió uno — como máximo
+                        veinte al día, uno por contacto para siempre. Esto solo edita el texto; no envía nada.
+                        {elegiblesHoy > 0 ? (
+                            <> Ahora mismo hay <strong>{elegiblesHoy}</strong> que calificarían.</>
+                        ) : (
+                            <> Ahora mismo no hay ninguno que califique.</>
+                        )}
+                    </p>
+                ) : (
+                    <p className="text-sm text-[#1d1d1f]/60 mb-6 max-w-2xl">
+                        <strong className="text-[#1d1d1f]">Pausado:</strong> el cron no está mandando
+                        seguimientos, solo los correos iniciales. El texto se puede seguir editando y
+                        guardando; saldrá cuando se reactive.
+                        {elegiblesHoy > 0 && (
+                            <> Hay <strong>{elegiblesHoy}</strong> que calificarían si estuviera activo.</>
+                        )}
+                    </p>
+                )}
 
                 <div className="grid gap-4">
                     <select
