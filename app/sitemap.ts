@@ -3,6 +3,7 @@ import { articles as staticArticles } from '@/lib/blog-data';
 import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE } from '@/lib/case-studies';
 import { EN_ARTICLE_SLUGS } from '@/lib/blog-en';
 import { createClient } from '@supabase/supabase-js';
+import { toIsoDate } from '@/lib/blog-utils';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -25,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { data: dbArticles } = await supabase
         .from('articles')
-        .select('slug, date');
+        .select('slug, date, created_at, updated_at');
 
     // 2. Definir rutas estáticas principales
     const staticRoutes: MetadataRoute.Sitemap = [
@@ -79,18 +80,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // disjuntos y no se nota, pero en cuanto se migre un artículo estático a la
     // DB (o el cron genere un slug que ya existe en el repo) Google recibe URLs
     // duplicadas. Los estáticos van primero: si hay colisión, gana el repo.
+    //
+    // <lastmod> es la fecha real del artículo: su última edición si la hay
+    // (`updated_at`, que pone un trigger en Supabase) y si no la de publicación.
+    // Antes era `new Date()` para todos, así que cada petición anunciaba los 25
+    // artículos como "cambiados hoy" — Google aprende a ignorar un lastmod que
+    // siempre miente, y entonces tampoco ve las actualizaciones de verdad.
     const seenEsBlogSlugs = new Set<string>();
     const blogEsRoutes: MetadataRoute.Sitemap = [];
 
-    for (const slug of [
-        ...staticArticles.map((article) => article.slug),
-        ...(dbArticles || []).map((article) => article.slug),
+    for (const { slug, lastmod } of [
+        ...staticArticles.map((article) => ({ slug: article.slug, lastmod: toIsoDate(article.date) })),
+        ...(dbArticles || []).map((article) => ({
+            slug: article.slug,
+            lastmod: toIsoDate(article.updated_at) ?? toIsoDate(article.date) ?? toIsoDate(article.created_at),
+        })),
     ]) {
         if (!slug || seenEsBlogSlugs.has(slug)) continue;
         seenEsBlogSlugs.add(slug);
         blogEsRoutes.push({
             url: `${SITE_URL}/blog/${slug}`,
-            lastModified: new Date(),
+            ...(lastmod ? { lastModified: lastmod } : {}),
             changeFrequency: 'monthly',
             priority: 0.7,
         });
