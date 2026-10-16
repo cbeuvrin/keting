@@ -12,7 +12,7 @@ import { ArrowUpRight, ArrowLeft, Plus } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ContactModal } from "@/components/pricing/contact-modal";
-import type { CaseStudyBase, CaseStudyLangContent } from "@/lib/case-studies";
+import type { CaseStudyBase, CaseStudyLangContent, CaseStudyService } from "@/lib/case-studies";
 import { CASE_STUDIES_PUBLISHED_DATE } from "@/lib/case-studies";
 import { getTestimonialForCase } from "@/lib/testimonials";
 
@@ -59,6 +59,24 @@ const LABELS: Record<Lang, {
         ctaBody: "A 30-minute coffee is enough to see if we're a fit. No commitment.",
         ctaButton: "Let's talk",
         designedBy: "Designed by",
+    },
+};
+
+// El texto del enlace es el nombre del servicio tal como se busca (y como lo
+// titula su página), no un "ver más": es lo que le dice a Google de qué trata
+// la página de destino.
+const SERVICE_LINKS: Record<Lang, { label: string } & Record<CaseStudyService, { href: string; text: string }>> = {
+    es: {
+        label: "Servicio",
+        web: { href: "/desarrollo-web", text: "Diseño y desarrollo web a medida" },
+        software: { href: "/desarrollo-de-software", text: "Desarrollo de software y apps a la medida" },
+        eventos: { href: "/software-para-eventos", text: "Software para eventos en vivo" },
+    },
+    en: {
+        label: "Service",
+        web: { href: "/en/desarrollo-web", text: "Custom web design & development" },
+        software: { href: "/en/desarrollo-de-software", text: "Custom software & app development" },
+        eventos: { href: "/en/software-para-eventos", text: "Software for live events" },
     },
 };
 
@@ -385,6 +403,21 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
                         </p>
                     </div>
                 )}
+
+                {/* Sin borde propio: lo que va justo arriba (detalles, testimonio) ya
+                    cierra con línea y quedaban dos seguidas. */}
+                <div className="max-w-5xl mx-auto mt-16">
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-[#1d1d1f]/40 font-mono mb-3">
+                        {SERVICE_LINKS[lang].label}
+                    </div>
+                    <Link
+                        href={SERVICE_LINKS[lang][study.service].href}
+                        className="group inline-flex items-center gap-3 text-2xl md:text-3xl font-light tracking-tight text-[#1d1d1f] hover:text-[#1d1d1f]/70 transition-colors"
+                    >
+                        {SERVICE_LINKS[lang][study.service].text}
+                        <ArrowUpRight className="w-6 h-6 shrink-0 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    </Link>
+                </div>
             </section>
 
             {/* ============ CTA ============ */}

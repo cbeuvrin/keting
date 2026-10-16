@@ -50,8 +50,16 @@ export type CaseStudyLangContent = {
     }[];
 };
 
+/**
+ * Página de servicio a la que pertenece el caso. Los casos tienen el mejor CTR
+ * del sitio y las páginas de servicio casi no aparecen en Google: el enlace
+ * de cada caso a su servicio es lo que les pasa esa relevancia.
+ */
+export type CaseStudyService = "web" | "software" | "eventos";
+
 export type CaseStudy = {
     slug: string;
+    service: CaseStudyService;
     /** Valor de la métrica destacada — idéntico en ES/EN (ej. "100+", "↑ 8x"). */
     metricValue: string;
     /** Sitio del cliente. Suzuki no tiene URL pública (app de evento en iPad). */
@@ -93,6 +101,7 @@ export function splitCaseStudy(study: CaseStudy, lang: "es" | "en"): {
 export const CASE_STUDIES: CaseStudy[] = [
     {
         slug: "re-dress",
+        service: "software",
         metricValue: "Full stack",
         url: "https://www.redressmx.com/",
         image: "/portafolio/screenshots/redress.jpg",
@@ -209,6 +218,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "iudex",
+        service: "web",
         metricValue: "100k+",
         url: "https://www.iudex.mx/",
         image: "/portafolio/screenshots/iudex.jpg",
@@ -243,6 +253,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "smile-better-clinics",
+        service: "web",
         metricValue: "↑ 3x",
         url: "https://smilebetterclinics.com/",
         image: "/portafolio/screenshots/smilebetter.jpg",
@@ -277,6 +288,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "gobernia",
+        service: "software",
         metricValue: "↑ 8x",
         url: "https://www.gobernia.ai/",
         image: "/portafolio/screenshots/gobernia.jpg",
@@ -311,6 +323,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "happtek",
+        service: "web",
         metricValue: "↑ 6x",
         url: "https://www.happtek.com.mx/",
         image: "/portafolio/screenshots/audiofive.jpg",
@@ -345,6 +358,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "barmored",
+        service: "web",
         metricValue: "↑ 7x",
         url: "https://www.barmoredsecurity.com/",
         image: "/portafolio/screenshots/barmored.jpg",
@@ -379,6 +393,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "toogo",
+        service: "software",
         metricValue: "100+",
         url: "https://www.toogo.store/",
         image: "/portafolio/screenshots/toogo.jpg",
@@ -414,6 +429,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     {
         // Edición 2026: registro, selección de evento, QR y métricas de asistencia.
         slug: "los-didis-2026",
+        service: "eventos",
         url: "https://losdidis2026.com/",
         metricValue: "QR",
         image: "/portafolio/screenshots/los-didis-registro.webp",
@@ -525,6 +541,7 @@ export const CASE_STUDIES: CaseStudy[] = [
         // consigue el número real de accesos, se cambia aquí y en
         // lib/testimonials.ts si algún día tiene testimonio.
         slug: "los-didis",
+        service: "eventos",
         metricValue: "1,800",
         image: "/soluciones/ipad-didis-3.png",
         bareImage: true,
@@ -559,6 +576,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "suzuki",
+        service: "eventos",
         metricValue: "500+",
         image: "/soluciones/suzuki-ipad.png",
         bareImage: true,
@@ -593,6 +611,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "rosymar-gonzalez",
+        service: "web",
         metricValue: "↑ 5x",
         url: "https://rosymargonzalez.com/",
         image: "/portafolio/screenshots/rosymargonzalez.jpg",
@@ -627,6 +646,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     {
         slug: "ivan-ivanovich-academy",
+        service: "software",
         metricValue: "↑ 4x",
         url: "https://ivanivanovich.com/",
         image: "/portafolio/screenshots/ivanivanovich-lms.webp",
