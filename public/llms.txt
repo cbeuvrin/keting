@@ -33,6 +33,8 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 - [Tienda en línea a medida vs. Shopify](https://ketingmedia.com/blog/tienda-en-linea-a-medida-vs-shopify): Cuál conviene según la etapa del negocio.
 - [¿Puedo crear mi app o web solo con IA? (vibe coding)](https://ketingmedia.com/blog/puedo-crear-mi-app-o-web-solo-con-ia-vibe-coding): Qué sí funciona, dónde se rompe y cuándo necesitas ingeniería.
 - [Lovable: qué es, cuánto cuesta y hasta dónde llega](https://ketingmedia.com/blog/lovable-que-es-cuanto-cuesta-y-hasta-donde-llega): Guía honesta 2026 — precios, techo real y cuándo pasar a ingeniería.
+- [¿Qué es AEO? Diferencia con SEO y GEO](https://ketingmedia.com/blog/que-es-aeo-optimizacion-para-motores-de-respuesta): Qué es la optimización para motores de respuesta, qué dice Google y qué cambiamos en nuestro propio blog, con la línea base publicada.
+- [Nadie puede garantizarte resultados en GEO](https://ketingmedia.com/blog/posicionamiento-en-chatgpt-por-que-nadie-puede-garantizarlo): Por qué el posicionamiento en ChatGPT y otras IA no se puede garantizar, con la evidencia de estudios controlados.
 
 ## English
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.

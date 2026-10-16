@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { articles as staticArticles } from '@/lib/blog-data';
 import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE } from '@/lib/case-studies';
-import { EN_ARTICLE_SLUGS } from '@/lib/blog-en';
+import { EN_ARTICLES } from '@/lib/blog-en';
 import { createClient } from '@supabase/supabase-js';
 import { toIsoDate } from '@/lib/blog-utils';
 
@@ -28,32 +28,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .from('articles')
         .select('slug, date, created_at, updated_at');
 
-    // 2. Definir rutas estáticas principales
+    // 2. Rutas fijas, SIN <lastmod>. Antes llevaban `new Date()` (igual que el blog EN): 33 de las 92
+    // URLs se anunciaban como "cambiadas hoy" en cada petición. No hay una fecha
+    // real de su última edición (el sitemap corre en Vercel, sin git), y una
+    // fecha falsa es peor que ninguna: Google aprende a ignorar el lastmod del
+    // sitio entero, incluido el de los artículos, que ahora sí es real.
     const staticRoutes: MetadataRoute.Sitemap = [
-        { url: SITE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
-        { url: `${SITE_URL}/desarrollo-web`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-        { url: `${SITE_URL}/desarrollo-de-software`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-        { url: `${SITE_URL}/automatizacion-de-procesos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-        { url: `${SITE_URL}/en`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/desarrollo-web`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/desarrollo-de-software`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/automatizacion-de-procesos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/software-para-eventos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-        { url: `${SITE_URL}/en/software-para-eventos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
-        { url: `${SITE_URL}/en/portafolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
-        { url: `${SITE_URL}/nosotros`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-        { url: `${SITE_URL}/en/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-        { url: `${SITE_URL}/nosotros/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-        { url: `${SITE_URL}/en/about/carlos-beuvrin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-        { url: `${SITE_URL}/contacto`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.75 },
-        { url: `${SITE_URL}/en/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.65 },
-        { url: `${SITE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-        { url: `${SITE_URL}/en/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-        { url: `${SITE_URL}/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-        { url: `${SITE_URL}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-        { url: `${SITE_URL}/en/aviso-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
-        { url: `${SITE_URL}/en/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
+        { url: SITE_URL, changeFrequency: 'weekly', priority: 1 },
+        { url: `${SITE_URL}/desarrollo-web`, changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/desarrollo-de-software`, changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/automatizacion-de-procesos`, changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/en`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/desarrollo-web`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/desarrollo-de-software`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/automatizacion-de-procesos`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/software-para-eventos`, changeFrequency: 'monthly', priority: 0.9 },
+        { url: `${SITE_URL}/en/software-para-eventos`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/portafolio`, changeFrequency: 'monthly', priority: 0.85 },
+        { url: `${SITE_URL}/en/portafolio`, changeFrequency: 'monthly', priority: 0.75 },
+        { url: `${SITE_URL}/nosotros`, changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${SITE_URL}/en/about`, changeFrequency: 'monthly', priority: 0.6 },
+        { url: `${SITE_URL}/nosotros/carlos-beuvrin`, changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${SITE_URL}/en/about/carlos-beuvrin`, changeFrequency: 'monthly', priority: 0.6 },
+        { url: `${SITE_URL}/contacto`, changeFrequency: 'yearly', priority: 0.75 },
+        { url: `${SITE_URL}/en/contact`, changeFrequency: 'yearly', priority: 0.65 },
+        { url: `${SITE_URL}/aviso-de-privacidad`, changeFrequency: 'yearly', priority: 0.3 },
+        { url: `${SITE_URL}/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.3 },
+        { url: `${SITE_URL}/en/aviso-de-privacidad`, changeFrequency: 'yearly', priority: 0.2 },
+        { url: `${SITE_URL}/en/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.2 },
     ];
 
     // 3. Casos individuales del portafolio, en español e inglés.
@@ -106,14 +108,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     }
 
-    // 6. Blog EN — subconjunto curado que vive en el repo (lib/blog-en/), no en Supabase.
-    const blogEnRoutes: MetadataRoute.Sitemap = EN_ARTICLE_SLUGS.map((slug) => ({
-        url: `${SITE_URL}/en/blog/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.65,
-    }));
+    // 6. Blog EN — subconjunto curado que vive en el repo (lib/blog-en/), no en
+    // Supabase. Su fecha es la que lleva cada artículo en el repo.
+    const blogEnRoutes: MetadataRoute.Sitemap = EN_ARTICLES.map((article) => {
+        const lastmod = toIsoDate(article.date);
+        return {
+            url: `${SITE_URL}/en/blog/${article.slug}`,
+            ...(lastmod ? { lastModified: lastmod } : {}),
+            changeFrequency: 'monthly' as const,
+            priority: 0.65,
+        };
+    });
 
-    // Retonar unión de todas las rutas
-    return [...staticRoutes, ...caseStudyRoutes, ...blogEsRoutes, ...blogEnRoutes];
+    // 7. Índices del blog: cambian cuando cambia un artículo, así que su fecha
+    // es la del artículo más reciente de su idioma.
+    const masReciente = (rutas: MetadataRoute.Sitemap) =>
+        rutas.map((r) => r.lastModified as string | undefined).filter(Boolean).sort().pop();
+    const blogIndexRoutes: MetadataRoute.Sitemap = [
+        { url: `${SITE_URL}/blog`, lastModified: masReciente(blogEsRoutes), changeFrequency: 'weekly', priority: 0.8 },
+        { url: `${SITE_URL}/en/blog`, lastModified: masReciente(blogEnRoutes), changeFrequency: 'weekly', priority: 0.7 },
+    ];
+
+    return [...staticRoutes, ...blogIndexRoutes, ...caseStudyRoutes, ...blogEsRoutes, ...blogEnRoutes];
 }
