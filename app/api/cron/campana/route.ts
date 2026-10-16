@@ -41,6 +41,10 @@ export const maxDuration = 300;
 const CUPOS: { service: LeadService; cupo: number }[] = [
     { service: "asociaciones", cupo: 20 },
     { service: "eventos", cupo: 20 },
+    // Web y personalizado se quedaron fuera al crear los cupos (11 sep) y las
+    // listas de web que entraron después no salían. Vuelven el 16 oct.
+    { service: "web", cupo: 20 },
+    { service: "personalizado", cupo: 5 },
 ];
 const TANDA = CUPOS.reduce((n, c) => n + c.cupo, 0);
 const PAUSA_MS = 700;
