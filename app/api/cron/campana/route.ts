@@ -46,7 +46,11 @@ const CUPOS: { service: LeadService; cupo: number }[] = [
     { service: "web", cupo: 20 },
     { service: "personalizado", cupo: 5 },
 ];
-const TANDA = CUPOS.reduce((n, c) => n + c.cupo, 0);
+// Máximo de correos a contactos por día, sumando iniciales y seguimientos (el
+// reporte a Carlos no cuenta). Lo fijó Carlos el 16 oct 2026: ese día los cupos
+// sumaban 65 sin ningún tope común, salieron 44, y el máximo es 30. Los cupos
+// de arriba siguen valiendo por grupo; esto es el techo de todos juntos.
+const TOPE_DIARIO = 30;
 const PAUSA_MS = 700;
 // Margen para no chocar con el límite de la función: si se acaba el tiempo,
 // se corta y se reporta lo enviado en vez de morir a media tanda.
@@ -135,9 +139,18 @@ export async function GET(request: Request) {
     //
     // `pendientes` ya viene por created_at ascendente, así que dentro de cada
     // grupo salen siempre los más viejos primero.
+    //
+    // Y nunca más de TOPE_DIARIO en total. Se reparte por turnos —uno de cada
+    // grupo, luego el segundo de cada grupo— para que el tope no se lo coma
+    // entero el primer grupo de la lista mientras los demás esperan.
+    const porGrupo = CUPOS.map(({ service, cupo }) =>
+        pendientes.filter((l) => l.service === service).slice(0, cupo)
+    );
     const tanda: Lead[] = [];
-    for (const { service, cupo } of CUPOS) {
-        tanda.push(...pendientes.filter((l) => l.service === service).slice(0, cupo));
+    for (let i = 0; tanda.length < TOPE_DIARIO && porGrupo.some((g) => i < g.length); i++) {
+        for (const grupo of porGrupo) {
+            if (i < grupo.length && tanda.length < TOPE_DIARIO) tanda.push(grupo[i]);
+        }
     }
 
     // Candidatos a seguimiento: abrieron su inicial hace SEGUIMIENTO_DIAS o
@@ -153,7 +166,8 @@ export async function GET(request: Request) {
             return Boolean(abierto) && new Date(abierto!).getTime() <= corteSeguimiento;
         })
         .sort((a, b) => inicialAbierto.get(a.id)!.localeCompare(inicialAbierto.get(b.id)!))
-        .slice(0, SEGUIMIENTO_CUPO);
+        // Los seguimientos solo ocupan lo que dejen libre los iniciales.
+        .slice(0, Math.min(SEGUIMIENTO_CUPO, TOPE_DIARIO - tanda.length));
 
     // Nada que hacer hoy en ninguna de las dos pasadas: se termina en
     // silencio, sin correo de aviso — el silencio significa "no tocaba".
