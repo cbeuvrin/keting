@@ -1,30 +1,35 @@
 // Mapeo de rutas entre español (raíz) e inglés (prefijo /en).
-// Fuente única de verdad para el toggle y los enlaces de los navs.
+// Fuente única de verdad para el toggle, los enlaces de los navs, el hreflang
+// del sitemap y las redirecciones de los slugs viejos.
 
-// Rutas ES con gemela EN. "" representa el home ("/").
-export const EN_MIRRORED = [
-    "",
-    "/desarrollo-web",
-    "/desarrollo-de-software",
-    "/automatizacion-de-procesos",
-    "/software-para-eventos",
-    "/portafolio",
-    "/aviso-de-privacidad",
-    "/terminos-y-condiciones",
+// Rutas ES con gemela EN y el slug inglés de cada una. "" es el home ("/").
+//
+// Hasta el 17 oct 2026 la gemela era "/en" + el MISMO slug español
+// (/en/desarrollo-web): para EE. UU. la URL no decía nada en inglés. Los slugs
+// viejos redirigen a estos en lib/legacy-redirects.js (LEGACY_EN_SLUGS).
+export const MIRROR_PAIRS: readonly { es: string; en: string }[] = [
+    { es: "", en: "/en" },
+    { es: "/desarrollo-web", en: "/en/web-development" },
+    { es: "/desarrollo-de-software", en: "/en/custom-software-development" },
+    { es: "/automatizacion-de-procesos", en: "/en/ai-process-automation" },
+    { es: "/software-para-eventos", en: "/en/event-software" },
+    { es: "/portafolio", en: "/en/portfolio" },
+    { es: "/aviso-de-privacidad", en: "/en/privacy-policy" },
+    { es: "/terminos-y-condiciones", en: "/en/terms-and-conditions" },
     // De temporada y noindex; tampoco va en el sitemap (app/sitemap.ts es una lista a mano).
-    "/halloween",
-] as const;
+    { es: "/halloween", en: "/en/halloween" },
+];
 
-function normalizeEs(pathname: string): string {
-    // Quita el prefijo /en si viene una ruta inglesa.
-    if (pathname === "/en") return "/";
-    if (pathname.startsWith("/en/")) return pathname.slice(3); // "/en/x" -> "/x"
-    return pathname;
+// Gemela inglesa de una ruta española del mapa, o undefined si no tiene.
+function mirrorEn(esPath: string): string | undefined {
+    const key = esPath === "/" ? "" : esPath;
+    return MIRROR_PAIRS.find((p) => p.es === key)?.en;
 }
 
-function hasMirror(esPath: string): boolean {
-    const key = esPath === "/" ? "" : esPath;
-    return (EN_MIRRORED as readonly string[]).includes(key);
+// Gemela española de una ruta inglesa del mapa ("/" para el home).
+function mirrorEs(enPath: string): string | undefined {
+    const pair = MIRROR_PAIRS.find((p) => p.en === enPath);
+    return pair ? pair.es || "/" : undefined;
 }
 
 // Casos de éxito: NO siguen el patrón genérico "/en" + mismo path — la raíz
@@ -137,7 +142,7 @@ export function getEsBlogSlug(enSlug: string): string | undefined {
 
 // Ruta actual -> su equivalente en inglés (o /en si no hay gemela).
 export function toEn(pathname: string): string {
-    if (pathname === CASE_STUDIES_ES_ROOT || pathname === CASE_STUDIES_EN_ROOT) return "/en/portafolio";
+    if (pathname === CASE_STUDIES_ES_ROOT || pathname === CASE_STUDIES_EN_ROOT) return "/en/portfolio";
     if (pathname === CONTACT_EN) return pathname;
     if (pathname === CONTACT_ES) return CONTACT_EN;
     if (isCaseStudyEnPath(pathname) || isAboutEnPath(pathname) || isBlogEnPath(pathname)) return pathname; // ya está en inglés
@@ -156,9 +161,8 @@ export function toEn(pathname: string): string {
         const esSlug = pathname.slice(`${BLOG_ES_ROOT}/`.length);
         return blogHref(esSlug, true);
     }
-    const es = normalizeEs(pathname);
-    if (!hasMirror(es)) return "/en";
-    return es === "/" ? "/en" : `/en${es}`;
+    if (mirrorEs(pathname) !== undefined) return pathname; // ya está en inglés
+    return mirrorEn(pathname) ?? "/en";
 }
 
 // Ruta actual -> su equivalente en español (o / si no hay gemela).
@@ -183,14 +187,30 @@ export function toEs(pathname: string): string {
         const pair = BLOG_SLUG_PAIRS.find((p) => p.en === enSlug);
         return pair ? `${BLOG_ES_ROOT}/${pair.es}` : BLOG_ES_ROOT;
     }
-    const es = normalizeEs(pathname);
-    if (!hasMirror(es)) return "/";
-    return es;
+    const es = mirrorEs(pathname);
+    if (es !== undefined) return es;
+    // Ruta inglesa sin gemela -> home ES; una ruta española ya está en español.
+    return pathname === "/en" || pathname.startsWith("/en/") ? "/" : pathname;
 }
 
 // Para los navs: dado un href español fijo, devuelve el correcto según idioma.
 export function enHref(esPath: string, isEn: boolean): string {
     if (!isEn) return esPath;
     if (esPath === "/" || esPath === "/#home") return "/en";
-    return `/en${esPath}`;
+    // Las del mapa tienen slug inglés propio; el resto (p. ej. /blog) sigue el
+    // patrón "/en" + ruta.
+    return mirrorEn(esPath) ?? `/en${esPath}`;
+}
+
+// Par ES/EN de cualquier ruta que tenga gemela —páginas espejo, contacto,
+// nosotros, casos y artículos traducidos—, para el hreflang del sitemap.
+// undefined si la ruta no tiene versión en el otro idioma.
+export function languagePair(pathname: string): { es: string; en: string } | undefined {
+    const isEn = pathname === "/en" || pathname.startsWith("/en/");
+    const other = isEn ? toEs(pathname) : toEn(pathname);
+    // toEn/toEs caen al home o al índice del blog cuando no hay gemela: eso no
+    // es un par, y declararlo como alternativa sería falso.
+    const back = isEn ? toEn(other) : toEs(other);
+    if (back !== pathname || other === pathname) return undefined;
+    return isEn ? { es: other, en: pathname } : { es: pathname, en: other };
 }

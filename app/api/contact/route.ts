@@ -55,6 +55,9 @@ export async function POST(request: Request) {
 
         const body = await request.json();
         const { name, email, phone, message, interests, source, company } = body;
+        // Lo mandan los formularios según el idioma de la página: así un lead del
+        // sitio en inglés llega al CRM etiquetado y no mezclado con los de México.
+        const isEn = body.lang === 'en';
 
         // 2. Honeypot: campo oculto que los humanos nunca llenan. Si viene con
         //    valor, es un bot → respondemos "éxito" sin enviar nada.
@@ -123,7 +126,7 @@ export async function POST(request: Request) {
             from: `"Keting Web" <${user}>`, // debe ser una cuenta del dominio autenticada
             to,
             replyTo: email,
-            subject: `Nuevo contacto desde la web (${String(source || 'General').slice(0, 120)})`,
+            subject: `Nuevo contacto desde la web${isEn ? ' en inglés' : ''} (${String(source || 'General').slice(0, 120)})`,
             html: `
                 <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px;">
                     <h2 style="color: #000;">Nuevo mensaje de contacto</h2>
@@ -151,6 +154,7 @@ export async function POST(request: Request) {
             source: 'contacto',
             message: typeof message === 'string' ? message : undefined,
             interests: Array.isArray(interests) ? interests.join(', ') : undefined,
+            list_name: isEn ? 'Sitio en inglés' : undefined,
         });
 
         return NextResponse.json({ success: true, message: 'Correo enviado con éxito' });

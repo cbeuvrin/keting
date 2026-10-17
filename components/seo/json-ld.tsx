@@ -1,3 +1,5 @@
+import { AREA_SERVED_JSON_LD } from "@/lib/seo/site";
+
 /**
  * Renderiza datos estructurados (JSON-LD) en el <head>/cuerpo del documento.
  * Acepta un objeto o un arreglo de objetos schema.org.
@@ -104,12 +106,10 @@ export function service(opts: {
                   },
               }
             : {}),
-        // Base en Ciudad de México y clientes en todo el país: ambas cosas son
-        // ciertas, y la ciudad es la señal que falta para las búsquedas locales.
-        areaServed: [
-            { "@type": "City", name: "Ciudad de México" },
-            { "@type": "Country", name: "México" },
-        ],
+        // Base en Ciudad de México —la ciudad es la señal que falta para las
+        // búsquedas locales— y clientes en México, EE. UU. y Latinoamérica
+        // (lista en lib/seo/site.ts).
+        areaServed: [{ "@type": "City", name: "Ciudad de México" }, ...AREA_SERVED_JSON_LD],
         provider: {
             "@type": "Organization",
             name: "Keting Media",

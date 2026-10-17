@@ -38,7 +38,7 @@ Keting Media es una empresa mexicana de desarrollo de software a medida. Diseña
 
 ## English
 - [Custom software, web & app development in Mexico](https://ketingmedia.com/en): English version of the site — custom software, web and mobile app development plus AI automation, built from Mexico City. Design, engineering and applied AI in one team.
-- [Portfolio](https://ketingmedia.com/en/portafolio): Keting Media projects with previews and links to each full case study.
+- [Portfolio](https://ketingmedia.com/en/portfolio): Keting Media projects with previews and links to each full case study.
 - [About us](https://ketingmedia.com/en/about): Keting Media's story since 2019, how the company works, and links to its real case studies.
 - [Carlos Beuvrin](https://ketingmedia.com/en/about/carlos-beuvrin): AI Engineer and founder of Keting Media — bio, products he has built, and a link to the blog he writes.
 - [Blog](https://ketingmedia.com/en/blog): English-language guides on custom software development, web and app pricing, and e-commerce — written for US companies evaluating nearshore development in Mexico.

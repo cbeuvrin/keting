@@ -3,6 +3,7 @@ import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
 import { CompanyAboutPage } from "@/components/about/company-about-page";
 import { COMPANY_ABOUT } from "@/lib/about-content";
 import { CASE_STUDIES } from "@/lib/case-studies";
+import { OG_LOCALE } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
     title: { absolute: "About us · Custom software development since 2019 · Keting Media" },
@@ -18,12 +19,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "/en/about",
         languages: {
-            "es-MX": "/nosotros",
+            es: "/nosotros",
             en: "/en/about",
             "x-default": "/nosotros",
         },
     },
     openGraph: {
+        ...OG_LOCALE.en,
         title: "About us · Keting Media",
         description:
             "Mexican custom software, web and app development company since 2019. Engineering, product design and applied AI.",

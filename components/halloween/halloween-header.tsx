@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
@@ -38,7 +38,6 @@ const STARS = [
 
 export function HalloweenHeader() {
     const { t } = useLang();
-    const router = useRouter();
     const pathname = usePathname() ?? "/halloween";
     const isEn = pathname === "/en" || pathname.startsWith("/en/");
     const reduced = useReducedMotion();
@@ -96,8 +95,6 @@ export function HalloweenHeader() {
     };
 
     const closeMenu = () => setIsMenuOpen(false);
-    const goEs = () => router.push(toEs(pathname));
-    const goEn = () => router.push(toEn(pathname));
 
     return (
         <>
@@ -125,7 +122,7 @@ export function HalloweenHeader() {
                     </div>
 
                     <div className="flex items-center gap-3 md:gap-5">
-                        <LangToggle isEn={isEn} onEs={goEs} onEn={goEn} className="hidden md:flex" />
+                        <LangToggle isEn={isEn} hrefEs={toEs(pathname)} hrefEn={toEn(pathname)} className="hidden md:flex" />
                         <button
                             onClick={() => setIsContactOpen(true)}
                             className={cn(
@@ -289,7 +286,7 @@ export function HalloweenHeader() {
                                         {t.nav.idiom}
                                     </span>
                                     <span className="block h-px w-8 bg-[#f3ecd9]/20" />
-                                    <LangToggle isEn={isEn} onEs={goEs} onEn={goEn} large className="flex" />
+                                    <LangToggle isEn={isEn} hrefEs={toEs(pathname)} hrefEn={toEn(pathname)} large className="flex" />
                                 </motion.div>
 
                                 <motion.div
@@ -354,14 +351,14 @@ function MenuLink({ href, onClick, wavy = false, children }: { href: string; onC
 /** ES/EN como calcomanías chicas; la activa es la de hueso con sombra lila. */
 function LangToggle({
     isEn,
-    onEs,
-    onEn,
+    hrefEs,
+    hrefEn,
     large = false,
     className,
 }: {
     isEn: boolean;
-    onEs: () => void;
-    onEn: () => void;
+    hrefEs: string;
+    hrefEn: string;
     large?: boolean;
     className?: string;
 }) {
@@ -376,12 +373,14 @@ function LangToggle({
         );
     return (
         <div className={cn("items-center gap-1", className)}>
-            <button onClick={onEs} className={pill(!isEn)} aria-label="Cambiar a español" aria-pressed={!isEn}>
+            {/* Enlaces y no botones: es navegación, y así los rastreadores también
+                encuentran la versión en el otro idioma. */}
+            <Link href={hrefEs} className={pill(!isEn)} aria-label="Cambiar a español" aria-current={!isEn ? "page" : undefined}>
                 ES
-            </button>
-            <button onClick={onEn} className={pill(isEn)} aria-label="Switch to English" aria-pressed={isEn}>
+            </Link>
+            <Link href={hrefEn} className={pill(isEn)} aria-label="Switch to English" aria-current={isEn ? "page" : undefined}>
                 EN
-            </button>
+            </Link>
         </div>
     );
 }

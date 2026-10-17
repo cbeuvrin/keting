@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     robots: { index: false, follow: true },
     alternates: {
         canonical: "/en/halloween",
-        languages: { "es-MX": "/halloween", en: "/en/halloween", "x-default": "/halloween" },
+        languages: { es: "/halloween", en: "/en/halloween", "x-default": "/halloween" },
     },
     openGraph: {
         title: "Halloween edition · Keting Media",

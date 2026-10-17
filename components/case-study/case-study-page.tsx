@@ -74,9 +74,9 @@ const SERVICE_LINKS: Record<Lang, { label: string } & Record<CaseStudyService, {
     },
     en: {
         label: "Service",
-        web: { href: "/en/desarrollo-web", text: "Custom web design & development" },
-        software: { href: "/en/desarrollo-de-software", text: "Custom software & app development" },
-        eventos: { href: "/en/software-para-eventos", text: "Software for live events" },
+        web: { href: "/en/web-development", text: "Custom web design & development" },
+        software: { href: "/en/custom-software-development", text: "Custom software & app development" },
+        eventos: { href: "/en/event-software", text: "Software for live events" },
     },
 };
 
@@ -178,7 +178,7 @@ export function CaseStudyPage({ study, copy, lang }: { study: CaseStudyBase; cop
 
                 <div className="max-w-7xl mx-auto relative">
                     <Link
-                        href={isEn ? "/en/portafolio" : "/portafolio"}
+                        href={isEn ? "/en/portfolio" : "/portafolio"}
                         className="group inline-flex items-center gap-2 text-sm text-[#1d1d1f]/60 hover:text-[#1d1d1f] transition-colors mb-12 md:mb-16"
                     >
                         <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />

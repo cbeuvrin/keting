@@ -56,7 +56,7 @@ const article: EnArticle = {
 <p>88% of companies already use AI in some function, but most can't make it work sustainably. Software development is no different: AI radically sped up building, but <strong>the judgment for what to build, how to secure it, and how to scale it is still human.</strong> The paradigm shifted from "writing code" to "expressing intent" — and expressing the right intent, with the right architecture, is exactly what engineering is.</p>
 
 <h2>How we do it at Keting Media</h2>
-<p>We use AI across our entire development cycle — that's why we build faster and at a better cost than we could two years ago. The difference is that AI works <strong>directed by engineers</strong>: architecture designed to scale, security reviewed, testing in place, and a product that holds up under real users. It's the best of both worlds: the speed of vibe coding with the solidity of professional software. That's how we built <a href="/en/desarrollo-de-software">custom platforms and apps</a> like Iudex (100,000+ sessions/month) and Toogo (100+ online stores).</p>
+<p>We use AI across our entire development cycle — that's why we build faster and at a better cost than we could two years ago. The difference is that AI works <strong>directed by engineers</strong>: architecture designed to scale, security reviewed, testing in place, and a product that holds up under real users. It's the best of both worlds: the speed of vibe coding with the solidity of professional software. That's how we built <a href="/en/custom-software-development">custom platforms and apps</a> like Iudex (100,000+ sessions/month) and Toogo (100+ online stores).</p>
 
 <h2>So what's right for you?</h2>
 <ul>

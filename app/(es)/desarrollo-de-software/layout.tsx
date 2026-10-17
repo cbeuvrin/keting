@@ -1,0 +1,62 @@
+import type { Metadata } from "next";
+import { JsonLd, service, breadcrumb } from "@/components/seo/json-ld";
+import { OG_LOCALE } from "@/lib/seo/site";
+
+export const metadata: Metadata = {
+    title: "Desarrollo de software y apps en CDMX y México",
+    description:
+        "Desarrollo de apps móviles, plataformas y software a medida con IA en Ciudad de México (CDMX) y todo el país. Estrategia, diseño, ingeniería y crecimiento.",
+    keywords: [
+        "desarrollo de aplicaciones móviles",
+        "desarrollo de apps",
+        "desarrollo de software a medida",
+        "plataformas saas",
+        "integración de sistemas",
+        "sistema de gestión",
+        "automatización con ia",
+        "agentes ia",
+        "desarrollo de software a la medida cdmx",
+        "desarrollo de apps móviles ciudad de méxico",
+    ],
+    alternates: {
+        canonical: "/desarrollo-de-software",
+        languages: {
+            es: "/desarrollo-de-software",
+            "en": "/en/custom-software-development",
+            "x-default": "/desarrollo-de-software",
+        },
+    },
+    openGraph: {
+        ...OG_LOCALE.es,
+        title: "Desarrollo de apps y software a medida con IA · Keting Media",
+        description:
+            "Apps móviles, plataformas y agentes IA a medida para empresas que necesitan escalar más allá del SaaS estándar.",
+        url: "/desarrollo-de-software",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Desarrollo de apps y software a medida con IA · Keting Media",
+        description: "Apps móviles, plataformas y software a medida con IA para empresas ambiciosas.",
+    },
+};
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+    return (
+        <>
+            <JsonLd
+                data={[
+                    service({
+                        name: "Desarrollo de software y aplicaciones móviles a medida con IA",
+                        serviceType: "Desarrollo de software y aplicaciones móviles",
+                        description:
+                            "Apps móviles, plataformas/SaaS, sistemas internos, agentes y automatización con IA hiper-personalizados para empresas que escalan.",
+                        path: "/desarrollo-de-software",
+                    }),
+                    breadcrumb("Desarrollo de Software", "/desarrollo-de-software"),
+                ]}
+            />
+            {children}
+        </>
+    );
+}

@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState, useRef } from "react";
 import { ContactModal } from "@/components/pricing/contact-modal";
 import { Header } from "@/components/layout/header";
@@ -20,7 +20,6 @@ export function GravityHeader({
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
     const { t } = useLang();
-    const router = useRouter();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
 
@@ -91,24 +90,26 @@ export function GravityHeader({
                         </nav>
                         {/* Toggle ES/EN */}
                         <div className="flex items-center gap-0.5 ml-3">
-                            <button
-                                onClick={() => router.push(toEs(pathname ?? "/"))}
-                                className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
+                            <Link
+                                href={toEs(pathname ?? "/")}
+                                aria-current={!isEn ? "page" : undefined}
+                                className={`inline-flex items-center justify-center px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     !isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
                                 aria-label="Cambiar a español"
                             >
                                 ES
-                            </button>
-                            <button
-                                onClick={() => router.push(toEn(pathname ?? "/"))}
-                                className={`px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
+                            </Link>
+                            <Link
+                                href={toEn(pathname ?? "/")}
+                                aria-current={isEn ? "page" : undefined}
+                                className={`inline-flex items-center justify-center px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all ${
                                     isEn ? "bg-black text-white" : "text-zinc-500 hover:text-black"
                                 }`}
                                 aria-label="Switch to English"
                             >
                                 EN
-                            </button>
+                            </Link>
                         </div>
                         <button
                             onClick={() => setIsContactOpen(true)}

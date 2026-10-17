@@ -4,6 +4,7 @@ import { CASE_STUDY_SLUGS, CASE_STUDIES_PUBLISHED_DATE } from '@/lib/case-studie
 import { EN_ARTICLES } from '@/lib/blog-en';
 import { createClient } from '@supabase/supabase-js';
 import { toIsoDate } from '@/lib/blog-utils';
+import { languagePair } from '@/lib/i18n/routes';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -39,13 +40,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/desarrollo-de-software`, changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/automatizacion-de-procesos`, changeFrequency: 'monthly', priority: 0.9 },
         { url: `${SITE_URL}/en`, changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/desarrollo-web`, changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/desarrollo-de-software`, changeFrequency: 'monthly', priority: 0.8 },
-        { url: `${SITE_URL}/en/automatizacion-de-procesos`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/web-development`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/custom-software-development`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/ai-process-automation`, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/software-para-eventos`, changeFrequency: 'monthly', priority: 0.9 },
-        { url: `${SITE_URL}/en/software-para-eventos`, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${SITE_URL}/en/event-software`, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${SITE_URL}/portafolio`, changeFrequency: 'monthly', priority: 0.85 },
-        { url: `${SITE_URL}/en/portafolio`, changeFrequency: 'monthly', priority: 0.75 },
+        { url: `${SITE_URL}/en/portfolio`, changeFrequency: 'monthly', priority: 0.75 },
         { url: `${SITE_URL}/nosotros`, changeFrequency: 'monthly', priority: 0.7 },
         { url: `${SITE_URL}/en/about`, changeFrequency: 'monthly', priority: 0.6 },
         { url: `${SITE_URL}/nosotros/carlos-beuvrin`, changeFrequency: 'monthly', priority: 0.7 },
@@ -54,8 +55,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/contact`, changeFrequency: 'yearly', priority: 0.65 },
         { url: `${SITE_URL}/aviso-de-privacidad`, changeFrequency: 'yearly', priority: 0.3 },
         { url: `${SITE_URL}/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.3 },
-        { url: `${SITE_URL}/en/aviso-de-privacidad`, changeFrequency: 'yearly', priority: 0.2 },
-        { url: `${SITE_URL}/en/terminos-y-condiciones`, changeFrequency: 'yearly', priority: 0.2 },
+        { url: `${SITE_URL}/en/privacy-policy`, changeFrequency: 'yearly', priority: 0.2 },
+        { url: `${SITE_URL}/en/terms-and-conditions`, changeFrequency: 'yearly', priority: 0.2 },
     ];
 
     // 3. Casos individuales del portafolio, en español e inglés.
@@ -129,5 +130,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${SITE_URL}/en/blog`, lastModified: masReciente(blogEnRoutes), changeFrequency: 'weekly', priority: 0.7 },
     ];
 
-    return [...staticRoutes, ...blogIndexRoutes, ...caseStudyRoutes, ...blogEsRoutes, ...blogEnRoutes];
+    // 8. hreflang dentro del sitemap: cada URL con versión en el otro idioma
+    // declara el par (y x-default al español), igual que el <head> de la
+    // página. El par sale del mismo mapa que usa el selector de idioma
+    // (lib/i18n/routes.ts), así que las dos fuentes no pueden contradecirse.
+    const absoluta = (path: string) => (path === '/' ? SITE_URL : `${SITE_URL}${path}`);
+    return [...staticRoutes, ...blogIndexRoutes, ...caseStudyRoutes, ...blogEsRoutes, ...blogEnRoutes].map((route) => {
+        const pair = languagePair(route.url.slice(SITE_URL.length) || '/');
+        if (!pair) return route;
+        return {
+            ...route,
+            alternates: {
+                languages: {
+                    es: absoluta(pair.es),
+                    en: absoluta(pair.en),
+                    'x-default': absoluta(pair.es),
+                },
+            },
+        };
+    });
 }

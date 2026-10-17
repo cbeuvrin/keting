@@ -53,6 +53,8 @@ export function ContactForm() {
             // Va en el asunto del correo: distingue los leads en inglés de los
             // que llegan por la página española.
             source: "Contact page (EN)",
+            // Etiqueta el lead en el CRM (lista "Sitio en inglés").
+            lang: "en",
             // Honeypot. La API lo espera con el nombre `company`.
             company: fd.get("company"),
         };
@@ -100,7 +102,7 @@ export function ContactForm() {
                     WhatsApp is right below.
                 </p>
                 <Link
-                    href="/en/portafolio"
+                    href="/en/portfolio"
                     className="inline-flex items-center gap-3 mt-10 text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase text-black/40 hover:text-black transition-colors"
                 >
                     <span className="block w-8 h-px bg-black/20" />

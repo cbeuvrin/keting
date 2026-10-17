@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,6 @@ export function Header({ className, showLogo = true, initialColor = "black", for
     const [isVisible, setIsVisible] = useState(true);
     const [lastY, setLastY] = useState(0);
     const { t } = useLang();
-    const router = useRouter();
     const pathname = usePathname();
     const isEn = pathname?.startsWith("/en") ?? false;
 
@@ -130,10 +129,11 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                     <div className="flex items-center gap-4 relative">
                         {/* Toggle ES/EN — visible en la barra (escritorio) */}
                         <div className="hidden md:flex items-center gap-0.5">
-                            <button
-                                onClick={() => router.push(toEs(pathname ?? "/"))}
+                            <Link
+                                href={toEs(pathname ?? "/")}
+                                aria-current={!isEn ? "page" : undefined}
                                 className={cn(
-                                    "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
+                                    "inline-flex items-center justify-center px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
                                     !isEn
                                         ? (isDark ? "bg-white text-black" : "bg-black text-white")
                                         : (isDark ? "text-white/60 hover:text-white" : "text-zinc-500 hover:text-black")
@@ -141,11 +141,12 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 aria-label="Cambiar a español"
                             >
                                 ES
-                            </button>
-                            <button
-                                onClick={() => router.push(toEn(pathname ?? "/"))}
+                            </Link>
+                            <Link
+                                href={toEn(pathname ?? "/")}
+                                aria-current={isEn ? "page" : undefined}
                                 className={cn(
-                                    "px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
+                                    "inline-flex items-center justify-center px-2 h-7 rounded-md text-[11px] font-bold tracking-wider uppercase transition-all",
                                     isEn
                                         ? (isDark ? "bg-white text-black" : "bg-black text-white")
                                         : (isDark ? "text-white/60 hover:text-white" : "text-zinc-500 hover:text-black")
@@ -153,7 +154,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                 aria-label="Switch to English"
                             >
                                 EN
-                            </button>
+                            </Link>
                         </div>
 
                         <button
@@ -322,8 +323,9 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                     </span>
                                     <span className="block w-8 h-px bg-black/20" />
                                     <div className="flex items-center gap-1">
-                                        <button
-                                            onClick={() => router.push(toEs(pathname ?? "/"))}
+                                        <Link
+                                            href={toEs(pathname ?? "/")}
+                                            aria-current={!isEn ? "page" : undefined}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 !isEn
                                                     ? "bg-black text-white rounded-md"
@@ -331,10 +333,11 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                             }`}
                                         >
                                             ES
-                                        </button>
+                                        </Link>
                                         <span className="text-black/20">·</span>
-                                        <button
-                                            onClick={() => router.push(toEn(pathname ?? "/"))}
+                                        <Link
+                                            href={toEn(pathname ?? "/")}
+                                            aria-current={isEn ? "page" : undefined}
                                             className={`px-3 py-1.5 text-sm font-medium tracking-wider uppercase transition-all ${
                                                 isEn
                                                     ? "bg-black text-white rounded-md"
@@ -342,7 +345,7 @@ export function Header({ className, showLogo = true, initialColor = "black", for
                                             }`}
                                         >
                                             EN
-                                        </button>
+                                        </Link>
                                     </div>
                                 </motion.div>
 

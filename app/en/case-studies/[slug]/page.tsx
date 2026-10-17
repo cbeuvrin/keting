@@ -5,6 +5,7 @@ import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { JsonLd, breadcrumbTrail } from "@/components/seo/json-ld";
 import { AUTHOR } from "@/lib/author";
 import { AUTHOR_ABOUT } from "@/lib/about-content";
+import { OG_LOCALE } from "@/lib/seo/site";
 
 const SITE_URL = "https://ketingmedia.com";
 
@@ -24,12 +25,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         alternates: {
             canonical: `/en/case-studies/${slug}`,
             languages: {
-                "es-MX": `/casos/${slug}`,
+                es: `/casos/${slug}`,
                 en: `/en/case-studies/${slug}`,
                 "x-default": `/casos/${slug}`,
             },
         },
         openGraph: {
+            ...OG_LOCALE.en,
             title: `${c.title} · Case Study · Keting Media`,
             description: c.summary,
             url: `/en/case-studies/${slug}`,
@@ -84,7 +86,7 @@ export default async function EnCaseStudyPage({ params }: { params: Promise<{ sl
                     articleJsonLd,
                     breadcrumbTrail([
                         { name: "Home", path: "/en" },
-                        { name: "Portfolio", path: "/en/portafolio" },
+                        { name: "Portfolio", path: "/en/portfolio" },
                         { name: c.title, path: `/en/case-studies/${slug}` },
                     ]),
                 ]}

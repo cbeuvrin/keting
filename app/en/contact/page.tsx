@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
 import { ContactForm } from "./ContactForm";
+import { AREA_SERVED, OG_LOCALE } from "@/lib/seo/site";
 
 // Gemela inglesa de /contacto. hreflang recíproco declarado en ambas.
 export const metadata: Metadata = {
@@ -13,12 +14,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "https://ketingmedia.com/en/contact",
         languages: {
-            "es-MX": "https://ketingmedia.com/contacto",
+            es: "https://ketingmedia.com/contacto",
             en: "https://ketingmedia.com/en/contact",
             "x-default": "https://ketingmedia.com/contacto",
         },
     },
     openGraph: {
+        ...OG_LOCALE.en,
         title: "Contact · Keting Media",
         description: "Tell us about your project. You get a fixed scope and a fixed price.",
         url: "https://ketingmedia.com/en/contact",
@@ -45,7 +47,7 @@ const contactJsonLd = {
             contactType: "Sales",
             telephone: PHONE_E164,
             email: EMAIL,
-            areaServed: ["MX", "US"],
+            areaServed: AREA_SERVED.map((c) => c.code),
             availableLanguage: ["es", "en"],
         },
     },

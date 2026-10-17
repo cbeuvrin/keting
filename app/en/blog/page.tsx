@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { EN_ARTICLES } from "@/lib/blog-en";
 import { getCategoryImage } from "@/lib/blog-utils";
 import { JsonLd, breadcrumb } from "@/components/seo/json-ld";
+import { OG_LOCALE } from "@/lib/seo/site";
 
 // Índice del blog EN — subconjunto curado de artículos que viven en el repo
 // (lib/blog-en/), no en Supabase (plan GEO 4.5). A diferencia de /blog (que
@@ -19,12 +20,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "/en/blog",
         languages: {
-            "es-MX": "/blog",
+            es: "/blog",
             en: "/en/blog",
             "x-default": "/blog",
         },
     },
     openGraph: {
+        ...OG_LOCALE.en,
         title: "Blog · Keting Media",
         description:
             "Guides and analysis on custom software, web and mobile apps, e-commerce, and applied AI.",

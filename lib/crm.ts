@@ -179,6 +179,8 @@ export async function captureLead(input: {
     source: LeadSource;
     message?: string;
     interests?: string;
+    /** Lista del CRM. Los leads del sitio en inglés entran en "Sitio en inglés". */
+    list_name?: string;
 }): Promise<void> {
     try {
         const db = crmAdmin();
@@ -194,7 +196,7 @@ export async function captureLead(input: {
             if (existing) {
                 await db.from("crm_notes").insert({
                     lead_id: existing.id,
-                    body: `Nuevo mensaje desde el formulario (${input.source}):\n${input.message ?? "(sin mensaje)"}`,
+                    body: `Nuevo mensaje desde el formulario (${input.source}${input.list_name ? ` · ${input.list_name}` : ""}):\n${input.message ?? "(sin mensaje)"}`,
                 });
                 await db
                     .from("crm_leads")
@@ -212,6 +214,7 @@ export async function captureLead(input: {
             source: input.source,
             message: input.message || null,
             interests: input.interests || null,
+            list_name: input.list_name || null,
         });
     } catch (err) {
         console.error("[crm] captura de lead fallida (no bloqueante):", err);

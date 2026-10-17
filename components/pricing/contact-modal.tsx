@@ -20,7 +20,7 @@ const INTEREST_IDS = ["web", "price", "digital", "automation"] as const;
 type InterestId = (typeof INTEREST_IDS)[number];
 
 export function ContactModal({ isOpen, onClose }: ContactModalProps) {
-    const { t } = useLang();
+    const { t, lang } = useLang();
     const [selectedInterest, setSelectedInterest] = useState<InterestId[]>([]);
     const [formData, setFormData] = useState({
         name: "",
@@ -94,7 +94,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     ...formData,
                     company, // honeypot
                     interests: selectedInterest.map((id) => INTEREST_VALUES[id]),
-                    source: "Modal Precios"
+                    source: "Modal Precios",
+                    // Etiqueta en el CRM los leads del sitio en inglés.
+                    lang,
                 }),
             });
 

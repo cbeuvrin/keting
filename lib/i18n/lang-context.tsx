@@ -23,7 +23,7 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
 
     // Mantener el atributo lang del <html> sincronizado (a11y + SEO).
     useEffect(() => {
-        document.documentElement.lang = lang === "en" ? "en" : "es-MX";
+        document.documentElement.lang = lang === "en" ? "en-US" : "es";
     }, [lang]);
 
     // setLang se conserva como no-op de estado (la navegación cambia el idioma);

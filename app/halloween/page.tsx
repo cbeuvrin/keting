@@ -8,13 +8,15 @@ import { HalloweenPage } from "@/components/halloween/halloween-page";
 // Su gemela en inglés es /en/halloween.
 
 export const metadata: Metadata = {
-    title: "Versión Halloween",
+    // Absoluto: su raíz (app/halloween/layout.tsx) está en el mismo segmento y
+    // la plantilla "%s · Keting Media" no se aplica a la página de su segmento.
+    title: { absolute: "Versión Halloween · Keting Media" },
     description:
         "El home de Keting Media en versión Halloween: un póster lleno de monstruos que reaccionan cuando les pasas el mouse encima.",
     robots: { index: false, follow: true },
     alternates: {
         canonical: "/halloween",
-        languages: { "es-MX": "/halloween", en: "/en/halloween", "x-default": "/halloween" },
+        languages: { es: "/halloween", en: "/en/halloween", "x-default": "/halloween" },
     },
 };
 

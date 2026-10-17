@@ -20,6 +20,10 @@ const nextConfig = {
     // Inlina el CSS en el HTML para eliminar la petición de CSS que bloquea el
     // render (mejora FCP/LCP, sobre todo en móvil).
     inlineCss: true,
+    // El sitio tiene varios layouts raíz (uno por idioma, ver lib/seo/site.ts)
+    // y sin un layout común Next servía el 404 de las URLs inexistentes como
+    // una página desnuda. app/global-not-found.tsx es su propio documento.
+    globalNotFound: true,
   },
   // Cabeceras de seguridad aplicadas a todas las rutas. (No se incluye una CSP
   // estricta aquí para no romper estilos inline / fuentes / embeds; se puede

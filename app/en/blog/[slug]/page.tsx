@@ -14,6 +14,7 @@ import { AUTHOR_ABOUT } from "@/lib/about-content";
 import { getCategoryImage, toIsoDate } from "@/lib/blog-utils";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { getEsBlogSlug, authorHref } from "@/lib/i18n/routes";
+import { OG_LOCALE } from "@/lib/seo/site";
 
 // Página de artículo del blog EN — mismo diseño que /blog/[slug] (ES) pero
 // leyendo de lib/blog-en/ (repo, no Supabase). No hay ViewTracker: esos
@@ -45,13 +46,15 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
             ...(esSlug
                 ? {
                       languages: {
-                          "es-MX": `/blog/${esSlug}`,
+                          es: `/blog/${esSlug}`,
                           en: `/en/blog/${slug}`,
+                          "x-default": `/blog/${esSlug}`,
                       },
                   }
                 : {}),
         },
         openGraph: {
+            ...OG_LOCALE.en,
             title: article.title,
             description,
             url: `/en/blog/${slug}`,
@@ -89,6 +92,7 @@ export default async function EnArticlePage({ params }: { params: any }) {
         "@context": "https://schema.org",
         "@type": "Article",
         headline: article.title,
+        inLanguage: "en",
         description: article.excerpt,
         image: article.image ? [article.image] : undefined,
         // Mismo motivo que en el blog ES: `date` es texto legible ("Jun 2026") y

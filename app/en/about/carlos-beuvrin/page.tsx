@@ -6,6 +6,7 @@ import { AUTHOR } from "@/lib/author";
 import { CASE_STUDIES } from "@/lib/case-studies";
 import { caseStudyHref } from "@/lib/i18n/routes";
 import { EN_ARTICLES } from "@/lib/blog-en";
+import { OG_LOCALE } from "@/lib/seo/site";
 
 const COMPANY_GITHUB = "https://github.com/KetingMedia";
 
@@ -22,12 +23,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "/en/about/carlos-beuvrin",
         languages: {
-            "es-MX": "/nosotros/carlos-beuvrin",
+            es: "/nosotros/carlos-beuvrin",
             en: "/en/about/carlos-beuvrin",
             "x-default": "/nosotros/carlos-beuvrin",
         },
     },
     openGraph: {
+        ...OG_LOCALE.en,
         title: "Carlos Beuvrin · AI Engineer & Founder · Keting Media",
         description: AUTHOR_ABOUT.en.bioSections[0].body,
         url: "/en/about/carlos-beuvrin",
